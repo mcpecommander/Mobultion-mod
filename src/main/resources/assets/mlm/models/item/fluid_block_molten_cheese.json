@@ -1,0 +1,7 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "mlm:blocks/molten_cheese_still"
+    }
+}
+}

@@ -1,0 +1,22 @@
+{
+  "fire_arrow_shot": {
+    "subtitle": "mlm.subtitles.fire_arrow_shot",
+    "sounds": [ "mlm:fire_arrow_shot" ]
+  },
+  "entity_respawn": {
+    "subtitle": "mlm.subtitles.entity_respawn",
+    "sounds": [ "mlm:entity_respawn" ]
+  },
+  "magma_remains_death": {
+    "subtitle": "mlm.subtitles.magma_remains_death",
+    "sounds": [ "mlm:magma_remains_death" ]
+  },
+  "forest_skeleton_shoot": {
+    "subtitle": "mlm.subtitles.forest_skeleton_shoot",
+    "sounds": [ "mlm:forest_skeleton_shoot" ]
+  },
+  "joker_ambient": {
+    "subtitle": "mlm.subtitles.joker_ambient",
+    "sounds": [ "mlm:joker_ambient" ]
+  }
+}

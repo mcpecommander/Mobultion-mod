@@ -1,0 +1,175 @@
+{
+  "title": "hatch",
+  "duration": 20,
+  "holdLastKeyframe": false,
+  "nodeAnimations": {
+    "EggA2": {
+      "position": {
+        "0": [ 0, 0, 0 ],
+        "10": [ 0, -1, 0 ]
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+      }
+    },
+    "Egg2": {
+      "position": {
+        "0": [ 0, 0, 0 ],
+        "10": [ 0, -1, 0 ]
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+      }
+    },
+    "Egg3": {
+      "position": {
+        "0": [ 0, 0, 0 ],
+        "10": [ 0, -0.5, 0 ]
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+      }
+    },
+    "EggA3": {
+      "position": {
+        "0": [ 0, 0, 0 ],
+        "10": [ 0, -0.5, 0 ]
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+      }
+    },
+    "Egg4": {
+      "position": {
+        "0": [ 0, 0, 0 ],
+        "10": [ 0, -0.5, 0 ]
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+      }
+    },
+    "Egg5": {
+      "position": {
+        "0": [ 0, 0, 0 ],
+        "10": [ 0, -0.5, 0 ]
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+      }
+    },
+    "Egg6": {
+      "position": {
+        "0": [ 0, 0, 0 ],
+        "10": [ 0, -0.5, 0 ]
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+      }
+    },
+    "Egg7": {
+      "position": {
+        "0": [ 0, 0, 0 ],
+        "10": [ 0, -0.5, 0 ]
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+      }
+    },
+    "EggA4": {
+      "position": {
+        "0": [ 0, 0, 0 ],
+        "10": [ 0, -0.5, 0 ]
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+      }
+    },
+    "EggA5": {
+      "position": {
+        "0": [ 0, 0, 0 ],
+        "10": [ 0, -0.5, 0 ]
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+      }
+    },
+    "EggA6": {
+      "position": {
+        "0": [ 0, 0, 0 ],
+        "10": [ 0, -0.5, 0 ]
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+      }
+    },
+    "EggA7": {
+      "position": {
+        "0": [ 0, 0, 0 ],
+        "10": [ 0, -0.5, 0 ]
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+      }
+    }
+  }
+}

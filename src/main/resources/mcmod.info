@@ -1,0 +1,16 @@
+[
+{
+  "modid": "mlm",
+  "name": "Mobultion",
+  "description": "Animaina-like mobs",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["McpeCommander"],
+  "credits": "McpeCommander",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

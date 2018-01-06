@@ -1,0 +1,6 @@
+{
+    "parent": "blocks/atm",
+    "textures": {
+        "all": "mlm:blocks/atm"
+    }
+}

@@ -1,0 +1,29 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "mlm:panel_light",
+    "textures": {
+      "front": "mlm:blocks/panel_light_off"
+    }
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "facing": {
+      "north": {},
+      "south": {"y": 180},
+      "west": {"y": 270},
+      "east": {"y": 90},
+      "up": {"x": -90},
+      "down": {"x": 90}
+    },
+    "enabled": {
+      "false": {},
+      "true": {
+        "textures": {
+          "front": "mlm:blocks/panel_light_on"
+        }
+      }
+    }
+  }
+}
