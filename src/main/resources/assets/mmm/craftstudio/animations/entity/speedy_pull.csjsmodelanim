@@ -1,0 +1,231 @@
+{
+  "title": "speedypull",
+  "duration": 20,
+  "holdLastKeyframe": true,
+  "nodeAnimations": {
+    "Leg41": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+        "0": [ 0, 0, -2.6138E-06 ],
+        "20": [ 5.955832E-06, 61.07005, -2.975571E-06 ]
+      },
+      "stretch": {
+      }
+    },
+    "Leg31": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+        "0": [ 0, 0, -2.6138E-06 ],
+        "20": [ 3.859089E-06, 66.56092, -3.591552E-06 ]
+      },
+      "stretch": {
+      }
+    },
+    "Leg21": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+        "0": [ 0, 0, -2.6138E-06 ],
+        "20": [ 5.999024E-06, 65.09798, -1.175008E-06 ]
+      },
+      "stretch": {
+      }
+    },
+    "Leg11": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+        "0": [ 0, 0, -2.6138E-06 ],
+        "20": [ 3.159044E-06, 60.49881, -1.435072E-06 ]
+      },
+      "stretch": {
+      }
+    },
+    "Leg51": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+        "0": [ 0, 0, 2.6138E-06 ],
+        "20": [ 5.746433E-06, -59.27087, 2.647348E-06 ]
+      },
+      "stretch": {
+      }
+    },
+    "Leg61": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+        "0": [ 0, 0, 2.6138E-06 ],
+        "20": [ 5.204063E-06, -54.05753, 1.788406E-06 ]
+      },
+      "stretch": {
+      }
+    },
+    "Leg71": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+        "0": [ 0, 0, 2.6138E-06 ],
+        "20": [ -360, -61.03479, 7.057281E-06 ]
+      },
+      "stretch": {
+      }
+    },
+    "Leg81": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+        "0": [ 0, 0, 2.6138E-06 ],
+        "20": [ 4.769861E-06, -59.90316, 3.229087E-06 ]
+      },
+      "stretch": {
+      }
+    },
+    "Leg4": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+        "0": [ 0, 0, 0 ],
+        "20": [ 3.124538E-07, 22.53665, -8.288631E-07 ]
+      },
+      "stretch": {
+      }
+    },
+    "Leg3": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+        "0": [ -9.518001E-08, 3.292193E-07, 4.511692E-07 ],
+        "20": [ -4.92464E-07, 20.16763, -4.760345E-08 ]
+      },
+      "stretch": {
+      }
+    },
+    "Leg2": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+        "0": [ 9.518001E-08, -3.292193E-07, 4.511692E-07 ],
+        "20": [ 3.433254E-08, 13.02472, 4.43835E-07 ]
+      },
+      "stretch": {
+      }
+    },
+    "Leg1": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+        "0": [ 0, 0, 0 ],
+        "20": [ -6.873021E-08, 12.46598, 3.495084E-07 ]
+      },
+      "stretch": {
+      }
+    },
+    "Leg5": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+        "0": [ 0, 0, 0 ],
+        "20": [ 1.97418E-07, -13.49129, 6.885296E-07 ]
+      },
+      "stretch": {
+      }
+    },
+    "Leg6": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+        "0": [ 9.518001E-08, 3.292193E-07, -4.511692E-07 ],
+        "20": [ -1.646444E-07, -15.09235, -1.690695E-06 ]
+      },
+      "stretch": {
+      }
+    },
+    "Leg7": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+        "0": [ -9.518001E-08, -3.292193E-07, -4.511692E-07 ],
+        "20": [ -1.118452E-06, -21.25578, 5.081003E-07 ]
+      },
+      "stretch": {
+      }
+    },
+    "Leg8": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+        "0": [ 0, 0, 0 ],
+        "20": [ -1.003261E-07, -20.78995, 1.091828E-07 ]
+      },
+      "stretch": {
+      }
+    }
+  }
+}

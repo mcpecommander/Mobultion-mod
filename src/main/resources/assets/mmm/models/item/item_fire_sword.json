@@ -1,0 +1,6 @@
+{
+    "parent": "item/handheld",
+    "textures": {
+        "layer0": "mmm:items/fire_sword/fire_sworda"
+    }
+}

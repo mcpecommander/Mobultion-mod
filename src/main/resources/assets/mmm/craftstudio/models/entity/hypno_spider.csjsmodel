@@ -1,0 +1,590 @@
+{
+  "title": "Spider",
+  "tree": [
+    {
+      "name": "RearEnd",
+      "position": [ 0, 8, -3 ],
+      "offsetFromPivot": [ 0, 0, -6 ],
+      "size": [ 10, 8, 12 ],
+      "rotation": [ 0, 0, 0 ],
+      "texOffset": [ 0, 12 ],
+      "children": []
+    },
+    {
+      "name": "Rear",
+      "position": [ 0, 8, 0 ],
+      "offsetFromPivot": [ 0, 0, 0 ],
+      "size": [ 6, 6, 6 ],
+      "rotation": [ 0, 0, 0 ],
+      "texOffset": [ 0, 0 ],
+      "children": []
+    },
+    {
+      "name": "Head",
+      "position": [ 0, 8, 7 ],
+      "offsetFromPivot": [ 0, 0, 0 ],
+      "size": [ 8, 8, 8 ],
+      "rotation": [ 0, 0, 0 ],
+      "texOffset": [ 32, 4 ],
+      "children": []
+    },
+    {
+      "name": "Leg1",
+      "position": [ 2, 8, -2 ],
+      "offsetFromPivot": [ 5, 0, 0 ],
+      "size": [ 9, 2, 2 ],
+      "rotation": [ -1.73549E-07, 30, -18 ],
+      "texOffset": [ 18, 0 ],
+      "children": [
+        {
+          "name": "Leg11",
+          "position": [ 3.8, 0.3, 0 ],
+          "offsetFromPivot": [ 3, 0, 0 ],
+          "size": [ 6, 2, 2 ],
+          "rotation": [ 0, 0, -45 ],
+          "texOffset": [ 18, 0 ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "Leg2",
+      "position": [ 2, 8, -1 ],
+      "offsetFromPivot": [ 5, 0, 0 ],
+      "size": [ 9, 2, 2 ],
+      "rotation": [ 9.153318E-09, 10, -18 ],
+      "texOffset": [ 18, 0 ],
+      "children": [
+        {
+          "name": "Leg21",
+          "position": [ 3.8, 0.3, 0 ],
+          "offsetFromPivot": [ 3, 0, 0 ],
+          "size": [ 6, 2, 2 ],
+          "rotation": [ 0, 0, -45 ],
+          "texOffset": [ 18, 0 ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "Leg3",
+      "position": [ 2, 8, 1 ],
+      "offsetFromPivot": [ 5, 0, 0 ],
+      "size": [ 9, 2, 2 ],
+      "rotation": [ -9.153318E-09, -10, -18 ],
+      "texOffset": [ 18, 0 ],
+      "children": [
+        {
+          "name": "Leg31",
+          "position": [ 3.8, 0.3, 0 ],
+          "offsetFromPivot": [ 3, 0, 0 ],
+          "size": [ 6, 2, 2 ],
+          "rotation": [ 0, 0, -45 ],
+          "texOffset": [ 18, 0 ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "Leg4",
+      "position": [ 2, 8, 2 ],
+      "offsetFromPivot": [ 5, 0, 0 ],
+      "size": [ 9, 2, 2 ],
+      "rotation": [ 1.73549E-07, -30, -18 ],
+      "texOffset": [ 18, 0 ],
+      "children": [
+        {
+          "name": "Leg41",
+          "position": [ 3.8, 0.3, 0 ],
+          "offsetFromPivot": [ 3, 0, 0 ],
+          "size": [ 6, 2, 2 ],
+          "rotation": [ 0, 0, -45 ],
+          "texOffset": [ 18, 0 ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "Leg5",
+      "position": [ -2, 8, -2 ],
+      "offsetFromPivot": [ -5, 0, 0 ],
+      "size": [ 9, 2, 2 ],
+      "rotation": [ -1.73549E-07, -30, 18 ],
+      "vertexCoords": [
+        [ 4.5, 1, -1 ],
+        [ -4.5, 1, -1 ],
+        [ -4.5, -1, -1 ],
+        [ 4.5, -1, -1 ],
+        [ -4.5, 1, 1 ],
+        [ 4.5, 1, 1 ],
+        [ 4.5, -1, 1 ],
+        [ -4.5, -1, 1 ]
+      ],
+      "texOffset": [ 18, 0 ],
+      "children": [
+        {
+          "name": "Leg51",
+          "position": [ -3.8, 0.3, 0 ],
+          "offsetFromPivot": [ -3, 0, 0 ],
+          "size": [ 6, 2, 2 ],
+          "rotation": [ 0, 0, 45 ],
+          "vertexCoords": [
+            [ 3, 1, -1 ],
+            [ -3, 1, -1 ],
+            [ -3, -1, -1 ],
+            [ 3, -1, -1 ],
+            [ -3, 1, 1 ],
+            [ 3, 1, 1 ],
+            [ 3, -1, 1 ],
+            [ -3, -1, 1 ]
+          ],
+          "texOffset": [ 18, 0 ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "Leg6",
+      "position": [ -2, 8, -1 ],
+      "offsetFromPivot": [ -5, 0, 0 ],
+      "size": [ 9, 2, 2 ],
+      "rotation": [ 9.153318E-09, -10, 18 ],
+      "vertexCoords": [
+        [ 4.5, 1, -1 ],
+        [ -4.5, 1, -1 ],
+        [ -4.5, -1, -1 ],
+        [ 4.5, -1, -1 ],
+        [ -4.5, 1, 1 ],
+        [ 4.5, 1, 1 ],
+        [ 4.5, -1, 1 ],
+        [ -4.5, -1, 1 ]
+      ],
+      "texOffset": [ 18, 0 ],
+      "children": [
+        {
+          "name": "Leg61",
+          "position": [ -3.8, 0.3, 0 ],
+          "offsetFromPivot": [ -3, 0, 0 ],
+          "size": [ 6, 2, 2 ],
+          "rotation": [ 0, 0, 45 ],
+          "vertexCoords": [
+            [ 3, 1, -1 ],
+            [ -3, 1, -1 ],
+            [ -3, -1, -1 ],
+            [ 3, -1, -1 ],
+            [ -3, 1, 1 ],
+            [ 3, 1, 1 ],
+            [ 3, -1, 1 ],
+            [ -3, -1, 1 ]
+          ],
+          "texOffset": [ 18, 0 ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "Leg7",
+      "position": [ -2, 8, 1 ],
+      "offsetFromPivot": [ -5, 0, 0 ],
+      "size": [ 9, 2, 2 ],
+      "rotation": [ -9.153318E-09, 10, 18 ],
+      "vertexCoords": [
+        [ 4.5, 1, -1 ],
+        [ -4.5, 1, -1 ],
+        [ -4.5, -1, -1 ],
+        [ 4.5, -1, -1 ],
+        [ -4.5, 1, 1 ],
+        [ 4.5, 1, 1 ],
+        [ 4.5, -1, 1 ],
+        [ -4.5, -1, 1 ]
+      ],
+      "texOffset": [ 18, 0 ],
+      "children": [
+        {
+          "name": "Leg71",
+          "position": [ -3.8, 0.3, 0 ],
+          "offsetFromPivot": [ -3, 0, 0 ],
+          "size": [ 6, 2, 2 ],
+          "rotation": [ 0, 0, 45 ],
+          "vertexCoords": [
+            [ 3, 1, -1 ],
+            [ -3, 1, -1 ],
+            [ -3, -1, -1 ],
+            [ 3, -1, -1 ],
+            [ -3, 1, 1 ],
+            [ 3, 1, 1 ],
+            [ 3, -1, 1 ],
+            [ -3, -1, 1 ]
+          ],
+          "texOffset": [ 18, 0 ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "Leg8",
+      "position": [ -2, 8, 2 ],
+      "offsetFromPivot": [ -5, 0, 0 ],
+      "size": [ 9, 2, 2 ],
+      "rotation": [ 1.73549E-07, 30, 18 ],
+      "vertexCoords": [
+        [ 4.5, 1, -1 ],
+        [ -4.5, 1, -1 ],
+        [ -4.5, -1, -1 ],
+        [ 4.5, -1, -1 ],
+        [ -4.5, 1, 1 ],
+        [ 4.5, 1, 1 ],
+        [ 4.5, -1, 1 ],
+        [ -4.5, -1, 1 ]
+      ],
+      "texOffset": [ 18, 0 ],
+      "children": [
+        {
+          "name": "Leg81",
+          "position": [ -3.8, 0.3, 0 ],
+          "offsetFromPivot": [ -3, 0, 0 ],
+          "size": [ 6, 2, 2 ],
+          "rotation": [ 0, 0, 45 ],
+          "vertexCoords": [
+            [ 3, 1, -1 ],
+            [ -3, 1, -1 ],
+            [ -3, -1, -1 ],
+            [ 3, -1, -1 ],
+            [ -3, 1, 1 ],
+            [ 3, 1, 1 ],
+            [ 3, -1, 1 ],
+            [ -3, -1, 1 ]
+          ],
+          "texOffset": [ 18, 0 ],
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "Diamond",
+      "position": [ 3.793216E-07, 16, 9 ],
+      "offsetFromPivot": [ 0, 0, 0 ],
+      "size": [ 2, 2, 2 ],
+      "rotation": [ -6.361109E-15, 1.41245E-30, -2.544444E-14 ],
+      "texOffset": [ 56, 28 ],
+      "children": [
+        {
+          "name": "Diamond1",
+          "position": [ -1.312132E-06, -2.569531E-07, -1.086788E-06 ],
+          "offsetFromPivot": [ 0, 0, 0 ],
+          "size": [ 2, 2, 2 ],
+          "rotation": [ -36, 5.906945E-07, 45 ],
+          "texOffset": [ 56, 28 ],
+          "children": [
+            {
+              "name": "Diamond2",
+              "position": [ -2.086163E-07, -6.258488E-07, 1.251698E-06 ],
+              "offsetFromPivot": [ 0, 0, 0 ],
+              "size": [ 2, 2, 2 ],
+              "rotation": [ 42.26019, -65.32095, -27.82796 ],
+              "texOffset": [ 56, 28 ],
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Horn",
+      "position": [ -2.918717E-07, 16, 9 ],
+      "offsetFromPivot": [ 0, -3, 0 ],
+      "size": [ 3, 1, 1 ],
+      "rotation": [ -5.088888E-14, -3.217209E-21, 7.24451E-06 ],
+      "texOffset": [ 44, 30 ],
+      "children": [
+        {
+          "name": "Horn1",
+          "position": [ 1.15, -0.1499998, 1.065814E-14 ],
+          "offsetFromPivot": [ 1.5, 0, 0 ],
+          "size": [ 3, 1, 1 ],
+          "rotation": [ 5.088887E-14, -2.802324E-21, 45 ],
+          "texOffset": [ 44, 30 ],
+          "children": [
+            {
+              "name": "Horn2",
+              "position": [ -3.126346, 1.626346, 4.172325E-07 ],
+              "offsetFromPivot": [ 1.5, 0, 0 ],
+              "size": [ 3, 1, 1 ],
+              "rotation": [ 0, 0, 89.99999 ],
+              "texOffset": [ 44, 30 ],
+              "children": [
+                {
+                  "name": "Horn3",
+                  "position": [ 2.191097, -0.9050971, 1.370907E-06 ],
+                  "offsetFromPivot": [ 0, 0, 0 ],
+                  "size": [ 3, 1, 1 ],
+                  "rotation": [ 3.598387E-14, 3.598387E-14, -45 ],
+                  "texOffset": [ 44, 30 ],
+                  "children": [
+                    {
+                      "name": "Horn4",
+                      "position": [ 1.093655E-06, -6.239999, -9.536743E-07 ],
+                      "offsetFromPivot": [ 0, 0, 0 ],
+                      "size": [ 3, 1, 1 ],
+                      "rotation": [ 0, 0, -180 ],
+                      "vertexCoords": [
+                        [ 1.5, 0.5, -0.5 ],
+                        [ -1.5, 0.5, -0.5 ],
+                        [ -1.5, -0.5, -0.5 ],
+                        [ 1.5, -0.5, -0.5 ],
+                        [ -1.5, 0.5, 0.5 ],
+                        [ 1.5, 0.5, 0.5 ],
+                        [ 1.5, -0.5, 0.5 ],
+                        [ -1.5, -0.5, 0.5 ]
+                      ],
+                      "texOffset": [ 44, 30 ],
+                      "children": [
+                        {
+                          "name": "Horn5",
+                          "position": [ -1.150003, -6.370001, 0 ],
+                          "offsetFromPivot": [ 1.5, 0, 0 ],
+                          "size": [ 3, 1, 1 ],
+                          "rotation": [ 0, 0, 135 ],
+                          "texOffset": [ 44, 30 ],
+                          "children": [
+                            {
+                              "name": "Horn6",
+                              "position": [ 3.096194, -4.596198, 0 ],
+                              "offsetFromPivot": [ -1.5, 0, 0 ],
+                              "size": [ 3, 1, 1 ],
+                              "rotation": [ 0, 0, -90.00001 ],
+                              "vertexCoords": [
+                                [ 1.5, 0.5, -0.5 ],
+                                [ -1.5, 0.5, -0.5 ],
+                                [ -1.5, -0.5, -0.5 ],
+                                [ 1.5, -0.5, -0.5 ],
+                                [ -1.5, 0.5, 0.5 ],
+                                [ 1.5, 0.5, 0.5 ],
+                                [ 1.5, -0.5, 0.5 ],
+                                [ -1.5, -0.5, 0.5 ]
+                              ],
+                              "texOffset": [ 44, 30 ],
+                              "children": [
+                                {
+                                  "name": "Horn7",
+                                  "position": [ -2.176957, -0.9192387, -9.536743E-07 ],
+                                  "offsetFromPivot": [ 0, 0, 0 ],
+                                  "size": [ 3, 1, 1 ],
+                                  "rotation": [ 0, 0, 45 ],
+                                  "texOffset": [ 44, 30 ],
+                                  "children": []
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HornA",
+      "position": [ -2.918717E-07, 16, 9 ],
+      "offsetFromPivot": [ 0, -3, 0 ],
+      "size": [ 3, 1, 1 ],
+      "rotation": [ -5.088888E-14, -3.217209E-21, 7.24451E-06 ],
+      "texOffset": [ 44, 30 ],
+      "children": [
+        {
+          "name": "HornA1",
+          "position": [ 1.15, -0.1499998, 1.065814E-14 ],
+          "offsetFromPivot": [ 1.5, 0, 0 ],
+          "size": [ 3, 1, 1 ],
+          "rotation": [ 5.088887E-14, -2.802324E-21, 45 ],
+          "texOffset": [ 44, 30 ],
+          "children": [
+            {
+              "name": "HornA2",
+              "position": [ -3.126346, 1.626346, 4.172325E-07 ],
+              "offsetFromPivot": [ 1.5, 0, 0 ],
+              "size": [ 3, 1, 1 ],
+              "rotation": [ 0, 0, 89.99999 ],
+              "texOffset": [ 44, 30 ],
+              "children": [
+                {
+                  "name": "HornA3",
+                  "position": [ 2.191097, -0.9050971, 1.370907E-06 ],
+                  "offsetFromPivot": [ 0, 0, 0 ],
+                  "size": [ 3, 1, 1 ],
+                  "rotation": [ 3.598387E-14, 3.598387E-14, -45 ],
+                  "texOffset": [ 44, 30 ],
+                  "children": [
+                    {
+                      "name": "HornA4",
+                      "position": [ 1.093655E-06, -6.239999, -9.536743E-07 ],
+                      "offsetFromPivot": [ 0, 0, 0 ],
+                      "size": [ 3, 1, 1 ],
+                      "rotation": [ 0, 0, -180 ],
+                      "vertexCoords": [
+                        [ 1.5, 0.5, -0.5 ],
+                        [ -1.5, 0.5, -0.5 ],
+                        [ -1.5, -0.5, -0.5 ],
+                        [ 1.5, -0.5, -0.5 ],
+                        [ -1.5, 0.5, 0.5 ],
+                        [ 1.5, 0.5, 0.5 ],
+                        [ 1.5, -0.5, 0.5 ],
+                        [ -1.5, -0.5, 0.5 ]
+                      ],
+                      "texOffset": [ 44, 30 ],
+                      "children": [
+                        {
+                          "name": "HornA5",
+                          "position": [ -1.150003, -6.370001, 0 ],
+                          "offsetFromPivot": [ 1.5, 0, 0 ],
+                          "size": [ 3, 1, 1 ],
+                          "rotation": [ 0, 0, 135 ],
+                          "texOffset": [ 44, 30 ],
+                          "children": [
+                            {
+                              "name": "HornA6",
+                              "position": [ 3.096194, -4.596198, 0 ],
+                              "offsetFromPivot": [ -1.5, 0, 0 ],
+                              "size": [ 3, 1, 1 ],
+                              "rotation": [ 0, 0, -90.00001 ],
+                              "vertexCoords": [
+                                [ 1.5, 0.5, -0.5 ],
+                                [ -1.5, 0.5, -0.5 ],
+                                [ -1.5, -0.5, -0.5 ],
+                                [ 1.5, -0.5, -0.5 ],
+                                [ -1.5, 0.5, 0.5 ],
+                                [ 1.5, 0.5, 0.5 ],
+                                [ 1.5, -0.5, 0.5 ],
+                                [ -1.5, -0.5, 0.5 ]
+                              ],
+                              "texOffset": [ 44, 30 ],
+                              "children": [
+                                {
+                                  "name": "HornA7",
+                                  "position": [ -2.176957, -0.9192387, -9.536743E-07 ],
+                                  "offsetFromPivot": [ 0, 0, 0 ],
+                                  "size": [ 3, 1, 1 ],
+                                  "rotation": [ 0, 0, 45 ],
+                                  "texOffset": [ 44, 30 ],
+                                  "children": []
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HornB",
+      "position": [ -2.918717E-07, 16, 9 ],
+      "offsetFromPivot": [ 0, -3, 0 ],
+      "size": [ 3, 1, 1 ],
+      "rotation": [ -5.088888E-14, -3.217209E-21, 7.24451E-06 ],
+      "texOffset": [ 44, 30 ],
+      "children": [
+        {
+          "name": "HornB1",
+          "position": [ 1.15, -0.1499998, 1.065814E-14 ],
+          "offsetFromPivot": [ 1.5, 0, 0 ],
+          "size": [ 3, 1, 1 ],
+          "rotation": [ 5.088887E-14, -2.802324E-21, 45 ],
+          "texOffset": [ 44, 30 ],
+          "children": [
+            {
+              "name": "HornB2",
+              "position": [ -3.126346, 1.626346, 4.172325E-07 ],
+              "offsetFromPivot": [ 1.5, 0, 0 ],
+              "size": [ 3, 1, 1 ],
+              "rotation": [ 0, 0, 89.99999 ],
+              "texOffset": [ 44, 30 ],
+              "children": [
+                {
+                  "name": "HornB3",
+                  "position": [ 2.191097, -0.9050971, 1.370907E-06 ],
+                  "offsetFromPivot": [ 0, 0, 0 ],
+                  "size": [ 3, 1, 1 ],
+                  "rotation": [ 3.598387E-14, 3.598387E-14, -45 ],
+                  "texOffset": [ 44, 30 ],
+                  "children": [
+                    {
+                      "name": "HornB4",
+                      "position": [ 1.093655E-06, -6.239999, -9.536743E-07 ],
+                      "offsetFromPivot": [ 0, 0, 0 ],
+                      "size": [ 3, 1, 1 ],
+                      "rotation": [ 0, 0, -180 ],
+                      "vertexCoords": [
+                        [ 1.5, 0.5, -0.5 ],
+                        [ -1.5, 0.5, -0.5 ],
+                        [ -1.5, -0.5, -0.5 ],
+                        [ 1.5, -0.5, -0.5 ],
+                        [ -1.5, 0.5, 0.5 ],
+                        [ 1.5, 0.5, 0.5 ],
+                        [ 1.5, -0.5, 0.5 ],
+                        [ -1.5, -0.5, 0.5 ]
+                      ],
+                      "texOffset": [ 44, 30 ],
+                      "children": [
+                        {
+                          "name": "HornB5",
+                          "position": [ -1.150003, -6.370001, 0 ],
+                          "offsetFromPivot": [ 1.5, 0, 0 ],
+                          "size": [ 3, 1, 1 ],
+                          "rotation": [ 0, 0, 135 ],
+                          "texOffset": [ 44, 30 ],
+                          "children": [
+                            {
+                              "name": "HornB6",
+                              "position": [ 3.096194, -4.596198, 0 ],
+                              "offsetFromPivot": [ -1.5, 0, 0 ],
+                              "size": [ 3, 1, 1 ],
+                              "rotation": [ 0, 0, -90.00001 ],
+                              "vertexCoords": [
+                                [ 1.5, 0.5, -0.5 ],
+                                [ -1.5, 0.5, -0.5 ],
+                                [ -1.5, -0.5, -0.5 ],
+                                [ 1.5, -0.5, -0.5 ],
+                                [ -1.5, 0.5, 0.5 ],
+                                [ 1.5, 0.5, 0.5 ],
+                                [ 1.5, -0.5, 0.5 ],
+                                [ -1.5, -0.5, 0.5 ]
+                              ],
+                              "texOffset": [ 44, 30 ],
+                              "children": [
+                                {
+                                  "name": "HornB7",
+                                  "position": [ -2.176957, -0.9192387, -9.536743E-07 ],
+                                  "offsetFromPivot": [ 0, 0, 0 ],
+                                  "size": [ 3, 1, 1 ],
+                                  "rotation": [ 0, 0, 45 ],
+                                  "texOffset": [ 44, 30 ],
+                                  "children": []
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "title": "Hammering",
+  "duration": 40,
+  "holdLastKeyframe": false,
+  "nodeAnimations": {
+    "RightArm": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+        "0": [ 0, 0, 0 ],
+        "10": [ -80.00712, -180, -173.9475 ],
+        "20": [ -39.75999, 180, -174.9362 ],
+        "30": [ -70.12006, -1.364634E-05, 7.013255 ]
+      },
+      "stretch": {
+      }
+    },
+    "RightArm1": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+        "0": [ 0, 0, 0 ],
+        "10": [ 0, 0, 21.14474 ],
+        "20": [ -29.15666, -4.665966, 13.50066 ],
+        "30": [ -10.88018, -2.695332, 16.30064 ]
+      },
+      "stretch": {
+      }
+    }
+  }
+}

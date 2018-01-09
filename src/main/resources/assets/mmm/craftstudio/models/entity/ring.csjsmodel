@@ -1,0 +1,78 @@
+{
+  "title": "ring",
+  "tree": [
+    {
+      "name": "Ring",
+      "position": [ 0, 1, 0 ],
+      "offsetFromPivot": [ 0, 0, 0 ],
+      "size": [ 3, 1, 1 ],
+      "rotation": [ 0, 0, 0 ],
+      "texOffset": [ 45, 30 ],
+      "children": [
+        {
+          "name": "Ring1",
+          "position": [ 2.2, 0, -0.9 ],
+          "offsetFromPivot": [ 0, 0, 0 ],
+          "size": [ 3, 1, 1 ],
+          "rotation": [ 0, 45, 0 ],
+          "texOffset": [ 45, 30 ],
+          "children": []
+        },
+        {
+          "name": "Ring2",
+          "position": [ -2.2, 0, -0.9 ],
+          "offsetFromPivot": [ 0, 0, 0 ],
+          "size": [ 3, 1, 1 ],
+          "rotation": [ 0, -45, 0 ],
+          "texOffset": [ 45, 30 ],
+          "children": []
+        },
+        {
+          "name": "Ring3",
+          "position": [ -3.1, 0, -3.1 ],
+          "offsetFromPivot": [ 0, 0, 0 ],
+          "size": [ 3, 1, 1 ],
+          "rotation": [ 0, 89.99999, 0 ],
+          "texOffset": [ 45, 30 ],
+          "children": []
+        },
+        {
+          "name": "Ring4",
+          "position": [ 3.1, 0, -3.1 ],
+          "offsetFromPivot": [ 0, 0, 0 ],
+          "size": [ 3, 1, 1 ],
+          "rotation": [ 0, -89.99999, 0 ],
+          "texOffset": [ 45, 30 ],
+          "children": []
+        },
+        {
+          "name": "Ring5",
+          "position": [ 2.2, 0, -5.3 ],
+          "offsetFromPivot": [ 0, 0, 0 ],
+          "size": [ 3, 1, 1 ],
+          "rotation": [ 0, -45, 0 ],
+          "texOffset": [ 45, 30 ],
+          "children": []
+        },
+        {
+          "name": "Ring6",
+          "position": [ -2.2, 0, -5.3 ],
+          "offsetFromPivot": [ 0, 0, 0 ],
+          "size": [ 3, 1, 1 ],
+          "rotation": [ 0, 45, 0 ],
+          "texOffset": [ 45, 30 ],
+          "children": []
+        },
+        {
+          "name": "Ring7",
+          "position": [ 0, 0, -6.2 ],
+          "offsetFromPivot": [ 0, 0, 0 ],
+          "size": [ 3, 1, 1 ],
+          "rotation": [ 0, 0, 0 ],
+          "texOffset": [ 45, 30 ],
+          "children": []
+        }
+      ]
+    }
+  ]
+}
