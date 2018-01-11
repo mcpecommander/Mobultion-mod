@@ -46,7 +46,7 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-@Mod.EventBusSubscriber
+//@Mod.EventBusSubscriber
 public class CommonEvent {
 	@SubscribeEvent
 	public static void onLivingDeath(LivingDeathEvent e) {
@@ -110,6 +110,7 @@ public class CommonEvent {
 		// System.out.println(player.getHeldItemMainhand() + " " +
 		// player.getHeldItemMainhand().getTagCompound());
 		// }
+		System.out.println("hi");
 		if (e.getEntityLiving() != null && !e.getEntityLiving().isDead) {
 			if (e.getEntityLiving() instanceof EntityPlayer) {
 				if (!e.getEntityLiving().isPotionActive(ModPotions.potionJokerness)) {

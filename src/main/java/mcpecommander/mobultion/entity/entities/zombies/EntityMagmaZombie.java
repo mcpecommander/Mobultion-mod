@@ -144,16 +144,16 @@ public class EntityMagmaZombie extends EntityAnimatedZombie {
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
 		if (!this.isWorldRemote() && MobsConfig.zombies.magma.lavaMaking) {
-			if (cause.getTrueSource() instanceof EntityPlayerMP) {
-				EntityPlayerMP player = (EntityPlayerMP) cause.getTrueSource();
-				if (player.getHeldItemMainhand().getItem() == ModItems.fireSword) {
-					player.getHeldItemMainhand().damageItem(25, player);
-					if (this.world.isAirBlock(getPosition())
-							&& this.world.isSideSolid(getPosition().add(0, -1, 0), EnumFacing.UP)) {
-						this.world.setBlockState(getPosition(), Blocks.FLOWING_LAVA.getDefaultState(), 3);
-					}
-				}
-			}
+//			if (cause.getTrueSource() instanceof EntityPlayerMP) {
+//				EntityPlayerMP player = (EntityPlayerMP) cause.getTrueSource();
+//				if (player.getHeldItemMainhand().getItem() == ModItems.fireSword) {
+//					player.getHeldItemMainhand().damageItem(25, player);
+//					if (this.world.isAirBlock(getPosition())
+//							&& this.world.isSideSolid(getPosition().add(0, -1, 0), EnumFacing.UP)) {
+//						this.world.setBlockState(getPosition(), Blocks.FLOWING_LAVA.getDefaultState(), 3);
+//					}
+//				}
+//			}
 		}
 	}
 
