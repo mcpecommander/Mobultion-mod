@@ -76,11 +76,20 @@ public class EntityMagmaSpider extends EntityAnimatedSpider{
 
         if (this.world.rand.nextInt(MobsConfig.spiders.magma.jockeyChance) == 0 && !this.world.isRemote)
         {
-            EntitySkeleton entityskeleton = new EntitySkeleton(this.world);
-            entityskeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
-            entityskeleton.onInitialSpawn(difficulty, (IEntityLivingData)null);
-            this.world.spawnEntity(entityskeleton);
-            entityskeleton.startRiding(this);
+        	if(this.world.rand.nextBoolean()){
+        		EntitySkeleton entityskeleton = new EntitySkeleton(this.world);
+                entityskeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
+                entityskeleton.onInitialSpawn(difficulty, (IEntityLivingData)null);
+                this.world.spawnEntity(entityskeleton);
+                entityskeleton.startRiding(this);
+        	}else{
+        		EntityMiniSpider entityskeleton = new EntityMiniSpider(this.world);
+                entityskeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
+                entityskeleton.onInitialSpawn(difficulty, (IEntityLivingData)null);
+                this.world.spawnEntity(entityskeleton);
+                entityskeleton.startRiding(this);
+        	}
+            
         }
 
         return livingdata;

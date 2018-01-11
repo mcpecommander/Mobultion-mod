@@ -1,5 +1,6 @@
 package mcpecommander.mobultion.particle;
 
+import mcpecommander.mobultion.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -11,7 +12,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 public class ColoredLavaParticle extends Particle{
-	private final ResourceLocation lava = new ResourceLocation("mlm:entity/lava_particle");
+	private final ResourceLocation lava = new ResourceLocation(Reference.MOD_ID ,"entity/lava_particle");
 
 	public ColoredLavaParticle(World worldIn, double posXIn, double posYIn, double posZIn) {
 		super(worldIn, posXIn, posYIn, posZIn);
@@ -19,7 +20,7 @@ public class ColoredLavaParticle extends Particle{
 		particleGravity = Blocks.LAVA.blockParticleGravity;
 		this.particleAlpha = 0.95f;
 
-		this.particleScale *= this.rand.nextFloat() * 2.0F + 0.2F;
+		this.particleScale *= this.rand.nextFloat() * 2.0F + 0.5F;
 	    this.particleMaxAge = 4;
 	    TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(lava.toString());
 	    setParticleTexture(sprite);

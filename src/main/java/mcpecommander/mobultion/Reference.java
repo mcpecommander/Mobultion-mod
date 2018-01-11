@@ -8,7 +8,7 @@ public class Reference {
 	
 	public static final String MOD_ID = "mmm";
 	public static final String NAME = "mcpeCommander's mobultion mod";
-	public static final String VERSION = "0.0.1";
+	public static final String VERSION = "0.0.2";
 	public static final String ACCEPTED_MINECRAFT_VERSIONS = "[1.12, 1.13)";
 	
 	public static final String CLIENT_PROXY_CLASS = "mcpecommander.mobultion.proxy.ClientProxy";
@@ -72,7 +72,7 @@ public class Reference {
 		GOROZOMBIE(new ResourceLocation(MOD_ID, "goro_zombie"), "goro_zombie"),
 		KNIGHTZOMBIE(new ResourceLocation(MOD_ID, "knight_zombie"), "knight_zombie"),
 		MAGMAZOMBIE(new ResourceLocation(MOD_ID, "magma_zombie"), "magma_zombie"),
-		WORKERZOMBIE(new ResourceLocation(MOD_ID, "worker_zombie"), "woker_zombie");
+		WORKERZOMBIE(new ResourceLocation(MOD_ID, "worker_zombie"), "worker_zombie");
 		
 		
 		

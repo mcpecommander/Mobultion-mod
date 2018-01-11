@@ -116,7 +116,7 @@ public class EntityMagmaSkeleton extends EntityAnimatedSkeleton{
 	public void onUpdate() {
 		super.onUpdate();
 		if(this.world.isRemote && ticksExisted % 9 == 0 && !this.isWet() && this.deathTime < 1){
-	        this.spawnEffect(this.world, this.posX , this.posY + (double)this.height/1.7, this.posZ , 2);
+	        this.spawnEffect(this.world, this.posX , this.posY + (double)this.height/1.5, this.posZ , 2);
 
 		}
 	}

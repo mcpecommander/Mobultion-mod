@@ -6,6 +6,7 @@ import mcpecommander.mobultion.entity.entityAI.spidersAI.EntityAIHypnoBallAttack
 import mcpecommander.mobultion.entity.entityAI.spidersAI.EntityAISpiderAttack;
 import mcpecommander.mobultion.entity.entityAI.spidersAI.EntityAISpiderTarget;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILeapAtTarget;
@@ -14,6 +15,7 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityHypnoSpider extends EntityAnimatedSpider{
@@ -48,6 +50,19 @@ public class EntityHypnoSpider extends EntityAnimatedSpider{
         this.targetTasks.addTask(2, new EntityAISpiderTarget(this, EntityPlayer.class));
         this.targetTasks.addTask(3, new EntityAISpiderTarget(this, EntityIronGolem.class));
     }
+	
+	@Override
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
+		IEntityLivingData data = super.onInitialSpawn(difficulty, livingdata);
+		if(this.world.rand.nextInt(100) == 1){
+			EntityMiniSpider entityskeleton = new EntityMiniSpider(this.world);
+            entityskeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
+            entityskeleton.onInitialSpawn(difficulty, (IEntityLivingData)null);
+            this.world.spawnEntity(entityskeleton);
+            entityskeleton.startRiding(this);
+		}
+		return data;
+	}
     
     @Override
     public double getMountedYOffset()

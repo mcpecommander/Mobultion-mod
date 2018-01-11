@@ -1,5 +1,6 @@
 package mcpecommander.mobultion.particle;
 
+import mcpecommander.mobultion.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -10,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 public class ConfuseCloudParticle extends Particle{
-	private final ResourceLocation confuse = new ResourceLocation("mlm:entity/confuse_particle");
+	private final ResourceLocation confuse = new ResourceLocation(Reference.MOD_ID ,"entity/confuse_particle");
 
 	public ConfuseCloudParticle(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, float scale) {
 		super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);

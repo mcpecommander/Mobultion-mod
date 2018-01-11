@@ -19,6 +19,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import scala.reflect.internal.Trees.New;
 
 public class CommonProxy {
 
@@ -26,7 +27,7 @@ public class CommonProxy {
 
 	public CommonProxy() {
 		MinecraftForge.EVENT_BUS.register(this);
-		MinecraftForge.TERRAIN_GEN_BUS.register(SpawnEvent.class);
+		MinecraftForge.TERRAIN_GEN_BUS.register(new SpawnEvent());
 	}
 
 	public void preInit(FMLPreInitializationEvent e) {

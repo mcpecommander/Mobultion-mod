@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 public class MobultionModTab extends CreativeTabs {
 
 	public MobultionModTab() {
-		super("tabMobultioMod");
+		super("tabMobultionMod");
 	}
 
 	@Override

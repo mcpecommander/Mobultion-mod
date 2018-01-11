@@ -5,14 +5,13 @@ import java.util.List;
 import mcpecommander.mobultion.MobsConfig;
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.entities.skeletons.EntityCorruptedSkeleton;
-import mcpecommander.mobultion.entity.entities.spiders.EntityAnimatedSpider;
 import mcpecommander.mobultion.entity.entities.spiders.EntityMiniSpider;
-import mcpecommander.mobultion.entity.entities.zombies.EntityAnimatedZombie;
-import mcpecommander.mobultion.entity.entities.zombies.EntityDoctorZombie;
 import mcpecommander.mobultion.entity.entityAI.zombiesAI.EntityAIMoveToNearestDoctor;
 import mcpecommander.mobultion.init.ModItems;
 import mcpecommander.mobultion.init.ModPotions;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,15 +37,13 @@ import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
-import net.minecraftforge.event.entity.ThrowableImpactEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Mod.EventBusSubscriber
@@ -79,12 +76,10 @@ public class CommonEvent {
 		TileEntity tile = e.getWorld().getTileEntity(e.getPos());
 		if (tile != null && tile instanceof TileEntityChest) {
 			TileEntityLockableLoot chest = (TileEntityLockableLoot) tile;
-			System.out.println(chest.getLootTable());
 			if (chest.getLootTable() != null && chest.getLootTable().equals(LootTableList.CHESTS_DESERT_PYRAMID)
 					&& e.getEntityPlayer().getRNG().nextFloat() < 0.02f) {
 				BlockPos pos = findPos(e.getPos().getAllInBox(e.getPos().add(-1, 0, -1), e.getPos().add(1, 1, 1)),
 						e.getWorld());
-				System.out.println(pos);
 				if (pos != null && MobsConfig.skeletons.corrupted.spawnFromLootChests) {
 					EntityCorruptedSkeleton entity = new EntityCorruptedSkeleton(e.getWorld());
 					entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BONE));
@@ -144,6 +139,13 @@ public class CommonEvent {
 				zombie.tasks.addTask(1, task);
 			}
 		}
+		if(e.getEntity() instanceof EntitySpider && e.getWorld().rand.nextInt(100) == 76){
+			EntitySpider spider = (EntitySpider) e.getEntity();
+			EntityMiniSpider mini = new EntityMiniSpider(spider.world);
+			mini.setLocationAndAngles(spider.posX, spider.posY, spider.posZ, spider.rotationYaw, 0.0F);
+            spider.world.spawnEntity(mini);
+            mini.startRiding(spider);
+		}
 	}
 
 	@SubscribeEvent
@@ -170,28 +172,29 @@ public class CommonEvent {
 		}
 	}
 
-	@SubscribeEvent
-	public static void spawnMiniSpider(LivingSpawnEvent.CheckSpawn e) {
-		if (!e.isSpawner() && e.getResult() == Result.ALLOW) {
-			if (e.getEntityLiving() instanceof EntityAnimatedSpider || e.getEntityLiving() instanceof EntitySpider) {
-				if (e.getEntityLiving().getRNG().nextFloat() < 0.01f) {
-					EntityMiniSpider mini = new EntityMiniSpider(e.getWorld());
-					mini.setLocationAndAngles(e.getX() + e.getEntityLiving().getRNG().nextGaussian(), e.getY(),
-							e.getZ() + e.getEntityLiving().getRNG().nextGaussian(), 0, 0);
-					e.getWorld().spawnEntity(mini);
-				}
-			}
-		}
-		if (!e.isSpawner() && e.getResult() == Result.ALLOW) {
-			if (e.getEntityLiving() instanceof EntityAnimatedZombie || e.getEntityLiving() instanceof EntityZombie) {
-				if (e.getEntityLiving().getRNG().nextFloat() < 0.1f) {
-					EntityDoctorZombie doctor = new EntityDoctorZombie(e.getWorld());
-					doctor.setLocationAndAngles(e.getX() + e.getEntityLiving().getRNG().nextGaussian(), e.getY(),
-							e.getZ() + e.getEntityLiving().getRNG().nextGaussian(), 0, 0);
-					e.getWorld().spawnEntity(doctor);
-				}
-			}
-		}
+	//@SubscribeEvent
+	public static void spawnMiniSpider(ChunkEvent.Load e) {
+
+//		if (!e.isSpawner() && e.getResult() == Result.ALLOW) {
+//			if (e.getEntityLiving() instanceof EntityAnimatedSpider || e.getEntityLiving() instanceof EntitySpider) {
+//				if (e.getEntityLiving().getRNG().nextFloat() < 0.01f) {
+//					EntityMiniSpider mini = new EntityMiniSpider(e.getWorld());
+//					mini.setLocationAndAngles(e.getX() + e.getEntityLiving().getRNG().nextGaussian(), e.getY(),
+//							e.getZ() + e.getEntityLiving().getRNG().nextGaussian(), 0, 0);
+//					e.getWorld().spawnEntity(mini);
+//				}
+//			}
+//		}
+//		if (!e.isSpawner() && e.getResult() == Result.ALLOW) {
+//			if (e.getEntityLiving() instanceof EntityAnimatedZombie || e.getEntityLiving() instanceof EntityZombie) {
+//				if (e.getEntityLiving().getRNG().nextFloat() < 0.1f) {
+//					EntityDoctorZombie doctor = new EntityDoctorZombie(e.getWorld());
+//					doctor.setLocationAndAngles(e.getX() + e.getEntityLiving().getRNG().nextGaussian(), e.getY(),
+//							e.getZ() + e.getEntityLiving().getRNG().nextGaussian(), 0, 0);
+//					e.getWorld().spawnEntity(doctor);
+//				}
+//			}
+//		}
 	}
 
 }

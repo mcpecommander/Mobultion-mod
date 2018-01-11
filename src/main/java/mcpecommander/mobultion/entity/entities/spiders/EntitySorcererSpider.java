@@ -5,6 +5,7 @@ import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.entityAI.spidersAI.sorcererAI.EntityAISorcererSpiderSpellAttack;
 import mcpecommander.mobultion.entity.entityAI.spidersAI.sorcererAI.EntityAISorcererSpiderTarget;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -13,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntitySorcererSpider extends EntityAnimatedSpider{
@@ -37,6 +39,19 @@ public class EntitySorcererSpider extends EntityAnimatedSpider{
         this.tasks.addTask(6, new EntityAILookIdle(this));
         this.targetTasks.addTask(2, new EntityAISorcererSpiderTarget(this, EntityPlayer.class, true));
     }
+	
+	@Override
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
+		IEntityLivingData data = super.onInitialSpawn(difficulty, livingdata);
+		if(this.world.rand.nextInt(100) == 1){
+			EntityMiniSpider entityskeleton = new EntityMiniSpider(this.world);
+            entityskeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
+            entityskeleton.onInitialSpawn(difficulty, (IEntityLivingData)null);
+            this.world.spawnEntity(entityskeleton);
+            entityskeleton.startRiding(this);
+		}
+		return data;
+	}
     
 	@Override
     public double getMountedYOffset()

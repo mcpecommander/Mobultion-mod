@@ -21,6 +21,7 @@ public class LayerMagmaZombieLava<T extends EntityMagmaZombie> implements LayerR
     public void doRenderLayer(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
     {
         this.renderLiving.bindTexture(LAVA);
+        GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
         GlStateManager.disableAlpha();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
@@ -40,6 +41,10 @@ public class LayerMagmaZombieLava<T extends EntityMagmaZombie> implements LayerR
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
         GlStateManager.color(1F, 1F, 1F, 1.0F);
         Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
+        if(entitylivingbaseIn.isChild()){
+    		GlStateManager.scale(0.5F, 0.5F, 0.5F);
+            GlStateManager.translate(0.0F, 24.0F * scale, 0.0F);
+    	}
         this.renderLiving.getMainModel().render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
         Minecraft.getMinecraft().entityRenderer.setupFogColor(false);
         i = entitylivingbaseIn.getBrightnessForRender();
@@ -49,6 +54,7 @@ public class LayerMagmaZombieLava<T extends EntityMagmaZombie> implements LayerR
         this.renderLiving.setLightmap(entitylivingbaseIn);
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
+        GlStateManager.popMatrix();
     }
 
     public boolean shouldCombineTextures()

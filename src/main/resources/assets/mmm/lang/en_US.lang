@@ -1,14 +1,33 @@
-item.cheese.name=Cheese
-item.cracker.name=Cracker
-item.cheese_and_cracker.name=Cheese and Cracker
-item.wand.name=Wand
+item.mmm:health.name=Health pack
+item.mmm:fire_sword.name=Fire Sword
+item.mmm:healing_wand.name=Healing Wand
+item.mmm:heart_arrow.name=Heart Arrow
+item.mmm:forest_bow.name=Forest Bow
 
+entity.corrupted_skeleton.name=Corrupted Skeleton
+entity.joker_skeleton.name=Jester Skeleton
+entity.magma_skeleton.name=Magma Skeleton
+entity.shaman_skeleton.name=Shaman Skeleton
+entity.sniper_skeleton.name=Sniper Skeleton
+entity.withering_skeleton.name=Withering Skeleton
+entity.skeleton_remains.name=Skeleton Remains
+entity.heart_arrow.name=Heart Arrow
+entity.magma_arrow.name=Magma Arrow
 
-tile.cheese.name=Cheese Block
-tile.fakeCheese.name=Fake Cheese Block
-tile.jar.name=Jar
-tile.counter.name=Counter
-tile.blinker.name=Blinker
-tile.panelLight.name=Panel Light
+entity.angel_spider.name=Angel Spider
+entity.hypno_spider.name=Hypno Spider
+entity.magma_spider.name=Magma Spider
+entity.mini_spider.name=Mini Spider
+entity.mother_spider.name=Mother Spider
+entity.sorcerer_spider.name=Sorcerer Spider
+entity.speedy_spider.name=Speedy Spider
+entity.wither_spider.name=Wither Spider
+entity.spider_egg.name=Spider Egg
 
-itemGroup.tabLuggageMod=Luggage Mod
+entity.doctor_zombie.name=Doctor Zombie
+entity.goro_zombie.name=Goro Zombie
+entity.knight_zombie.name=Knight Zombie
+entity.magma_zombie.name=Magma Zombie
+entity.worker_zombie.name=Worker Zombie
+
+itemGroup.tabMobultionMod=Mobultion Tab

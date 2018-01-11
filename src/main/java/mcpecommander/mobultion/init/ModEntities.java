@@ -121,7 +121,7 @@ public class ModEntities {
 			EntityEntry speedy = EntityEntryBuilder.create().entity(EntitySpeedySpider.class)
 					.id(Reference.MobultionEntities.SPEEDYSPIDER.getRegistryName(), 2)
 					.name(Reference.MobultionEntities.SPEEDYSPIDER.getUnlocalizedName()).tracker(64, 3, true)
-					.egg(0x230E0E, 0xF01414)
+					.egg(0x0C0CDB, 0x6666D0)
 					.spawn(EnumCreatureType.MONSTER, 100, 1, 2, getBiomes(MobsConfig.spiders.speedy.spawnLocations)).build();
 			event.getRegistry().register(speedy);
 		}
@@ -131,7 +131,7 @@ public class ModEntities {
 			EntityEntry wither = EntityEntryBuilder.create().entity(EntityWitherSpider.class)
 					.id(Reference.MobultionEntities.WITHERSPIDER.getRegistryName(), 3)
 					.name(Reference.MobultionEntities.WITHERSPIDER.getUnlocalizedName()).tracker(64, 3, true)
-					.egg(0x230E0E, 0xF01414)
+					.egg(0x666666, 0x444444)
 					.spawn(EnumCreatureType.MONSTER, 100, 1, 3, getBiomes(MobsConfig.spiders.wither.spawnLocations)).build();
 			event.getRegistry().register(wither);
 		}
@@ -141,7 +141,7 @@ public class ModEntities {
 			EntityEntry mini = EntityEntryBuilder.create().entity(EntityMiniSpider.class)
 					.id(Reference.MobultionEntities.MINISPIDER.getRegistryName(), 4)
 					.name(Reference.MobultionEntities.MINISPIDER.getUnlocalizedName()).tracker(64, 3, true)
-					.egg(0x230E0E, 0xF01414)
+					.egg(0xF3F3F3, 0xF4CCCC)
 					.build();
 			event.getRegistry().register(mini);
 		}
@@ -151,7 +151,7 @@ public class ModEntities {
 			EntityEntry sorcerer = EntityEntryBuilder.create().entity(EntitySorcererSpider.class)
 					.id(Reference.MobultionEntities.SORCERERSPIDER.getRegistryName(), 5)
 					.name(Reference.MobultionEntities.SORCERERSPIDER.getUnlocalizedName()).tracker(64, 3, true)
-					.egg(0x230E0E, 0xF01414)
+					.egg(0x6AA84F, 0x12436F)
 					.spawn(EnumCreatureType.MONSTER, 100, 1, 2, getBiomes(MobsConfig.spiders.sorcerer.spawnLocations)).build();
 			event.getRegistry().register(sorcerer);
 		}
@@ -161,7 +161,7 @@ public class ModEntities {
 			EntityEntry angel = EntityEntryBuilder.create().entity(EntityAngelSpider.class)
 					.id(Reference.MobultionEntities.ANGELSPIDER.getRegistryName(), 6)
 					.name(Reference.MobultionEntities.ANGELSPIDER.getUnlocalizedName()).tracker(64, 3, true)
-					.egg(0x230E0E, 0xF01414)
+					.egg(0xFFFFFF, 0xFFFF53)
 					.spawn(EnumCreatureType.MONSTER, 100, 2, 4, getBiomes(MobsConfig.spiders.angel.spawnLocations)).build();
 			event.getRegistry().register(angel);
 		}
@@ -171,7 +171,7 @@ public class ModEntities {
 			EntityEntry mother = EntityEntryBuilder.create().entity(EntityMotherSpider.class)
 					.id(Reference.MobultionEntities.MOTHERSPIDER.getRegistryName(), 7)
 					.name(Reference.MobultionEntities.MOTHERSPIDER.getUnlocalizedName()).tracker(64, 3, true)
-					.egg(0x230E0E, 0xF01414)
+					.egg(0x444444, 0x9D8888)
 					.spawn(EnumCreatureType.MONSTER, 100, 2, 4, getBiomes(MobsConfig.spiders.mother.spawnLocations)).build();
 			EntityEntry egg = EntityEntryBuilder.create().entity(EntitySpiderEgg.class)
 					.id(Reference.MobultionEntities.SPIDEREGG.getRegistryName(), 8)
@@ -185,7 +185,7 @@ public class ModEntities {
 			EntityEntry hypno = EntityEntryBuilder.create().entity(EntityHypnoSpider.class)
 					.id(Reference.MobultionEntities.HYPNOSPIDER.getRegistryName(), 9)
 					.name(Reference.MobultionEntities.HYPNOSPIDER.getUnlocalizedName()).tracker(64, 3, true)
-					.egg(0x230E0E, 0xF01414)
+					.egg(0xDD06DD, 0xF736F7)
 					.spawn(EnumCreatureType.MONSTER, 100, 3, 6, getBiomes(MobsConfig.spiders.hypno.spawnLocations)).build();
 			EntityEntry egg = EntityEntryBuilder.create().entity(EntityHypnoBall.class)
 					.id(Reference.MobultionEntities.HYPNOBALL.getRegistryName(), 10)
@@ -206,7 +206,7 @@ public class ModEntities {
 			EntityEntry withering = EntityEntryBuilder.create().entity(EntityWitheringSkeleton.class)
 					.id(Reference.MobultionEntities.WITHERINGSKELETON.getRegistryName(), 12)
 					.name(Reference.MobultionEntities.WITHERINGSKELETON.getUnlocalizedName()).tracker(64, 3, true)
-					.egg(0x230E0E, 0xF01414)
+					.egg(0x5C5151, 0xCCCCCC)
 					.spawn(EnumCreatureType.MONSTER, 100, 3, 5, getBiomes(MobsConfig.skeletons.withering.spawnLocations)).build();
 			event.getRegistry().register(withering);
 		}
@@ -216,7 +216,7 @@ public class ModEntities {
 			EntityEntry joker = EntityEntryBuilder.create().entity(EntityShamanSkeleton.class)
 					.id(Reference.MobultionEntities.SHAMANSKELETON.getRegistryName(), 13)
 					.name(Reference.MobultionEntities.SHAMANSKELETON.getUnlocalizedName()).tracker(64, 3, true)
-					.egg(0x230E0E, 0xF01414)
+					.egg(0x050572, 0x741B47)
 					.spawn(EnumCreatureType.MONSTER, 100, 3, 5, getBiomes(MobsConfig.skeletons.shaman.spawnLocations)).build();
 			event.getRegistry().register(joker);
 		}
@@ -226,7 +226,7 @@ public class ModEntities {
 			EntityEntry joker = EntityEntryBuilder.create().entity(EntityJokerSkeleton.class)
 					.id(Reference.MobultionEntities.JOKERSKELETON.getRegistryName(), 14)
 					.name(Reference.MobultionEntities.JOKERSKELETON.getUnlocalizedName()).tracker(64, 3, true)
-					.egg(0x230E0E, 0xF01414)
+					.egg(0xFF0000, 0xFFFF00)
 					.spawn(EnumCreatureType.MONSTER, 100, 3, 5, getBiomes(MobsConfig.skeletons.joker.spawnLocations)).build();
 			event.getRegistry().register(joker);
 		}
@@ -240,7 +240,7 @@ public class ModEntities {
 			EntityEntry sniper = EntityEntryBuilder.create().entity(EntitySniperSkeleton.class)
 					.id(Reference.MobultionEntities.SNIPERSKELETON.getRegistryName(), 16)
 					.name(Reference.MobultionEntities.SNIPERSKELETON.getUnlocalizedName()).tracker(64, 3, true)
-					.egg(0x230E0E, 0xF01414)
+					.egg(0x38761D, 0x93C47D)
 					.spawn(EnumCreatureType.MONSTER, 100, 3, 5, getBiomes(MobsConfig.skeletons.sniper.spawnLocations)).build();
 			event.getRegistry().register(sniper);
 		}
@@ -250,7 +250,7 @@ public class ModEntities {
 			EntityEntry magma = EntityEntryBuilder.create().entity(EntityMagmaSkeleton.class)
 					.id(Reference.MobultionEntities.MAGMASKELETON.getRegistryName(), 17)
 					.name(Reference.MobultionEntities.MAGMASKELETON.getUnlocalizedName()).tracker(64, 3, true)
-					.egg(0x230E0E, 0xF01414)
+					.egg(0x811616, 0xFD1D1D)
 					.spawn(EnumCreatureType.MONSTER, 100, 3, 5, getBiomes(MobsConfig.skeletons.magma.spawnLocations)).build();
 			event.getRegistry().register(magma);
 		}
@@ -265,7 +265,7 @@ public class ModEntities {
 			EntityEntry corrupted = EntityEntryBuilder.create().entity(EntityCorruptedSkeleton.class)
 					.id(Reference.MobultionEntities.CORRUPTEDSKELETON.getRegistryName(), 19)
 					.name(Reference.MobultionEntities.CORRUPTEDSKELETON.getUnlocalizedName()).tracker(64, 3, true)
-					.egg(0x230E0E, 0xF01414)
+					.egg(0x745F1D, 0x927006)
 					.spawn(EnumCreatureType.MONSTER, 100, 3, 5, getBiomes(MobsConfig.skeletons.corrupted.spawnLocations)).build();
 			event.getRegistry().register(corrupted);
 		}
@@ -275,7 +275,7 @@ public class ModEntities {
 			EntityEntry knight = EntityEntryBuilder.create().entity(EntityKnightZombie.class)
 					.id(Reference.MobultionEntities.KNIGHTZOMBIE.getRegistryName(), 20)
 					.name(Reference.MobultionEntities.KNIGHTZOMBIE.getUnlocalizedName()).tracker(64, 3, true)
-					.egg(0x230E0E, 0xF01414)
+					.egg(0xEEEEEE, 0xD0E0E3)
 					.spawn(EnumCreatureType.MONSTER, 100, 3, 5, getBiomes(MobsConfig.zombies.knight.spawnLocations)).build();
 			event.getRegistry().register(knight);
 		}
@@ -285,7 +285,7 @@ public class ModEntities {
 			EntityEntry worker = EntityEntryBuilder.create().entity(EntityWorkerZombie.class)
 					.id(Reference.MobultionEntities.WORKERZOMBIE.getRegistryName(), 21)
 					.name(Reference.MobultionEntities.WORKERZOMBIE.getUnlocalizedName()).tracker(64, 3, true)
-					.egg(0x230E0E, 0xF01414)
+					.egg(0xFFE599, 0xFFFF00)
 					.spawn(EnumCreatureType.MONSTER, 100, 3, 5, getBiomes(MobsConfig.zombies.worker.spawnLocations)).build();
 			event.getRegistry().register(worker);
 		}
@@ -295,7 +295,7 @@ public class ModEntities {
 			EntityEntry magma = EntityEntryBuilder.create().entity(EntityMagmaZombie.class)
 					.id(Reference.MobultionEntities.MAGMAZOMBIE.getRegistryName(), 22)
 					.name(Reference.MobultionEntities.MAGMAZOMBIE.getUnlocalizedName()).tracker(64, 3, true)
-					.egg(0x230E0E, 0xF01414)
+					.egg(0xFFF144, 0xCC0000)
 					.spawn(EnumCreatureType.MONSTER, 100, 3, 5, getBiomes(MobsConfig.zombies.magma.spawnLocations)).build();
 			event.getRegistry().register(magma);
 		}
@@ -305,8 +305,8 @@ public class ModEntities {
 			EntityEntry doctor = EntityEntryBuilder.create().entity(EntityDoctorZombie.class)
 					.id(Reference.MobultionEntities.DOCTORZOMBIE.getRegistryName(), 23)
 					.name(Reference.MobultionEntities.DOCTORZOMBIE.getUnlocalizedName()).tracker(64, 3, true)
-					.egg(0x230E0E, 0xF01414)
-					.spawn(EnumCreatureType.MONSTER, 100, 3, 5, getBiomes(MobsConfig.zombies.doctor.spawnLocations)).build();
+					.egg(0xFFFFFF, 0xFD1D1D)
+					.spawn(EnumCreatureType.MONSTER, 80, 1, 2, getBiomes(MobsConfig.zombies.doctor.spawnLocations)).build();
 			event.getRegistry().register(doctor);
 		}
 
@@ -315,7 +315,7 @@ public class ModEntities {
 			EntityEntry goro = EntityEntryBuilder.create().entity(EntityGoroZombie.class)
 					.id(Reference.MobultionEntities.GOROZOMBIE.getRegistryName(), 24)
 					.name(Reference.MobultionEntities.GOROZOMBIE.getUnlocalizedName()).tracker(64, 3, true)
-					.egg(0x230E0E, 0xF01414)
+					.egg(0x95BD84, 0xCEA937)
 					.spawn(EnumCreatureType.MONSTER, 100, 1, 2, getBiomes(MobsConfig.zombies.goro.spawnLocations)).build();
 			event.getRegistry().register(goro);
 		}
