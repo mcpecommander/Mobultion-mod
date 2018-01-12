@@ -4,8 +4,8 @@ import com.leviathanstudio.craftstudio.CraftStudioApi;
 import com.leviathanstudio.craftstudio.common.animation.AnimationHandler;
 import com.leviathanstudio.craftstudio.common.animation.IAnimated;
 
-import mcpecommander.mobultion.MobsConfig;
 import mcpecommander.mobultion.Reference;
+import mcpecommander.mobultion.mobConfigs.SpidersConfig;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -198,7 +198,7 @@ public class EntitySpiderEgg extends EntityLivingBase implements IAnimated{
 							3, 0, 0, 0, 0.01);
 					spider.setAttackTarget(getRevengeTarget());
 					this.world.spawnEntity(spider);
-					this.coolDown = (short) MobsConfig.spiders.mother.eggHatchingTime;
+					this.coolDown = (short) SpidersConfig.spiders.mother.eggHatchingTime;
 					this.setPregnant((byte) -1);
 				}
 				if (!this.isCoolingDown()) {

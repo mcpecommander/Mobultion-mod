@@ -1,6 +1,6 @@
 package mcpecommander.mobultion.entity.entities.skeletons;
 
-import mcpecommander.mobultion.MobsConfig;
+import mcpecommander.mobultion.mobConfigs.SkeletonsConfig;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -61,7 +61,7 @@ public class EntityMagmaArrow extends EntityArrow {
 			this.extinguish();
 		}
 		if (this.isInWater() && this.world.getBlockState(this.getPosition()).getMaterial() == Material.WATER
-				&& MobsConfig.skeletons.magma.cobbleMaking) {
+				&& SkeletonsConfig.skeletons.magma.cobbleMaking) {
 			this.world.setBlockState(this.getPosition(), Blocks.COBBLESTONE.getDefaultState());
 			this.setDead();
 		}
@@ -106,9 +106,9 @@ public class EntityMagmaArrow extends EntityArrow {
 			// }
 			// }
 			// }else
-			if (blockState.getBlock() instanceof BlockSand && MobsConfig.skeletons.magma.glassMaking) {
+			if (blockState.getBlock() instanceof BlockSand && SkeletonsConfig.skeletons.magma.glassMaking) {
 				this.world.setBlockState(blockpos, Blocks.GLASS.getDefaultState());
-			} else if (blockState.getMaterial() == Material.WATER && MobsConfig.skeletons.magma.cobbleMaking) {
+			} else if (blockState.getMaterial() == Material.WATER && SkeletonsConfig.skeletons.magma.cobbleMaking) {
 				this.world.setBlockState(blockpos, Blocks.COBBLESTONE.getDefaultState());
 				this.setDead();
 			}

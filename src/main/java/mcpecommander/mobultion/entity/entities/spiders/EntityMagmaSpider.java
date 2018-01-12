@@ -2,11 +2,11 @@ package mcpecommander.mobultion.entity.entities.spiders;
 
 import javax.annotation.Nullable;
 
-import mcpecommander.mobultion.MobsConfig;
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.entityAI.spidersAI.EntityAISpiderAttack;
 import mcpecommander.mobultion.entity.entityAI.spidersAI.EntityAISpiderTarget;
+import mcpecommander.mobultion.mobConfigs.SpidersConfig;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -63,8 +63,8 @@ public class EntityMagmaSpider extends EntityAnimatedSpider{
     protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(18.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.32D);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(22.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
     }
 
 
@@ -74,23 +74,13 @@ public class EntityMagmaSpider extends EntityAnimatedSpider{
     {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
 
-        if (this.world.rand.nextInt(MobsConfig.spiders.magma.jockeyChance) == 0 && !this.world.isRemote)
-        {
-        	if(this.world.rand.nextBoolean()){
-        		EntitySkeleton entityskeleton = new EntitySkeleton(this.world);
-                entityskeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
-                entityskeleton.onInitialSpawn(difficulty, (IEntityLivingData)null);
-                this.world.spawnEntity(entityskeleton);
-                entityskeleton.startRiding(this);
-        	}else{
-        		EntityMiniSpider entityskeleton = new EntityMiniSpider(this.world);
-                entityskeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
-                entityskeleton.onInitialSpawn(difficulty, (IEntityLivingData)null);
-                this.world.spawnEntity(entityskeleton);
-                entityskeleton.startRiding(this);
-        	}
-            
-        }
+		if (this.world.rand.nextInt(SpidersConfig.spiders.magma.jockeyChance) == 0 && !this.world.isRemote) {
+			EntitySkeleton entityskeleton = new EntitySkeleton(this.world);
+			entityskeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
+			entityskeleton.onInitialSpawn(difficulty, (IEntityLivingData) null);
+			this.world.spawnEntity(entityskeleton);
+			entityskeleton.startRiding(this);
+		}
 
         return livingdata;
     }
@@ -126,7 +116,7 @@ public class EntityMagmaSpider extends EntityAnimatedSpider{
 
             if (this.rand.nextFloat() < f * 0.3F)
             {
-                entityIn.setFire(MobsConfig.spiders.magma.burningLength + (int)f);
+                entityIn.setFire(SpidersConfig.spiders.magma.burningLength + (int)f);
             }
         }
 
@@ -135,7 +125,7 @@ public class EntityMagmaSpider extends EntityAnimatedSpider{
     
     @Override
     protected void updateAITasks(){
-    	if (this.isWet() && MobsConfig.spiders.magma.waterDamage)
+    	if (this.isWet() && SpidersConfig.spiders.magma.waterDamage)
         {
             this.attackEntityFrom(DamageSource.DROWN, 1.0F);
         }

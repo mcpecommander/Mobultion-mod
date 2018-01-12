@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.entities.spiders.EntityMagmaSpider;
+import mcpecommander.mobultion.entity.layers.spiderLayers.LayerMagmaSpiderLava;
 import mcpecommander.mobultion.entity.layers.spiderLayers.LayerSpiderEyes;
 import mcpecommander.mobultion.entity.model.ModelCraftStudioSon;
 import net.minecraft.client.renderer.entity.Render;
@@ -20,6 +21,7 @@ public class RenderMagmaSpider extends RenderLiving<EntityMagmaSpider>{
 	public RenderMagmaSpider(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, model, 0.5F);
 		this.addLayer(new LayerSpiderEyes(this));
+		this.addLayer(new LayerMagmaSpiderLava(this));
 	}
 	
 	@Override

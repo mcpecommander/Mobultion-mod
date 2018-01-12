@@ -1,10 +1,10 @@
 package mcpecommander.mobultion.entity.entities.spiders;
 
-import mcpecommander.mobultion.MobsConfig;
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.entityAI.spidersAI.miniAI.EntityAIMiniSpiderAttack;
 import mcpecommander.mobultion.entity.entityAI.spidersAI.miniAI.EntityAIMiniSpiderTarget;
+import mcpecommander.mobultion.mobConfigs.SpidersConfig;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -56,9 +56,9 @@ public class EntityMiniSpider extends EntityAnimatedSpider{
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(MobsConfig.spiders.mini.speed);
-		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(SpidersConfig.spiders.mini.speed);
+		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
 	}
 
 	@Override

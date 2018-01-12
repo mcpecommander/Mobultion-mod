@@ -2,11 +2,11 @@ package mcpecommander.mobultion.entity.entities.spiders;
 
 import javax.annotation.Nullable;
 
-import mcpecommander.mobultion.MobsConfig;
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.entityAI.spidersAI.EntityAISpiderAttack;
 import mcpecommander.mobultion.entity.entityAI.spidersAI.EntityAISpiderTarget;
+import mcpecommander.mobultion.mobConfigs.SpidersConfig;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -56,34 +56,26 @@ public class EntitySpeedySpider extends EntityAnimatedSpider{
     {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(18.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(MobsConfig.spiders.speedy.speed);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(SpidersConfig.spiders.speedy.speed);
     } 
     
     @Override
     @Nullable
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata)
     {
-        livingdata = super.onInitialSpawn(difficulty, livingdata);
+		livingdata = super.onInitialSpawn(difficulty, livingdata);
 
-        if (this.world.rand.nextInt(MobsConfig.spiders.speedy.jockeyChance) == 0 && !this.world.isRemote)
-        {
-        	if(this.world.rand.nextBoolean()){
-	            EntitySkeleton entityskeleton = new EntitySkeleton(this.world);
-	            entityskeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
-	            entityskeleton.onInitialSpawn(difficulty, (IEntityLivingData)null);
-	            this.world.spawnEntity(entityskeleton);
-	            entityskeleton.startRiding(this);
-        	}else{
-        		EntityMiniSpider entityskeleton = new EntityMiniSpider(this.world);
-                entityskeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
-                entityskeleton.onInitialSpawn(difficulty, (IEntityLivingData)null);
-                this.world.spawnEntity(entityskeleton);
-                entityskeleton.startRiding(this);
-        	}
-        }
+		if (this.world.rand.nextInt(SpidersConfig.spiders.speedy.jockeyChance) == 0 && !this.world.isRemote) {
+			EntitySkeleton entityskeleton = new EntitySkeleton(this.world);
+			entityskeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
+			entityskeleton.onInitialSpawn(difficulty, (IEntityLivingData) null);
+			this.world.spawnEntity(entityskeleton);
+			entityskeleton.startRiding(this);
+		}
 
-        return livingdata;
-    }
+		return livingdata;
+	}
+    
     @Override
     public float getEyeHeight()
     {

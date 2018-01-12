@@ -33,8 +33,8 @@ public class RenderSkeletonRemains extends RenderLivingBase<EntitySkeletonRemain
 		switch(entity.getTYPE()){
 		case (byte)1: return mobTexture;
 		case (byte)2: return mobTexture2;
-		case (byte)3: case (byte)4: return mobTexture3;
-		case (byte)5: return mobTexture4;
+		case (byte)3: case (byte)4: case (byte)5: return mobTexture3;
+//		case (byte)5: return mobTexture4;
 		case (byte)6: return mobTexture5;
 		default: return mobTexture;
 		}
@@ -54,7 +54,7 @@ public class RenderSkeletonRemains extends RenderLivingBase<EntitySkeletonRemain
 	
 	@Override
 	protected boolean canRenderName(EntitySkeletonRemains entity) {
-		return false;
+		return entity.hasCustomName();
 	}
 	
 	@Override

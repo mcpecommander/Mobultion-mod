@@ -1,11 +1,12 @@
 package mcpecommander.mobultion.entity.entities.zombies;
 
-import mcpecommander.mobultion.MobsConfig;
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.animation.AnimationRiding;
 import mcpecommander.mobultion.entity.entityAI.zombiesAI.EntityAIKnightAttackMelee;
 import mcpecommander.mobultion.init.ModItems;
+import mcpecommander.mobultion.mobConfigs.SpidersConfig;
+import mcpecommander.mobultion.mobConfigs.ZombiesConfig;
 import mcpecommander.mobultion.particle.ColoredLavaParticle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -52,13 +53,11 @@ public class EntityMagmaZombie extends EntityAnimatedZombie {
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(1, new EntityAIBreakDoor(this));
 		this.tasks.addTask(2, new EntityAIKnightAttackMelee(this, 1.0D, false));
 		this.tasks.addTask(3, new EntityAIMoveTowardsRestriction(this, 1.0D));
-		this.tasks.addTask(4, new EntityAIMoveThroughVillage(this, 1.0D, false));
-		this.tasks.addTask(5, new EntityAIWanderAvoidWater(this, 1.0D));
-		this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-		this.tasks.addTask(6, new EntityAILookIdle(this));
+		this.tasks.addTask(4, new EntityAIWanderAvoidWater(this, 1.0D));
+		this.tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+		this.tasks.addTask(5, new EntityAILookIdle(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false, new Class[0]));
 		this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
 		this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityVillager.class, false));
@@ -143,23 +142,23 @@ public class EntityMagmaZombie extends EntityAnimatedZombie {
 	@Override
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
-		if (!this.isWorldRemote() && MobsConfig.zombies.magma.lavaMaking) {
-//			if (cause.getTrueSource() instanceof EntityPlayerMP) {
-//				EntityPlayerMP player = (EntityPlayerMP) cause.getTrueSource();
-//				if (player.getHeldItemMainhand().getItem() == ModItems.fireSword) {
-//					player.getHeldItemMainhand().damageItem(25, player);
-//					if (this.world.isAirBlock(getPosition())
-//							&& this.world.isSideSolid(getPosition().add(0, -1, 0), EnumFacing.UP)) {
-//						this.world.setBlockState(getPosition(), Blocks.FLOWING_LAVA.getDefaultState(), 3);
-//					}
-//				}
-//			}
+		if (!this.isWorldRemote() && ZombiesConfig.zombies.magma.lavaMaking) {
+			if (cause.getTrueSource() instanceof EntityPlayerMP) {
+				EntityPlayerMP player = (EntityPlayerMP) cause.getTrueSource();
+				if (player.getHeldItemMainhand().getItem() == ModItems.fireSword) {
+					player.getHeldItemMainhand().damageItem(25, player);
+					if (this.world.isAirBlock(getPosition())
+							&& this.world.isSideSolid(getPosition().add(0, -1, 0), EnumFacing.UP)) {
+						this.world.setBlockState(getPosition(), Blocks.FLOWING_LAVA.getDefaultState(), 3);
+					}
+				}
+			}
 		}
 	}
 
 	@Override
 	protected void updateAITasks() {
-		if (this.isWet() && MobsConfig.zombies.magma.wetDamage) {
+		if (this.isWet() && ZombiesConfig.zombies.magma.wetDamage) {
 			this.attackEntityFrom(DamageSource.DROWN, 1.0F);
 		}
 		super.updateAITasks();

@@ -2,12 +2,16 @@ package mcpecommander.mobultion.entity.entities.skeletons;
 
 import javax.annotation.Nullable;
 
+import org.apache.logging.log4j.Level;
+
 import com.leviathanstudio.craftstudio.CraftStudioApi;
 import com.leviathanstudio.craftstudio.common.animation.AnimationHandler;
 import com.leviathanstudio.craftstudio.common.animation.IAnimated;
 
+import mcpecommander.mobultion.MobultionMod;
 import mcpecommander.mobultion.init.ModSounds;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntitySkeleton;
@@ -31,8 +35,6 @@ public class EntitySkeletonRemains extends EntityLivingBase implements IAnimated
 	public EntitySkeletonRemains(World worldIn) {
 		super(worldIn);
 		this.setSize(.75f, .52f);
-		this.setAlwaysRenderNameTag(false);
-		this.setCustomNameTag("haha");
 	}
 	
 	public EntitySkeletonRemains(World worldIn, EntityLivingBase originalSkeleton){
@@ -64,10 +66,12 @@ public class EntitySkeletonRemains extends EntityLivingBase implements IAnimated
 	
 	@Override
 	protected void collideWithEntity(Entity entityIn) {
+		return;
 	}
 	
 	@Override
 	protected void collideWithNearbyEntities() {
+		return;
 	}
 
 	@Override
@@ -75,6 +79,14 @@ public class EntitySkeletonRemains extends EntityLivingBase implements IAnimated
     {
         return .35F;
     }
+	
+	@Override
+	public boolean isEntityInvulnerable(DamageSource source) {
+		if(source == DamageSource.IN_WALL){
+			return true;
+		}
+		return super.isEntityInvulnerable(source);
+	}
 	
 	@Override
 	public void onLivingUpdate() {
@@ -87,8 +99,8 @@ public class EntitySkeletonRemains extends EntityLivingBase implements IAnimated
 		if(this.ticksExisted >= 1200 && !this.world.isRemote){
 			this.setDead();
 			this.playSound(ModSounds.entity_respawn, 1f, .5f);
-			EntityLivingBase skele = this.getSkeleton(this.getTYPE());
-            skele.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(((IGetEquip) skele).getEquip()));
+			EntityLiving skele = this.getSkeleton(this.getTYPE());
+			skele.onInitialSpawn(this.world.getDifficultyForLocation(getPosition()), null);
             skele.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
             this.world.spawnEntity(skele);
 		}
@@ -163,7 +175,7 @@ public class EntitySkeletonRemains extends EntityLivingBase implements IAnimated
 		}
 	}
 	
-	public EntityLivingBase getSkeleton(byte type) {
+	public EntityLiving getSkeleton(byte type) {
 		switch(type){
 		case (byte)1:
 			return new EntityWitheringSkeleton(this.world);
@@ -178,7 +190,8 @@ public class EntitySkeletonRemains extends EntityLivingBase implements IAnimated
 		case (byte)6:
 			return new EntityCorruptedSkeleton(this.world);
 		}
-		System.out.println("If this is printed, there is a serious problem in " + this.getClass() + " and you need to contact the mod author" );	
+		MobultionMod.logger.log(Level.FATAL, "If this is printed, there is a serious problem in " + this.toString() + " and you need to contact the mod author");
+//		System.out.println("If this is printed, there is a serious problem in " + this.toString() + " and you need to contact the mod author" );	
 		return new EntitySkeleton(this.world);
 	}
 

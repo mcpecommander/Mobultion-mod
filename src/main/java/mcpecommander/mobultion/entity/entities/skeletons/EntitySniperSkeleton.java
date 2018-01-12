@@ -1,6 +1,5 @@
 package mcpecommander.mobultion.entity.entities.skeletons;
 
-import mcpecommander.mobultion.MobsConfig;
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.animation.AnimationRiding;
@@ -8,6 +7,7 @@ import mcpecommander.mobultion.entity.entityAI.skeletonsAI.EntityAIAttackRangedM
 import mcpecommander.mobultion.entity.entityAI.skeletonsAI.EntityAIForestSkeletonMoveToTree;
 import mcpecommander.mobultion.init.ModItems;
 import mcpecommander.mobultion.init.ModSounds;
+import mcpecommander.mobultion.mobConfigs.SkeletonsConfig;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -28,7 +28,6 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntityTippedArrow;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
@@ -78,7 +77,7 @@ public class EntitySniperSkeleton extends EntityAnimatedSkeleton{
 	protected void initEntityAI() {
 		this.tasks.addTask(1, new EntityAISwimming(this));
 	    this.tasks.addTask(2, new EntityAIRestrictSun(this));
-	    this.tasks.addTask(2, new EntityAIForestSkeletonMoveToTree(this, MobsConfig.skeletons.sniper.radius, 1.0D));
+	    this.tasks.addTask(2, new EntityAIForestSkeletonMoveToTree(this, SkeletonsConfig.skeletons.sniper.radius, 1.0D));
 	    this.tasks.addTask(3, new EntityAIAvoidEntity(this, EntityWolf.class, 6.0F, 1.0D, 1.2D));
 	    this.tasks.addTask(5, new EntityAIWanderAvoidWater(this, 1.0D));
 	    this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
@@ -96,7 +95,8 @@ public class EntitySniperSkeleton extends EntityAnimatedSkeleton{
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.29D);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(16f);
 	}
 
 	@Override
@@ -113,8 +113,8 @@ public class EntitySniperSkeleton extends EntityAnimatedSkeleton{
 	
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
-		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(this.getEquip()));
-		this.setDropChance(EntityEquipmentSlot.MAINHAND, (float) MobsConfig.skeletons.sniper.bowDropChance);
+		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.forestBow));
+		this.setDropChance(EntityEquipmentSlot.MAINHAND, (float) SkeletonsConfig.skeletons.sniper.bowDropChance);
 		this.setCombatTask();
 		return super.onInitialSpawn(difficulty, livingdata);
 	}
@@ -166,7 +166,7 @@ public class EntitySniperSkeleton extends EntityAnimatedSkeleton{
         double d1 = target.getEntityBoundingBox().minY + (double)(target.height / 3.0F) - entityarrow.posY;
         double d2 = target.posZ - this.posZ;
         double d3 = (double)MathHelper.sqrt(d0 * d0 + d2 * d2);
-        entityarrow.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 1.6F, (float) MobsConfig.skeletons.sniper.inaccuracy);
+        entityarrow.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 1.6F, (float) SkeletonsConfig.skeletons.sniper.inaccuracy);
         this.playSound(ModSounds.forest_skeleton_shoot, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
         this.world.spawnEntity(entityarrow);
     }
@@ -261,11 +261,6 @@ public class EntitySniperSkeleton extends EntityAnimatedSkeleton{
     	
     }
 
-    @Override
-	public Item getEquip() {
-		return ModItems.forestBow;
-	}
-
 	@Override
 	public int getDimension() {
 		return this.dimension;
@@ -275,7 +270,7 @@ public class EntitySniperSkeleton extends EntityAnimatedSkeleton{
 	protected EntityArrow getArrow(float distanceFactor) {
 		EntityTippedArrow arrow = new EntityTippedArrow(this.world, this);
 		arrow.setEnchantmentEffectsFromEntity(this, distanceFactor);
-		arrow.addEffect(new PotionEffect(MobEffects.POISON, MobsConfig.skeletons.sniper.poison, 0, false, true));
+		arrow.addEffect(new PotionEffect(MobEffects.POISON, SkeletonsConfig.skeletons.sniper.poison, 0, false, true));
 		return arrow;
 	}
 

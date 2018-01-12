@@ -8,7 +8,7 @@ public class Reference {
 	
 	public static final String MOD_ID = "mmm";
 	public static final String NAME = "mcpeCommander's mobultion mod";
-	public static final String VERSION = "0.0.2";
+	public static final String VERSION = "0.0.3";
 	public static final String ACCEPTED_MINECRAFT_VERSIONS = "[1.12, 1.13)";
 	
 	public static final String CLIENT_PROXY_CLASS = "mcpecommander.mobultion.proxy.ClientProxy";

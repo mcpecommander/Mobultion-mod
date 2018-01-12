@@ -2,11 +2,11 @@ package mcpecommander.mobultion.entity.entities.spiders;
 
 import javax.annotation.Nullable;
 
-import mcpecommander.mobultion.MobsConfig;
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAtWither;
 import mcpecommander.mobultion.entity.entityAI.spidersAI.EntityAISpiderAttack;
 import mcpecommander.mobultion.entity.entityAI.spidersAI.EntityAISpiderTarget;
+import mcpecommander.mobultion.mobConfigs.SpidersConfig;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
@@ -64,7 +64,8 @@ public class EntityWitherSpider extends EntityAnimatedSpider {
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.32D);
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
+		this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(3D);
 	}
 
 	@Override
@@ -73,19 +74,11 @@ public class EntityWitherSpider extends EntityAnimatedSpider {
 		livingdata = super.onInitialSpawn(difficulty, livingdata);
 
 		if (this.world.rand.nextInt(200) == 0 && !this.world.isRemote) {
-			if(this.world.rand.nextBoolean()){
-				EntitySkeleton entityskeleton = new EntitySkeleton(this.world);
-				entityskeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
-				entityskeleton.onInitialSpawn(difficulty, (IEntityLivingData) null);
-				this.world.spawnEntity(entityskeleton);
-				entityskeleton.startRiding(this);
-			}else{
-				EntityMiniSpider entityskeleton = new EntityMiniSpider(this.world);
-                entityskeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
-                entityskeleton.onInitialSpawn(difficulty, (IEntityLivingData)null);
-                this.world.spawnEntity(entityskeleton);
-                entityskeleton.startRiding(this);
-			}
+			EntitySkeleton entityskeleton = new EntitySkeleton(this.world);
+			entityskeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
+			entityskeleton.onInitialSpawn(difficulty, (IEntityLivingData) null);
+			this.world.spawnEntity(entityskeleton);
+			entityskeleton.startRiding(this);
 		}
 
 		return livingdata;
@@ -99,7 +92,7 @@ public class EntityWitherSpider extends EntityAnimatedSpider {
 			float f = this.world.getDifficultyForLocation(new BlockPos(this)).getAdditionalDifficulty();
 
 			if (this.rand.nextFloat() < f * 0.3F) {
-				PotionEffect potioneffect = new PotionEffect(MobEffects.WITHER, MobsConfig.spiders.wither.witheringLength, 0);
+				PotionEffect potioneffect = new PotionEffect(MobEffects.WITHER, SpidersConfig.spiders.wither.witheringLength, 0);
 				((EntityLivingBase) entityIn).addPotionEffect(potioneffect);
 			}
 		}

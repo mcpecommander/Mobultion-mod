@@ -1,7 +1,7 @@
 package mcpecommander.mobultion.entity.entityAI.spidersAI.angelAI;
 
-import mcpecommander.mobultion.MobsConfig;
 import mcpecommander.mobultion.entity.entities.spiders.EntityAngelSpider;
+import mcpecommander.mobultion.mobConfigs.SpidersConfig;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
@@ -53,7 +53,7 @@ public class EntityAIAngelSpiderHeal extends EntityAIBase{
 		if(this.attacker.getAttackTarget() != null && !this.attacker.getAttackTarget().isDead){
 			this.attacker.getLookHelper().setLookPositionWithEntity(this.attacker.getAttackTarget(), 30f, 30f);
 			if(this.healCoolDown < 10){
-				this.attacker.getAttackTarget().heal(MobsConfig.spiders.angel.healAmount);
+				this.attacker.getAttackTarget().heal(SpidersConfig.spiders.angel.healAmount);
 				if(this.attacker.isServerWorld()){
 					WorldServer temp = (WorldServer) this.attacker.getEntityWorld();
 					temp.spawnParticle(EnumParticleTypes.HEART, true, this.attacker.getAttackTarget().posX, this.attacker.getAttackTarget().posY + this.attacker.getAttackTarget().getEyeHeight(), this.attacker.getAttackTarget().posZ, 2, 0.0f, 0.0f, 0.0f, 0.01f);

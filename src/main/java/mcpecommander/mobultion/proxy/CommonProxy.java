@@ -23,8 +23,6 @@ import scala.reflect.internal.Trees.New;
 
 public class CommonProxy {
 
-	public static Configuration config;
-
 	public CommonProxy() {
 		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.TERRAIN_GEN_BUS.register(new SpawnEvent());

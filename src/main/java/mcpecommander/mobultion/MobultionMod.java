@@ -1,5 +1,7 @@
 package mcpecommander.mobultion;
 
+import org.apache.logging.log4j.Logger;
+
 import mcpecommander.mobultion.proxy.CommonProxy;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -22,6 +24,8 @@ public class MobultionMod {
 	
 	public static final CreativeTabs MOBULTION_TAB = new MobultionModTab();
 	
+	public static Logger logger;
+	
 	static
 	{
 		FluidRegistry.enableUniversalBucket();
@@ -29,6 +33,7 @@ public class MobultionMod {
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
+		logger = e.getModLog();
 		proxy.preInit(e);
 
 	}

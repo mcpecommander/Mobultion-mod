@@ -3,7 +3,6 @@ package mcpecommander.mobultion.entity.entities.skeletons;
 import com.leviathanstudio.craftstudio.CraftStudioApi;
 import com.leviathanstudio.craftstudio.common.animation.AnimationHandler;
 import com.leviathanstudio.craftstudio.common.animation.IAnimated;
-import com.leviathanstudio.craftstudio.common.animation.simpleImpl.AnimatedEntity;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityCreature;
@@ -17,11 +16,9 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntityTippedArrow;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
@@ -29,7 +26,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class EntityAnimatedSkeleton extends EntityMob implements IRangedAttackMob, IGetEquip, IAnimated
+public abstract class EntityAnimatedSkeleton extends EntityMob implements IRangedAttackMob, IAnimated
 {
 	private static final DataParameter<Boolean> MOVING = EntityDataManager.<Boolean>createKey(EntityAnimatedSkeleton.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> SWINGING_ARMS = EntityDataManager.<Boolean>createKey(EntityAnimatedSkeleton.class, DataSerializers.BOOLEAN);
@@ -39,16 +36,7 @@ public abstract class EntityAnimatedSkeleton extends EntityMob implements IRange
     {
         super(worldIn);
     }
-
-    protected void initEntityAI(){
-    	super.initEntityAI();
-    }
-
-    protected void applyEntityAttributes(){
-    	super.applyEntityAttributes();
-    }
-    	
-
+    @Override
     protected void entityInit()
     {
         super.entityInit();
@@ -72,17 +60,19 @@ public abstract class EntityAnimatedSkeleton extends EntityMob implements IRange
     }
     
     
-
+    @Override
     protected void playStepSound(BlockPos pos, Block blockIn)
     {
         this.playSound(SoundEvents.ENTITY_SKELETON_STEP , 0.15F, 1.0F);
     }
 
+    @Override
     public EnumCreatureAttribute getCreatureAttribute()
     {
         return EnumCreatureAttribute.UNDEAD;
     }
 
+    @Override
     public void updateRidden()
     {
         super.updateRidden();
@@ -125,6 +115,7 @@ public abstract class EntityAnimatedSkeleton extends EntityMob implements IRange
         }
     }
 
+    @Override
     public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor)
     {
         EntityArrow entityarrow = this.getArrow(distanceFactor);
@@ -156,6 +147,7 @@ public abstract class EntityAnimatedSkeleton extends EntityMob implements IRange
     	return data;
     }
 
+    @Override
     public double getYOffset()
     {
         return -0.6D;
@@ -167,6 +159,7 @@ public abstract class EntityAnimatedSkeleton extends EntityMob implements IRange
         return ((Boolean)this.dataManager.get(SWINGING_ARMS)).booleanValue();
     }
 
+    @Override
     public void setSwingingArms(boolean swingingArms)
     {
         this.dataManager.set(SWINGING_ARMS, Boolean.valueOf(swingingArms));

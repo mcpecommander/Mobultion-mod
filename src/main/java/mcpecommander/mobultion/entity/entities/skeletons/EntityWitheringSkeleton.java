@@ -1,9 +1,9 @@
 package mcpecommander.mobultion.entity.entities.skeletons;
 
-import mcpecommander.mobultion.MobsConfig;
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.animation.AnimationRiding;
+import mcpecommander.mobultion.mobConfigs.SkeletonsConfig;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -27,7 +27,6 @@ import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
@@ -113,6 +112,8 @@ public class EntityWitheringSkeleton extends EntityAnimatedSkeleton {
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
+		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(18f);
+		this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(2d);
 	}
 
 	@Override
@@ -122,7 +123,7 @@ public class EntityWitheringSkeleton extends EntityAnimatedSkeleton {
 
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
-		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(this.getEquip()));
+		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
 		this.setCombatTask();
 		return super.onInitialSpawn(difficulty, livingdata);
 	}
@@ -219,11 +220,6 @@ public class EntityWitheringSkeleton extends EntityAnimatedSkeleton {
 	}
 
 	@Override
-	public Item getEquip() {
-		return Items.BOW;
-	}
-
-	@Override
 	public int getDimension() {
 		return this.dimension;
 	}
@@ -232,7 +228,7 @@ public class EntityWitheringSkeleton extends EntityAnimatedSkeleton {
 	protected EntityArrow getArrow(float distanceFactor) {
 		EntityTippedArrow arrow = new EntityTippedArrow(this.world, this);
 		arrow.setEnchantmentEffectsFromEntity(this, distanceFactor);
-		arrow.addEffect(new PotionEffect(MobEffects.WITHER, MobsConfig.skeletons.withering.wither, 0));
+		arrow.addEffect(new PotionEffect(MobEffects.WITHER, SkeletonsConfig.skeletons.withering.wither, 0));
 		return arrow;
 	}
 

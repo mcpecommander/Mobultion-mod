@@ -2,11 +2,11 @@ package mcpecommander.mobultion.entity.entities.skeletons;
 
 import javax.annotation.Nullable;
 
-import mcpecommander.mobultion.MobsConfig;
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.animation.AnimationRiding;
 import mcpecommander.mobultion.init.ModSounds;
+import mcpecommander.mobultion.mobConfigs.SkeletonsConfig;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -26,7 +26,6 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -104,7 +103,8 @@ public class EntityJokerSkeleton extends EntityAnimatedSkeleton {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.28D);
+		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(12f);
 	}
 
 	@Override
@@ -114,14 +114,14 @@ public class EntityJokerSkeleton extends EntityAnimatedSkeleton {
 
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
-		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(this.getEquip()));
+		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
 		this.setCombatTask();
 		return super.onInitialSpawn(difficulty, livingdata);
 	}
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		if (MobsConfig.skeletons.joker.laughSound) {
+		if (SkeletonsConfig.skeletons.joker.laughSound) {
 			return ModSounds.joker_ambient;
 		} else {
 			return null;
@@ -141,7 +141,7 @@ public class EntityJokerSkeleton extends EntityAnimatedSkeleton {
 		double d1 = target.getEntityBoundingBox().minY + (double) (target.height / 3.0F) - entityarrow.posY;
 		double d2 = target.posZ - this.posZ;
 		double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
-		entityarrow.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 1.6F, (float) MobsConfig.skeletons.joker.inaccuracy);
+		entityarrow.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 1.6F, (float) SkeletonsConfig.skeletons.joker.inaccuracy);
 		this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
 		this.world.spawnEntity(entityarrow);
 	}
@@ -166,14 +166,11 @@ public class EntityJokerSkeleton extends EntityAnimatedSkeleton {
 		super.onLivingUpdate();
 		if (!this.isWorldRemote()) {
 			this.setMoving(Boolean.valueOf(this.isMoving(this)));
-			// TODO: Fix the grave texture UV's
-			// if(this.isDead){
-			// EntitySkeletonRemains grave = new
-			// EntitySkeletonRemains(this.world, this);
-			// grave.setLocationAndAngles(this.posX, this.posY, this.posZ,
-			// this.rotationYaw, 0.0F);
-			// this.world.spawnEntity(grave);
-			// }
+			 if(this.isDead){
+				 EntitySkeletonRemains grave = new EntitySkeletonRemains(this.world, this);
+				 grave.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
+				 this.world.spawnEntity(grave);
+			 }
 		}
 		if (this.isWorldRemote()) {
 			if (this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "skeleton_walk", this)
@@ -226,11 +223,6 @@ public class EntityJokerSkeleton extends EntityAnimatedSkeleton {
 		if (!this.world.isRemote && slotIn == EntityEquipmentSlot.MAINHAND) {
 			this.setCombatTask();
 		}
-	}
-
-	@Override
-	public Item getEquip() {
-		return Items.BOW;
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 package mcpecommander.mobultion.entity.entityAI.skeletonsAI;
 
-import mcpecommander.mobultion.MobsConfig;
 import mcpecommander.mobultion.entity.entities.skeletons.EntitySkeletonRemains;
 import mcpecommander.mobultion.init.ModItems;
+import mcpecommander.mobultion.mobConfigs.SkeletonsConfig;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IRangedAttackMob;
@@ -86,13 +86,13 @@ public class EntityAIShamanSkeletonHeal extends EntityAIBase{
 				if (i >= 50) {
 					if(entitylivingbase instanceof EntitySkeletonRemains){
 						this.entity.resetActiveHand();
-						entitylivingbase.ticksExisted += MobsConfig.skeletons.shaman.reviveAmount;
+						entitylivingbase.ticksExisted += SkeletonsConfig.skeletons.shaman.reviveAmount;
 						this.cooldown = 300;
 						finished = true;
 						return;
 					}else{
 						this.entity.resetActiveHand();
-						entitylivingbase.heal((float) MobsConfig.skeletons.shaman.healAmount);
+						entitylivingbase.heal((float) SkeletonsConfig.skeletons.shaman.healAmount);
 						this.cooldown = 100;
 						finished = true;
 						return;

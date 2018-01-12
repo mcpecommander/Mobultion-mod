@@ -1,12 +1,12 @@
 package mcpecommander.mobultion.entity.entities.skeletons;
 
-import mcpecommander.mobultion.MobsConfig;
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.animation.AnimationRiding;
 import mcpecommander.mobultion.entity.entityAI.skeletonsAI.EntityAIShamanSkeletonHeal;
 import mcpecommander.mobultion.entity.entityAI.skeletonsAI.EntityAIShamanSkeletonTarget;
 import mcpecommander.mobultion.init.ModItems;
+import mcpecommander.mobultion.mobConfigs.SkeletonsConfig;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -20,7 +20,6 @@ import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -65,6 +64,7 @@ public class EntityShamanSkeleton extends EntityAnimatedSkeleton {
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
+		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(26f);
 	}
 
 	@Override
@@ -74,8 +74,8 @@ public class EntityShamanSkeleton extends EntityAnimatedSkeleton {
 
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
-		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(this.getEquip()));
-		this.setDropChance(EntityEquipmentSlot.MAINHAND, (float) MobsConfig.skeletons.shaman.wandDropChance);
+		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.healingWand));
+		this.setDropChance(EntityEquipmentSlot.MAINHAND, (float) SkeletonsConfig.skeletons.shaman.wandDropChance);
 		return super.onInitialSpawn(difficulty, livingdata);
 	}
 
@@ -148,11 +148,6 @@ public class EntityShamanSkeleton extends EntityAnimatedSkeleton {
 			}
 		}
 
-	}
-
-	@Override
-	public Item getEquip() {
-		return ModItems.healingWand;
 	}
 
 	@Override

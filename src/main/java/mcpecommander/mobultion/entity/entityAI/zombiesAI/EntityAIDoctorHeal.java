@@ -1,8 +1,8 @@
 package mcpecommander.mobultion.entity.entityAI.zombiesAI;
 
-import mcpecommander.mobultion.MobsConfig;
 import mcpecommander.mobultion.entity.entities.zombies.EntityDoctorZombie;
 import mcpecommander.mobultion.init.ModItems;
+import mcpecommander.mobultion.mobConfigs.ZombiesConfig;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -88,7 +88,7 @@ public class EntityAIDoctorHeal extends EntityAIBase{
 			
 			if (--this.cooldown <= 0)
             {
-            	if(entitylivingbase.isBurning() && MobsConfig.zombies.doctor.shouldExtinguish){
+            	if(entitylivingbase.isBurning() && ZombiesConfig.zombies.doctor.shouldExtinguish){
             		if(!this.entity.world.isRemote && dis <= (15D*15D) && flag){
 						EntityPotion potion = new EntityPotion(this.entity.world, this.entity, this.entity.getHeldItemMainhand());
 						double d0 = entitylivingbase.posX - this.entity.posX;
@@ -102,7 +102,7 @@ public class EntityAIDoctorHeal extends EntityAIBase{
 				}else{
 					this.entity.getNavigator().tryMoveToEntityLiving(entitylivingbase, this.speed);
 					if(dis <= 1D){
-						entitylivingbase.heal((float) MobsConfig.zombies.doctor.healAmount);
+						entitylivingbase.heal((float) ZombiesConfig.zombies.doctor.healAmount);
 						this.resetTask();
 					}
 				}

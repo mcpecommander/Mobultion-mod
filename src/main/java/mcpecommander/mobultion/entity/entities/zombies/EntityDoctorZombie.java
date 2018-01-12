@@ -52,9 +52,8 @@ public class EntityDoctorZombie extends EntityAnimatedZombie {
 		this.tasks.addTask(1, new EntityAIDoctorHeal(this, 1.0D));
 		this.tasks.addTask(2, new EntityAIAvoidEntity(this, EntityPlayer.class, 3, 1D, 1.4D));
 		this.tasks.addTask(3, new EntityAIMoveTowardsRestriction(this, 1.0D));
-		this.tasks.addTask(4, new EntityAIMoveThroughVillage(this, 1.0D, false));
-		this.tasks.addTask(5, new EntityAIWanderAvoidWater(this, 1.0D));
-		this.tasks.addTask(6, new EntityAILookIdle(this));
+		this.tasks.addTask(4, new EntityAIWanderAvoidWater(this, 1.0D));
+		this.tasks.addTask(5, new EntityAILookIdle(this));
 		this.targetTasks.addTask(1,
 				new EntityAIDoctorTarget(this, false, EntityZombie.class, EntityZombieVillager.class,
 						EntityKnightZombie.class, EntityWorkerZombie.class, EntityGoroZombie.class));

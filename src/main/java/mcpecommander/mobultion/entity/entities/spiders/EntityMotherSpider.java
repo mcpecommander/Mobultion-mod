@@ -1,11 +1,11 @@
 package mcpecommander.mobultion.entity.entities.spiders;
 
-import mcpecommander.mobultion.MobsConfig;
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.entityAI.spidersAI.EntityAIMotherSpiderLayEgg;
 import mcpecommander.mobultion.entity.entityAI.spidersAI.EntityAISpiderAttack;
 import mcpecommander.mobultion.entity.entityAI.spidersAI.EntityAISpiderTarget;
+import mcpecommander.mobultion.mobConfigs.SpidersConfig;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILeapAtTarget;
@@ -38,7 +38,7 @@ public class EntityMotherSpider extends EntityAnimatedSpider{
     {
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(4, new EntityAISpiderAttack(this));
-        this.tasks.addTask(4, new EntityAIMotherSpiderLayEgg(this, MobsConfig.spiders.mother.pregnancyTime));
+        this.tasks.addTask(4, new EntityAIMotherSpiderLayEgg(this, SpidersConfig.spiders.mother.pregnancyTime));
         this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(6, new EntityAILookIdle(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false, new Class[0]));
@@ -55,8 +55,8 @@ public class EntityMotherSpider extends EntityAnimatedSpider{
     protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(18.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.32D);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(26.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.28D);
     } 
 
     @Override

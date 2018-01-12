@@ -1,9 +1,9 @@
 package mcpecommander.mobultion.entity.entities.skeletons;
 
-import mcpecommander.mobultion.MobsConfig;
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.animation.AnimationRiding;
+import mcpecommander.mobultion.mobConfigs.SkeletonsConfig;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
@@ -25,7 +25,6 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
@@ -72,7 +71,8 @@ public class EntityCorruptedSkeleton extends EntityAnimatedSkeleton {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.20D);
+		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(15f);
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public class EntityCorruptedSkeleton extends EntityAnimatedSkeleton {
 
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
-		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(this.getEquip()));
+		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BONE));
 		return super.onInitialSpawn(difficulty, livingdata);
 	}
 
@@ -189,10 +189,10 @@ public class EntityCorruptedSkeleton extends EntityAnimatedSkeleton {
 
 			if (this.rand.nextFloat() < f * 0.6F) {
 				PotionEffect potioneffect = new PotionEffect(MobEffects.MINING_FATIGUE,
-						MobsConfig.skeletons.corrupted.miningFatigue, 0);
+						SkeletonsConfig.skeletons.corrupted.miningFatigue, 0);
 				((EntityLivingBase) entityIn).addPotionEffect(potioneffect);
 				PotionEffect potioneffect2 = new PotionEffect(MobEffects.SLOWNESS,
-						MobsConfig.skeletons.corrupted.slowness, 0);
+						SkeletonsConfig.skeletons.corrupted.slowness, 0);
 				((EntityLivingBase) entityIn).addPotionEffect(potioneffect2);
 			}
 		}
@@ -203,11 +203,6 @@ public class EntityCorruptedSkeleton extends EntityAnimatedSkeleton {
 	@Override
 	protected EntityArrow getArrow(float distanceFactor) {
 		return null;
-	}
-
-	@Override
-	public Item getEquip() {
-		return Items.BONE;
 	}
 
 	@Override

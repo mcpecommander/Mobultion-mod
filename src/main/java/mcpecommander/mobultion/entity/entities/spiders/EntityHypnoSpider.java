@@ -50,19 +50,6 @@ public class EntityHypnoSpider extends EntityAnimatedSpider{
         this.targetTasks.addTask(2, new EntityAISpiderTarget(this, EntityPlayer.class));
         this.targetTasks.addTask(3, new EntityAISpiderTarget(this, EntityIronGolem.class));
     }
-	
-	@Override
-	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
-		IEntityLivingData data = super.onInitialSpawn(difficulty, livingdata);
-		if(this.world.rand.nextInt(100) == 1){
-			EntityMiniSpider entityskeleton = new EntityMiniSpider(this.world);
-            entityskeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
-            entityskeleton.onInitialSpawn(difficulty, (IEntityLivingData)null);
-            this.world.spawnEntity(entityskeleton);
-            entityskeleton.startRiding(this);
-		}
-		return data;
-	}
     
     @Override
     public double getMountedYOffset()
@@ -74,8 +61,8 @@ public class EntityHypnoSpider extends EntityAnimatedSpider{
     protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(18.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.32D);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
     }
     
     @Override

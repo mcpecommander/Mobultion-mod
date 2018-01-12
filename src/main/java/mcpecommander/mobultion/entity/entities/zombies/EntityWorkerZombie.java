@@ -6,6 +6,7 @@ import mcpecommander.mobultion.entity.animation.AnimationRiding;
 import mcpecommander.mobultion.entity.entityAI.zombiesAI.EntityAIKnightAttackMelee;
 import mcpecommander.mobultion.entity.entityAI.zombiesAI.EntityAIMoveToNearestDoctor;
 import mcpecommander.mobultion.init.ModItems;
+import mcpecommander.mobultion.mobConfigs.ZombiesConfig;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -23,8 +24,10 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
+import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -91,10 +94,15 @@ public class EntityWorkerZombie extends EntityAnimatedZombie{
 	public boolean attackEntityAsMob(Entity entityIn)
     {
         boolean flag = super.attackEntityAsMob(entityIn);
-        if(entityIn instanceof EntityPlayerMP){
-        	EntityPlayerMP player = (EntityPlayerMP) entityIn;
-        	player.getCooldownTracker().setCooldown(player.getHeldItemMainhand().getItem(), 50);
-        	player.connection.setPlayerLocation(player.posX, player.posY - 1.1, player.posZ, player.rotationYaw, player.rotationPitch );
+        if(entityIn instanceof EntityPlayerMP ){
+        	if(ZombiesConfig.zombies.worker.hammerAttack){
+	        	EntityPlayerMP player = (EntityPlayerMP) entityIn;
+	        	player.getCooldownTracker().setCooldown(player.getHeldItemMainhand().getItem(), 50);
+	        	player.connection.setPlayerLocation(player.posX, player.posY - 1.1, player.posZ, player.rotationYaw, player.rotationPitch );
+        	}else{
+        		EntityPlayerMP player = (EntityPlayerMP) entityIn;
+        		player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 5, 1));
+        	}
         }
 
         if (flag)

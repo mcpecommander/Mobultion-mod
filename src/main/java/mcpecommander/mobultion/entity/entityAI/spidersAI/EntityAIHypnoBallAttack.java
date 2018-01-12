@@ -1,8 +1,8 @@
 package mcpecommander.mobultion.entity.entityAI.spidersAI;
 
-import mcpecommander.mobultion.MobsConfig;
 import mcpecommander.mobultion.entity.entities.spiders.EntityHypnoBall;
 import mcpecommander.mobultion.entity.entities.spiders.EntityHypnoSpider;
+import mcpecommander.mobultion.mobConfigs.SpidersConfig;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -66,7 +66,7 @@ public class EntityAIHypnoBallAttack extends EntityAIBase{
                  EntityHypnoBall hypnoBall = new EntityHypnoBall(this.hypno.world, this.hypno, d1 , d2, d3 );
                  hypnoBall.posY = this.hypno.posY + (double)(this.hypno.height / 2.0F) + 0.5D;
                  this.hypno.world.spawnEntity(hypnoBall);
-                 this.attackTime = MobsConfig.spiders.hypno.fireDelay;
+                 this.attackTime = SpidersConfig.spiders.hypno.fireDelay;
             } 
             
             this.hypno.getLookHelper().setLookPositionWithEntity(entitylivingbase, 10.0F, 10.0F);

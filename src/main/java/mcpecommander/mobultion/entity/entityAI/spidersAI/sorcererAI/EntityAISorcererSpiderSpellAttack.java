@@ -3,12 +3,12 @@ package mcpecommander.mobultion.entity.entityAI.spidersAI.sorcererAI;
 import java.util.ArrayList;
 import java.util.List;
 
-import mcpecommander.mobultion.MobsConfig;
 import mcpecommander.mobultion.entity.entities.spiders.EntityHypnoSpider;
 import mcpecommander.mobultion.entity.entities.spiders.EntityMagmaSpider;
 import mcpecommander.mobultion.entity.entities.spiders.EntitySorcererSpider;
 import mcpecommander.mobultion.entity.entities.spiders.EntitySpeedySpider;
 import mcpecommander.mobultion.entity.entities.spiders.EntityWitherSpider;
+import mcpecommander.mobultion.mobConfigs.SpidersConfig;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.monster.EntityCaveSpider;
@@ -83,7 +83,7 @@ public class EntityAISorcererSpiderSpellAttack extends EntityAIBase{
 	private ArrayList<EntityLiving> getSpidersList(int num, World world){
     	ArrayList<EntityLiving> list = new ArrayList<>();
     	for(int i = 0; i < num; i++){
-    		int random = this.attacker.getRNG().nextInt(MobsConfig.spiders.sorcerer.mobsDiffculty);
+    		int random = this.attacker.getRNG().nextInt(SpidersConfig.spiders.sorcerer.mobsDiffculty);
     		switch(random){
     		case 1: list.add(new EntitySpider(world));
     		break;

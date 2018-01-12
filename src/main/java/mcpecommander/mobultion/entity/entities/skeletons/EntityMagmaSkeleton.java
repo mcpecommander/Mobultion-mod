@@ -1,9 +1,9 @@
 package mcpecommander.mobultion.entity.entities.skeletons;
 
-import mcpecommander.mobultion.MobsConfig;
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.animation.AnimationRiding;
+import mcpecommander.mobultion.mobConfigs.SkeletonsConfig;
 import mcpecommander.mobultion.particle.ColoredLavaParticle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
@@ -25,7 +25,6 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathNodeType;
@@ -136,7 +135,8 @@ public class EntityMagmaSkeleton extends EntityAnimatedSkeleton{
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.23D);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(22f);
 	}
 
 	@Override
@@ -146,7 +146,7 @@ public class EntityMagmaSkeleton extends EntityAnimatedSkeleton{
 	
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
-		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(this.getEquip()));
+		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
 		this.setCombatTask();
 		return super.onInitialSpawn(difficulty, livingdata);
 	}
@@ -224,7 +224,7 @@ public class EntityMagmaSkeleton extends EntityAnimatedSkeleton{
     
     @Override
     protected void updateAITasks(){
-    	if (this.isWet() && MobsConfig.skeletons.magma.wetDamage)
+    	if (this.isWet() && SkeletonsConfig.skeletons.magma.wetDamage)
         {
             this.attackEntityFrom(DamageSource.DROWN, 1.0F);
         }
@@ -248,11 +248,6 @@ public class EntityMagmaSkeleton extends EntityAnimatedSkeleton{
             this.setCombatTask();
         }
     }
-
-	@Override
-	public Item getEquip() {
-		return Items.BOW;
-	}
 
 	@Override
 	public int getDimension() {
