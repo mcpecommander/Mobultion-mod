@@ -260,11 +260,6 @@ public class EntitySniperSkeleton extends EntityAnimatedSkeleton{
     	}
     	
     }
-
-	@Override
-	public int getDimension() {
-		return this.dimension;
-	}
 	
 	@Override
 	protected EntityArrow getArrow(float distanceFactor) {
@@ -273,11 +268,5 @@ public class EntitySniperSkeleton extends EntityAnimatedSkeleton{
 		arrow.addEffect(new PotionEffect(MobEffects.POISON, SkeletonsConfig.skeletons.sniper.poison, 0, false, true));
 		return arrow;
 	}
-
-	@Override
-	public boolean isWorldRemote() {
-		return world.isRemote;
-	}
-
 
 }

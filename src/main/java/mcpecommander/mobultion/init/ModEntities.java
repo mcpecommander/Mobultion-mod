@@ -15,6 +15,7 @@ import mcpecommander.mobultion.entity.entities.skeletons.EntityMagmaSkeleton;
 import mcpecommander.mobultion.entity.entities.skeletons.EntityShamanSkeleton;
 import mcpecommander.mobultion.entity.entities.skeletons.EntitySkeletonRemains;
 import mcpecommander.mobultion.entity.entities.skeletons.EntitySniperSkeleton;
+import mcpecommander.mobultion.entity.entities.skeletons.EntityVampireSkeleton;
 import mcpecommander.mobultion.entity.entities.skeletons.EntityWitheringSkeleton;
 import mcpecommander.mobultion.entity.entities.spiders.EntityAngelSpider;
 import mcpecommander.mobultion.entity.entities.spiders.EntityHypnoBall;
@@ -30,6 +31,7 @@ import mcpecommander.mobultion.entity.entities.zombies.EntityDoctorZombie;
 import mcpecommander.mobultion.entity.entities.zombies.EntityGoroZombie;
 import mcpecommander.mobultion.entity.entities.zombies.EntityKnightZombie;
 import mcpecommander.mobultion.entity.entities.zombies.EntityMagmaZombie;
+import mcpecommander.mobultion.entity.entities.zombies.EntityRavenousZombie;
 import mcpecommander.mobultion.entity.entities.zombies.EntityWorkerZombie;
 import mcpecommander.mobultion.entity.renderer.skeletonsRenderer.RenderCorruptedSkeleton;
 import mcpecommander.mobultion.entity.renderer.skeletonsRenderer.RenderHeartArrow;
@@ -39,6 +41,7 @@ import mcpecommander.mobultion.entity.renderer.skeletonsRenderer.RenderMagmaSkel
 import mcpecommander.mobultion.entity.renderer.skeletonsRenderer.RenderShamanSkeleton;
 import mcpecommander.mobultion.entity.renderer.skeletonsRenderer.RenderSkeletonRemains;
 import mcpecommander.mobultion.entity.renderer.skeletonsRenderer.RenderSniperSkeleton;
+import mcpecommander.mobultion.entity.renderer.skeletonsRenderer.RenderVampireSkeleton;
 import mcpecommander.mobultion.entity.renderer.skeletonsRenderer.RenderWitheringSkeleton;
 import mcpecommander.mobultion.entity.renderer.spidersRenderer.RenderAngelSpider;
 import mcpecommander.mobultion.entity.renderer.spidersRenderer.RenderHypnoBall;
@@ -54,9 +57,10 @@ import mcpecommander.mobultion.entity.renderer.zombiesRenderer.RenderDoctorZombi
 import mcpecommander.mobultion.entity.renderer.zombiesRenderer.RenderGoroZombie;
 import mcpecommander.mobultion.entity.renderer.zombiesRenderer.RenderKnightZombie;
 import mcpecommander.mobultion.entity.renderer.zombiesRenderer.RenderMagmaZombie;
+import mcpecommander.mobultion.entity.renderer.zombiesRenderer.RenderRavenousZombie;
 import mcpecommander.mobultion.entity.renderer.zombiesRenderer.RenderWorkerZombie;
-import mcpecommander.mobultion.mobConfigs.SpidersConfig;
 import mcpecommander.mobultion.mobConfigs.SkeletonsConfig;
+import mcpecommander.mobultion.mobConfigs.SpidersConfig;
 import mcpecommander.mobultion.mobConfigs.ZombiesConfig;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.ResourceLocation;
@@ -75,7 +79,7 @@ public class ModEntities {
 	private static Biome[] getBiomes(String[] string) {
 		List<Biome> list = new ArrayList();
 		Biome[] biome = {};
-		if(string == null){
+		if (string == null) {
 			return null;
 		}
 		if (string[0].equals("all")) {
@@ -116,7 +120,9 @@ public class ModEntities {
 					.id(Reference.MobultionEntities.MAGMASPIDER.getRegistryName(), 1)
 					.name(Reference.MobultionEntities.MAGMASPIDER.getUnlocalizedName()).tracker(64, 3, true)
 					.egg(0x230E0E, 0xF01414)
-					.spawn(EnumCreatureType.MONSTER, SpidersConfig.spiders.magma.spawnRates.weight, SpidersConfig.spiders.magma.spawnRates.min, SpidersConfig.spiders.magma.spawnRates.max, getBiomes(SpidersConfig.spiders.magma.spawnRates.biomes))
+					.spawn(EnumCreatureType.MONSTER, SpidersConfig.spiders.magma.spawnRates.weight,
+							SpidersConfig.spiders.magma.spawnRates.min, SpidersConfig.spiders.magma.spawnRates.max,
+							getBiomes(SpidersConfig.spiders.magma.spawnRates.biomes))
 					.build();
 			event.getRegistry().register(magma);
 		}
@@ -127,7 +133,9 @@ public class ModEntities {
 					.id(Reference.MobultionEntities.SPEEDYSPIDER.getRegistryName(), 2)
 					.name(Reference.MobultionEntities.SPEEDYSPIDER.getUnlocalizedName()).tracker(64, 3, true)
 					.egg(0x0C0CDB, 0x6666D0)
-					.spawn(EnumCreatureType.MONSTER, SpidersConfig.spiders.speedy.spawnRates.weight, SpidersConfig.spiders.speedy.spawnRates.min, SpidersConfig.spiders.speedy.spawnRates.max, getBiomes(SpidersConfig.spiders.speedy.spawnRates.biomes))
+					.spawn(EnumCreatureType.MONSTER, SpidersConfig.spiders.speedy.spawnRates.weight,
+							SpidersConfig.spiders.speedy.spawnRates.min, SpidersConfig.spiders.speedy.spawnRates.max,
+							getBiomes(SpidersConfig.spiders.speedy.spawnRates.biomes))
 					.build();
 			event.getRegistry().register(speedy);
 		}
@@ -138,7 +146,9 @@ public class ModEntities {
 					.id(Reference.MobultionEntities.WITHERSPIDER.getRegistryName(), 3)
 					.name(Reference.MobultionEntities.WITHERSPIDER.getUnlocalizedName()).tracker(64, 3, true)
 					.egg(0x666666, 0x444444)
-					.spawn(EnumCreatureType.MONSTER, SpidersConfig.spiders.wither.spawnRates.weight, SpidersConfig.spiders.wither.spawnRates.min, SpidersConfig.spiders.wither.spawnRates.max, getBiomes(SpidersConfig.spiders.wither.spawnRates.biomes))
+					.spawn(EnumCreatureType.MONSTER, SpidersConfig.spiders.wither.spawnRates.weight,
+							SpidersConfig.spiders.wither.spawnRates.min, SpidersConfig.spiders.wither.spawnRates.max,
+							getBiomes(SpidersConfig.spiders.wither.spawnRates.biomes))
 					.build();
 			event.getRegistry().register(wither);
 		}
@@ -158,7 +168,10 @@ public class ModEntities {
 					.id(Reference.MobultionEntities.SORCERERSPIDER.getRegistryName(), 5)
 					.name(Reference.MobultionEntities.SORCERERSPIDER.getUnlocalizedName()).tracker(64, 3, true)
 					.egg(0x6AA84F, 0x12436F)
-					.spawn(EnumCreatureType.MONSTER, SpidersConfig.spiders.sorcerer.spawnRates.weight, SpidersConfig.spiders.sorcerer.spawnRates.min, SpidersConfig.spiders.sorcerer.spawnRates.max, getBiomes(SpidersConfig.spiders.sorcerer.spawnRates.biomes))
+					.spawn(EnumCreatureType.MONSTER, SpidersConfig.spiders.sorcerer.spawnRates.weight,
+							SpidersConfig.spiders.sorcerer.spawnRates.min,
+							SpidersConfig.spiders.sorcerer.spawnRates.max,
+							getBiomes(SpidersConfig.spiders.sorcerer.spawnRates.biomes))
 					.build();
 			event.getRegistry().register(sorcerer);
 		}
@@ -169,7 +182,9 @@ public class ModEntities {
 					.id(Reference.MobultionEntities.ANGELSPIDER.getRegistryName(), 6)
 					.name(Reference.MobultionEntities.ANGELSPIDER.getUnlocalizedName()).tracker(64, 3, true)
 					.egg(0xFFFFFF, 0xFFFF53)
-					.spawn(EnumCreatureType.MONSTER, SpidersConfig.spiders.angel.spawnRates.weight, SpidersConfig.spiders.angel.spawnRates.min, SpidersConfig.spiders.angel.spawnRates.max, getBiomes(SpidersConfig.spiders.angel.spawnRates.biomes))
+					.spawn(EnumCreatureType.MONSTER, SpidersConfig.spiders.angel.spawnRates.weight,
+							SpidersConfig.spiders.angel.spawnRates.min, SpidersConfig.spiders.angel.spawnRates.max,
+							getBiomes(SpidersConfig.spiders.angel.spawnRates.biomes))
 					.build();
 			event.getRegistry().register(angel);
 		}
@@ -180,7 +195,9 @@ public class ModEntities {
 					.id(Reference.MobultionEntities.MOTHERSPIDER.getRegistryName(), 7)
 					.name(Reference.MobultionEntities.MOTHERSPIDER.getUnlocalizedName()).tracker(64, 3, true)
 					.egg(0x444444, 0x9D8888)
-					.spawn(EnumCreatureType.MONSTER, SpidersConfig.spiders.mother.spawnRates.weight, SpidersConfig.spiders.mother.spawnRates.min, SpidersConfig.spiders.mother.spawnRates.max, getBiomes(SpidersConfig.spiders.mother.spawnRates.biomes))
+					.spawn(EnumCreatureType.MONSTER, SpidersConfig.spiders.mother.spawnRates.weight,
+							SpidersConfig.spiders.mother.spawnRates.min, SpidersConfig.spiders.mother.spawnRates.max,
+							getBiomes(SpidersConfig.spiders.mother.spawnRates.biomes))
 					.build();
 			EntityEntry egg = EntityEntryBuilder.create().entity(EntitySpiderEgg.class)
 					.id(Reference.MobultionEntities.SPIDEREGG.getRegistryName(), 8)
@@ -194,7 +211,9 @@ public class ModEntities {
 					.id(Reference.MobultionEntities.HYPNOSPIDER.getRegistryName(), 9)
 					.name(Reference.MobultionEntities.HYPNOSPIDER.getUnlocalizedName()).tracker(64, 3, true)
 					.egg(0xDD06DD, 0xF736F7)
-					.spawn(EnumCreatureType.MONSTER, SpidersConfig.spiders.hypno.spawnRates.weight, SpidersConfig.spiders.hypno.spawnRates.min, SpidersConfig.spiders.hypno.spawnRates.max, getBiomes(SpidersConfig.spiders.hypno.spawnRates.biomes))
+					.spawn(EnumCreatureType.MONSTER, SpidersConfig.spiders.hypno.spawnRates.weight,
+							SpidersConfig.spiders.hypno.spawnRates.min, SpidersConfig.spiders.hypno.spawnRates.max,
+							getBiomes(SpidersConfig.spiders.hypno.spawnRates.biomes))
 					.build();
 			EntityEntry egg = EntityEntryBuilder.create().entity(EntityHypnoBall.class)
 					.id(Reference.MobultionEntities.HYPNOBALL.getRegistryName(), 10)
@@ -213,7 +232,10 @@ public class ModEntities {
 			EntityEntry withering = EntityEntryBuilder.create().entity(EntityWitheringSkeleton.class)
 					.id(Reference.MobultionEntities.WITHERINGSKELETON.getRegistryName(), 12)
 					.name(Reference.MobultionEntities.WITHERINGSKELETON.getUnlocalizedName()).tracker(64, 3, true)
-					.egg(0x5C5151, 0xCCCCCC).spawn(EnumCreatureType.MONSTER, SkeletonsConfig.skeletons.withering.spawnRates.weight, SkeletonsConfig.skeletons.withering.spawnRates.min, SkeletonsConfig.skeletons.withering.spawnRates.max,
+					.egg(0x5C5151, 0xCCCCCC)
+					.spawn(EnumCreatureType.MONSTER, SkeletonsConfig.skeletons.withering.spawnRates.weight,
+							SkeletonsConfig.skeletons.withering.spawnRates.min,
+							SkeletonsConfig.skeletons.withering.spawnRates.max,
 							getBiomes(SkeletonsConfig.skeletons.withering.spawnRates.biomes))
 					.build();
 			event.getRegistry().register(withering);
@@ -225,7 +247,10 @@ public class ModEntities {
 					.id(Reference.MobultionEntities.SHAMANSKELETON.getRegistryName(), 13)
 					.name(Reference.MobultionEntities.SHAMANSKELETON.getUnlocalizedName()).tracker(64, 3, true)
 					.egg(0x050572, 0x741B47)
-					.spawn(EnumCreatureType.MONSTER, SkeletonsConfig.skeletons.shaman.spawnRates.weight, SkeletonsConfig.skeletons.shaman.spawnRates.min, SkeletonsConfig.skeletons.shaman.spawnRates.max, getBiomes(SkeletonsConfig.skeletons.shaman.spawnRates.biomes))
+					.spawn(EnumCreatureType.MONSTER, SkeletonsConfig.skeletons.shaman.spawnRates.weight,
+							SkeletonsConfig.skeletons.shaman.spawnRates.min,
+							SkeletonsConfig.skeletons.shaman.spawnRates.max,
+							getBiomes(SkeletonsConfig.skeletons.shaman.spawnRates.biomes))
 					.build();
 			event.getRegistry().register(joker);
 		}
@@ -236,7 +261,10 @@ public class ModEntities {
 					.id(Reference.MobultionEntities.JOKERSKELETON.getRegistryName(), 14)
 					.name(Reference.MobultionEntities.JOKERSKELETON.getUnlocalizedName()).tracker(64, 3, true)
 					.egg(0xFF0000, 0xFFFF00)
-					.spawn(EnumCreatureType.MONSTER, SkeletonsConfig.skeletons.joker.spawnRates.weight, SkeletonsConfig.skeletons.joker.spawnRates.min, SkeletonsConfig.skeletons.joker.spawnRates.max, getBiomes(SkeletonsConfig.skeletons.joker.spawnRates.biomes))
+					.spawn(EnumCreatureType.MONSTER, SkeletonsConfig.skeletons.joker.spawnRates.weight,
+							SkeletonsConfig.skeletons.joker.spawnRates.min,
+							SkeletonsConfig.skeletons.joker.spawnRates.max,
+							getBiomes(SkeletonsConfig.skeletons.joker.spawnRates.biomes))
 					.build();
 			event.getRegistry().register(joker);
 		}
@@ -251,7 +279,10 @@ public class ModEntities {
 					.id(Reference.MobultionEntities.SNIPERSKELETON.getRegistryName(), 16)
 					.name(Reference.MobultionEntities.SNIPERSKELETON.getUnlocalizedName()).tracker(64, 3, true)
 					.egg(0x38761D, 0x93C47D)
-					.spawn(EnumCreatureType.MONSTER, SkeletonsConfig.skeletons.sniper.spawnRates.weight, SkeletonsConfig.skeletons.sniper.spawnRates.min, SkeletonsConfig.skeletons.sniper.spawnRates.max, getBiomes(SkeletonsConfig.skeletons.sniper.spawnRates.biomes))
+					.spawn(EnumCreatureType.MONSTER, SkeletonsConfig.skeletons.sniper.spawnRates.weight,
+							SkeletonsConfig.skeletons.sniper.spawnRates.min,
+							SkeletonsConfig.skeletons.sniper.spawnRates.max,
+							getBiomes(SkeletonsConfig.skeletons.sniper.spawnRates.biomes))
 					.build();
 			event.getRegistry().register(sniper);
 		}
@@ -262,7 +293,10 @@ public class ModEntities {
 					.id(Reference.MobultionEntities.MAGMASKELETON.getRegistryName(), 17)
 					.name(Reference.MobultionEntities.MAGMASKELETON.getUnlocalizedName()).tracker(64, 3, true)
 					.egg(0x811616, 0xFD1D1D)
-					.spawn(EnumCreatureType.MONSTER, SkeletonsConfig.skeletons.magma.spawnRates.weight, SkeletonsConfig.skeletons.magma.spawnRates.min, SkeletonsConfig.skeletons.magma.spawnRates.max, getBiomes(SkeletonsConfig.skeletons.magma.spawnRates.biomes))
+					.spawn(EnumCreatureType.MONSTER, SkeletonsConfig.skeletons.magma.spawnRates.weight,
+							SkeletonsConfig.skeletons.magma.spawnRates.min,
+							SkeletonsConfig.skeletons.magma.spawnRates.max,
+							getBiomes(SkeletonsConfig.skeletons.magma.spawnRates.biomes))
 					.build();
 			event.getRegistry().register(magma);
 		}
@@ -277,7 +311,10 @@ public class ModEntities {
 			EntityEntry corrupted = EntityEntryBuilder.create().entity(EntityCorruptedSkeleton.class)
 					.id(Reference.MobultionEntities.CORRUPTEDSKELETON.getRegistryName(), 19)
 					.name(Reference.MobultionEntities.CORRUPTEDSKELETON.getUnlocalizedName()).tracker(64, 3, true)
-					.egg(0x745F1D, 0x927006).spawn(EnumCreatureType.MONSTER, SkeletonsConfig.skeletons.corrupted.spawnRates.weight, SkeletonsConfig.skeletons.corrupted.spawnRates.min, SkeletonsConfig.skeletons.corrupted.spawnRates.max,
+					.egg(0x745F1D, 0x927006)
+					.spawn(EnumCreatureType.MONSTER, SkeletonsConfig.skeletons.corrupted.spawnRates.weight,
+							SkeletonsConfig.skeletons.corrupted.spawnRates.min,
+							SkeletonsConfig.skeletons.corrupted.spawnRates.max,
 							getBiomes(SkeletonsConfig.skeletons.corrupted.spawnRates.biomes))
 					.build();
 			event.getRegistry().register(corrupted);
@@ -289,7 +326,9 @@ public class ModEntities {
 					.id(Reference.MobultionEntities.KNIGHTZOMBIE.getRegistryName(), 20)
 					.name(Reference.MobultionEntities.KNIGHTZOMBIE.getUnlocalizedName()).tracker(64, 3, true)
 					.egg(0xEEEEEE, 0xD0E0E3)
-					.spawn(EnumCreatureType.MONSTER, ZombiesConfig.zombies.knight.spawnRates.weight, ZombiesConfig.zombies.knight.spawnRates.min, ZombiesConfig.zombies.knight.spawnRates.max, getBiomes(ZombiesConfig.zombies.knight.spawnRates.biomes))
+					.spawn(EnumCreatureType.MONSTER, ZombiesConfig.zombies.knight.spawnRates.weight,
+							ZombiesConfig.zombies.knight.spawnRates.min, ZombiesConfig.zombies.knight.spawnRates.max,
+							getBiomes(ZombiesConfig.zombies.knight.spawnRates.biomes))
 					.build();
 			event.getRegistry().register(knight);
 		}
@@ -300,7 +339,9 @@ public class ModEntities {
 					.id(Reference.MobultionEntities.WORKERZOMBIE.getRegistryName(), 21)
 					.name(Reference.MobultionEntities.WORKERZOMBIE.getUnlocalizedName()).tracker(64, 3, true)
 					.egg(0xFFE599, 0xFFFF00)
-					.spawn(EnumCreatureType.MONSTER, ZombiesConfig.zombies.worker.spawnRates.weight, ZombiesConfig.zombies.worker.spawnRates.min, ZombiesConfig.zombies.worker.spawnRates.max, getBiomes(ZombiesConfig.zombies.worker.spawnRates.biomes))
+					.spawn(EnumCreatureType.MONSTER, ZombiesConfig.zombies.worker.spawnRates.weight,
+							ZombiesConfig.zombies.worker.spawnRates.min, ZombiesConfig.zombies.worker.spawnRates.max,
+							getBiomes(ZombiesConfig.zombies.worker.spawnRates.biomes))
 					.build();
 			event.getRegistry().register(worker);
 		}
@@ -311,7 +352,9 @@ public class ModEntities {
 					.id(Reference.MobultionEntities.MAGMAZOMBIE.getRegistryName(), 22)
 					.name(Reference.MobultionEntities.MAGMAZOMBIE.getUnlocalizedName()).tracker(64, 3, true)
 					.egg(0xFFF144, 0xCC0000)
-					.spawn(EnumCreatureType.MONSTER, ZombiesConfig.zombies.magma.spawnRates.weight, ZombiesConfig.zombies.magma.spawnRates.min, ZombiesConfig.zombies.magma.spawnRates.max, getBiomes(ZombiesConfig.zombies.magma.spawnRates.biomes))
+					.spawn(EnumCreatureType.MONSTER, ZombiesConfig.zombies.magma.spawnRates.weight,
+							ZombiesConfig.zombies.magma.spawnRates.min, ZombiesConfig.zombies.magma.spawnRates.max,
+							getBiomes(ZombiesConfig.zombies.magma.spawnRates.biomes))
 					.build();
 			event.getRegistry().register(magma);
 		}
@@ -322,7 +365,9 @@ public class ModEntities {
 					.id(Reference.MobultionEntities.DOCTORZOMBIE.getRegistryName(), 23)
 					.name(Reference.MobultionEntities.DOCTORZOMBIE.getUnlocalizedName()).tracker(64, 3, true)
 					.egg(0xFFFFFF, 0xFD1D1D)
-					.spawn(EnumCreatureType.MONSTER, ZombiesConfig.zombies.doctor.spawnRates.weight, ZombiesConfig.zombies.doctor.spawnRates.min, ZombiesConfig.zombies.doctor.spawnRates.max, getBiomes(ZombiesConfig.zombies.doctor.spawnRates.biomes))
+					.spawn(EnumCreatureType.MONSTER, ZombiesConfig.zombies.doctor.spawnRates.weight,
+							ZombiesConfig.zombies.doctor.spawnRates.min, ZombiesConfig.zombies.doctor.spawnRates.max,
+							getBiomes(ZombiesConfig.zombies.doctor.spawnRates.biomes))
 					.build();
 			event.getRegistry().register(doctor);
 		}
@@ -333,9 +378,38 @@ public class ModEntities {
 					.id(Reference.MobultionEntities.GOROZOMBIE.getRegistryName(), 24)
 					.name(Reference.MobultionEntities.GOROZOMBIE.getUnlocalizedName()).tracker(64, 3, true)
 					.egg(0x95BD84, 0xCEA937)
-					.spawn(EnumCreatureType.MONSTER, ZombiesConfig.zombies.goro.spawnRates.weight, ZombiesConfig.zombies.goro.spawnRates.min, ZombiesConfig.zombies.goro.spawnRates.max, getBiomes(ZombiesConfig.zombies.goro.spawnRates.biomes))
+					.spawn(EnumCreatureType.MONSTER, ZombiesConfig.zombies.goro.spawnRates.weight,
+							ZombiesConfig.zombies.goro.spawnRates.min, ZombiesConfig.zombies.goro.spawnRates.max,
+							getBiomes(ZombiesConfig.zombies.goro.spawnRates.biomes))
 					.build();
 			event.getRegistry().register(goro);
+		}
+
+		// RavenousZombie
+		if (ZombiesConfig.zombies.ravenous.spawn) {
+			EntityEntry ravenous = EntityEntryBuilder.create().entity(EntityRavenousZombie.class)
+					.id(Reference.MobultionEntities.RAVENOUSZOMBIE.getRegistryName(), 25)
+					.name(Reference.MobultionEntities.RAVENOUSZOMBIE.getUnlocalizedName()).tracker(64, 3, true)
+					.egg(0x6AA84F, 0xD41A1A)
+					.spawn(EnumCreatureType.MONSTER, ZombiesConfig.zombies.ravenous.spawnRates.weight,
+							ZombiesConfig.zombies.ravenous.spawnRates.min, ZombiesConfig.zombies.ravenous.spawnRates.max,
+							getBiomes(ZombiesConfig.zombies.ravenous.spawnRates.biomes))
+					.build();
+			event.getRegistry().register(ravenous);
+		}
+		
+		// VampireSkeleton
+		if (SkeletonsConfig.skeletons.vampire.spawn) {
+			EntityEntry vampire = EntityEntryBuilder.create().entity(EntityVampireSkeleton.class)
+					.id(Reference.MobultionEntities.VAMPIRESKELETON.getRegistryName(), 26)
+					.name(Reference.MobultionEntities.VAMPIRESKELETON.getUnlocalizedName()).tracker(64, 3, true)
+					.egg(0xBB8A8A, 0x540D0D)
+					.spawn(EnumCreatureType.MONSTER, SkeletonsConfig.skeletons.vampire.spawnRates.weight,
+							SkeletonsConfig.skeletons.vampire.spawnRates.min,
+							SkeletonsConfig.skeletons.vampire.spawnRates.max,
+							getBiomes(SkeletonsConfig.skeletons.vampire.spawnRates.biomes))
+					.build();
+			event.getRegistry().register(vampire);
 		}
 	}
 
@@ -400,5 +474,11 @@ public class ModEntities {
 					new RenderDoctorZombie.Factory());
 		if (ZombiesConfig.zombies.goro.spawn)
 			RenderingRegistry.registerEntityRenderingHandler(EntityGoroZombie.class, new RenderGoroZombie.Factory());
+		if (ZombiesConfig.zombies.ravenous.spawn)
+			RenderingRegistry.registerEntityRenderingHandler(EntityRavenousZombie.class,
+					new RenderRavenousZombie.Factory());
+		if (SkeletonsConfig.skeletons.vampire.spawn)
+			RenderingRegistry.registerEntityRenderingHandler(EntityVampireSkeleton.class,
+					new RenderVampireSkeleton.Factory());
 	}
 }

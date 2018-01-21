@@ -76,12 +76,6 @@ public class EntityWorkerZombie extends EntityAnimatedZombie{
     }
 	
 	@Override
-	protected void entityInit()
-    {
-        super.entityInit();
-    }
-	
-	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
 		this.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
         this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.hammer));

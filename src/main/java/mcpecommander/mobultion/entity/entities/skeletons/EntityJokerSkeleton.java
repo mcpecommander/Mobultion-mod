@@ -28,6 +28,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
@@ -131,7 +132,7 @@ public class EntityJokerSkeleton extends EntityAnimatedSkeleton {
 	@Nullable
 	@Override
 	protected ResourceLocation getLootTable() {
-		return LootTableList.ENTITIES_SKELETON;
+		return new ResourceLocation(Reference.MOD_ID, "joker_skeleton");
 	}
 
 	@Override
@@ -226,20 +227,10 @@ public class EntityJokerSkeleton extends EntityAnimatedSkeleton {
 	}
 
 	@Override
-	public int getDimension() {
-		return this.dimension;
-	}
-
-	@Override
 	protected EntityArrow getArrow(float distanceFactor) {
 		EntityHeartArrow arrow = new EntityHeartArrow(this.world, this);
 		arrow.setEnchantmentEffectsFromEntity(this, distanceFactor);
 		return arrow;
-	}
-
-	@Override
-	public boolean isWorldRemote() {
-		return world.isRemote;
 	}
 
 }

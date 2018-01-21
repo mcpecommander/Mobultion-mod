@@ -6,9 +6,9 @@ import net.minecraft.world.biome.Biome;
 
 public class Reference {
 	
-	public static final String MOD_ID = "mmm";
+	public static final String MOD_ID = "mobultion";
 	public static final String NAME = "mcpeCommander's mobultion mod";
-	public static final String VERSION = "0.0.3";
+	public static final String VERSION = "0.0.5";
 	public static final String ACCEPTED_MINECRAFT_VERSIONS = "[1.12, 1.13)";
 	
 	public static final String CLIENT_PROXY_CLASS = "mcpecommander.mobultion.proxy.ClientProxy";
@@ -16,18 +16,21 @@ public class Reference {
 	
 	//ItemNames
 	
-	public static enum ModItems {
+	public static enum MobultionItems {
 		FORESTBOW("forest_bow","item_forest_bow"),
 		HEALINGWAND("healing_wand","item_healing_wand"),
 		HEARTARROW("heart_arrow","item_heart_arrow"),
 		HAMMER("hammer","item_hammer"),
 		FIRE_SWORD("fire_sword","item_fire_sword"),
-		HEALTH("health", "item_health");
+		HEALTH("health", "item_health"),
+		FORK("fork","item_fork"),
+		KNIFE("knife","item_knife"),
+		HAT("hat","item_hat");
 		
 		private String unlocalizedName;
 		private String registryName;
 		
-		private ModItems(String unlocalizedName, String registryName) {
+		private MobultionItems(String unlocalizedName, String registryName) {
 			this.unlocalizedName = unlocalizedName;
 			this.registryName = registryName;
 		}
@@ -62,6 +65,7 @@ public class Reference {
 		SHAMANSKELETON(new ResourceLocation(MOD_ID, "shaman_skeleton"), "shaman_skeleton"),
 		SNIPERSKELETON(new ResourceLocation(MOD_ID, "sniper_skeleton"), "sniper_skeleton"),
 		WITHERINGSKELETON(new ResourceLocation(MOD_ID, "withering_skeleton"), "withering_skeleton"),
+		VAMPIRESKELETON(new ResourceLocation(MOD_ID, "vampire_skeleton"), "vampire_skeleton"),
 		
 		SKELETONREMAINS(new ResourceLocation(MOD_ID, "skeleton_remains"), "skeleton_remains"),
 		HEARTARROW(new ResourceLocation(MOD_ID, "heart_arrow"), "heart_arrow"),
@@ -72,7 +76,8 @@ public class Reference {
 		GOROZOMBIE(new ResourceLocation(MOD_ID, "goro_zombie"), "goro_zombie"),
 		KNIGHTZOMBIE(new ResourceLocation(MOD_ID, "knight_zombie"), "knight_zombie"),
 		MAGMAZOMBIE(new ResourceLocation(MOD_ID, "magma_zombie"), "magma_zombie"),
-		WORKERZOMBIE(new ResourceLocation(MOD_ID, "worker_zombie"), "worker_zombie");
+		WORKERZOMBIE(new ResourceLocation(MOD_ID, "worker_zombie"), "worker_zombie"),
+		RAVENOUSZOMBIE(new ResourceLocation(MOD_ID, "ravenous_zombie"), "ravenous_zombie");
 		
 		
 		
@@ -92,8 +97,5 @@ public class Reference {
 			return registryName;
 		}
 	}
-	
-	
-	
-	
+
 }

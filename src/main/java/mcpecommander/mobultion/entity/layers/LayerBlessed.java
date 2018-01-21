@@ -60,6 +60,7 @@ public class LayerBlessed<T extends ModelCraftStudioSon> implements LayerRendere
         this.renderer.setLightmap(entitylivingbaseIn);
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
 	@Override

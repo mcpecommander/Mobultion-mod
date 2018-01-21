@@ -14,6 +14,7 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -118,7 +119,7 @@ public class EntityMotherSpider extends EntityAnimatedSpider{
     @Override
     public void onDeath(DamageSource cause) {
     	if(!this.isWorldRemote()){
-    		if(cause.getTrueSource() instanceof EntityPlayer){
+    		if(cause.getTrueSource() instanceof EntityPlayerMP){
     			EntitySpiderEgg egg = new EntitySpiderEgg(this.world, cause.getTrueSource().getName());
     			egg.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
     			this.world.spawnEntity(egg);

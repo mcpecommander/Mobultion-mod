@@ -1,0 +1,6 @@
+{
+    "parent": "item/handheld",
+    "textures": {
+        "layer0": "mobultion:items/fire_sword/fire_sworda"
+    }
+}

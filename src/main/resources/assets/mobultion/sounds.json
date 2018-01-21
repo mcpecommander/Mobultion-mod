@@ -1,0 +1,49 @@
+{
+  "fire_arrow_shot": {
+    "subtitle": "mobultion.subtitles.fire_arrow_shot",
+    "sounds": [ "mobultion:fire_arrow_shot" ]
+  },
+  "entity_respawn": {
+    "subtitle": "mobultion.subtitles.entity_respawn",
+    "sounds": [ "mobultion:entity_respawn" ]
+  },
+  "magma_remains_death": {
+    "subtitle": "mobultion.subtitles.magma_remains_death",
+    "sounds": [ "mobultion:magma_remains_death" ]
+  },
+  "forest_skeleton_shoot": {
+    "subtitle": "mobultion.subtitles.forest_skeleton_shoot",
+    "sounds": [ "mobultion:forest_skeleton_shoot" ]
+  },
+  "joker_ambient": {
+    "subtitle": "mobultion.subtitles.joker_ambient",
+    "sounds": [ "mobultion:joker_ambient" ]
+  },
+  "ravenous_eating": {
+    "subtitle": "mobultion.subtitles.ravenous_eating",
+    "sounds": [ "mobultion:ravenous_eating" ]
+  },
+  "burp": {
+    "subtitle": "mobultion.subtitles.burp",
+    "sounds": [ "mobultion:burp",
+				"mobultion:burp1",
+				"mobultion:burp2"
+				]
+  },
+  "shield_block": {
+    "subtitle": "mobultion.subtitles.shield_block",
+    "sounds": [ "mobultion:shield_block" ]
+  },
+  "vampire_bite": {
+    "subtitle": "mobultion.subtitles.vampire_bite",
+    "sounds": [ "mobultion:vampire_bite",
+				"mobultion:vampire_bite",
+				"mobultion:vampire_bite",
+				"mobultion:vampire_bite"
+				]
+  },
+  "bat_morph": {
+    "subtitle": "mobultion.subtitles.bat_morph",
+    "sounds": [ "mobultion:bat_morph" ]
+  }
+}

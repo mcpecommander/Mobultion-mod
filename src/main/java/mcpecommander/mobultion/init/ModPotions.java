@@ -6,11 +6,11 @@ import mcpecommander.mobultion.potion.PotionJokerness;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ModPotions {
-	@GameRegistry.ObjectHolder("mlm:hypnotize_potion")
+	@GameRegistry.ObjectHolder("mobultion:hypnotize_potion")
 	public static PotionHypnotize potionHypnotize;
-	@GameRegistry.ObjectHolder("mlm:freeze_potion")
+	@GameRegistry.ObjectHolder("mobultion:freeze_potion")
 	public static PotionFreeze potionFreeze;
-	@GameRegistry.ObjectHolder("mlm:jokerness_potion")
+	@GameRegistry.ObjectHolder("mobultion:jokerness_potion")
 	public static PotionJokerness potionJokerness;
 	
 	public static void init(){

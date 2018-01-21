@@ -1,0 +1,39 @@
+item.mobultion:health.name=HälsaFörpackning
+item.mobultion:fire_sword.name=Eldsvärd
+item.mobultion:healing_wand.name=Läkningstråd
+item.mobultion:heart_arrow.name=Hjärtat pil
+item.mobultion:forest_bow.name=Skogsbåge
+item.mobultion:fork.name=Gaffel
+item.mobultion:knife.name=Kniv
+item.mobultion:hammer.name=Hammare
+item.mobultion:hat.name=Hatt
+
+entity.corrupted_skeleton.name=Korrumperat skelett
+entity.joker_skeleton.name=Gycklare
+entity.magma_skeleton.name=Magma skelett
+entity.shaman_skeleton.name=Schaman skelett
+entity.sniper_skeleton.name=Prickskytt skelett
+entity.withering_skeleton.name=Förtvining skelett
+entity.vampire_skeleton.name=Vampyr skelett
+entity.skeleton_remains.name=Skelettrester
+entity.heart_arrow.name=Hjärtat pil
+entity.magma_arrow.name=Magma Pil
+
+entity.angel_spider.name=Ängel spindel
+entity.hypno_spider.name=Hypnotisk spindel
+entity.magma_spider.name=Magma spindel
+entity.mini_spider.name=Mini spindel
+entity.mother_spider.name=Moder spindel
+entity.sorcerer_spider.name=trollkarl spindel
+entity.speedy_spider.name=snabb spindel
+entity.wither_spider.name=Förtvining spindel
+entity.spider_egg.name=spindels ägg
+
+entity.doctor_zombie.name=Doctor zombie
+entity.goro_zombie.name=Goro zombie
+entity.knight_zombie.name=Riddare zombie
+entity.magma_zombie.name=Magma zombie
+entity.worker_zombie.name=Arbetare zombie
+entity.ravenous_zombie.name=Glupande zombie
+
+itemGroup.tabMobultionMod=Mobultion Sida

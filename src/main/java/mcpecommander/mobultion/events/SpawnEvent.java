@@ -1,9 +1,10 @@
 package mcpecommander.mobultion.events;
 
+import mcpecommander.mobultion.entity.entities.skeletons.EntityCorruptedSkeleton;
 import mcpecommander.mobultion.entity.entities.skeletons.EntityWitheringSkeleton;
 import mcpecommander.mobultion.entity.entities.spiders.EntityMagmaSpider;
-import mcpecommander.mobultion.mobConfigs.SpidersConfig;
 import mcpecommander.mobultion.mobConfigs.SkeletonsConfig;
+import mcpecommander.mobultion.mobConfigs.SpidersConfig;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraft.world.gen.structure.MapGenNetherBridge;
 import net.minecraft.world.gen.structure.MapGenScatteredFeature;
@@ -25,7 +26,7 @@ public class SpawnEvent {
 		}
 		if(e.getType() == EventType.SCATTERED_FEATURE && SkeletonsConfig.skeletons.corrupted.templeSpawn){
 			MapGenScatteredFeature gen = (MapGenScatteredFeature) e.getNewGen();
-			gen.getMonsters().add(new SpawnListEntry(EntityWitheringSkeleton.class, 100, 2, 3));
+			gen.getMonsters().add(new SpawnListEntry(EntityCorruptedSkeleton.class, 100, 2, 3));
 		}
 
 	}

@@ -1,13 +1,20 @@
 package mcpecommander.mobultion.items;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 import mcpecommander.mobultion.MobultionMod;
 import mcpecommander.mobultion.Reference;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
@@ -17,8 +24,8 @@ public class ItemFireSword extends ItemSword{
 
 	public ItemFireSword() {
 		super(ToolMaterial.DIAMOND);
-		this.setRegistryName(Reference.ModItems.FIRE_SWORD.getRegistryName());
-		this.setUnlocalizedName(Reference.ModItems.FIRE_SWORD.getUnlocalizedName());
+		this.setRegistryName(Reference.MobultionItems.FIRE_SWORD.getRegistryName());
+		this.setUnlocalizedName(Reference.MobultionItems.FIRE_SWORD.getUnlocalizedName());
 		
 		this.setCreativeTab(MobultionMod.MOBULTION_TAB);
 	}
@@ -46,7 +53,7 @@ public class ItemFireSword extends ItemSword{
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 		stack.damageItem(1, attacker);
-		target.setFire(3 + target.getRNG().nextInt(5));
+		target.attackEntityFrom(DamageSource.IN_FIRE, this.getAttackDamage());
 		return true;
 	}
 

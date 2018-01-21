@@ -42,7 +42,7 @@ public class LayerMagmaSpiderLava<T extends EntityMagmaSpider> implements LayerR
         int j = i % 65536;
         int k = i / 65536;
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
-        GlStateManager.color(249.0F, 161.0F, 30.0F, 1.0F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
         this.renderMagmaSpider.getMainModel().render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
         Minecraft.getMinecraft().entityRenderer.setupFogColor(false);
@@ -53,6 +53,7 @@ public class LayerMagmaSpiderLava<T extends EntityMagmaSpider> implements LayerR
         this.renderMagmaSpider.setLightmap(entitylivingbaseIn);
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     public boolean shouldCombineTextures()

@@ -151,18 +151,8 @@ public class EntityShamanSkeleton extends EntityAnimatedSkeleton {
 	}
 
 	@Override
-	public int getDimension() {
-		return this.dimension;
-	}
-
-	@Override
 	protected EntityArrow getArrow(float distanceFactor) {
 		return null;
-	}
-
-	@Override
-	public boolean isWorldRemote() {
-		return world.isRemote;
 	}
 
 }

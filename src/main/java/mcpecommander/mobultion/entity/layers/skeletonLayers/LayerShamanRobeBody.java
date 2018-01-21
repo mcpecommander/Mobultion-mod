@@ -26,7 +26,8 @@ public class LayerShamanRobeBody implements LayerRenderer<EntityShamanSkeleton>
     public void doRenderLayer(EntityShamanSkeleton entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
     {
     	GlStateManager.pushMatrix();
-    	GlStateManager.scale(1F, 1.55F, 1.2F);
+    	GlStateManager.scale(1.05F, 1.55F, 1.1F);
+    	GlStateManager.translate(0, -0.03, 0);
     	this.layerModel.setModelAttributes(this.layerModel);
         this.layerModel.setLivingAnimations(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks);
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);

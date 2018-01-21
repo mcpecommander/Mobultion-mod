@@ -20,8 +20,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemHealingWand extends Item {
 
 	public ItemHealingWand() {
-		this.setRegistryName(Reference.ModItems.HEALINGWAND.getRegistryName());
-		this.setUnlocalizedName(Reference.ModItems.HEALINGWAND.getUnlocalizedName());
+		this.setRegistryName(Reference.MobultionItems.HEALINGWAND.getRegistryName());
+		this.setUnlocalizedName(Reference.MobultionItems.HEALINGWAND.getUnlocalizedName());
 		this.setCreativeTab(MobultionMod.MOBULTION_TAB);
 		this.maxStackSize = 1;
 		this.setMaxDamage(5);

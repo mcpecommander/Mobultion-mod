@@ -93,6 +93,9 @@ public class EntityMiniSpider extends EntityAnimatedSpider{
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+//		if(this.ticksExisted % 20 == 0){
+//			System.out.println(this.getAttackTarget());
+//		}
 		if (this.isRiding()) {
 			PotionEffect invis = new PotionEffect(MobEffects.INVISIBILITY, 10, 0, false, false);
 			this.addPotionEffect(invis);

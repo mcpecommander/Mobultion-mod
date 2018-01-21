@@ -25,11 +25,7 @@ public class MobultionMod {
 	public static final CreativeTabs MOBULTION_TAB = new MobultionModTab();
 	
 	public static Logger logger;
-	
-	static
-	{
-		FluidRegistry.enableUniversalBucket();
-	}
+
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
@@ -49,9 +45,5 @@ public class MobultionMod {
         proxy.postInit(e);
 
 	}
-
-
-	
-	
 
 }

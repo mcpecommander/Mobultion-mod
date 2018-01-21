@@ -248,11 +248,6 @@ public class EntityMagmaSkeleton extends EntityAnimatedSkeleton{
             this.setCombatTask();
         }
     }
-
-	@Override
-	public int getDimension() {
-		return this.dimension;
-	}
 	
 	@Override
 	protected EntityArrow getArrow(float distanceFactor) {
@@ -260,12 +255,6 @@ public class EntityMagmaSkeleton extends EntityAnimatedSkeleton{
 		arrow.setEnchantmentEffectsFromEntity(this, distanceFactor);
 		return arrow;
 	}
-
-	@Override
-	public boolean isWorldRemote() {
-		return world.isRemote;
-	}
-
 
 }
 

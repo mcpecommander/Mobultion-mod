@@ -221,7 +221,7 @@ public class SkeletonsConfig {
 
 			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")
-			public Spawn spawnRates = new Spawn(100, 1, 3, "extreme_hills", "forest", "swampland", "mushroom_island",
+			public Spawn spawnRates = new Spawn(100, 1, 1, "extreme_hills", "forest", "swampland", "mushroom_island",
 					"mushroom_island_shore", "jungle", "forest_hills", "jungle_hills", "jungle_edge", "birch_forest",
 					"birch_forest_hills", "roofed_forest", "mutated_forest", "mutated_jungle", "mutated_swampland",
 					"mutated_birch_forest");
@@ -369,8 +369,48 @@ public class SkeletonsConfig {
 				
 			}
 			
-//			@Config.Comment("Where this will spawn")
-//			public String[] spawnLocations = { "sky" };
+
+		}
+		
+		@Config.Comment("Vampire Skeleton")
+		public Vampire vampire = new Vampire();
+
+		public static class Vampire {
+
+			@Config.RequiresMcRestart
+			@Config.Comment("Do you want to unregister this mob?")
+			public boolean spawn = true;
+
+			@Config.RequiresMcRestart
+			@Config.Comment("Spawn configuration")
+			public Spawn spawnRates = new Spawn(100, 1, 3, "jungle", "jungle_hills", "jungle_edge", "mutated_jungle", "mutated_jungle_edge");
+			
+			public static class Spawn{
+
+				public Spawn(int weight, int min, int max, @Nullable String... biomes) {
+					this.weight = weight;
+					this.min = min;
+					this.max = max;
+					this.biomes = biomes;
+				}
+				
+				@Config.RangeInt(min = 1, max = 500)
+				@Config.Comment("Spawn weight")
+				public int weight;
+				
+				@Config.RangeInt(min = 1, max = 16)
+				@Config.Comment("Minimum spawn count")
+				public int min;
+				
+				@Config.RangeInt(min = 1, max = 16)
+				@Config.Comment("Maximum spawn count")
+				public int max;
+				
+				@Config.Comment("Biomes to spawn in")
+				public String[] biomes;
+				
+			}
+			
 
 		}
 	}

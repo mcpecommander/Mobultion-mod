@@ -220,21 +220,11 @@ public class EntityWitheringSkeleton extends EntityAnimatedSkeleton {
 	}
 
 	@Override
-	public int getDimension() {
-		return this.dimension;
-	}
-
-	@Override
 	protected EntityArrow getArrow(float distanceFactor) {
 		EntityTippedArrow arrow = new EntityTippedArrow(this.world, this);
 		arrow.setEnchantmentEffectsFromEntity(this, distanceFactor);
 		arrow.addEffect(new PotionEffect(MobEffects.WITHER, SkeletonsConfig.skeletons.withering.wither, 0));
 		return arrow;
-	}
-
-	@Override
-	public boolean isWorldRemote() {
-		return world.isRemote;
 	}
 
 }

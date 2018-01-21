@@ -6,6 +6,7 @@ import com.leviathanstudio.craftstudio.common.animation.IAnimated;
 
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.mobConfigs.SpidersConfig;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -24,6 +25,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
@@ -186,12 +188,21 @@ public class EntitySpiderEgg extends EntityLivingBase implements IAnimated{
 				}
 				if (!this.isCoolingDown() && this.isHatching()) {
 					EntityMob spider = this.getDimension() == 0 ? new EntitySpider(this.world) : new EntityMagmaSpider(this.world);
-					spider.setLocationAndAngles(
-							posX + (this.getRNG().nextBoolean() ? ((this.getRNG().nextFloat() + 1) * 2)
-									: (-(this.getRNG().nextFloat() + 1) * 2)),
-							posY, posZ + (this.getRNG().nextBoolean() ? ((this.getRNG().nextFloat() + 1) * 2)
-									: (-(this.getRNG().nextFloat() + 1) * 2)),
-							rotationYaw, rotationPitch);
+					BlockPos pos = new BlockPos(posX + (this.getRNG().nextBoolean() ? ((this.getRNG().nextFloat() + 1) * 2)
+							: (-(this.getRNG().nextFloat() + 1) * 2)),
+					posY, posZ + (this.getRNG().nextBoolean() ? ((this.getRNG().nextFloat() + 1) * 2)
+							: (-(this.getRNG().nextFloat() + 1) * 2)));
+					while (!isBlockAccessabile(pos) && !isBlockAccessabile(pos.add(1, 0, 0))
+							&& !isBlockAccessabile(pos.add(0, 0, 1)) && !isBlockAccessabile(pos.add(-1, 0, 0))
+							&& !isBlockAccessabile(pos.add(0, 0, -1))) {
+						if (this.getRNG().nextBoolean()) {
+							pos = pos.add(0, 1, 0);
+						} else {
+							pos = pos.add(1, 0, 1);
+						}
+
+					}
+					spider.setLocationAndAngles(pos.getX(), pos.getY(), pos.getZ(),	rotationYaw, rotationPitch);
 					this.playSound(SoundEvents.ENTITY_BOBBER_SPLASH, 1f, .5f);
 					WorldServer world = (WorldServer) this.world;
 					world.spawnParticle(EnumParticleTypes.CLOUD, this.posX, this.posY + 1.5d, this.posZ,
@@ -235,6 +246,12 @@ public class EntitySpiderEgg extends EntityLivingBase implements IAnimated{
 //            this.world.spawnEntity(mini);
 //		}
 		
+	}
+	
+	private boolean isBlockAccessabile(BlockPos pos) {
+		return world.getBlockState(pos).getMaterial() == Material.AIR
+				|| (world.getBlockState(pos).getMaterial() == Material.GRASS
+						&& !world.getBlockState(pos).causesSuffocation());
 	}
 	
 	@Override

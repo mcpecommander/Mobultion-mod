@@ -35,8 +35,8 @@ public class ItemForestBow extends Item{
 	
 	public ItemForestBow()
     {
-		this.setRegistryName(Reference.ModItems.FORESTBOW.getRegistryName());
-		this.setUnlocalizedName(Reference.ModItems.FORESTBOW.getUnlocalizedName());
+		this.setRegistryName(Reference.MobultionItems.FORESTBOW.getRegistryName());
+		this.setUnlocalizedName(Reference.MobultionItems.FORESTBOW.getUnlocalizedName());
         this.maxStackSize = 1;
         this.setMaxDamage(384);
         this.setCreativeTab(MobultionMod.MOBULTION_TAB);

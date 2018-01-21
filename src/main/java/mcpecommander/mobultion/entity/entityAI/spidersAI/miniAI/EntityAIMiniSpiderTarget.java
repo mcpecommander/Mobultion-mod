@@ -66,7 +66,7 @@ public class EntityAIMiniSpiderTarget<T extends EntityLivingBase> extends Entity
 
     public boolean shouldExecute()
     {
-    	if(this.taskOwner.getHealth() > 15f && !this.taskOwner.isRiding()){
+    	if(this.taskOwner.getHealth() > 2f && !this.taskOwner.isRiding()){
 	    	if (this.targetChance > 0 && this.taskOwner.getRNG().nextInt(this.targetChance) != 0)
 	        {
 	            return false;

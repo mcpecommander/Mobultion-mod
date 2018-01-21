@@ -20,8 +20,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemHealth extends Item {
 
 	public ItemHealth() {
-		this.setRegistryName(Reference.ModItems.HEALTH.getRegistryName());
-		this.setUnlocalizedName(Reference.ModItems.HEALTH.getUnlocalizedName());
+		this.setRegistryName(Reference.MobultionItems.HEALTH.getRegistryName());
+		this.setUnlocalizedName(Reference.MobultionItems.HEALTH.getUnlocalizedName());
 
 		this.maxStackSize = 16;
 		// this.setFull3D();

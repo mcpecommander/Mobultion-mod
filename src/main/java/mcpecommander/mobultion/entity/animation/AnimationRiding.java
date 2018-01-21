@@ -22,7 +22,7 @@ public class AnimationRiding extends CustomChannel{
 	public void update(CSModelRenderer part, IAnimated animated) {
 		if(animated instanceof EntityAnimatedSkeleton){
 			if(part.boxName.equals("LeftLeg")){
-				Quat4f quat = MathHelper.quatFromEuler(-90, -20f, 0f);
+				Quat4f quat = MathHelper.quatFromEuler(-90f, -20f, 0f);
 				Quat4f quat2 = new Quat4f(part.getDefaultRotationAsQuaternion());
 				quat.mul(quat2);
                 part.getRotationMatrix().set(quat);

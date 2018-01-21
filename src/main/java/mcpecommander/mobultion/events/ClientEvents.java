@@ -2,9 +2,17 @@ package mcpecommander.mobultion.events;
 
 import java.util.Random;
 
+import com.leviathanstudio.craftstudio.client.model.CSModelRenderer;
+import com.leviathanstudio.craftstudio.common.animation.IAnimated;
+
+import mcpecommander.mobultion.Reference;
+import mcpecommander.mobultion.entity.model.ModelCraftStudioSon;
 import mcpecommander.mobultion.init.ModPotions;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.client.event.RenderLivingEvent;
@@ -14,7 +22,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 public class ClientEvents {
 
 	@SubscribeEvent
@@ -22,12 +30,6 @@ public class ClientEvents {
 		if(ModPotions.potionJokerness.isReady && e.getType() == ElementType.ALL){
 			ModPotions.potionJokerness.render(Minecraft.getMinecraft(), e.getResolution(), new Random());
 		}
-	}
-	
-	//@SubscribeEvent
-	public static void onLivingRender(RenderLivingEvent.Post<EntityLivingBase> e){
-		
-	}
-	
+	}	
 	
 }

@@ -163,6 +163,7 @@ public abstract class EntityAnimatedSkeleton extends EntityMob implements IRange
     public void setSwingingArms(boolean swingingArms)
     {
         this.dataManager.set(SWINGING_ARMS, Boolean.valueOf(swingingArms));
+        this.dataManager.setDirty(SWINGING_ARMS);
     }
 
     @Override
@@ -184,6 +185,16 @@ public abstract class EntityAnimatedSkeleton extends EntityMob implements IRange
     public void onLivingUpdate() {
         super.onLivingUpdate();
         this.getAnimationHandler().animationsUpdate(this);
+    }
+    
+    @Override
+    public int getDimension() {
+    	return this.dimension;
+    }
+    
+    @Override
+    public boolean isWorldRemote() {
+    	return this.world.isRemote;
     }
     
     @Override

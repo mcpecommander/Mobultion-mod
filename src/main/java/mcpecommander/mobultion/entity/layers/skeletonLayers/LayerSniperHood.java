@@ -42,6 +42,7 @@ public class LayerSniperHood implements LayerRenderer<EntitySniperSkeleton>
         
         this.renderer.bindTexture(TEXTURE);
         this.layerModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
         GlStateManager.popMatrix();
         
         

@@ -5,21 +5,22 @@ import mcpecommander.mobultion.init.ModPotions;
 import mcpecommander.mobultion.init.ModSounds;
 import mcpecommander.mobultion.items.ItemFireSword;
 import mcpecommander.mobultion.items.ItemForestBow;
+import mcpecommander.mobultion.items.ItemFork;
 import mcpecommander.mobultion.items.ItemHammer;
+import mcpecommander.mobultion.items.ItemHat;
 import mcpecommander.mobultion.items.ItemHealingWand;
 import mcpecommander.mobultion.items.ItemHealth;
 import mcpecommander.mobultion.items.ItemHeartArrow;
+import mcpecommander.mobultion.items.ItemKnife;
 import net.minecraft.item.Item;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import scala.reflect.internal.Trees.New;
 
 public class CommonProxy {
 
@@ -30,7 +31,6 @@ public class CommonProxy {
 
 	public void preInit(FMLPreInitializationEvent e) {
 		ModPotions.init();
-		// ModEntities.init();
 
 	}
 
@@ -44,7 +44,7 @@ public class CommonProxy {
 	@SubscribeEvent
 	public void registerItems(RegistryEvent.Register<Item> event) {
 		event.getRegistry().registerAll(new ItemForestBow(), new ItemHealingWand(), new ItemHeartArrow(),
-				new ItemHammer(), new ItemFireSword(), new ItemHealth());
+				new ItemHammer(), new ItemFireSword(), new ItemHealth(), new ItemFork(), new ItemKnife(), new ItemHat());
 	}
 
 	@SubscribeEvent
@@ -61,6 +61,11 @@ public class CommonProxy {
 		event.getRegistry().register(ModSounds.magma_remains_death);
 		event.getRegistry().register(ModSounds.forest_skeleton_shoot);
 		event.getRegistry().register(ModSounds.joker_ambient);
+		event.getRegistry().register(ModSounds.ravenous_eating);
+		event.getRegistry().register(ModSounds.burp);
+		event.getRegistry().register(ModSounds.shield_block);
+		event.getRegistry().register(ModSounds.vampire_bite);
+		event.getRegistry().register(ModSounds.bat_morph);
 	}
 
 }

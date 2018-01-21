@@ -11,6 +11,7 @@ import mcpecommander.mobultion.init.ModEntities;
 import mcpecommander.mobultion.init.ModItems;
 import mcpecommander.mobultion.particle.TextureStitcherBreathFX;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -20,6 +21,7 @@ public class ClientProxy extends CommonProxy{
 	@Override
     public void preInit(FMLPreInitializationEvent e) {
         super.preInit(e);
+        OBJLoader.INSTANCE.addDomain(Reference.MOD_ID);
         ModEntities.initModels();
         MinecraftForge.EVENT_BUS.register(new TextureStitcherBreathFX());
     }
@@ -44,6 +46,8 @@ public class ClientProxy extends CommonProxy{
         csRegistryHelper.register(EnumResourceType.ANIM, EnumRenderType.ENTITY, "skeleton_holding_bow");
         csRegistryHelper.register(EnumResourceType.ANIM, EnumRenderType.ENTITY, "skeleton_walk_hands");
         csRegistryHelper.register(EnumResourceType.ANIM, EnumRenderType.ENTITY, "skeleton_healing");
+        csRegistryHelper.register(EnumResourceType.ANIM, EnumRenderType.ENTITY, "remains_rebirth");
+        csRegistryHelper.register(EnumResourceType.ANIM, EnumRenderType.ENTITY, "bat_morph");
         
         //Spiders
         csRegistryHelper.register(EnumResourceType.MODEL, EnumRenderType.ENTITY, "hypno_spider");
@@ -70,6 +74,7 @@ public class ClientProxy extends CommonProxy{
         csRegistryHelper.register(EnumResourceType.MODEL, EnumRenderType.ENTITY, "zombie");
         csRegistryHelper.register(EnumResourceType.MODEL, EnumRenderType.ENTITY, "test");
         csRegistryHelper.register(EnumResourceType.MODEL, EnumRenderType.ENTITY, "goro_zombie");
+        csRegistryHelper.register(EnumResourceType.MODEL, EnumRenderType.ENTITY, "ravenous_zombie");
         
         csRegistryHelper.register(EnumResourceType.ANIM, EnumRenderType.ENTITY, "knight_slash");
         csRegistryHelper.register(EnumResourceType.ANIM, EnumRenderType.ENTITY, "worker_hammering");
@@ -77,6 +82,7 @@ public class ClientProxy extends CommonProxy{
         csRegistryHelper.register(EnumResourceType.ANIM, EnumRenderType.ENTITY, "doctor_heal");
         csRegistryHelper.register(EnumResourceType.ANIM, EnumRenderType.ENTITY, "goro_slash");
         csRegistryHelper.register(EnumResourceType.ANIM, EnumRenderType.ENTITY, "goro_hands");
+        csRegistryHelper.register(EnumResourceType.ANIM, EnumRenderType.ENTITY, "ravenous_eating");
     }
 
 }

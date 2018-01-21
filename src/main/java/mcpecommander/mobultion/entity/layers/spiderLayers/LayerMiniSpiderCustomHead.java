@@ -81,7 +81,7 @@ public class LayerMiniSpiderCustomHead implements LayerRenderer<EntityMiniSpider
                 
                 minecraft.getItemRenderer().renderItem(entitylivingbaseIn, itemstack, ItemCameraTransforms.TransformType.HEAD);
             }
-
+            GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
             GlStateManager.popMatrix();
         }
     }

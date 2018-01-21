@@ -6,6 +6,7 @@ import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.entities.skeletons.EntityMagmaSkeleton;
 import mcpecommander.mobultion.entity.layers.skeletonLayers.LayerCustomHeadCraftstudio;
 import mcpecommander.mobultion.entity.layers.skeletonLayers.LayerHeldItemCraftStudio;
+import mcpecommander.mobultion.entity.layers.skeletonLayers.LayerMagmaSkeletonLava;
 import mcpecommander.mobultion.entity.model.ModelCraftStudioSon;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -27,6 +28,7 @@ public class RenderMagmaSkeleton extends RenderLiving<EntityMagmaSkeleton>{
 		super(rendermanagerIn, model, 0.5F);
 		this.addLayer(new LayerHeldItemCraftStudio(this));
 		this.addLayer(new LayerBipedArmor(this));
+		this.addLayer(new LayerMagmaSkeletonLava(this));
 		this.addLayer(new LayerCustomHeadCraftstudio(model.getModelRendererFromName("Head")));
 	}
 	

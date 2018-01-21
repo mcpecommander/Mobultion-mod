@@ -2,28 +2,37 @@ package mcpecommander.mobultion.init;
 
 import mcpecommander.mobultion.items.ItemFireSword;
 import mcpecommander.mobultion.items.ItemForestBow;
+import mcpecommander.mobultion.items.ItemFork;
 import mcpecommander.mobultion.items.ItemHammer;
+import mcpecommander.mobultion.items.ItemHat;
 import mcpecommander.mobultion.items.ItemHealingWand;
 import mcpecommander.mobultion.items.ItemHealth;
 import mcpecommander.mobultion.items.ItemHeartArrow;
+import mcpecommander.mobultion.items.ItemKnife;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModItems {
 
-	@GameRegistry.ObjectHolder("mmm:item_forest_bow")
+	@GameRegistry.ObjectHolder("mobultion:item_forest_bow")
 	public static ItemForestBow forestBow;
-	@GameRegistry.ObjectHolder("mmm:item_healing_wand")
+	@GameRegistry.ObjectHolder("mobultion:item_healing_wand")
 	public static ItemHealingWand healingWand;
-	@GameRegistry.ObjectHolder("mmm:item_heart_arrow")
+	@GameRegistry.ObjectHolder("mobultion:item_heart_arrow")
 	public static ItemHeartArrow heartArrow;
-	@GameRegistry.ObjectHolder("mmm:item_hammer")
+	@GameRegistry.ObjectHolder("mobultion:item_hammer")
 	public static ItemHammer hammer;
-	@GameRegistry.ObjectHolder("mmm:item_fire_sword")
+	@GameRegistry.ObjectHolder("mobultion:item_fire_sword")
 	public static ItemFireSword fireSword;
-	@GameRegistry.ObjectHolder("mmm:item_health")
+	@GameRegistry.ObjectHolder("mobultion:item_health")
 	public static ItemHealth health;
+	@GameRegistry.ObjectHolder("mobultion:item_fork")
+	public static ItemFork fork;
+	@GameRegistry.ObjectHolder("mobultion:item_knife")
+	public static ItemKnife knife;
+	@GameRegistry.ObjectHolder("mobultion:item_hat")
+	public static ItemHat hat;
 
 	@SideOnly(Side.CLIENT)
     public static void initModels() {
@@ -33,7 +42,9 @@ public class ModItems {
 		hammer.initModel();
 		fireSword.initModel();
 		health.initModel();
-		
+		fork.initModel();
+		knife.initModel();
+		hat.initModel();
     }
 	
 

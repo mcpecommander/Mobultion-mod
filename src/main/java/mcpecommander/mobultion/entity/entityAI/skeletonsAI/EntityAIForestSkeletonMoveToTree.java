@@ -108,10 +108,10 @@ public class EntityAIForestSkeletonMoveToTree extends EntityAIBase{
 		return false;
 	}
 	
-	private boolean checkForLeaves(BlockPos pos, int amount){
+	private static boolean checkForLeaves(BlockPos pos, int amount, World world){
 		int i = 0;
 		for(BlockPos block : pos.getAllInBox(pos.add(-1, -1, -1), pos.add(1, 1, 1))){
-			IBlockState state = this.world.getBlockState(block);
+			IBlockState state = world.getBlockState(block);
 			if(state.getBlock() instanceof BlockLeaves){
 				//System.out.println(i);
 				i++;
@@ -133,31 +133,31 @@ public class EntityAIForestSkeletonMoveToTree extends EntityAIBase{
 		return list;
 	}
 	
-	public List<BlockPos> getAllInBox(BlockPos from, BlockPos to, @Nonnull World world)
+	public static List<BlockPos> getAllInBox(BlockPos from, BlockPos to, @Nonnull World world)
     {
         return getAllInBox(Math.min(from.getX(), to.getX()), Math.min(from.getY(), to.getY()), Math.min(from.getZ(), to.getZ()), Math.max(from.getX(), to.getX()), Math.max(from.getY(), to.getY()), Math.max(from.getZ(), to.getZ()), world);
     }
 	
-	private List<BlockPos> getAllInBox(final int minX, final int minY, final int minZ, final int maxX, final int maxY, final int maxZ, @Nonnull World world)
+	private static List<BlockPos> getAllInBox(final int minX, final int minY, final int minZ, final int maxX, final int maxY, final int maxZ, @Nonnull World world)
     {
 		ArrayList<BlockPos> array = new ArrayList<>();
         for(int i = minX; i <= maxX; i++){
 			for (int k = minZ; k <= maxZ; k++) {
 				for (int j = minY; j <= maxY; j++) {
 					BlockPos block = new BlockPos(i, j, k);
-					if (this.world.getBlockState(block).getBlock().isWood(world, block)) {
+					if (world.getBlockState(block).getBlock().isWood(world, block)) {
 						int count = 1;
 						BlockPos neighbourBlock;
 						do {
 							neighbourBlock = new BlockPos(block.getX(), block.getY() + count, block.getZ());
 							count++;
-						} while ((this.world.getBlockState(neighbourBlock)
+						} while ((world.getBlockState(neighbourBlock)
 								.getBlock() == (world.getBlockState(block).getBlock())
-								&& (this.world.getBlockState(neighbourBlock).getBlock().getDefaultState() == world
+								&& (world.getBlockState(neighbourBlock).getBlock().getDefaultState() == world
 										.getBlockState(block).getBlock().getDefaultState()))
 								&& count < 5);
 						if (count >= 5) {
-							if (this.checkForLeaves(neighbourBlock, 4)) {
+							if (checkForLeaves(neighbourBlock, 4, world)) {
 								array.add(block);
 							}
 						}

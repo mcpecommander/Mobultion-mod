@@ -70,6 +70,7 @@ public class LayerZombieArmor<T extends EntityAnimatedZombie> implements LayerRe
 		this.renderer.bindTexture(entity instanceof EntityWorkerZombie ? RES1 : RES);
 		GlStateManager.color(1f, 1f, 1f, 1f);
 		model.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
 		GlStateManager.popMatrix();
 	}
 

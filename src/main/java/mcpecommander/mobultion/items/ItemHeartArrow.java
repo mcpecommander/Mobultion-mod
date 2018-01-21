@@ -15,8 +15,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemHeartArrow extends ItemArrow{
 	
 	public ItemHeartArrow() {
-		setUnlocalizedName(Reference.ModItems.HEARTARROW.getUnlocalizedName());
-		setRegistryName(Reference.ModItems.HEARTARROW.getRegistryName());
+		setUnlocalizedName(Reference.MobultionItems.HEARTARROW.getUnlocalizedName());
+		setRegistryName(Reference.MobultionItems.HEARTARROW.getRegistryName());
 		
 		this.setCreativeTab(MobultionMod.MOBULTION_TAB);
 	}

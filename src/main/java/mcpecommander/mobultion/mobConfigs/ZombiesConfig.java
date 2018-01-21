@@ -254,10 +254,52 @@ public class ZombiesConfig {
 				public String[] biomes;
 				
 			}
+
+		}
+		
+		@Config.Comment("Ravenous Zombie")
+		public Ravenous ravenous = new Ravenous();
+
+		public static class Ravenous {
+
+			@Config.RequiresMcRestart
+			@Config.Comment("Do you want to unregister this mob?")
+			public boolean spawn = true;
+
+			@Config.RequiresMcRestart
+			@Config.Comment("Spawn configuration")
+			public Spawn spawnRates = new Spawn(100, 1, 2, "plains", "forest_hills", "mutated_plains",
+					"mutated_birch_forest_hills");
 			
-//			@Config.Comment("Where this will spawn")
-//			public String[] spawnLocations = { "extreme_hills", "smaller_extreme_hills", "extreme_hills_with_trees",
-//					"mutated_extreme_hills", "mutated_extreme_hills_with_trees" };
+			@Config.Comment("Will this mob explode on death, "
+					+ "The explosion will not affect blocks if mob griefing is off")
+			public boolean explodeOnDeath = true;
+			
+			public static class Spawn{
+
+				public Spawn(int weight, int min, int max, @Nullable String... biomes) {
+					this.weight = weight;
+					this.min = min;
+					this.max = max;
+					this.biomes = biomes;
+				}
+				
+				@Config.RangeInt(min = 1, max = 500)
+				@Config.Comment("Spawn weight")
+				public int weight;
+				
+				@Config.RangeInt(min = 1, max = 16)
+				@Config.Comment("Minimum spawn count")
+				public int min;
+				
+				@Config.RangeInt(min = 1, max = 16)
+				@Config.Comment("Maximum spawn count")
+				public int max;
+				
+				@Config.Comment("Biomes to spawn in")
+				public String[] biomes;
+				
+			}
 
 		}
 	}

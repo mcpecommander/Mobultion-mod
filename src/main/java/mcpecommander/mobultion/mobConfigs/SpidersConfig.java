@@ -181,6 +181,10 @@ public class SpidersConfig {
 			@Config.RangeDouble(min = 0.1, max = 1)
 			@Config.Comment("how fast is this mob (a zombie is 0.23)")
 			public double speed = 0.52D;
+			
+			@Config.RangeInt(min = 1, max = 1000)
+			@Config.Comment("What is the chance (1/this number) to spawn this spider when another spider is spawned")
+			public int spawnChance = 100;
 
 		}
 

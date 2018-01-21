@@ -12,6 +12,7 @@ import mcpecommander.mobultion.entity.entityAI.zombiesAI.EntityAIMoveToNearestDo
 import mcpecommander.mobultion.init.ModItems;
 import mcpecommander.mobultion.init.ModPotions;
 import mcpecommander.mobultion.mobConfigs.SkeletonsConfig;
+import mcpecommander.mobultion.mobConfigs.SpidersConfig;
 import mcpecommander.mobultion.mobConfigs.ZombiesConfig;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntitySpider;
@@ -49,7 +50,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 public class CommonEvent {
 	@SubscribeEvent
 	public static void onLivingDeath(LivingDeathEvent e) {
@@ -173,7 +174,7 @@ public class CommonEvent {
 	public static void spawnMiniSpider(LivingSpawnEvent.CheckSpawn e) {
 		if (!e.isSpawner() && e.getResult() == Result.ALLOW) {
 			if (e.getEntityLiving() instanceof EntityAnimatedSpider || e.getEntityLiving() instanceof EntitySpider) {
-				if (e.getEntityLiving().getRNG().nextFloat() < 0.01f) {
+				if (e.getEntityLiving().getRNG().nextInt(SpidersConfig.spiders.mini.spawnChance) == 1) {
 					EntityMiniSpider mini = new EntityMiniSpider(e.getWorld());
 					mini.setLocationAndAngles(e.getX() + e.getEntityLiving().getRNG().nextGaussian(), e.getY(),
 							e.getZ() + e.getEntityLiving().getRNG().nextGaussian(), 0, 0);
@@ -181,16 +182,17 @@ public class CommonEvent {
 				}
 			}
 		}
-		if (!e.isSpawner() && e.getResult() == Result.ALLOW) {
-			if (e.getEntityLiving() instanceof EntityAnimatedZombie || e.getEntityLiving() instanceof EntityZombie) {
-				if (e.getEntityLiving().getRNG().nextFloat() < 0.1f) {
-					EntityDoctorZombie doctor = new EntityDoctorZombie(e.getWorld());
-					doctor.setLocationAndAngles(e.getX() + e.getEntityLiving().getRNG().nextGaussian(), e.getY(),
-							e.getZ() + e.getEntityLiving().getRNG().nextGaussian(), 0, 0);
-					e.getWorld().spawnEntity(doctor);
-				}
-			}
-		}
+		//Not really needed
+//		if (!e.isSpawner() && e.getResult() == Result.ALLOW) {
+//			if (e.getEntityLiving() instanceof EntityAnimatedZombie || e.getEntityLiving() instanceof EntityZombie) {
+//				if (e.getEntityLiving().getRNG().nextInt(100) == 1) {
+//					EntityDoctorZombie doctor = new EntityDoctorZombie(e.getWorld());
+//					doctor.setLocationAndAngles(e.getX() + e.getEntityLiving().getRNG().nextGaussian(), e.getY(),
+//							e.getZ() + e.getEntityLiving().getRNG().nextGaussian(), 0, 0);
+//					e.getWorld().spawnEntity(doctor);
+//				}
+//			}
+//		}
 	}
 
 }

@@ -5,6 +5,7 @@ import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.animation.AnimationRiding;
 import mcpecommander.mobultion.entity.entityAI.zombiesAI.EntityAIKnightAttackMelee;
 import mcpecommander.mobultion.entity.entityAI.zombiesAI.EntityAIMoveToNearestDoctor;
+import mcpecommander.mobultion.init.ModItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;

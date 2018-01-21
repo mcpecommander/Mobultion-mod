@@ -53,6 +53,7 @@ public class LayerAngelSpiderRing<T extends EntityAngelSpider> implements LayerR
         this.renderAngelSpider.setLightmap(entitylivingbaseIn);
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     public boolean shouldCombineTextures()

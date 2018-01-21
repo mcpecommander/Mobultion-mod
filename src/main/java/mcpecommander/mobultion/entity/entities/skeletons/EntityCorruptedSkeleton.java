@@ -38,7 +38,7 @@ public class EntityCorruptedSkeleton extends EntityAnimatedSkeleton {
 		EntityCorruptedSkeleton.animHandler.addAnim(Reference.MOD_ID, "skeleton_death", "forest_skeleton", false);
 		EntityCorruptedSkeleton.animHandler.addAnim(Reference.MOD_ID, "skeleton_walk", "forest_skeleton", true);
 		EntityCorruptedSkeleton.animHandler.addAnim(Reference.MOD_ID, "skeleton_walk_hands", "forest_skeleton", true);
-		EntityCorruptedSkeleton.animHandler.addAnim(Reference.MOD_ID, "skeleton_holding_bow", "forest_skeleton", true);
+		EntityCorruptedSkeleton.animHandler.addAnim(Reference.MOD_ID, "knight_slash", "forest_skeleton", true);
 		EntityCorruptedSkeleton.animHandler.addAnim(Reference.MOD_ID, "lookat", new AnimationLookAt("Head"));
 		EntityCorruptedSkeleton.animHandler.addAnim(Reference.MOD_ID, "riding", new AnimationRiding());
 	}
@@ -51,10 +51,26 @@ public class EntityCorruptedSkeleton extends EntityAnimatedSkeleton {
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(1, new EntityAISwimming(this));
-		this.tasks.addTask(2, new EntityAIRestrictSun(this));
+		//this.tasks.addTask(2, new EntityAIRestrictSun(this));
 		this.tasks.addTask(3, new EntityAIFleeSun(this, 1.0D));
 		this.tasks.addTask(3, new EntityAIAvoidEntity(this, EntityWolf.class, 6.0F, 1.0D, 1.2D));
-		this.tasks.addTask(4, new EntityAIAttackMelee(this, 1.2d, false));
+		this.tasks.addTask(4, new EntityAIAttackMelee(this, 1.2d, false){
+			@Override
+			public void updateTask() {
+				super.updateTask();
+				if(this.attacker.getDistanceSq(this.attacker.getAttackTarget()) < 3d){
+					((EntityCorruptedSkeleton) this.attacker).setSwingingArms(true);
+				}else{
+					((EntityCorruptedSkeleton) this.attacker).setSwingingArms(false);
+				}
+			}
+			
+			@Override
+			public void resetTask() {
+				super.resetTask();
+				((EntityCorruptedSkeleton) this.attacker).setSwingingArms(false);
+			}
+		});
 		this.tasks.addTask(5, new EntityAIWanderAvoidWater(this, 1.0D));
 		this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		this.tasks.addTask(6, new EntityAILookIdle(this));
@@ -98,7 +114,7 @@ public class EntityCorruptedSkeleton extends EntityAnimatedSkeleton {
 				&& !this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "skeleton_death", this) && !flag) {
 			this.getAnimationHandler().stopAnimation(Reference.MOD_ID, "skeleton_walk_hands", this);
 			this.getAnimationHandler().stopAnimation(Reference.MOD_ID, "skeleton_walk", this);
-			this.getAnimationHandler().stopAnimation(Reference.MOD_ID, "skeleton_holding_bow", this);
+			this.getAnimationHandler().stopAnimation(Reference.MOD_ID, "knight_slash", this);
 			this.getAnimationHandler().stopAnimation(Reference.MOD_ID, "lookat", this);
 			this.getAnimationHandler().startAnimation(Reference.MOD_ID, "skeleton_death", 0, this);
 			flag = true;
@@ -151,10 +167,10 @@ public class EntityCorruptedSkeleton extends EntityAnimatedSkeleton {
 				}
 			}
 			if (this.isSwingingArms()
-					&& !this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "skeleton_holding_bow", this)
+					&& !this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "knight_slash", this)
 					&& this.deathTime < 1) {
 				this.getAnimationHandler().stopAnimation(Reference.MOD_ID, "skeleton_walk_hands", this);
-				this.getAnimationHandler().startAnimation(Reference.MOD_ID, "skeleton_holding_bow", 0, this);
+				this.getAnimationHandler().startAnimation(Reference.MOD_ID, "knight_slash", 0, this);
 			}
 
 			if (!this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "skeleton_walk", this)
@@ -165,7 +181,7 @@ public class EntityCorruptedSkeleton extends EntityAnimatedSkeleton {
 			if (!this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "skeleton_walk_hands", this)
 					&& !this.isSwingingArms()
 					&& this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "skeleton_walk", this)) {
-				this.getAnimationHandler().stopAnimation(Reference.MOD_ID, "skeleton_holding_bow", this);
+				this.getAnimationHandler().stopAnimation(Reference.MOD_ID, "knight_slash", this);
 				this.getAnimationHandler().startAnimation(Reference.MOD_ID, "skeleton_walk_hands", 0, this);
 			}
 
@@ -203,16 +219,6 @@ public class EntityCorruptedSkeleton extends EntityAnimatedSkeleton {
 	@Override
 	protected EntityArrow getArrow(float distanceFactor) {
 		return null;
-	}
-
-	@Override
-	public int getDimension() {
-		return this.dimension;
-	}
-
-	@Override
-	public boolean isWorldRemote() {
-		return this.world.isRemote;
 	}
 
 }
