@@ -1,5 +1,7 @@
 package mcpecommander.mobultion.init;
 
+import mcpecommander.mobultion.items.ItemEnderBlaze;
+import mcpecommander.mobultion.items.ItemEnderFlake;
 import mcpecommander.mobultion.items.ItemFireSword;
 import mcpecommander.mobultion.items.ItemForestBow;
 import mcpecommander.mobultion.items.ItemFork;
@@ -33,6 +35,10 @@ public class ModItems {
 	public static ItemKnife knife;
 	@GameRegistry.ObjectHolder("mobultion:item_hat")
 	public static ItemHat hat;
+	@GameRegistry.ObjectHolder("mobultion:item_ender_flake")
+	public static ItemEnderFlake enderFlake;
+	@GameRegistry.ObjectHolder("mobultion:item_ender_blaze")
+	public static ItemEnderBlaze enderBlaze;
 
 	@SideOnly(Side.CLIENT)
     public static void initModels() {
@@ -45,6 +51,8 @@ public class ModItems {
 		fork.initModel();
 		knife.initModel();
 		hat.initModel();
+		enderFlake.initModel();
+		enderBlaze.initModel();
     }
 	
 

@@ -30,6 +30,9 @@ public class ZombiesConfig {
 
 			@Config.Comment("Should this mob get hurt from water or rain")
 			public boolean wetDamage = true;
+			
+			@Config.Comment("Is the fire sword craftable")
+			public boolean craftableSword = false;
 
 			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")

@@ -36,4 +36,9 @@ entity.magma_zombie.name=Magma Zombie
 entity.worker_zombie.name=Worker Zombie
 entity.ravenous_zombie.name=Ravenous Zombie
 
+entity.magma_enderman.name=Magma Enderman
+entity.ice_enderman.name=Ice Enderman
+
+entity.woodmite.name=WoodMite
+
 itemGroup.tabMobultionMod=Mobultion Tab

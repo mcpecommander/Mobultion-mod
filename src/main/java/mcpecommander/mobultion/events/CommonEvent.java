@@ -1,20 +1,29 @@
 package mcpecommander.mobultion.events;
 
 import java.util.List;
+import java.util.UUID;
 
 import mcpecommander.mobultion.Reference;
+import mcpecommander.mobultion.entity.entities.mites.EntityWoodMite;
 import mcpecommander.mobultion.entity.entities.skeletons.EntityCorruptedSkeleton;
 import mcpecommander.mobultion.entity.entities.spiders.EntityAnimatedSpider;
 import mcpecommander.mobultion.entity.entities.spiders.EntityMiniSpider;
-import mcpecommander.mobultion.entity.entities.zombies.EntityAnimatedZombie;
-import mcpecommander.mobultion.entity.entities.zombies.EntityDoctorZombie;
 import mcpecommander.mobultion.entity.entityAI.zombiesAI.EntityAIMoveToNearestDoctor;
 import mcpecommander.mobultion.init.ModItems;
 import mcpecommander.mobultion.init.ModPotions;
+import mcpecommander.mobultion.mobConfigs.MitesConfig;
 import mcpecommander.mobultion.mobConfigs.SkeletonsConfig;
 import mcpecommander.mobultion.mobConfigs.SpidersConfig;
 import mcpecommander.mobultion.mobConfigs.ZombiesConfig;
+import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockNewLog;
+import net.minecraft.block.BlockOldLog;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,9 +44,11 @@ import net.minecraft.tileentity.TileEntityLockableLoot;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
+import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -45,6 +56,8 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
@@ -52,16 +65,21 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 public class CommonEvent {
+	private static final UUID BLESSED_ID = UUID.fromString("020E6DFB-87AE-9653-9556-561210E291A0");
+	private static final AttributeModifier UNBLESSED = (new AttributeModifier(BLESSED_ID, "un_blessed", -0.1D, 0)).setSaved(true);
 	@SubscribeEvent
 	public static void onLivingDeath(LivingDeathEvent e) {
 		EntityLivingBase entity = e.getEntityLiving();
-		if (entity.getEntityData().getBoolean("is")) {
-			if (entity.getRNG().nextInt(2) == 0) {
-				e.setCanceled(true);
-				entity.setHealth(entity.getMaxHealth());
-				entity.playSound(SoundEvents.ITEM_TOTEM_USE, 1f, 1f);
+		if (entity instanceof EntitySpider || entity instanceof EntityAnimatedSpider) {
+			if (entity.getAttributeMap().getAttributeInstanceByName("generic.blessed").getAttributeValue() > 0.0d ) {
+				if(entity.getRNG().nextInt(SpidersConfig.spiders.angel.reviveChance) == 0){
+					entity.setHealth(entity.getMaxHealth());
+					entity.playSound(SoundEvents.ITEM_TOTEM_USE, 1f, 1f);
+					entity.removeActivePotionEffect(ModPotions.potionBlessed);
+					entity.getAttributeMap().getAttributeInstanceByName("generic.blessed").removeAllModifiers();
+					entity.getAttributeMap().getAttributeInstanceByName("generic.blessed").applyModifier(UNBLESSED);
+				}
 			}
-			entity.getEntityData().setBoolean("is", false);
 		}
 		if (ZombiesConfig.zombies.magma.alwaysLava && e.getSource().getTrueSource() instanceof EntityPlayerMP) {
 			EntityPlayerMP player = (EntityPlayerMP) e.getSource().getTrueSource();
@@ -72,6 +90,13 @@ public class CommonEvent {
 					player.world.setBlockState(entity.getPosition(), Blocks.FLOWING_LAVA.getDefaultState(), 3);
 				}
 			}
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onConstruction(EntityConstructing e){
+		if(e.getEntity() instanceof EntitySpider || e.getEntity() instanceof EntityAnimatedSpider){
+			((EntityLivingBase) e.getEntity()).getAttributeMap().registerAttribute((new RangedAttribute((IAttribute)null, "generic.blessed", 0.0D, -100D, 100D)).setShouldWatch(true));
 		}
 	}
 	
@@ -120,6 +145,14 @@ public class CommonEvent {
 				if (!e.getEntityLiving().isPotionActive(ModPotions.potionJokerness)) {
 					ModPotions.potionJokerness.isReady = false;
 				}
+				if (!e.getEntityLiving().isPotionActive(ModPotions.potionVomit)) {
+					ModPotions.potionVomit.isReady = false;
+					ModPotions.potionVomit.mul = 0.0f;
+				}
+				if (!e.getEntityLiving().isPotionActive(ModPotions.potionFreeze)) {
+					ModPotions.potionFreeze.isReady = false;
+					ModPotions.potionFreeze.mul = 0.0f;
+				}
 			}
 		}
 	}
@@ -162,6 +195,21 @@ public class CommonEvent {
 			}
 		}
 	}
+	
+	@SubscribeEvent
+	public static void onHarvestBlock(BlockEvent.HarvestDropsEvent e){
+		if(e.getState().getBlock().isWood(e.getWorld(), e.getPos())){
+			if(e.getHarvester() != null && e.getHarvester() instanceof EntityPlayerMP){
+				if(e.getWorld().rand.nextInt(MitesConfig.mites.wood.spawnChance) == 0){ 
+					EntityWoodMite mite = new EntityWoodMite(e.getWorld());
+					mite.setPosition(e.getPos().getX(), e.getPos().getY(), e.getPos().getZ());
+					mite.getLookHelper().setLookPositionWithEntity(e.getHarvester(), 30, 30);
+					mite.setAttackTarget(e.getHarvester());
+					e.getWorld().spawnEntity(mite);
+				}
+			}
+		}
+	}
 
 	@SubscribeEvent
 	public static void onConfigChanged(final ConfigChangedEvent.OnConfigChangedEvent event) {
@@ -170,6 +218,7 @@ public class CommonEvent {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@SubscribeEvent
 	public static void spawnMiniSpider(LivingSpawnEvent.CheckSpawn e) {
 		if (!e.isSpawner() && e.getResult() == Result.ALLOW) {

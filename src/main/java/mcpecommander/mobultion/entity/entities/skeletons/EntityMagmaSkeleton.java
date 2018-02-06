@@ -122,7 +122,7 @@ public class EntityMagmaSkeleton extends EntityAnimatedSkeleton{
 	
 	public void spawnEffect(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, int num){
 		for(int i = 0; i < num; i++){
-			ColoredLavaParticle newEffect = new ColoredLavaParticle(worldIn, xCoordIn, yCoordIn, zCoordIn);
+			ColoredLavaParticle newEffect = new ColoredLavaParticle(worldIn, xCoordIn, yCoordIn, zCoordIn, 0d, 0d, 0d);
 			Minecraft.getMinecraft().effectRenderer.addEffect(newEffect);
 		}
 	}

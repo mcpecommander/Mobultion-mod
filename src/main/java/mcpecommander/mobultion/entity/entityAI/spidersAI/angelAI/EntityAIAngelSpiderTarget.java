@@ -28,14 +28,16 @@ public class EntityAIAngelSpiderTarget <T extends EntityLivingBase> extends Enti
         this.setMutexBits(1);
     }
 
-    /**
-     * Returns whether the EntityAIBase should begin execution.
-     */
+    @Override
     public boolean shouldExecute()
     {
-        if (this.targetChance > 0 && this.taskOwner.getRNG().nextInt(this.targetChance) != 0)
+        if (this.targetChance > 0 && this.taskOwner.getRNG().nextInt(this.targetChance) != 0 )
         {
             return false;
+        }
+        else if (this.taskOwner.getAttackTarget() != null)
+        {
+        	return false;
         }
         else
         {
@@ -66,9 +68,7 @@ public class EntityAIAngelSpiderTarget <T extends EntityLivingBase> extends Enti
         return this.taskOwner.getEntityBoundingBox().grow(targetDistance, 4.0D, targetDistance);
     }
 
-    /**
-     * Execute a one shot task or start executing a continuous task
-     */
+    @Override
     public void startExecuting()
     {
         this.taskOwner.setAttackTarget(this.targetEntity);

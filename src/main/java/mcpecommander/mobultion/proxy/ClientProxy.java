@@ -21,7 +21,6 @@ public class ClientProxy extends CommonProxy{
 	@Override
     public void preInit(FMLPreInitializationEvent e) {
         super.preInit(e);
-        OBJLoader.INSTANCE.addDomain(Reference.MOD_ID);
         ModEntities.initModels();
         MinecraftForge.EVENT_BUS.register(new TextureStitcherBreathFX());
     }
@@ -72,7 +71,6 @@ public class ClientProxy extends CommonProxy{
         
         //Zombies
         csRegistryHelper.register(EnumResourceType.MODEL, EnumRenderType.ENTITY, "zombie");
-        csRegistryHelper.register(EnumResourceType.MODEL, EnumRenderType.ENTITY, "test");
         csRegistryHelper.register(EnumResourceType.MODEL, EnumRenderType.ENTITY, "goro_zombie");
         csRegistryHelper.register(EnumResourceType.MODEL, EnumRenderType.ENTITY, "ravenous_zombie");
         
@@ -83,6 +81,17 @@ public class ClientProxy extends CommonProxy{
         csRegistryHelper.register(EnumResourceType.ANIM, EnumRenderType.ENTITY, "goro_slash");
         csRegistryHelper.register(EnumResourceType.ANIM, EnumRenderType.ENTITY, "goro_hands");
         csRegistryHelper.register(EnumResourceType.ANIM, EnumRenderType.ENTITY, "ravenous_eating");
+        
+        //Endermen
+        csRegistryHelper.register(EnumResourceType.MODEL, EnumRenderType.ENTITY, "enderman");
+        
+        csRegistryHelper.register(EnumResourceType.ANIM, EnumRenderType.ENTITY, "scream");
+        csRegistryHelper.register(EnumResourceType.ANIM, EnumRenderType.ENTITY, "enderman_bite");
+        
+        //Mites
+        csRegistryHelper.register(EnumResourceType.MODEL, EnumRenderType.ENTITY, "woodmite");
+        
+        csRegistryHelper.register(EnumResourceType.ANIM, EnumRenderType.ENTITY, "woodmite_walk");
     }
 
 }

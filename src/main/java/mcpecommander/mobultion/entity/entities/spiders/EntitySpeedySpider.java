@@ -90,11 +90,11 @@ public class EntitySpeedySpider extends EntityAnimatedSpider{
     			this.getAnimationHandler().startAnimation(Reference.MOD_ID, "lookat", 0, this);
     		}
 
-    		if(!this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "speedy_pull", this) && this.isMoving()){
+    		if(!this.getAnimationHandler().isHoldAnimationActive(Reference.MOD_ID + ":speedy_pull", this) && this.isMoving()){
     			this.getAnimationHandler().startAnimation(Reference.MOD_ID, "speedy_pull", 0, this);
     		}
     		
-    		if(this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "speedy_pull", this) && !this.isMoving()){
+    		if(this.getAnimationHandler().isHoldAnimationActive(Reference.MOD_ID + ":speedy_pull", this) && !this.isMoving()){
     			this.getAnimationHandler().stopAnimation(Reference.MOD_ID, "speedy_pull", this);
     		}
     	}

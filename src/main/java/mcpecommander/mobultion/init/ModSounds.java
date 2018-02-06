@@ -25,4 +25,8 @@ public class ModSounds {
 	public static SoundEvent vampire_bite = new SoundEvent(loc9).setRegistryName(loc9);
 	private static ResourceLocation loc10 = new ResourceLocation(Reference.MOD_ID, "bat_morph");
 	public static SoundEvent bat_morph = new SoundEvent(loc10).setRegistryName(loc10);
+	private static ResourceLocation loc11 = new ResourceLocation(Reference.MOD_ID, "puke");
+	public static SoundEvent puke = new SoundEvent(loc11).setRegistryName(loc11);
+	private static ResourceLocation loc12 = new ResourceLocation(Reference.MOD_ID, "spit");
+	public static SoundEvent spit = new SoundEvent(loc12).setRegistryName(loc12);
 }

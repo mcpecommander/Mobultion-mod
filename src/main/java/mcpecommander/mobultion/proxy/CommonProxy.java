@@ -1,8 +1,11 @@
 package mcpecommander.mobultion.proxy;
 
 import mcpecommander.mobultion.events.SpawnEvent;
+import mcpecommander.mobultion.init.ModDictionary;
 import mcpecommander.mobultion.init.ModPotions;
 import mcpecommander.mobultion.init.ModSounds;
+import mcpecommander.mobultion.items.ItemEnderBlaze;
+import mcpecommander.mobultion.items.ItemEnderFlake;
 import mcpecommander.mobultion.items.ItemFireSword;
 import mcpecommander.mobultion.items.ItemForestBow;
 import mcpecommander.mobultion.items.ItemFork;
@@ -35,7 +38,7 @@ public class CommonProxy {
 	}
 
 	public void init(FMLInitializationEvent e) {
-
+		ModDictionary.registerDict();
 	}
 
 	public void postInit(FMLPostInitializationEvent e) {
@@ -44,7 +47,8 @@ public class CommonProxy {
 	@SubscribeEvent
 	public void registerItems(RegistryEvent.Register<Item> event) {
 		event.getRegistry().registerAll(new ItemForestBow(), new ItemHealingWand(), new ItemHeartArrow(),
-				new ItemHammer(), new ItemFireSword(), new ItemHealth(), new ItemFork(), new ItemKnife(), new ItemHat());
+				new ItemHammer(), new ItemFireSword(), new ItemHealth(), new ItemFork(), new ItemKnife(), new ItemHat(),
+				new ItemEnderFlake(), new ItemEnderBlaze());
 	}
 
 	@SubscribeEvent
@@ -52,6 +56,8 @@ public class CommonProxy {
 		event.getRegistry().register(ModPotions.potionHypnotize);
 		event.getRegistry().register(ModPotions.potionFreeze);
 		event.getRegistry().register(ModPotions.potionJokerness);
+		event.getRegistry().register(ModPotions.potionVomit);
+		event.getRegistry().register(ModPotions.potionBlessed);
 	}
 
 	@SubscribeEvent
@@ -66,6 +72,8 @@ public class CommonProxy {
 		event.getRegistry().register(ModSounds.shield_block);
 		event.getRegistry().register(ModSounds.vampire_bite);
 		event.getRegistry().register(ModSounds.bat_morph);
+		event.getRegistry().register(ModSounds.puke);
+		event.getRegistry().register(ModSounds.spit);
 	}
 
 }

@@ -1,5 +1,7 @@
 package mcpecommander.mobultion.entity.entities.zombies;
 
+import javax.annotation.Nonnull;
+
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.animation.AnimationRiding;
@@ -9,9 +11,13 @@ import mcpecommander.mobultion.entity.entityAI.zombiesAI.EntityAIItemTarget;
 import mcpecommander.mobultion.entity.entityAI.zombiesAI.EntityAIKnightAttackMelee;
 import mcpecommander.mobultion.entity.entityAI.zombiesAI.EntityAIRavenousTarget;
 import mcpecommander.mobultion.init.ModItems;
+import mcpecommander.mobultion.init.ModPotions;
 import mcpecommander.mobultion.init.ModSounds;
 import mcpecommander.mobultion.mobConfigs.ZombiesConfig;
+import mcpecommander.mobultion.particle.ConfuseCloudParticle;
+import mcpecommander.mobultion.particle.VomitParticle;
 import net.minecraft.block.BlockCake;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
@@ -35,13 +41,19 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
 public class EntityRavenousZombie extends EntityAnimatedZombie {
-	
+
 	private EntityItem item;
+	private boolean flag = false;
+	float base = 1f;
 
 	static {
 		EntityRavenousZombie.animHandler.addAnim(Reference.MOD_ID, "skeleton_walk", "ravenous_zombie", true);
@@ -67,11 +79,11 @@ public class EntityRavenousZombie extends EntityAnimatedZombie {
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false, new Class[0]));
 		this.targetTasks.addTask(2, new EntityAIRavenousTarget(this, false, EntityAnimal.class));
 		this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityPlayer.class, false));
-		//this.targetTasks.addTask(4, new EntityAICakeTarget(this, 1D));
+		// this.targetTasks.addTask(4, new EntityAICakeTarget(this, 1D));
 		this.targetTasks.addTask(5, new EntityAIItemTarget(this));
-		
+
 	}
-	
+
 	public EntityItem getItemTarget() {
 		return item;
 	}
@@ -79,19 +91,19 @@ public class EntityRavenousZombie extends EntityAnimatedZombie {
 	public void setItem(EntityItem item) {
 		this.item = item;
 	}
-	
+
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
-		if(item != null){
+		if (item != null) {
 			compound.setInteger("itemTarget", item.getEntityId());
 		}
 	}
-	
+
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
-		if(compound.hasKey("itemTarget")){
+		if (compound.hasKey("itemTarget")) {
 			this.setItem((EntityItem) this.world.getEntityByID(compound.getInteger("itemTarget")));
 		}
 	}
@@ -112,8 +124,8 @@ public class EntityRavenousZombie extends EntityAnimatedZombie {
 			}
 		}
 		boolean flag = super.attackEntityAsMob(entityIn);
-		if(entityIn instanceof EntityLivingBase && flag){
-			if(((EntityLivingBase) entityIn).getHealth() <= 0f){
+		if (entityIn instanceof EntityLivingBase && flag) {
+			if (((EntityLivingBase) entityIn).getHealth() <= 0f) {
 				this.playSound(ModSounds.burp, this.getSoundVolume(), this.getSoundPitch());
 			}
 			this.heal(2f);
@@ -121,14 +133,57 @@ public class EntityRavenousZombie extends EntityAnimatedZombie {
 
 		return flag;
 	}
-	
+
+	@Override
+	protected void onDeathUpdate() {
+		super.onDeathUpdate();
+		if (!isWorldRemote() && !flag) {
+			flag = true;
+			this.playSound(ModSounds.puke, 1.5f, this.getSoundPitch());
+		}
+		if (isWorldRemote()) {
+			base += 0.1f;
+			this.renderVomit(base);
+		}
+	}
+
+	@Override
+	protected SoundEvent getDeathSound() {
+		return null;
+	}
+
 	@Override
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
-		if(!world.isRemote && ZombiesConfig.zombies.ravenous.explodeOnDeath){
-			boolean flag = this.world.getGameRules().getBoolean("mobGriefing");
-			this.world.createExplosion(this, this.posX, this.posY, this.posZ, 1f, flag);
+		if (!world.isRemote && ZombiesConfig.zombies.ravenous.explodeOnDeath) {
+			Explosion explosion = new Explosion(this.world, this, this.posX, this.posY, this.posZ, 1.2f, false, false);
+			explosion.doExplosionA();
+			for (Entity entity : this.world.getEntitiesWithinAABBExcludingEntity(this,
+					this.getEntityBoundingBox().grow(3))) {
+				if (entity instanceof EntityLivingBase) {
+					EntityLivingBase entityIn = (EntityLivingBase) entity;
+					entityIn.addPotionEffect(new PotionEffect(ModPotions.potionVomit, 200, 0, false, false));
+				}
+			}
 		}
+	}
+
+	private void renderVomit(float radius){
+		for (int i = 0; i < 360; i += 20) {
+			double x = Math.sin(i);
+			double z = Math.cos(i);
+			VomitParticle newEffect = new VomitParticle(this.world, this.posX + (x * radius), this.posY + (this.getRNG().nextFloat() * .5),
+					this.posZ + (z * radius), 0.0d, 0.0d, 0.0d, 1.2f);
+			Minecraft.getMinecraft().effectRenderer.addEffect(newEffect);
+		}
+//		for(int i = 0; i < count; i ++){
+//			double yaw = ((this.rotationYawHead + 90) * Math.PI) / 180;
+//			double z = Math.sin(yaw);
+//			double x = Math.cos(yaw);
+//			double y = this.getEyeHeight() - 
+//			VomitParticle newEffect = new VomitParticle(this.world, this.posX + x, this.posY + this.getEyeHeight(), this.posZ + z, 0.0d, 0.0d, 0.0d, 1.2f);
+//			Minecraft.getMinecraft().effectRenderer.addEffect(newEffect);
+//		}
 	}
 
 	@Override
@@ -149,25 +204,29 @@ public class EntityRavenousZombie extends EntityAnimatedZombie {
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		if(this.getAttackTarget() == null ){
+		if (this.getAttackTarget() == null) {
 			this.setAttacking(false);
-		}else{
+		} else {
 			this.setItem(null);
 		}
-		
-		
-//		if (!world.isRemote && world.getBlockState(getPosition().add(1, 0, 0)).getBlock() instanceof BlockCake) {
-//			BlockCake block = (BlockCake) world.getBlockState(getPosition().add(1, 0, 0)).getBlock();
-//			int i = block.getMetaFromState(world.getBlockState(getPosition().add(1, 0, 0)));
-//			this.heal(2f);
-//			if (i < 6) {
-//				world.setBlockState(getPosition().add(1, 0, 0),
-//						world.getBlockState(getPosition().add(1, 0, 0)).withProperty(block.BITES, Integer.valueOf(i + 1)), 3);
-//			} else {
-//				world.setBlockToAir(getPosition().add(1, 0, 0));
-//			}
-//		}
-		
+
+		// if (!world.isRemote && world.getBlockState(getPosition().add(1, 0,
+		// 0)).getBlock() instanceof BlockCake) {
+		// BlockCake block = (BlockCake)
+		// world.getBlockState(getPosition().add(1, 0, 0)).getBlock();
+		// int i =
+		// block.getMetaFromState(world.getBlockState(getPosition().add(1, 0,
+		// 0)));
+		// this.heal(2f);
+		// if (i < 6) {
+		// world.setBlockState(getPosition().add(1, 0, 0),
+		// world.getBlockState(getPosition().add(1, 0,
+		// 0)).withProperty(block.BITES, Integer.valueOf(i + 1)), 3);
+		// } else {
+		// world.setBlockToAir(getPosition().add(1, 0, 0));
+		// }
+		// }
+
 		if (!this.isWorldRemote()) {
 			this.setMoving(Boolean.valueOf(this.isMoving(this)));
 		}
@@ -179,7 +238,8 @@ public class EntityRavenousZombie extends EntityAnimatedZombie {
 					this.getAnimationHandler().stopAnimation(Reference.MOD_ID, "skeleton_walk_hands", this);
 				}
 			}
-			if (this.getAttacking() && !this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "ravenous_eating", this)
+			if (this.getAttacking()
+					&& !this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "ravenous_eating", this)
 					&& this.deathTime < 1) {
 				this.getAnimationHandler().stopAnimation(Reference.MOD_ID, "skeleton_walk_hands", this);
 				this.getAnimationHandler().startAnimation(Reference.MOD_ID, "ravenous_eating", 0, this);

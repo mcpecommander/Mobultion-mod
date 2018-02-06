@@ -45,5 +45,13 @@
   "bat_morph": {
     "subtitle": "mobultion.subtitles.bat_morph",
     "sounds": [ "mobultion:bat_morph" ]
+  },
+  "puke": {
+    "subtitle": "mobultion.subtitles.puke",
+    "sounds": [ "mobultion:puke" ]
+  },
+  "spit": {
+    "subtitle": "mobultion.subtitles.spit",
+    "sounds": [ "mobultion:spit" ]
   }
 }

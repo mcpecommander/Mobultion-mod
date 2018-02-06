@@ -36,4 +36,9 @@ entity.magma_zombie.name=Magma zombie
 entity.worker_zombie.name=Arbetare zombie
 entity.ravenous_zombie.name=Glupande zombie
 
+entity.magma_enderman.name=Magma Enderman
+entity.ice_enderman.name=Is Enderman
+
+entity.woodmite.name=TrädMit
+
 itemGroup.tabMobultionMod=Mobultion Sida

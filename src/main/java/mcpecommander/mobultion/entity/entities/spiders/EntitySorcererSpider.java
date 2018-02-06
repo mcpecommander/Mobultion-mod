@@ -81,18 +81,19 @@ public class EntitySorcererSpider extends EntityAnimatedSpider{
     public void onLivingUpdate() {
     	super.onLivingUpdate();
     	if(this.isWorldRemote()){
+        	//System.out.println(this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "sorcerer_cast", this));
     		if(!this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "lookat", this)){
     			this.getAnimationHandler().startAnimation(Reference.MOD_ID, "lookat", 0, this);
     		}
 
-    		if(!this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "spider_move", this) && this.isMoving()){
+    		if(!this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "spider_move", this) && this.isMoving() ){
     			this.getAnimationHandler().startAnimation(Reference.MOD_ID, "spider_move", 0, this);
     		}
     		
-    		if(this.isSpellcasting() && !this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "sorcerer_cast", this)){
+    		if(this.isSpellcasting() && !this.getAnimationHandler().isHoldAnimationActive(Reference.MOD_ID + ":sorcerer_cast", this)){
     			this.getAnimationHandler().startAnimation(Reference.MOD_ID, "sorcerer_cast", 0, this);
     		}
-    		if(!this.isSpellcasting() && this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "sorcerer_cast", this)){
+    		if(!this.isSpellcasting() && this.getAnimationHandler().isHoldAnimationActive(Reference.MOD_ID + ":sorcerer_cast", this)){
     			this.getAnimationHandler().stopAnimation(Reference.MOD_ID, "sorcerer_cast", this);
     		}
     	}    	

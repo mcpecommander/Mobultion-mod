@@ -7,6 +7,11 @@ import org.apache.logging.log4j.Level;
 
 import mcpecommander.mobultion.MobultionMod;
 import mcpecommander.mobultion.Reference;
+import mcpecommander.mobultion.entity.entities.endermen.EntityEnderBlaze;
+import mcpecommander.mobultion.entity.entities.endermen.EntityEnderFlake;
+import mcpecommander.mobultion.entity.entities.endermen.EntityIceEnderman;
+import mcpecommander.mobultion.entity.entities.endermen.EntityMagmaEnderman;
+import mcpecommander.mobultion.entity.entities.mites.EntityWoodMite;
 import mcpecommander.mobultion.entity.entities.skeletons.EntityCorruptedSkeleton;
 import mcpecommander.mobultion.entity.entities.skeletons.EntityHeartArrow;
 import mcpecommander.mobultion.entity.entities.skeletons.EntityJokerSkeleton;
@@ -33,6 +38,11 @@ import mcpecommander.mobultion.entity.entities.zombies.EntityKnightZombie;
 import mcpecommander.mobultion.entity.entities.zombies.EntityMagmaZombie;
 import mcpecommander.mobultion.entity.entities.zombies.EntityRavenousZombie;
 import mcpecommander.mobultion.entity.entities.zombies.EntityWorkerZombie;
+import mcpecommander.mobultion.entity.renderer.endermenRenderer.RenderEnderBlaze;
+import mcpecommander.mobultion.entity.renderer.endermenRenderer.RenderEnderFlake;
+import mcpecommander.mobultion.entity.renderer.endermenRenderer.RenderIceEnderman;
+import mcpecommander.mobultion.entity.renderer.endermenRenderer.RenderMagmaEnderman;
+import mcpecommander.mobultion.entity.renderer.mites.RenderWoodMite;
 import mcpecommander.mobultion.entity.renderer.skeletonsRenderer.RenderCorruptedSkeleton;
 import mcpecommander.mobultion.entity.renderer.skeletonsRenderer.RenderHeartArrow;
 import mcpecommander.mobultion.entity.renderer.skeletonsRenderer.RenderJokerSkeleton;
@@ -59,12 +69,16 @@ import mcpecommander.mobultion.entity.renderer.zombiesRenderer.RenderKnightZombi
 import mcpecommander.mobultion.entity.renderer.zombiesRenderer.RenderMagmaZombie;
 import mcpecommander.mobultion.entity.renderer.zombiesRenderer.RenderRavenousZombie;
 import mcpecommander.mobultion.entity.renderer.zombiesRenderer.RenderWorkerZombie;
+import mcpecommander.mobultion.mobConfigs.EndermenConfig;
+import mcpecommander.mobultion.mobConfigs.MitesConfig;
 import mcpecommander.mobultion.mobConfigs.SkeletonsConfig;
 import mcpecommander.mobultion.mobConfigs.SpidersConfig;
 import mcpecommander.mobultion.mobConfigs.ZombiesConfig;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -268,7 +282,7 @@ public class ModEntities {
 					.build();
 			event.getRegistry().register(joker);
 		}
-		EntityEntry heartArrow = EntityEntryBuilder.create().entity(EntityJokerSkeleton.class)
+		EntityEntry heartArrow = EntityEntryBuilder.create().entity(EntityHeartArrow.class)
 				.id(Reference.MobultionEntities.HEARTARROW.getRegistryName(), 15)
 				.name(Reference.MobultionEntities.HEARTARROW.getUnlocalizedName()).tracker(64, 3, true).build();
 		event.getRegistry().register(heartArrow);
@@ -392,12 +406,13 @@ public class ModEntities {
 					.name(Reference.MobultionEntities.RAVENOUSZOMBIE.getUnlocalizedName()).tracker(64, 3, true)
 					.egg(0x6AA84F, 0xD41A1A)
 					.spawn(EnumCreatureType.MONSTER, ZombiesConfig.zombies.ravenous.spawnRates.weight,
-							ZombiesConfig.zombies.ravenous.spawnRates.min, ZombiesConfig.zombies.ravenous.spawnRates.max,
+							ZombiesConfig.zombies.ravenous.spawnRates.min,
+							ZombiesConfig.zombies.ravenous.spawnRates.max,
 							getBiomes(ZombiesConfig.zombies.ravenous.spawnRates.biomes))
 					.build();
 			event.getRegistry().register(ravenous);
 		}
-		
+
 		// VampireSkeleton
 		if (SkeletonsConfig.skeletons.vampire.spawn) {
 			EntityEntry vampire = EntityEntryBuilder.create().entity(EntityVampireSkeleton.class)
@@ -411,6 +426,57 @@ public class ModEntities {
 					.build();
 			event.getRegistry().register(vampire);
 		}
+
+		// MagmaEnderman
+		if (EndermenConfig.endermen.magma.spawn) {
+			EntityEntry magma = EntityEntryBuilder.create().entity(EntityMagmaEnderman.class)
+					.id(Reference.MobultionEntities.MAGMAENDERMAN.getRegistryName(), 27)
+					.name(Reference.MobultionEntities.MAGMAENDERMAN.getUnlocalizedName()).tracker(64, 3, true)
+					.egg(0xB40A0A, 0xE7E740)
+					.spawn(EnumCreatureType.MONSTER, EndermenConfig.endermen.magma.spawnRates.weight,
+							EndermenConfig.endermen.magma.spawnRates.min, EndermenConfig.endermen.magma.spawnRates.max,
+							getBiomes(EndermenConfig.endermen.magma.spawnRates.biomes))
+					.build();
+			for (SpawnListEntry entry : Biome.getBiomeForId(8).getSpawnableList(EnumCreatureType.MONSTER)){
+				if(entry.entityClass == EntityEnderman.class){
+					Biome.getBiomeForId(8).getSpawnableList(EnumCreatureType.MONSTER).remove(entry);
+					break;
+				}
+			}
+			event.getRegistry().register(magma);
+		}
+		
+		// IceEnderman
+		if (EndermenConfig.endermen.ice.spawn) {
+			EntityEntry ice = EntityEntryBuilder.create().entity(EntityIceEnderman.class)
+					.id(Reference.MobultionEntities.ICEENDERMAN.getRegistryName(), 28)
+					.name(Reference.MobultionEntities.ICEENDERMAN.getUnlocalizedName()).tracker(64, 3, true)
+					.egg(0xC5F9F9, 0x30ABAB)
+					.spawn(EnumCreatureType.MONSTER, EndermenConfig.endermen.ice.spawnRates.weight,
+							EndermenConfig.endermen.ice.spawnRates.min, EndermenConfig.endermen.ice.spawnRates.max,
+							getBiomes(EndermenConfig.endermen.ice.spawnRates.biomes))
+					.build();
+			event.getRegistry().register(ice);
+		}
+		
+		//Mites
+		if (MitesConfig.mites.wood.spawn) {
+			EntityEntry woodmite = EntityEntryBuilder.create().entity(EntityWoodMite.class)
+					.id(Reference.MobultionEntities.WOODMITE.getRegistryName(), 29)
+					.name(Reference.MobultionEntities.WOODMITE.getUnlocalizedName()).tracker(64, 3, true)
+					.egg(0x996600, 0x705D21).build();
+			event.getRegistry().register(woodmite);
+		}
+		
+		EntityEntry enderBlaze = EntityEntryBuilder.create().entity(EntityEnderBlaze.class)
+				.id(Reference.MobultionEntities.ENDERBLAZE.getRegistryName(), 30)
+				.name(Reference.MobultionEntities.ENDERBLAZE.getUnlocalizedName()).tracker(64, 3, true).build();
+		event.getRegistry().register(enderBlaze);
+		
+		EntityEntry enderFlake = EntityEntryBuilder.create().entity(EntityEnderFlake.class)
+				.id(Reference.MobultionEntities.ENDERFLAKE.getRegistryName(), 31)
+				.name(Reference.MobultionEntities.ENDERFLAKE.getUnlocalizedName()).tracker(64, 3, true).build();
+		event.getRegistry().register(enderFlake);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -480,5 +546,17 @@ public class ModEntities {
 		if (SkeletonsConfig.skeletons.vampire.spawn)
 			RenderingRegistry.registerEntityRenderingHandler(EntityVampireSkeleton.class,
 					new RenderVampireSkeleton.Factory());
+		if (EndermenConfig.endermen.magma.spawn)
+			RenderingRegistry.registerEntityRenderingHandler(EntityMagmaEnderman.class,
+					new RenderMagmaEnderman.Factory());
+		if (EndermenConfig.endermen.ice.spawn)
+			RenderingRegistry.registerEntityRenderingHandler(EntityIceEnderman.class,
+					new RenderIceEnderman.Factory());
+		if (MitesConfig.mites.wood.spawn)
+			RenderingRegistry.registerEntityRenderingHandler(EntityWoodMite.class, new RenderWoodMite.Factory());
+		
+		RenderingRegistry.registerEntityRenderingHandler(EntityEnderFlake.class, new RenderEnderFlake.Factory());
+		RenderingRegistry.registerEntityRenderingHandler(EntityEnderBlaze.class, new RenderEnderBlaze.Factory());
+
 	}
 }

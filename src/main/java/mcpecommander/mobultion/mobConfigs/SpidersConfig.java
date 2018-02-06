@@ -26,6 +26,10 @@ public class SpidersConfig {
 			@Config.Comment("how much the Angel spider heals")
 			public float healAmount = 4f;
 			
+			@Config.Comment("What is the chance (1/this number) for the blessed spider to be revived")
+			@Config.RangeInt(min = 1, max = 100)
+			public int reviveChance = 2;
+			
 			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")
 			public Spawn spawnRates = new Spawn(100, 1, 4, "extreme_hills", "ice_mountains", "cold_beach", "mutated_ice_flats" );

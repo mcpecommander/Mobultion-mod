@@ -53,7 +53,7 @@ public class ItemFireSword extends ItemSword{
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 		stack.damageItem(1, attacker);
-		target.attackEntityFrom(DamageSource.IN_FIRE, this.getAttackDamage());
+		target.setFire(7);
 		return true;
 	}
 

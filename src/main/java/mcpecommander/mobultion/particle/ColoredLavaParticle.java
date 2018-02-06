@@ -14,14 +14,18 @@ import net.minecraft.world.World;
 public class ColoredLavaParticle extends Particle{
 	private final ResourceLocation lava = new ResourceLocation(Reference.MOD_ID ,"entity/lava_particle");
 
-	public ColoredLavaParticle(World worldIn, double posXIn, double posYIn, double posZIn) {
-		super(worldIn, posXIn, posYIn, posZIn);
+	public ColoredLavaParticle(World worldIn, double posXIn, double posYIn, double posZIn, double speedX, double speedY, double speedZ) {
+		super(worldIn, posXIn, posYIn, posZIn, speedX, speedY, speedZ);
 		
 		particleGravity = Blocks.LAVA.blockParticleGravity;
 		this.particleAlpha = 0.95f;
 
 		this.particleScale *= this.rand.nextFloat() * 2.0F + 0.5F;
-	    this.particleMaxAge = 4;
+	    this.particleMaxAge = 10;
+	    this.motionX = speedX;
+	    this.motionY = speedY;
+	    this.motionZ = speedZ;
+	    
 	    TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(lava.toString());
 	    setParticleTexture(sprite);
 	}
@@ -94,6 +98,8 @@ public class ColoredLavaParticle extends Particle{
         this.prevPosX = this.posX;
         this.prevPosY = this.posY;
         this.prevPosZ = this.posZ;
+        
+        move(motionX, motionY, motionZ);
 
         if (this.particleAge++ >= this.particleMaxAge)
         {

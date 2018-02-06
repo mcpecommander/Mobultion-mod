@@ -1,0 +1,16 @@
+{
+  "type": "forge:ore_shaped",
+  "result": { "item": "mobultion:item_fire_sword" },
+  "pattern": [
+    " f ",
+    "fsf",
+    " f "
+  ],
+  "key": {
+    "f": { "item": "minecraft:flint_and_steel" },
+    "s": { "item": "minecraft:diamond_sword" }
+  },
+  "conditions": [
+    { "type": "mobultion:config", "ore": "" }
+  ]
+}

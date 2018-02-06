@@ -8,7 +8,7 @@ public class Reference {
 	
 	public static final String MOD_ID = "mobultion";
 	public static final String NAME = "mcpeCommander's mobultion mod";
-	public static final String VERSION = "0.0.5";
+	public static final String VERSION = "0.0.7";
 	public static final String ACCEPTED_MINECRAFT_VERSIONS = "[1.12, 1.13)";
 	
 	public static final String CLIENT_PROXY_CLASS = "mcpecommander.mobultion.proxy.ClientProxy";
@@ -25,7 +25,9 @@ public class Reference {
 		HEALTH("health", "item_health"),
 		FORK("fork","item_fork"),
 		KNIFE("knife","item_knife"),
-		HAT("hat","item_hat");
+		HAT("hat","item_hat"),
+		ENDERBLAZE("ender_blaze","item_ender_blaze"),
+		ENDERFLAKE("ender_flake","item_ender_flake");
 		
 		private String unlocalizedName;
 		private String registryName;
@@ -77,7 +79,20 @@ public class Reference {
 		KNIGHTZOMBIE(new ResourceLocation(MOD_ID, "knight_zombie"), "knight_zombie"),
 		MAGMAZOMBIE(new ResourceLocation(MOD_ID, "magma_zombie"), "magma_zombie"),
 		WORKERZOMBIE(new ResourceLocation(MOD_ID, "worker_zombie"), "worker_zombie"),
-		RAVENOUSZOMBIE(new ResourceLocation(MOD_ID, "ravenous_zombie"), "ravenous_zombie");
+		RAVENOUSZOMBIE(new ResourceLocation(MOD_ID, "ravenous_zombie"), "ravenous_zombie"),
+		
+		//Endermen
+		MAGMAENDERMAN(new ResourceLocation(MOD_ID, "magma_enderman"), "magma_enderman"),
+		ICEENDERMAN(new ResourceLocation(MOD_ID, "ice_enderman"), "ice_enderman"),
+		ENDERBLAZE(new ResourceLocation(MOD_ID, "ender_blaze"), "ender_blaze"),
+		ENDERFLAKE(new ResourceLocation(MOD_ID, "ender_flake"), "ender_flake"),
+		
+		//Mites
+		WOODMITE(new ResourceLocation(MOD_ID, "woodmite"), "woodmite")
+		
+		
+		;
+		
 		
 		
 		
