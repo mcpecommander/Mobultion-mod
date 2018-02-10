@@ -1,0 +1,44 @@
+item.mobultion:health.name=Gesundheitspaket
+item.mobultion:fire_sword.name=Feuerschwert
+item.mobultion:healing_wand.name=Heilstab
+item.mobultion:heart_arrow.name=Herzpfeil
+item.mobultion:forest_bow.name=Waldbogen
+item.mobultion:fork.name=Gabel
+item.mobultion:knife.name=Messer
+item.mobultion:hammer.name=Hammer
+item.mobultion:hat.name=Hut
+
+entity.corrupted_skeleton.name=Verdorbenes Skelett
+entity.joker_skeleton.name=Narrenskelett
+entity.magma_skeleton.name=Magmaskelett
+entity.shaman_skeleton.name=Schamanenskelett
+entity.sniper_skeleton.name=Scharfschützenskelett
+entity.withering_skeleton.name=Verdorrtes Skelett
+entity.skeleton_remains.name=Skelett-Überreste
+entity.vampire_skeleton.name=Vampirskelett
+entity.heart_arrow.name=Herzpfeil
+entity.magma_arrow.name=Magmapfeil
+
+entity.angel_spider.name=Engelspinne
+entity.hypno_spider.name=Hypnospinne
+entity.magma_spider.name=Magmaspinne
+entity.mini_spider.name=Minispinne
+entity.mother_spider.name=Mutterspinne
+entity.sorcerer_spider.name=Hexenspinne
+entity.speedy_spider.name=Schnelle Spinne
+entity.wither_spider.name=Witherspinne
+entity.spider_egg.name=Spinnenei
+
+entity.doctor_zombie.name=Arztzombie
+entity.goro_zombie.name=Goro-Zombie
+entity.knight_zombie.name=Ritterzombie
+entity.magma_zombie.name=Magmazombie
+entity.worker_zombie.name=Arbeiterzombie
+entity.ravenous_zombie.name=Gefräßiger Zombie
+
+entity.magma_enderman.name=Magma-Enderman
+entity.ice_enderman.name=Eis-Enderman
+
+entity.woodmite.name=Holzmilbe
+
+itemGroup.tabMobultionMod=Mobultion Tab
