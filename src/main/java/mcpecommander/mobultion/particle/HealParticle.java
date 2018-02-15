@@ -12,7 +12,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class HealParticle extends Particle{
 	private final ResourceLocation lava = new ResourceLocation(Reference.MOD_ID ,"particle/heal");
 	private BlockPos finalTarget;

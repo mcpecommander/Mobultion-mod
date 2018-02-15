@@ -3,6 +3,7 @@ package mcpecommander.mobultion.entity.entities.skeletons;
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.animation.AnimationRiding;
+import mcpecommander.mobultion.init.ModItems;
 import mcpecommander.mobultion.mobConfigs.SkeletonsConfig;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -27,6 +28,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -98,7 +100,8 @@ public class EntityCorruptedSkeleton extends EntityAnimatedSkeleton {
 
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
-		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BONE));
+		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.corruptedBone));
+		this.setDropChance(EntityEquipmentSlot.MAINHAND, 0.0f);
 		return super.onInitialSpawn(difficulty, livingdata);
 	}
 

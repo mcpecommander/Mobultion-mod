@@ -33,6 +33,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityMagmaSkeleton extends EntityAnimatedSkeleton{
 
@@ -120,6 +122,7 @@ public class EntityMagmaSkeleton extends EntityAnimatedSkeleton{
 		}
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public void spawnEffect(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, int num){
 		for(int i = 0; i < num; i++){
 			ColoredLavaParticle newEffect = new ColoredLavaParticle(worldIn, xCoordIn, yCoordIn, zCoordIn, 0d, 0d, 0d);
@@ -184,11 +187,6 @@ public class EntityMagmaSkeleton extends EntityAnimatedSkeleton{
     	super.onLivingUpdate();
     	if(!this.world.isRemote){
     		this.setMoving(Boolean.valueOf(this.isMoving(this)));
-    		if(this.isDead){
-    			EntitySkeletonRemains grave = new EntitySkeletonRemains(this.world, this);
-				grave.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
-            	this.world.spawnEntity(grave);
-    		}
 		}
     	if(this.isWorldRemote()){
     		if(this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "skeleton_walk", this) && !this.getMoving()){

@@ -26,7 +26,7 @@ public class PotionFreeze extends Potion{
 	
 	public PotionFreeze() {
 		super(true, 0x9696F1);
-		this.setPotionName("freeze");
+		this.setPotionName(Reference.MOD_ID + ":effect.freeze");
 		this.setRegistryName(new ResourceLocation(Reference.MOD_ID,  "freeze_potion"));
 	}
 	

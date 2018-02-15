@@ -1,6 +1,9 @@
 package mcpecommander.mobultion;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.init.Biomes;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 
@@ -8,11 +11,24 @@ public class Reference {
 	
 	public static final String MOD_ID = "mobultion";
 	public static final String NAME = "mcpeCommander's mobultion mod";
-	public static final String VERSION = "0.0.7";
+	public static final String VERSION = "0.0.8";
 	public static final String ACCEPTED_MINECRAFT_VERSIONS = "[1.12, 1.13)";
 	
 	public static final String CLIENT_PROXY_CLASS = "mcpecommander.mobultion.proxy.ClientProxy";
 	public static final String SERVER_PROXY_CLASS = "mcpecommander.mobultion.proxy.ServerProxy";
+	
+	public static boolean removeEnchant(int id, ItemStack item){
+		if(item.isEmpty()){
+			return false;
+		}
+		for(int i = 0; i < item.getEnchantmentTagList().tagCount(); i++){
+			if(item.getEnchantmentTagList().getCompoundTagAt(i).getShort("id") == id){
+				item.getEnchantmentTagList().removeTag(i);
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	//ItemNames
 	
@@ -27,7 +43,12 @@ public class Reference {
 		KNIFE("knife","item_knife"),
 		HAT("hat","item_hat"),
 		ENDERBLAZE("ender_blaze","item_ender_blaze"),
-		ENDERFLAKE("ender_flake","item_ender_flake");
+		ENDERFLAKE("ender_flake","item_ender_flake"),
+		CORRUPTEDBONE("corrupted_bone","item_corrupted_bone"),
+		CORRUPTEDBONEMEAL("corrupted_bonemeal","item_corrupted_bonemeal"),
+		HOLYSHARD("holy_shard","item_holy_shard"),
+		HYPNOBALL("hypno_ball","item_hypno_ball"),
+		FANGNECKLACE("fang_necklace","item_fang_necklace");
 		
 		private String unlocalizedName;
 		private String registryName;

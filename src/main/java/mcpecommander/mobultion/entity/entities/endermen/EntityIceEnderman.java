@@ -23,13 +23,16 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-public class EntityIceEnderman extends EntityAnimatedEnderman{
-	
-	private static final DataParameter<Boolean> BITING = EntityDataManager.<Boolean>createKey(EntityIceEnderman.class, DataSerializers.BOOLEAN);
+public class EntityIceEnderman extends EntityAnimatedEnderman {
+
+	private static final DataParameter<Boolean> BITING = EntityDataManager.<Boolean>createKey(EntityIceEnderman.class,
+			DataSerializers.BOOLEAN);
 
 	static {
 		EntityIceEnderman.animHandler.addAnim(Reference.MOD_ID, "scream", "enderman", true);
@@ -39,13 +42,28 @@ public class EntityIceEnderman extends EntityAnimatedEnderman{
 		EntityIceEnderman.animHandler.addAnim(Reference.MOD_ID, "lookat", new AnimationLookAtEnderman("Head", "Jaw"));
 		EntityIceEnderman.animHandler.addAnim(Reference.MOD_ID, "riding", new AnimationRiding());
 	}
-	
+
 	public EntityIceEnderman(World worldIn) {
 		super(worldIn);
 		this.setSize(0.6F, 2.9F);
 		this.stepHeight = 1.0F;
 	}
 	
+	@Override
+	public boolean handleWaterMovement() {
+		return false;
+	}
+	
+	@Override
+	protected float getWaterSlowDown() {
+		return -0.546f;
+	}
+	
+	@Override
+	public boolean isPushedByWater() {
+		return false;
+	}
+
 	@Override
 	public void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
@@ -59,20 +77,25 @@ public class EntityIceEnderman extends EntityAnimatedEnderman{
 	}
 	
 	@Override
+	protected ResourceLocation getLootTable() {
+		return new ResourceLocation(Reference.MOD_ID, "endermen/ice_enderman");
+	}
+
+	@Override
 	protected void entityInit() {
 		super.entityInit();
 		this.dataManager.register(BITING, Boolean.valueOf(false));
 	}
-	
-	public void setBiting(boolean biting){
+
+	public void setBiting(boolean biting) {
 		this.dataManager.set(BITING, Boolean.valueOf(biting));
 		this.dataManager.setDirty(BITING);
 	}
-	
-	public boolean getBiting(){
+
+	public boolean getBiting() {
 		return this.dataManager.get(BITING);
 	}
-	
+
 	@Override
 	protected void updateAITasks() {
 		if (this.world.isDaytime() && this.ticksExisted >= this.targetChangeTime + 600) {
@@ -86,16 +109,17 @@ public class EntityIceEnderman extends EntityAnimatedEnderman{
 		}
 
 		if (this.isWet() && this.getRNG().nextInt(10) == 0) {
-			this.heal(1f);;
+			this.heal(1f);
+			;
 		}
 
 		super.updateAITasks();
 	}
-	
+
 	@Override
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
-		if(!this.isWorldRemote()){
+		if (!this.isWorldRemote()) {
 			EntityAreaEffectCloud entityareaeffectcloud = new EntityAreaEffectCloud(this.world, this.posX, this.posY,
 					this.posZ);
 			entityareaeffectcloud.setOwner(this);
@@ -106,13 +130,13 @@ public class EntityIceEnderman extends EntityAnimatedEnderman{
 					.setRadiusPerTick(-entityareaeffectcloud.getRadius() / (float) entityareaeffectcloud.getDuration());
 			entityareaeffectcloud.addEffect(new PotionEffect(ModPotions.potionFreeze, 100, 0));
 			// entityareaeffectcloud.setPotion(PotionType.getPotionTypeForName("mobultion:freeze_potion"));
-			 this.world.spawnEntity(entityareaeffectcloud);
+			this.world.spawnEntity(entityareaeffectcloud);
 		}
 	}
-	
+
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if(source.equals(DamageSource.ON_FIRE)){
+		if (source.equals(DamageSource.ON_FIRE)) {
 			return super.attackEntityFrom(source, amount * 2);
 		}
 		if (this.isEntityInvulnerable(source)) {
@@ -125,7 +149,7 @@ public class EntityIceEnderman extends EntityAnimatedEnderman{
 		} else {
 			boolean flag = super.attackEntityFrom(source, amount);
 
-			if (source.isUnblockable() && this.rand.nextInt(30) != 0) {
+			if (source.isUnblockable() && this.rand.nextInt(30) <= 5) {
 				this.teleportRandomly();
 			}
 
@@ -140,12 +164,12 @@ public class EntityIceEnderman extends EntityAnimatedEnderman{
 			return flag;
 		}
 	}
-	
+
 	@Override
 	public void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20d);
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
 		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(7.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(64.0D);
 	}
@@ -161,7 +185,7 @@ public class EntityIceEnderman extends EntityAnimatedEnderman{
 		double d1 = vec3d.dotProduct(vec3d1);
 		return d1 > 1.0D - 0.015D / d0 ? player.canEntityBeSeen(this) : false;
 	}
-	
+
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
@@ -170,7 +194,8 @@ public class EntityIceEnderman extends EntityAnimatedEnderman{
 		}
 
 		if (isWorldRemote()) {
-			if (!this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "enderman_bite", this) && this.getBiting()) {
+			if (!this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "enderman_bite", this)
+					&& this.getBiting()) {
 				this.getAnimationHandler().stopAnimation(Reference.MOD_ID, "scream", this);
 				this.getAnimationHandler().stopAnimation(Reference.MOD_ID, "skeleton_walk_hands", this);
 				this.getAnimationHandler().stopAnimation(Reference.MOD_ID, "lookat", this);
@@ -187,7 +212,8 @@ public class EntityIceEnderman extends EntityAnimatedEnderman{
 					this.getAnimationHandler().stopAnimation(Reference.MOD_ID, "skeleton_walk_hands", this);
 				}
 			}
-			if (this.isScreaming() && !this.getBiting() && !this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "scream", this)
+			if (this.isScreaming() && !this.getBiting()
+					&& !this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "scream", this)
 					&& this.deathTime < 1) {
 				this.getAnimationHandler().stopAnimation(Reference.MOD_ID, "skeleton_walk_hands", this);
 				this.getAnimationHandler().stopAnimation(Reference.MOD_ID, "lookat", this);
@@ -228,17 +254,17 @@ public class EntityIceEnderman extends EntityAnimatedEnderman{
 			}
 		}
 	}
-	
-//	@Override
-//	public void updatePassenger(Entity passenger)
-//    {
-//        if (this.isPassenger(passenger))
-//        {
-//        	double yaw = ((this.rotationYawHead + 90) * Math.PI) / 180;
-//			double z = Math.sin(yaw);
-//			double x = Math.cos(yaw);
-//            passenger.setPosition(this.posX + x, this.posY, this.posZ + z);
-//        }
-//    }
+
+	// @Override
+	// public void updatePassenger(Entity passenger)
+	// {
+	// if (this.isPassenger(passenger))
+	// {
+	// double yaw = ((this.rotationYawHead + 90) * Math.PI) / 180;
+	// double z = Math.sin(yaw);
+	// double x = Math.cos(yaw);
+	// passenger.setPosition(this.posX + x, this.posY, this.posZ + z);
+	// }
+	// }
 
 }

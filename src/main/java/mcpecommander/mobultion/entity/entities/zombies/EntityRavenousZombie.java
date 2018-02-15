@@ -1,11 +1,8 @@
 package mcpecommander.mobultion.entity.entities.zombies;
 
-import javax.annotation.Nonnull;
-
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.animation.AnimationRiding;
-import mcpecommander.mobultion.entity.entityAI.zombiesAI.EntityAICakeTarget;
 import mcpecommander.mobultion.entity.entityAI.zombiesAI.EntityAIItemEat;
 import mcpecommander.mobultion.entity.entityAI.zombiesAI.EntityAIItemTarget;
 import mcpecommander.mobultion.entity.entityAI.zombiesAI.EntityAIKnightAttackMelee;
@@ -14,9 +11,7 @@ import mcpecommander.mobultion.init.ModItems;
 import mcpecommander.mobultion.init.ModPotions;
 import mcpecommander.mobultion.init.ModSounds;
 import mcpecommander.mobultion.mobConfigs.ZombiesConfig;
-import mcpecommander.mobultion.particle.ConfuseCloudParticle;
 import mcpecommander.mobultion.particle.VomitParticle;
-import net.minecraft.block.BlockCake;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -30,11 +25,6 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.entity.passive.EntityCow;
-import net.minecraft.entity.passive.EntityMooshroom;
-import net.minecraft.entity.passive.EntityPig;
-import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -43,11 +33,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityRavenousZombie extends EntityAnimatedZombie {
 
@@ -168,6 +159,7 @@ public class EntityRavenousZombie extends EntityAnimatedZombie {
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	private void renderVomit(float radius){
 		for (int i = 0; i < 360; i += 20) {
 			double x = Math.sin(i);

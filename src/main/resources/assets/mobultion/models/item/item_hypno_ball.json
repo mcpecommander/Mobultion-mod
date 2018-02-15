@@ -1,0 +1,6 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "mobultion:items/hypno_ball/hypno_ball"
+    }
+}

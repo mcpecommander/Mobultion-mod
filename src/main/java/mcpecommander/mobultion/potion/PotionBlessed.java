@@ -16,15 +16,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PotionBlessed extends Potion {
 	
-
 	public PotionBlessed() {
 		super(false, 0xF74BF7);
-		this.setPotionName("blessed");
+		this.setPotionName(Reference.MOD_ID + ":effect.blessed");
 		this.setRegistryName(new ResourceLocation(Reference.MOD_ID, "blessed_potion"));
 
 	}
 	
-
 	@Override
 	public void performEffect(EntityLivingBase e, int amplifier) {
 		//System.out.println(e.world.isRemote);

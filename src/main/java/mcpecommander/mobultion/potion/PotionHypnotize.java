@@ -19,7 +19,7 @@ public class PotionHypnotize extends Potion {
 
 	public PotionHypnotize() {
 		super(true, 0xF74BF7);
-		this.setPotionName("hypnotize");
+		this.setPotionName(Reference.MOD_ID + ":effect.hypnotize");
 		this.setRegistryName(new ResourceLocation(Reference.MOD_ID, "hypnotize_potion"));
 
 	}

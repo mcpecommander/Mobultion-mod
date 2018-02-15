@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "result": { "item": "mobultion:item_corrupted_bonemeal", "count": 3 },
+  "ingredients": [
+    {
+      "item": "mobultion:item_corrupted_bone",
+      "data": 0
+    }
+  ]
+}

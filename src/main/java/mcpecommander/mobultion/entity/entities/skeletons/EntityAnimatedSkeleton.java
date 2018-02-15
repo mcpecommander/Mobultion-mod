@@ -91,16 +91,21 @@ public abstract class EntityAnimatedSkeleton extends EntityMob implements IRange
 
         if (this.deathTime == 30)
         {
-            if (!this.world.isRemote && (this.isPlayer() || this.recentlyHit > 0 && this.canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot")))
+            if (!this.world.isRemote )
             {
-                int i = this.getExperiencePoints(this.attackingPlayer);
-                i = net.minecraftforge.event.ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
-                while (i > 0)
-                {
-                    int j = EntityXPOrb.getXPSplit(i);
-                    i -= j;
-                    this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
-                }
+            	if((this.isPlayer() || this.recentlyHit > 0 && this.canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot"))){
+	                int i = this.getExperiencePoints(this.attackingPlayer);
+	                i = net.minecraftforge.event.ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
+	                while (i > 0)
+	                {
+	                    int j = EntityXPOrb.getXPSplit(i);
+	                    i -= j;
+	                    this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
+	                }
+            	}
+            	EntitySkeletonRemains grave = new EntitySkeletonRemains(this.world, this);
+    			grave.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
+    			this.world.spawnEntity(grave);
             }
 
             this.setDead();

@@ -34,7 +34,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTableList;
 
 public class EntityJokerSkeleton extends EntityAnimatedSkeleton {
 
@@ -132,7 +131,7 @@ public class EntityJokerSkeleton extends EntityAnimatedSkeleton {
 	@Nullable
 	@Override
 	protected ResourceLocation getLootTable() {
-		return new ResourceLocation(Reference.MOD_ID, "joker_skeleton");
+		return new ResourceLocation(Reference.MOD_ID, "skeletons/joker_skeleton");
 	}
 
 	@Override
@@ -142,7 +141,8 @@ public class EntityJokerSkeleton extends EntityAnimatedSkeleton {
 		double d1 = target.getEntityBoundingBox().minY + (double) (target.height / 3.0F) - entityarrow.posY;
 		double d2 = target.posZ - this.posZ;
 		double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
-		entityarrow.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 1.6F, (float) SkeletonsConfig.skeletons.joker.inaccuracy);
+		entityarrow.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 1.6F,
+				(float) SkeletonsConfig.skeletons.joker.inaccuracy);
 		this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
 		this.world.spawnEntity(entityarrow);
 	}
@@ -161,17 +161,12 @@ public class EntityJokerSkeleton extends EntityAnimatedSkeleton {
 			flag = true;
 		}
 	}
-
+	
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		if (!this.isWorldRemote()) {
 			this.setMoving(Boolean.valueOf(this.isMoving(this)));
-			 if(this.isDead){
-				 EntitySkeletonRemains grave = new EntitySkeletonRemains(this.world, this);
-				 grave.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
-				 this.world.spawnEntity(grave);
-			 }
 		}
 		if (this.isWorldRemote()) {
 			if (this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "skeleton_walk", this)

@@ -9,7 +9,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class VomitParticle extends Particle{
 	
 	private static final ResourceLocation VOMIT = new ResourceLocation(Reference.MOD_ID, "particle/vomit");

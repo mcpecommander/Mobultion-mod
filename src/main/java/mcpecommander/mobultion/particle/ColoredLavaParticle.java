@@ -10,7 +10,10 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class ColoredLavaParticle extends Particle{
 	private final ResourceLocation lava = new ResourceLocation(Reference.MOD_ID ,"entity/lava_particle");
 

@@ -153,11 +153,6 @@ public class EntityVampireSkeleton extends EntityAnimatedSkeleton {
 				}
 			}
 			this.setMoving(Boolean.valueOf(this.isMoving(this)));
-			if (this.isDead) {
-				EntitySkeletonRemains grave = new EntitySkeletonRemains(this.world, this);
-				grave.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
-				this.world.spawnEntity(grave);
-			}
 			
 			if(this.getMorphing() == 2){
 				EntityBat bat = new EntityBat(world);

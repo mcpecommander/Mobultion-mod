@@ -15,6 +15,7 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
@@ -55,6 +56,11 @@ public class EntityHypnoSpider extends EntityAnimatedSpider{
     public double getMountedYOffset()
     {
         return (double)(this.height * 0.6F);
+    }
+    
+    @Override
+    protected ResourceLocation getLootTable() {
+    	return new ResourceLocation(Reference.MOD_ID, "spiders/hypno_spider");
     }
 
     @Override

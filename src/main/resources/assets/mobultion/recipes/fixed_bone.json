@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "result": { "item": "minecraft:bone" },
+  "ingredients": [
+    {
+      "item": "mobultion:item_holy_shard",
+      "data": 0
+    },
+	{
+      "item": "mobultion:item_corrupted_bone",
+      "data": 0
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "type": "mobultion:nbt",
+  "result": { "item": "minecraft:enchanted_book" },
+  "ingredients": [
+    {
+      "item": "mobultion:item_holy_shard",
+      "data": 0
+    },
+	{
+      "item": "mobultion:item_holy_shard",
+      "data": 0
+    },
+	{
+      "item": "mobultion:item_holy_shard",
+      "data": 0
+    },
+	{
+      "item": "mobultion:item_holy_shard",
+      "data": 0
+    },
+	{
+      "item": "mobultion:item_holy_shard",
+      "data": 0
+    },
+	{
+      "item": "mobultion:item_holy_shard",
+      "data": 0
+    },
+	{
+      "item": "mobultion:item_holy_shard",
+      "data": 0
+    },
+	{
+      "item": "mobultion:item_holy_shard",
+      "data": 0
+    },
+	{
+	  "item": "minecraft:book",
+	  "data": 0
+	}
+  ],
+  "lvl": 1,
+  "id": "mobultion:blessed_enchantment"
+}

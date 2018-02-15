@@ -30,7 +30,7 @@ public class PotionJokerness extends Potion {
 
 	public PotionJokerness() {
 		super(true, 0x75CA50);
-		this.setPotionName("jokerness");
+		this.setPotionName(Reference.MOD_ID + ":effect.jokerness");
 		this.setRegistryName(new ResourceLocation(Reference.MOD_ID, "jokerness_potion"));
 	}
 
@@ -44,6 +44,7 @@ public class PotionJokerness extends Potion {
 
 	public boolean isReady;
 
+	@SideOnly(Side.CLIENT)
 	public void render(Minecraft minecraft, ScaledResolution scaledRes, Random RNG) {
 		if (minecraft.gameSettings.thirdPersonView == 0) {
 			if (!Minecraft.getMinecraft().isGamePaused()) {

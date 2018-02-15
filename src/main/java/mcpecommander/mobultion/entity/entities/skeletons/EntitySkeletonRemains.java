@@ -1,5 +1,7 @@
 package mcpecommander.mobultion.entity.entities.skeletons;
 
+import java.util.Random;
+
 import javax.annotation.Nullable;
 
 import org.apache.logging.log4j.Level;
@@ -25,8 +27,12 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootTable;
 
 public class EntitySkeletonRemains extends EntityLivingBase implements IAnimated {
 	private static final DataParameter<Byte> TYPE = EntityDataManager.<Byte>createKey(EntitySkeletonRemains.class,
@@ -41,6 +47,45 @@ public class EntitySkeletonRemains extends EntityLivingBase implements IAnimated
 	public EntitySkeletonRemains(World worldIn) {
 		super(worldIn);
 		this.setSize(.75f, .52f);
+	}
+	
+	@Nullable
+    protected ResourceLocation getLootTable()
+    {
+        return new ResourceLocation(Reference.MOD_ID, "skeletons/skeleton_remains");
+    }
+	
+	@Override
+	protected void dropLoot(boolean wasRecentlyHit, int lootingModifier, DamageSource source)
+    {
+        ResourceLocation resourcelocation = this.getLootTable();
+        if (resourcelocation != null)
+        {
+            LootTable loottable = this.world.getLootTableManager().getLootTableFromLocation(resourcelocation);
+            LootContext.Builder lootcontext$builder = (new LootContext.Builder((WorldServer)this.world)).withLootedEntity(this).withDamageSource(source);
+
+            if (wasRecentlyHit && this.attackingPlayer != null)
+            {
+                lootcontext$builder = lootcontext$builder.withPlayer(this.attackingPlayer).withLuck(this.attackingPlayer.getLuck());
+            }
+
+            for (ItemStack itemstack : loottable.generateLootForPools(this.rand, lootcontext$builder.build()))
+            {
+                this.entityDropItem(itemstack, 0.0F);
+            }
+
+            this.dropEquipment(wasRecentlyHit, lootingModifier);
+        }
+        else
+        {
+        	MobultionMod.logger.log(Level.ERROR, this.toString() + ": has no loot table or errored loot table.");
+            return;
+        }
+    }
+	
+	@Override
+	public String toString() {
+		return super.toString() + this.getSkeleton(getTYPE()).toString();
 	}
 
 	public EntitySkeletonRemains(World worldIn, EntityLivingBase originalSkeleton) {

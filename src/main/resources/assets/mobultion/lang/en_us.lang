@@ -7,6 +7,12 @@ item.mobultion:fork.name=Fork
 item.mobultion:knife.name=Knife
 item.mobultion:hammer.name=Hammer
 item.mobultion:hat.name=Hat
+item.mobultion:holy_shard.name=Holy Shard
+item.mobultion:hypno_ball.name=Hypno Ball
+item.mobultion:ender_flake.name=Ender Flake
+item.mobultion:ender_blaze.name=Ender Blaze
+item.mobultion:corrupted_bone.name=Corrupted Bone
+item.mobultion:corrupted_bonemeal.name=Corrupted Bonemeal
 
 entity.corrupted_skeleton.name=Corrupted Skeleton
 entity.joker_skeleton.name=Jester Skeleton
@@ -40,5 +46,26 @@ entity.magma_enderman.name=Magma Enderman
 entity.ice_enderman.name=Ice Enderman
 
 entity.woodmite.name=WoodMite
+
+mobultion:effect.blessed=Blessed
+mobultion:effect.jokerness=Jokerness
+mobultion:effect.freeze=Freeze
+mobultion:effect.hypnotize=Hypnotize
+mobultion:effect.vomit=Vomit
+
+mobultion:ench.blessed=Blessed
+
+mobultion.subtitles.fire_arrow_shot=Fire arrow being shot
+mobultion.subtitles.entity_respawn=Entity re-spawning
+mobultion.subtitles.magma_remains_death=Magma skeleton remains dies
+mobultion.subtitles.forest_skeleton_shoot=Sniper skeleton shoots
+mobultion.subtitles.joker_ambient=Jester laughs
+mobultion.subtitles.ravenous_eating=Ravenous zombie eats
+mobultion.subtitles.burp=Ravenous zombie burps
+mobultion.subtitles.shield_block=Magic shield block
+mobultion.subtitles.vampire_bite=Vampire skeleton bites
+mobultion.subtitles.bat_morph=Vampire skeleton morphs
+mobultion.subtitles.puke=Ravenous zombie pukes
+mobultion.subtitles.spit=Magma enderman spits
 
 itemGroup.tabMobultionMod=Mobultion Tab

@@ -1,7 +1,10 @@
 package mcpecommander.mobultion.init;
 
+import mcpecommander.mobultion.items.ItemCorruptedBone;
+import mcpecommander.mobultion.items.ItemCorruptedBonemeal;
 import mcpecommander.mobultion.items.ItemEnderBlaze;
 import mcpecommander.mobultion.items.ItemEnderFlake;
+import mcpecommander.mobultion.items.ItemFangNecklace;
 import mcpecommander.mobultion.items.ItemFireSword;
 import mcpecommander.mobultion.items.ItemForestBow;
 import mcpecommander.mobultion.items.ItemFork;
@@ -10,6 +13,8 @@ import mcpecommander.mobultion.items.ItemHat;
 import mcpecommander.mobultion.items.ItemHealingWand;
 import mcpecommander.mobultion.items.ItemHealth;
 import mcpecommander.mobultion.items.ItemHeartArrow;
+import mcpecommander.mobultion.items.ItemHolyShard;
+import mcpecommander.mobultion.items.ItemHypnoBall;
 import mcpecommander.mobultion.items.ItemKnife;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -39,6 +44,16 @@ public class ModItems {
 	public static ItemEnderFlake enderFlake;
 	@GameRegistry.ObjectHolder("mobultion:item_ender_blaze")
 	public static ItemEnderBlaze enderBlaze;
+	@GameRegistry.ObjectHolder("mobultion:item_corrupted_bone")
+	public static ItemCorruptedBone corruptedBone;
+	@GameRegistry.ObjectHolder("mobultion:item_corrupted_bonemeal")
+	public static ItemCorruptedBonemeal corruptedBonemeal;
+	@GameRegistry.ObjectHolder("mobultion:item_holy_shard")
+	public static ItemHolyShard holyShard;
+	@GameRegistry.ObjectHolder("mobultion:item_hypno_ball")
+	public static ItemHypnoBall hypnoBall;
+	@GameRegistry.ObjectHolder("mobultion:item_fang_necklace")
+	public static ItemFangNecklace fangNecklace;
 
 	@SideOnly(Side.CLIENT)
     public static void initModels() {
@@ -53,6 +68,11 @@ public class ModItems {
 		hat.initModel();
 		enderFlake.initModel();
 		enderBlaze.initModel();
+		corruptedBone.initModel();
+		corruptedBonemeal.initModel();
+		holyShard.initModel();
+		hypnoBall.initModel();
+		fangNecklace.initModel();
     }
 	
 

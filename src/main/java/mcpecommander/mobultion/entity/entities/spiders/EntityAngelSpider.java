@@ -21,9 +21,12 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityAngelSpider extends EntityAnimatedSpider {
 
@@ -65,6 +68,11 @@ public class EntityAngelSpider extends EntityAnimatedSpider {
 		this.tasks.addTask(6, new EntityAILookIdle(this));
 		this.targetTasks.addTask(1, new EntityAIAngelSpiderTarget(this));
 	}
+	
+	@Override
+	protected ResourceLocation getLootTable() {
+		return new ResourceLocation(Reference.MOD_ID, "spiders/angel_spider");
+	}
 
 	@Override
 	protected void entityInit() {
@@ -97,9 +105,6 @@ public class EntityAngelSpider extends EntityAnimatedSpider {
 				((EntityLivingBase) this.getTarget()).addPotionEffect(effect);
 			}
 		}
-		if (!this.isWorldRemote()) {
-
-		}
 		if (this.isWorldRemote()) {
 			if (!this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "lookat", this)) {
 				this.getAnimationHandler().startAnimation(Reference.MOD_ID, "lookat", 0, this);
@@ -113,18 +118,34 @@ public class EntityAngelSpider extends EntityAnimatedSpider {
 				this.getAnimationHandler().startAnimation(Reference.MOD_ID, "wings_flap", 0, this);
 			}
 			if (this.getTarget() != null && ticksExisted % 5 == 0) {
-				Vec3d vec3d = new Vec3d(this.posX - this.getTarget().posX,
-						this.getEntityBoundingBox().minY + (double) this.getEyeHeight()
-								- (this.getTarget().posY + (double) this.getTarget().getEyeHeight()),
-						this.posZ - this.getTarget().posZ).normalize();
-				HealParticle heal = new HealParticle(world, this.posX, this.posY + this.getEyeHeight(), this.posZ,
-						this.getRNG().nextFloat(), vec3d,
-						new BlockPos(this.getTarget().posX,
-								(this.getTarget().posY + (double) this.getTarget().getEyeHeight()),
-								this.getTarget().posZ));
-				Minecraft.getMinecraft().effectRenderer.addEffect(heal);
+				performEffect();
+//				Vec3d vec3d = new Vec3d(this.posX - this.getTarget().posX,
+//						this.getEntityBoundingBox().minY + (double) this.getEyeHeight()
+//								- (this.getTarget().posY + (double) this.getTarget().getEyeHeight()),
+//						this.posZ - this.getTarget().posZ).normalize();
+//				HealParticle heal = new HealParticle(world, this.posX, this.posY + this.getEyeHeight(), this.posZ,
+//						this.getRNG().nextFloat(), vec3d,
+//						new BlockPos(this.getTarget().posX,
+//								(this.getTarget().posY + (double) this.getTarget().getEyeHeight()),
+//								this.getTarget().posZ));
+//				Minecraft.getMinecraft().effectRenderer.addEffect(heal);
 			}
 		}
 	}
-
+	
+	@SideOnly(Side.CLIENT)
+	private void performEffect(){
+		Vec3d vec3d = new Vec3d(this.posX - this.getTarget().posX,
+				this.getEntityBoundingBox().minY + (double) this.getEyeHeight()
+						- (this.getTarget().posY + (double) this.getTarget().getEyeHeight()),
+				this.posZ - this.getTarget().posZ).normalize();
+		HealParticle heal = new HealParticle(world, this.posX, this.posY + this.getEyeHeight(), this.posZ,
+				this.getRNG().nextFloat(), vec3d,
+				new BlockPos(this.getTarget().posX,
+						(this.getTarget().posY + (double) this.getTarget().getEyeHeight()),
+						this.getTarget().posZ));
+		Minecraft.getMinecraft().effectRenderer.addEffect(heal);
+	}
+	
+	
 }

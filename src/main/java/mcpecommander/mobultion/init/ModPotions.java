@@ -19,11 +19,4 @@ public class ModPotions {
 	@GameRegistry.ObjectHolder("mobultion:blessed_potion")
 	public static PotionBlessed potionBlessed;
 	
-	public static void init(){
-		potionHypnotize = new PotionHypnotize();
-		potionFreeze = new PotionFreeze();
-		potionJokerness = new PotionJokerness();
-		potionVomit = new PotionVomit();
-		potionBlessed = new PotionBlessed();
-	}
 }

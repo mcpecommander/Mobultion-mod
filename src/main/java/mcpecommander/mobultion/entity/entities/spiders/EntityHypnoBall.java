@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
@@ -18,8 +19,19 @@ public class EntityHypnoBall extends EntityFireball{
 
     public EntityHypnoBall(World worldIn, EntityLivingBase shooter, double accelX, double accelY, double accelZ)
     {
-        super(worldIn, shooter, accelX, accelY, accelZ);
+        super(worldIn);
         this.setSize(0.3125F, 0.3125F);
+        this.shootingEntity = shooter;
+        this.setSize(1.0F, 1.0F);
+        this.setLocationAndAngles(shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1d, shooter.posZ, shooter.rotationYaw, shooter.rotationPitch);
+        this.setPosition(this.posX, this.posY, this.posZ);
+        this.motionX = 0.0D;
+        this.motionY = 0.0D;
+        this.motionZ = 0.0D;
+        double d0 = (double)MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
+        this.accelerationX = accelX / d0 * 0.1D;
+        this.accelerationY = accelY / d0 * 0.1D;
+        this.accelerationZ = accelZ / d0 * 0.1D;
     }
     
     @Override

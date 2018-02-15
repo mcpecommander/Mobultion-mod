@@ -9,18 +9,16 @@ import mcpecommander.mobultion.entity.entities.skeletons.EntityCorruptedSkeleton
 import mcpecommander.mobultion.entity.entities.spiders.EntityAnimatedSpider;
 import mcpecommander.mobultion.entity.entities.spiders.EntityMiniSpider;
 import mcpecommander.mobultion.entity.entityAI.zombiesAI.EntityAIMoveToNearestDoctor;
+import mcpecommander.mobultion.init.ModEnchantments;
 import mcpecommander.mobultion.init.ModItems;
 import mcpecommander.mobultion.init.ModPotions;
 import mcpecommander.mobultion.mobConfigs.MitesConfig;
 import mcpecommander.mobultion.mobConfigs.SkeletonsConfig;
 import mcpecommander.mobultion.mobConfigs.SpidersConfig;
 import mcpecommander.mobultion.mobConfigs.ZombiesConfig;
-import net.minecraft.block.BlockLog;
-import net.minecraft.block.BlockNewLog;
-import net.minecraft.block.BlockOldLog;
-import net.minecraft.block.material.Material;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
@@ -42,9 +40,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityLockableLoot;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
@@ -57,7 +56,6 @@ import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
@@ -88,6 +86,33 @@ public class CommonEvent {
 				if (player.world.isAirBlock(entity.getPosition())
 						&& entity.world.isSideSolid(entity.getPosition().add(0, -1, 0), EnumFacing.UP)) {
 					player.world.setBlockState(entity.getPosition(), Blocks.FLOWING_LAVA.getDefaultState(), 3);
+				}
+			}
+		}
+		
+		if(entity instanceof EntityPlayerMP){
+			EntityPlayerMP player = (EntityPlayerMP) entity;
+			if(!player.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty() && EnchantmentHelper.getEnchantments(player.getItemStackFromSlot(EntityEquipmentSlot.HEAD)).keySet().contains(ModEnchantments.blessed)){
+				if(!player.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty() && EnchantmentHelper.getEnchantments(player.getItemStackFromSlot(EntityEquipmentSlot.CHEST)).keySet().contains(ModEnchantments.blessed)){
+					if(!player.getItemStackFromSlot(EntityEquipmentSlot.LEGS).isEmpty() && EnchantmentHelper.getEnchantments(player.getItemStackFromSlot(EntityEquipmentSlot.LEGS)).keySet().contains(ModEnchantments.blessed)){
+						if(!player.getItemStackFromSlot(EntityEquipmentSlot.FEET).isEmpty() && EnchantmentHelper.getEnchantments(player.getItemStackFromSlot(EntityEquipmentSlot.FEET)).keySet().contains(ModEnchantments.blessed)){
+							if(player.getRNG().nextFloat() > 1.2f){
+								Reference.removeEnchant(Enchantment.getEnchantmentID(ModEnchantments.blessed), player.getItemStackFromSlot(EntityEquipmentSlot.FEET));
+							}
+							if(player.getRNG().nextFloat() > 1.2f){
+								Reference.removeEnchant(Enchantment.getEnchantmentID(ModEnchantments.blessed), player.getItemStackFromSlot(EntityEquipmentSlot.HEAD));
+							}
+							if(player.getRNG().nextFloat() > 1.2f){
+								Reference.removeEnchant(Enchantment.getEnchantmentID(ModEnchantments.blessed), player.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
+							}
+							if(player.getRNG().nextFloat() > 1.2f){
+								Reference.removeEnchant(Enchantment.getEnchantmentID(ModEnchantments.blessed), player.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
+							}
+							player.world.playSound(null, player.getPosition(), SoundEvents.ITEM_TOTEM_USE, SoundCategory.PLAYERS, 1.8f, 1f);
+							player.setHealth(20f);
+							e.setCanceled(true);
+						}
+					}
 				}
 			}
 		}

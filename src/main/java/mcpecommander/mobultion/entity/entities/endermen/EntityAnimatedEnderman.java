@@ -238,7 +238,7 @@ public abstract class EntityAnimatedEnderman extends EntityMob implements IAnima
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		this.getAnimationHandler().animationsUpdate(this);
-		if(!isWorldRemote() && this.isScreaming() && ticksExisted % 40 == 0){
+		if(!isWorldRemote() && this.isScreaming() && ticksExisted % 80 == 0){
 			this.playSound(SoundEvents.ENTITY_ENDERMEN_STARE, 2.5F, 1.0F);
 		}
 	}

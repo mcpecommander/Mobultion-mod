@@ -1,5 +1,8 @@
 {
   "conditions": {
 	"config": "mcpecommander.mobultion.crafting.ConfigCondition"
+  },
+  "recipes": {
+    "nbt": "mcpecommander.mobultion.crafting.NBTCondition"
   }
 }

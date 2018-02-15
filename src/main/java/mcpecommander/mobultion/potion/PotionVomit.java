@@ -26,7 +26,7 @@ public class PotionVomit extends Potion{
 	
 	public PotionVomit() {
 		super(true, 0x1AE11A);
-		this.setPotionName("vomit");
+		this.setPotionName(Reference.MOD_ID + ":effect.vomit");
 		this.setRegistryName(new ResourceLocation(Reference.MOD_ID, "vomit_potion"));
 	}
 	
