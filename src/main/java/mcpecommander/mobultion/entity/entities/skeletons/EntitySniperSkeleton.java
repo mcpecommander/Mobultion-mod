@@ -32,11 +32,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 
 public class EntitySniperSkeleton extends EntityAnimatedSkeleton{
 	
@@ -103,6 +105,11 @@ public class EntitySniperSkeleton extends EntityAnimatedSkeleton{
 	@Override
 	public float getEyeHeight() {
 		return 1.74F;
+	}
+	
+	@Override
+	protected ResourceLocation getLootTable() {
+		return LootTableList.ENTITIES_SKELETON;
 	}
 	
 	@Override

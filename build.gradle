@@ -11,7 +11,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = "0.0.7"
+version = "0.0.9"
 group = "mcpecommander" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "mobultion"
 
@@ -21,7 +21,7 @@ compileJava {
 }
 
 minecraft {
-    version = "1.12.2-14.23.1.2586"
+    version = "1.12.2-14.23.2.2618"
     runDir = "run"
     
     // the mappings can be changed at any time, and must be in the following format.
@@ -35,15 +35,27 @@ minecraft {
 
 repositories {
     mavenCentral()
+	//CraftStudio
     maven {
         name = "leviathan"
         url = "http://maven.leviathan-studio.com/artifactory/leviathan/"
     }
+	//Baubles
+    maven {
+        name = "thiakil"
+        url = "http://maven.thiakil.com"
+    }
+	//JEI
+	maven {
+		name = "Progwml6 maven"
+		url = "http://dvs1.progwml6.com/files/maven"
+  }
 }
 
 dependencies {
 	compile 'com.leviathanstudio:CraftStudio:1.0.0.93-mc1.12-alpha:dev'
-
+	deobfCompile "com.azanor.baubles:Baubles:1.12-1.5.2"
+	deobfProvided "mezz.jei:jei_1.12.2:4.8.5.147:api"
 }
 
 task signJar(type: SignJar, dependsOn: reobfJar) {

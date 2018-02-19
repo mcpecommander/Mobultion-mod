@@ -31,6 +31,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
@@ -198,6 +199,11 @@ public class EntityWitheringSkeleton extends EntityAnimatedSkeleton {
 			}
 		}
 
+	}
+	
+	@Override
+	protected ResourceLocation getLootTable() {
+		return null; //new ResourceLocation(Reference.MOD_ID, "skeletons/withering_skeleton");
 	}
 
 	@Override

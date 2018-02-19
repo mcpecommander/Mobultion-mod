@@ -1,5 +1,6 @@
 package mcpecommander.mobultion.entity.entities.skeletons;
 
+import mcpecommander.mobultion.init.ModItems;
 import mcpecommander.mobultion.mobConfigs.SkeletonsConfig;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.material.Material;
@@ -60,13 +61,15 @@ public class EntityMagmaArrow extends EntityArrow {
 			this.dataManager.set(COLOR, Integer.valueOf(-1));
 			this.extinguish();
 		}
-		if (this.isInWater() && this.world.getBlockState(this.getPosition()).getMaterial() == Material.WATER
+		
+		if (!world.isRemote && this.world.getBlockState(this.getPosition()).getMaterial() == Material.WATER
 				&& SkeletonsConfig.skeletons.magma.cobbleMaking) {
 			this.world.setBlockState(this.getPosition(), Blocks.COBBLESTONE.getDefaultState());
 			this.setDead();
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	private void spawnPotionParticles(int particleCount) {
 		int i = this.getColor();
 
@@ -87,7 +90,7 @@ public class EntityMagmaArrow extends EntityArrow {
 	@Override
 	protected void onHit(RayTraceResult raytraceResultIn) {
 		super.onHit(raytraceResultIn);
-		if (raytraceResultIn.getBlockPos() != null) {
+		if (!world.isRemote && raytraceResultIn.getBlockPos() != null) {
 			BlockPos blockpos = raytraceResultIn.getBlockPos();
 			IBlockState blockState = this.world.getBlockState(blockpos);
 			// if(blockState.getBlock().isFlammable(this.world,
@@ -108,6 +111,7 @@ public class EntityMagmaArrow extends EntityArrow {
 			// }else
 			if (blockState.getBlock() instanceof BlockSand && SkeletonsConfig.skeletons.magma.glassMaking) {
 				this.world.setBlockState(blockpos, Blocks.GLASS.getDefaultState());
+				this.setDead();
 			} else if (blockState.getMaterial() == Material.WATER && SkeletonsConfig.skeletons.magma.cobbleMaking) {
 				this.world.setBlockState(blockpos, Blocks.COBBLESTONE.getDefaultState());
 				this.setDead();
@@ -120,7 +124,7 @@ public class EntityMagmaArrow extends EntityArrow {
 	}
 
 	protected ItemStack getArrowStack() {
-		return new ItemStack(Items.ARROW);
+		return new ItemStack(ModItems.magmaArrow);
 	}
 
 	/**

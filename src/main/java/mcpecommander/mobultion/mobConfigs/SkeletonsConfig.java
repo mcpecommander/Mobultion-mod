@@ -217,7 +217,7 @@ public class SkeletonsConfig {
 
 			@Config.RangeDouble(min = 0D, max = 1D)
 			@Config.Comment("What is the chance to drop its wand (where 1 is 100%)")
-			public double wandDropChance = 0.0885d;
+			public double wandDropChance = 0d;
 
 			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")

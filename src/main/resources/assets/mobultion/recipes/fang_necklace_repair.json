@@ -1,0 +1,9 @@
+{
+  "type": "mobultion:fang_repair",
+  "result": { "item": "mobultion:item_fang_necklace"},
+  "ingredients": [
+    {
+      "item": "mobultion:item_fang_necklace"
+    }
+  ]
+}

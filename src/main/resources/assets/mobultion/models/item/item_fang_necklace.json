@@ -1,13 +1,38 @@
 {
-    "parent": "item/handheld",
+    "parent": "item/generated",
     "textures": {
-        "layer0": "mobultion:items/corrupted_bone"
+        "layer0": "mobultion:items/fang_necklace"
     },
-    "display": {
-        "head": {
-            "rotation": [ 0, 0, -45 ],
-            "translation": [ 0, -4.5, -6.5],
-            "scale":[ 1, 1, 1 ]
+	"overrides": [
+        {
+            "predicate": {
+                "mobultion:fangs": 1
+            },
+            "model": "mobultion:item/item_fang_necklace_1"
+        },
+        {
+            "predicate": {
+                "mobultion:fangs": 2
+            },
+            "model": "mobultion:item/item_fang_necklace_2"
+        },
+        {
+            "predicate": {
+                "mobultion:fangs": 3
+            },
+            "model": "mobultion:item/item_fang_necklace_3"
+        },
+        {
+            "predicate": {
+                "mobultion:fangs": 4
+            },
+            "model": "mobultion:item/item_fang_necklace_4"
+        },
+        {
+            "predicate": {
+                "mobultion:fangs": 5
+            },
+            "model": "mobultion:item/item_fang_necklace_5"
         }
-    }
+    ]
 }

@@ -3,6 +3,7 @@
 	"config": "mcpecommander.mobultion.crafting.ConfigCondition"
   },
   "recipes": {
-    "nbt": "mcpecommander.mobultion.crafting.NBTCondition"
+    "nbt": "mcpecommander.mobultion.crafting.NBTType",
+	"fang_repair": "mcpecommander.mobultion.crafting.FangRepairType"
   }
 }

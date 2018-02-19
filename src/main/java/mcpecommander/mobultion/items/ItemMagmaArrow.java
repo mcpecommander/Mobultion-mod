@@ -2,7 +2,7 @@ package mcpecommander.mobultion.items;
 
 import mcpecommander.mobultion.MobultionMod;
 import mcpecommander.mobultion.Reference;
-import mcpecommander.mobultion.entity.entities.skeletons.EntityHeartArrow;
+import mcpecommander.mobultion.entity.entities.skeletons.EntityMagmaArrow;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -14,18 +14,18 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemHeartArrow extends ItemArrow{
+public class ItemMagmaArrow extends ItemArrow{
 	
-	public ItemHeartArrow() {
-		setUnlocalizedName(Reference.MobultionItems.HEARTARROW.getUnlocalizedName());
-		setRegistryName(Reference.MobultionItems.HEARTARROW.getRegistryName());
-		
+	public ItemMagmaArrow() {
+		this.setRegistryName(Reference.MobultionItems.MAGMAARROW.getRegistryName());
+		this.setUnlocalizedName(Reference.MobultionItems.MAGMAARROW.getUnlocalizedName());
 		this.setCreativeTab(MobultionMod.MOBULTION_TAB);
 	}
+
 	@Override
-	public EntityHeartArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter)
+	public EntityMagmaArrow createArrow(World worldIn, ItemStack stack, EntityLivingBase shooter)
     {
-		EntityHeartArrow arrow = new EntityHeartArrow(worldIn, shooter);
+		EntityMagmaArrow arrow = new EntityMagmaArrow(worldIn, shooter);
         return arrow;
     }
 
@@ -33,7 +33,7 @@ public class ItemHeartArrow extends ItemArrow{
     public boolean isInfinite(ItemStack stack, ItemStack bow, net.minecraft.entity.player.EntityPlayer player)
     {
         int enchant = EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, bow);
-        return enchant <= 0 ? false : this.getClass() == ItemHeartArrow.class;
+        return enchant <= 0 ? false : this.getClass() == ItemMagmaArrow.class;
     }
 	
 	@SideOnly(Side.CLIENT)

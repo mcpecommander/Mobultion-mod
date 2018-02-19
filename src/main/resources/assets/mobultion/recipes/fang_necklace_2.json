@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "necklace",
+  "result": { "item": "mobultion:item_fang_necklace", "data": 2 },
+  "pattern": [
+    "s s",
+    "fs ",
+    "f  "
+  ],
+  "key": {
+    "f": { "item": "mobultion:item_fang" },
+    "s": { "item": "minecraft:string" }
+  }
+}

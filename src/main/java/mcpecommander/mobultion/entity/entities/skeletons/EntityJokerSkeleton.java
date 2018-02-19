@@ -131,7 +131,7 @@ public class EntityJokerSkeleton extends EntityAnimatedSkeleton {
 	@Nullable
 	@Override
 	protected ResourceLocation getLootTable() {
-		return new ResourceLocation(Reference.MOD_ID, "skeletons/joker_skeleton");
+		return Reference.LootTables.ENTITYJOKERSKELETON;
 	}
 
 	@Override

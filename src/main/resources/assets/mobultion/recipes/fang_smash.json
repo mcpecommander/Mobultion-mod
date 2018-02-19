@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "result": { "item": "minecraft:dye", "data": 15 },
+  "ingredients": [
+    {
+      "item": "mobultion:item_fang",
+      "data": 0
+    }
+  ]
+}

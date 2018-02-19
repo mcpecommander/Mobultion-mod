@@ -4,6 +4,7 @@ import mcpecommander.mobultion.items.ItemCorruptedBone;
 import mcpecommander.mobultion.items.ItemCorruptedBonemeal;
 import mcpecommander.mobultion.items.ItemEnderBlaze;
 import mcpecommander.mobultion.items.ItemEnderFlake;
+import mcpecommander.mobultion.items.ItemFang;
 import mcpecommander.mobultion.items.ItemFangNecklace;
 import mcpecommander.mobultion.items.ItemFireSword;
 import mcpecommander.mobultion.items.ItemForestBow;
@@ -16,6 +17,7 @@ import mcpecommander.mobultion.items.ItemHeartArrow;
 import mcpecommander.mobultion.items.ItemHolyShard;
 import mcpecommander.mobultion.items.ItemHypnoBall;
 import mcpecommander.mobultion.items.ItemKnife;
+import mcpecommander.mobultion.items.ItemMagmaArrow;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -54,6 +56,10 @@ public class ModItems {
 	public static ItemHypnoBall hypnoBall;
 	@GameRegistry.ObjectHolder("mobultion:item_fang_necklace")
 	public static ItemFangNecklace fangNecklace;
+	@GameRegistry.ObjectHolder("mobultion:item_fang")
+	public static ItemFang fang;
+	@GameRegistry.ObjectHolder("mobultion:item_magma_arrow")
+	public static ItemMagmaArrow magmaArrow;
 
 	@SideOnly(Side.CLIENT)
     public static void initModels() {
@@ -73,6 +79,8 @@ public class ModItems {
 		holyShard.initModel();
 		hypnoBall.initModel();
 		fangNecklace.initModel();
+		fang.initModel();
+		magmaArrow.initModel();
     }
 	
 

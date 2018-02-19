@@ -29,6 +29,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
@@ -72,6 +73,11 @@ public class EntityMagmaSkeleton extends EntityAnimatedSkeleton{
 		this.isImmuneToFire = true;
 		this.setPathPriority(PathNodeType.WATER, -1.0F);
 
+	}
+	
+	@Override
+	protected ResourceLocation getLootTable() {
+		return Reference.LootTables.ENTITYMAGMASKELETON;
 	}
 	
 	@Override

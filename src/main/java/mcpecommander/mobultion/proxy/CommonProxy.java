@@ -8,6 +8,7 @@ import mcpecommander.mobultion.items.ItemCorruptedBone;
 import mcpecommander.mobultion.items.ItemCorruptedBonemeal;
 import mcpecommander.mobultion.items.ItemEnderBlaze;
 import mcpecommander.mobultion.items.ItemEnderFlake;
+import mcpecommander.mobultion.items.ItemFang;
 import mcpecommander.mobultion.items.ItemFangNecklace;
 import mcpecommander.mobultion.items.ItemFireSword;
 import mcpecommander.mobultion.items.ItemForestBow;
@@ -20,6 +21,7 @@ import mcpecommander.mobultion.items.ItemHeartArrow;
 import mcpecommander.mobultion.items.ItemHolyShard;
 import mcpecommander.mobultion.items.ItemHypnoBall;
 import mcpecommander.mobultion.items.ItemKnife;
+import mcpecommander.mobultion.items.ItemMagmaArrow;
 import mcpecommander.mobultion.potion.PotionBlessed;
 import mcpecommander.mobultion.potion.PotionFreeze;
 import mcpecommander.mobultion.potion.PotionHypnotize;
@@ -59,7 +61,7 @@ public class CommonProxy {
 		event.getRegistry().registerAll(new ItemForestBow(), new ItemHealingWand(), new ItemHeartArrow(),
 				new ItemHammer(), new ItemFireSword(), new ItemHealth(), new ItemFork(), new ItemKnife(), new ItemHat(),
 				new ItemEnderFlake(), new ItemEnderBlaze(), new ItemCorruptedBone(), new ItemCorruptedBonemeal(),
-				new ItemHolyShard(), new ItemHypnoBall(), new ItemFangNecklace());
+				new ItemHolyShard(), new ItemHypnoBall(), new ItemFangNecklace(), new ItemFang(), new ItemMagmaArrow());
 	}
 
 	@SubscribeEvent

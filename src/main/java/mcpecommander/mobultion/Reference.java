@@ -11,7 +11,7 @@ public class Reference {
 	
 	public static final String MOD_ID = "mobultion";
 	public static final String NAME = "mcpeCommander's mobultion mod";
-	public static final String VERSION = "0.0.8";
+	public static final String VERSION = "0.0.9";
 	public static final String ACCEPTED_MINECRAFT_VERSIONS = "[1.12, 1.13)";
 	
 	public static final String CLIENT_PROXY_CLASS = "mcpecommander.mobultion.proxy.ClientProxy";
@@ -37,7 +37,7 @@ public class Reference {
 		HEALINGWAND("healing_wand","item_healing_wand"),
 		HEARTARROW("heart_arrow","item_heart_arrow"),
 		HAMMER("hammer","item_hammer"),
-		FIRE_SWORD("fire_sword","item_fire_sword"),
+		FIRESWORD("fire_sword","item_fire_sword"),
 		HEALTH("health", "item_health"),
 		FORK("fork","item_fork"),
 		KNIFE("knife","item_knife"),
@@ -48,7 +48,9 @@ public class Reference {
 		CORRUPTEDBONEMEAL("corrupted_bonemeal","item_corrupted_bonemeal"),
 		HOLYSHARD("holy_shard","item_holy_shard"),
 		HYPNOBALL("hypno_ball","item_hypno_ball"),
-		FANGNECKLACE("fang_necklace","item_fang_necklace");
+		FANGNECKLACE("fang_necklace","item_fang_necklace"),
+		FANG("fang","item_fang"),
+		MAGMAARROW("magma_arrow","item_magma_arrow");
 		
 		private String unlocalizedName;
 		private String registryName;
@@ -132,6 +134,15 @@ public class Reference {
 		public ResourceLocation getRegistryName(){
 			return registryName;
 		}
+	}
+	
+	public static class LootTables{
+		
+		public static final ResourceLocation ENTITYCORRUPTEDSKELETON = new ResourceLocation(Reference.MOD_ID, "skeletons/corrupted_skeleton");
+		public static final ResourceLocation ENTITYJOKERSKELETON = new ResourceLocation(Reference.MOD_ID, "skeletons/joker_skeleton");
+		public static final ResourceLocation ENTITYMAGMASKELETON = new ResourceLocation(Reference.MOD_ID, "skeletons/magma_skeleton");
+		public static final ResourceLocation ENTITYSHAMANSKELETON = new ResourceLocation(Reference.MOD_ID, "skeletons/shaman_skeleton");
+		public static final ResourceLocation ENTITYVAMPIRESKELETON = new ResourceLocation(Reference.MOD_ID, "skeletons/vampire_skeleton");
 	}
 
 }

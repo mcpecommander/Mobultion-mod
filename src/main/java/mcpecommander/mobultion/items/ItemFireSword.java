@@ -24,8 +24,8 @@ public class ItemFireSword extends ItemSword{
 
 	public ItemFireSword() {
 		super(ToolMaterial.DIAMOND);
-		this.setRegistryName(Reference.MobultionItems.FIRE_SWORD.getRegistryName());
-		this.setUnlocalizedName(Reference.MobultionItems.FIRE_SWORD.getUnlocalizedName());
+		this.setRegistryName(Reference.MobultionItems.FIRESWORD.getRegistryName());
+		this.setUnlocalizedName(Reference.MobultionItems.FIRESWORD.getUnlocalizedName());
 		
 		this.setCreativeTab(MobultionMod.MOBULTION_TAB);
 	}

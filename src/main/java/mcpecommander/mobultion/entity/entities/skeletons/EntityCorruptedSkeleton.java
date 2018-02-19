@@ -29,6 +29,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -97,6 +98,11 @@ public class EntityCorruptedSkeleton extends EntityAnimatedSkeleton {
 	public float getEyeHeight() {
 		return 1.74F;
 	}
+	
+	@Override
+	protected ResourceLocation getLootTable() {
+		return Reference.LootTables.ENTITYCORRUPTEDSKELETON;
+	}
 
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
@@ -155,11 +161,6 @@ public class EntityCorruptedSkeleton extends EntityAnimatedSkeleton {
 		}
 		if (!this.world.isRemote) {
 			this.setMoving(Boolean.valueOf(this.isMoving(this)));
-			if (this.isDead) {
-				EntitySkeletonRemains grave = new EntitySkeletonRemains(this.world, this);
-				grave.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
-				this.world.spawnEntity(grave);
-			}
 		}
 		if (this.isWorldRemote()) {
 			if (this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "skeleton_walk", this)

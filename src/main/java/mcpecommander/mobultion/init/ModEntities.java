@@ -42,7 +42,7 @@ import mcpecommander.mobultion.entity.renderer.endermenRenderer.RenderEnderBlaze
 import mcpecommander.mobultion.entity.renderer.endermenRenderer.RenderEnderFlake;
 import mcpecommander.mobultion.entity.renderer.endermenRenderer.RenderIceEnderman;
 import mcpecommander.mobultion.entity.renderer.endermenRenderer.RenderMagmaEnderman;
-import mcpecommander.mobultion.entity.renderer.mites.RenderWoodMite;
+import mcpecommander.mobultion.entity.renderer.mitesRenderer.RenderWoodMite;
 import mcpecommander.mobultion.entity.renderer.skeletonsRenderer.RenderCorruptedSkeleton;
 import mcpecommander.mobultion.entity.renderer.skeletonsRenderer.RenderHeartArrow;
 import mcpecommander.mobultion.entity.renderer.skeletonsRenderer.RenderJokerSkeleton;
@@ -85,6 +85,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -97,25 +98,18 @@ public class ModEntities {
 			return null;
 		}
 		if (string[0].equals("all")) {
-			for (int i = 1; i <= 39; i++) {
-				list.add(Biome.getBiome(i));
-			}
-			// if(string[1] != null && string[1].equals("m")){
-			// for(int i = 129; i <= 167; i++){
-			// list.add(Biome.getBiome(i));
-			// }
-			// }
+			list.addAll(ForgeRegistries.BIOMES.getValuesCollection());
+
 			return list.toArray(biome);
 		}
 		for (String id : string) {
-
-			Biome add = Biome.REGISTRY.getObject(new ResourceLocation(id));
-			// System.out.println(id + " " + add);
+		
+			Biome add = ForgeRegistries.BIOMES.getValue(new ResourceLocation(id)); //Biome.REGISTRY.getObject(new ResourceLocation(id));
 			if (add != null) {
 				list.add(add);
 			} else {
 				MobultionMod.logger.log(Level.ERROR,
-						"NPE, The id " + id + " is probably misswritten, PS:The biomes do not support non-vanilla yet");
+						"NPE, The id " + id + " is probably misswritten, PS:The biomes do not support non-vanilla yet (Under Tests)");
 			}
 		}
 		if (!list.isEmpty()) {

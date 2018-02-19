@@ -13,6 +13,9 @@ item.mobultion:ender_flake.name=Ender Flake
 item.mobultion:ender_blaze.name=Ender Blaze
 item.mobultion:corrupted_bone.name=Corrupted Bone
 item.mobultion:corrupted_bonemeal.name=Corrupted Bonemeal
+item.mobultion:fang_necklace.name=Fang Necklace
+item.mobultion:fang.name=Fang
+item.mobultion:magma_arrow.name=Magma Arrow
 
 entity.corrupted_skeleton.name=Corrupted Skeleton
 entity.joker_skeleton.name=Jester Skeleton

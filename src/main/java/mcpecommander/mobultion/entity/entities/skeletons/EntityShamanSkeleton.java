@@ -22,8 +22,10 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 
 public class EntityShamanSkeleton extends EntityAnimatedSkeleton {
 	boolean flag = false;
@@ -54,6 +56,11 @@ public class EntityShamanSkeleton extends EntityAnimatedSkeleton {
 				new EntityAIShamanSkeletonTarget(this, false, EntitySkeletonRemains.class, EntityJokerSkeleton.class,
 						EntitySniperSkeleton.class, EntityMagmaSkeleton.class, EntityWitheringSkeleton.class,
 						EntitySkeleton.class, EntityStray.class));
+	}
+	
+	@Override
+	protected ResourceLocation getLootTable() {
+		return Reference.LootTables.ENTITYSHAMANSKELETON;
 	}
 
 	@Override
