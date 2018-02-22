@@ -13,6 +13,9 @@ item.mobultion:ender_flake.name=Enderflocke
 item.mobultion:ender_blaze.name=Enderglut
 item.mobultion:corrupted_bone.name=Verdorbener Knochen
 item.mobultion:corrupted_bonemeal.name=Verdorbenes Knochenmehl
+item.mobultion:fang_necklace.name=Spinnengiftzahn-Halskette
+item.mobultion:fang.name=Spinnengiftzahn
+item.mobultion:magma_arrow.name=Magmapfeil
 
 entity.corrupted_skeleton.name=Verdorbenes Skelett
 entity.joker_skeleton.name=Narrenskelett
