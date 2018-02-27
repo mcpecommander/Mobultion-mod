@@ -1,21 +1,32 @@
 package mcpecommander.mobultion;
 
+import java.util.HashMap;
+
 import javax.annotation.Nonnull;
 
+import mcpecommander.mobultion.init.ModItems;
 import net.minecraft.init.Biomes;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class Reference {
 	
 	public static final String MOD_ID = "mobultion";
 	public static final String NAME = "mcpeCommander's mobultion mod";
-	public static final String VERSION = "0.0.9";
+	public static final String VERSION = "0.1";
 	public static final String ACCEPTED_MINECRAFT_VERSIONS = "[1.12, 1.13)";
 	
 	public static final String CLIENT_PROXY_CLASS = "mcpecommander.mobultion.proxy.ClientProxy";
 	public static final String SERVER_PROXY_CLASS = "mcpecommander.mobultion.proxy.ServerProxy";
+	
+	
 	
 	public static boolean removeEnchant(int id, ItemStack item){
 		if(item.isEmpty()){
@@ -28,6 +39,7 @@ public class Reference {
 			}
 		}
 		return false;
+		
 	}
 	
 	//ItemNames
@@ -49,8 +61,19 @@ public class Reference {
 		HOLYSHARD("holy_shard","item_holy_shard"),
 		HYPNOBALL("hypno_ball","item_hypno_ball"),
 		FANGNECKLACE("fang_necklace","item_fang_necklace"),
-		FANG("fang","item_fang"),
-		MAGMAARROW("magma_arrow","item_magma_arrow");
+		FANG("fang", "item_fang"),
+		MAGMAARROW("magma_arrow", "item_magma_arrow"),
+		MAGICTOUCH("magic_touch", "item_magic_touch"),
+		SORCERERBREATH("sorcerer_breath", "item_sorcerer_breath"),
+		WITHERSPINE("wither_spine", "item_wither_spine"),
+		SPINEASH("spine_ash", "item_spine_ash"),
+		FLAMINGCHIP("flaming_chip", "item_flaming_chip"),
+		NETHERRUBY("nether_ruby", "item_nether_ruby"),
+		PIGMANFLESH("pigman_flesh", "item_pigman_flesh"),
+		PIGSHEATHTUNIC("pigsheath_tunic", "item_pigsheath_tunic"),
+		PIGSHEATHHELMET("pigsheath_helmet", "item_pigsheath_helmet"),
+		PIGSHEATHLEGGINGS("pigsheath_leggings", "item_pigsheath_leggings"),
+		PIGSHEATHBOOTS("pigsheath_boots", "item_pigsheath_boots");
 		
 		private String unlocalizedName;
 		private String registryName;
@@ -71,47 +94,47 @@ public class Reference {
 	
 	public static enum MobultionEntities{
 		//Spiders
-		ANGELSPIDER(new ResourceLocation(MOD_ID, "angel_spider"), "angel_spider"),
-		HYPNOSPIDER(new ResourceLocation(MOD_ID, "hypno_spider"), "hypno_spider"),
-		MAGMASPIDER(new ResourceLocation(MOD_ID, "magma_spider"), "magma_spider"),
-		MINISPIDER(new ResourceLocation(MOD_ID, "mini_spider"), "mini_spider"),
-		MOTHERSPIDER(new ResourceLocation(MOD_ID, "mother_spider"), "mother_spider"),
-		SORCERERSPIDER(new ResourceLocation(MOD_ID, "sorcerer_spider"), "sorcerer_spider"),
-		SPEEDYSPIDER(new ResourceLocation(MOD_ID, "speedy_spider"), "speedy_spider"),
-		WITHERSPIDER(new ResourceLocation(MOD_ID, "wither_spider"), "wither_spider"),
+		ANGELSPIDER(new ResourceLocation(MOD_ID, "angel_spider"), "angel_spider", "mobultion:angel_spider.info"),
+		HYPNOSPIDER(new ResourceLocation(MOD_ID, "hypno_spider"), "hypno_spider", "mobultion:hypno_spider.info"),
+		MAGMASPIDER(new ResourceLocation(MOD_ID, "magma_spider"), "magma_spider", "mobultion:magma_spider.info"),
+		MINISPIDER(new ResourceLocation(MOD_ID, "mini_spider"), "mini_spider", "mobultion:mini_spider.info"),
+		MOTHERSPIDER(new ResourceLocation(MOD_ID, "mother_spider"), "mother_spider", "mobultion:mother_spider.info"),
+		SORCERERSPIDER(new ResourceLocation(MOD_ID, "sorcerer_spider"), "sorcerer_spider", "mobultion:sorcerer_spider.info"),
+		SPEEDYSPIDER(new ResourceLocation(MOD_ID, "speedy_spider"), "speedy_spider", "mobultion:speedy_spider.info"),
+		WITHERSPIDER(new ResourceLocation(MOD_ID, "wither_spider"), "wither_spider", "mobultion:wither_spider.info"),
 		
-		SPIDEREGG(new ResourceLocation(MOD_ID, "spider_egg"), "spider_egg"),
-		HYPNOBALL(new ResourceLocation(MOD_ID, "hypno_ball"), "hypno_ball"),
+		SPIDEREGG(new ResourceLocation(MOD_ID, "spider_egg"), "spider_egg", ""),
+		HYPNOBALL(new ResourceLocation(MOD_ID, "hypno_ball"), "hypno_ball", ""),
 		
 		//Skeletons
-		CORRUPTEDSKELETON(new ResourceLocation(MOD_ID, "corrupted_skeleton"), "corrupted_skeleton"),
-		JOKERSKELETON(new ResourceLocation(MOD_ID, "joker_skeleton"), "joker_skeleton"),
-		MAGMASKELETON(new ResourceLocation(MOD_ID, "magma_skeleton"), "magma_skeleton"),
-		SHAMANSKELETON(new ResourceLocation(MOD_ID, "shaman_skeleton"), "shaman_skeleton"),
-		SNIPERSKELETON(new ResourceLocation(MOD_ID, "sniper_skeleton"), "sniper_skeleton"),
-		WITHERINGSKELETON(new ResourceLocation(MOD_ID, "withering_skeleton"), "withering_skeleton"),
-		VAMPIRESKELETON(new ResourceLocation(MOD_ID, "vampire_skeleton"), "vampire_skeleton"),
+		CORRUPTEDSKELETON(new ResourceLocation(MOD_ID, "corrupted_skeleton"), "corrupted_skeleton", "mobultion:corrupted_skeleton.info"),
+		JOKERSKELETON(new ResourceLocation(MOD_ID, "joker_skeleton"), "joker_skeleton", "mobultion:joker_skeleton.info"),
+		MAGMASKELETON(new ResourceLocation(MOD_ID, "magma_skeleton"), "magma_skeleton", "mobultion:magma_skeleton.info"),
+		SHAMANSKELETON(new ResourceLocation(MOD_ID, "shaman_skeleton"), "shaman_skeleton", "mobultion:shaman_skeleton.info"),
+		SNIPERSKELETON(new ResourceLocation(MOD_ID, "sniper_skeleton"), "sniper_skeleton", "mobultion:sniper_skeleton.info"),
+		WITHERINGSKELETON(new ResourceLocation(MOD_ID, "withering_skeleton"), "withering_skeleton", "mobultion:withering_skeleton.info"),
+		VAMPIRESKELETON(new ResourceLocation(MOD_ID, "vampire_skeleton"), "vampire_skeleton", "mobultion:vampire_skeleton.info"),
 		
-		SKELETONREMAINS(new ResourceLocation(MOD_ID, "skeleton_remains"), "skeleton_remains"),
-		HEARTARROW(new ResourceLocation(MOD_ID, "heart_arrow"), "heart_arrow"),
-		MAGMAARROW(new ResourceLocation(MOD_ID, "magma_arrow"), "magma_arrow"),
+		SKELETONREMAINS(new ResourceLocation(MOD_ID, "skeleton_remains"), "skeleton_remains", ""),
+		HEARTARROW(new ResourceLocation(MOD_ID, "heart_arrow"), "heart_arrow", ""),
+		MAGMAARROW(new ResourceLocation(MOD_ID, "magma_arrow"), "magma_arrow", ""),
 		
 		//Zombies
-		DOCTORZOMBIE(new ResourceLocation(MOD_ID, "doctor_zombie"), "doctor_zombie"),
-		GOROZOMBIE(new ResourceLocation(MOD_ID, "goro_zombie"), "goro_zombie"),
-		KNIGHTZOMBIE(new ResourceLocation(MOD_ID, "knight_zombie"), "knight_zombie"),
-		MAGMAZOMBIE(new ResourceLocation(MOD_ID, "magma_zombie"), "magma_zombie"),
-		WORKERZOMBIE(new ResourceLocation(MOD_ID, "worker_zombie"), "worker_zombie"),
-		RAVENOUSZOMBIE(new ResourceLocation(MOD_ID, "ravenous_zombie"), "ravenous_zombie"),
+		DOCTORZOMBIE(new ResourceLocation(MOD_ID, "doctor_zombie"), "doctor_zombie", "mobultion:doctor_zombie.info"),
+		GOROZOMBIE(new ResourceLocation(MOD_ID, "goro_zombie"), "goro_zombie", "mobultion:goro_zombie.info"),
+		KNIGHTZOMBIE(new ResourceLocation(MOD_ID, "knight_zombie"), "knight_zombie", "mobultion:knight_zombie.info"),
+		MAGMAZOMBIE(new ResourceLocation(MOD_ID, "magma_zombie"), "magma_zombie", "mobultion:magma_zombie.info"),
+		WORKERZOMBIE(new ResourceLocation(MOD_ID, "worker_zombie"), "worker_zombie", "mobultion:worker_zombie.info"),
+		RAVENOUSZOMBIE(new ResourceLocation(MOD_ID, "ravenous_zombie"), "ravenous_zombie", "mobultion:ravenous_zombie.info"),
 		
 		//Endermen
-		MAGMAENDERMAN(new ResourceLocation(MOD_ID, "magma_enderman"), "magma_enderman"),
-		ICEENDERMAN(new ResourceLocation(MOD_ID, "ice_enderman"), "ice_enderman"),
-		ENDERBLAZE(new ResourceLocation(MOD_ID, "ender_blaze"), "ender_blaze"),
-		ENDERFLAKE(new ResourceLocation(MOD_ID, "ender_flake"), "ender_flake"),
+		MAGMAENDERMAN(new ResourceLocation(MOD_ID, "magma_enderman"), "magma_enderman", "mobultion:magma_enderman.info"),
+		ICEENDERMAN(new ResourceLocation(MOD_ID, "ice_enderman"), "ice_enderman", "mobultion:ice_enderman.info"),
+		ENDERBLAZE(new ResourceLocation(MOD_ID, "ender_blaze"), "ender_blaze", ""),
+		ENDERFLAKE(new ResourceLocation(MOD_ID, "ender_flake"), "ender_flake", ""),
 		
 		//Mites
-		WOODMITE(new ResourceLocation(MOD_ID, "woodmite"), "woodmite")
+		WOODMITE(new ResourceLocation(MOD_ID, "woodmite"), "woodmite", "mobultion:woodmite.info")
 		
 		
 		;
@@ -121,10 +144,12 @@ public class Reference {
 		
 		private ResourceLocation registryName;
 		private String unlocalizedName;
+		private String info;
 		
-		private MobultionEntities(ResourceLocation registryName, String unlocalizedName){
+		private MobultionEntities(ResourceLocation registryName, String unlocalizedName, String info){
 			this.unlocalizedName = unlocalizedName;
 			this.registryName = registryName;
+			this.info = info;
 		}
 		
 		public String getUnlocalizedName(){
@@ -134,15 +159,40 @@ public class Reference {
 		public ResourceLocation getRegistryName(){
 			return registryName;
 		}
+		
+		public String getInfo(){
+			return info;
+		}
+		
+		public static MobultionEntities getEnumByRegistery(ResourceLocation registry){
+			for(MobultionEntities value : MobultionEntities.values()){
+				if(value.registryName.equals(registry)){
+					return value;
+				}
+			}
+			return null;
+		}
+		
 	}
 	
+	
 	public static class LootTables{
+		
+		public static final ResourceLocation ENTITYANGELSPIDER = new ResourceLocation(Reference.MOD_ID, "spiders/angel_spider");
+		public static final ResourceLocation ENTITYHYPNOSPIDER = new ResourceLocation(Reference.MOD_ID, "spiders/hypno_spider");
+		public static final ResourceLocation ENTITYWITHERSPIDER = new ResourceLocation(Reference.MOD_ID, "spiders/wither_spider");
+		public static final ResourceLocation ENTITYSORCERERSPIDER = new ResourceLocation(Reference.MOD_ID, "spiders/sorcerer_spider");
+		public static final ResourceLocation ENTITYMAGMASPIDER = new ResourceLocation(Reference.MOD_ID, "spiders/magma_spider");
 		
 		public static final ResourceLocation ENTITYCORRUPTEDSKELETON = new ResourceLocation(Reference.MOD_ID, "skeletons/corrupted_skeleton");
 		public static final ResourceLocation ENTITYJOKERSKELETON = new ResourceLocation(Reference.MOD_ID, "skeletons/joker_skeleton");
 		public static final ResourceLocation ENTITYMAGMASKELETON = new ResourceLocation(Reference.MOD_ID, "skeletons/magma_skeleton");
 		public static final ResourceLocation ENTITYSHAMANSKELETON = new ResourceLocation(Reference.MOD_ID, "skeletons/shaman_skeleton");
 		public static final ResourceLocation ENTITYVAMPIRESKELETON = new ResourceLocation(Reference.MOD_ID, "skeletons/vampire_skeleton");
+		public static final ResourceLocation ENTITYWITHERINGSKELETON = new ResourceLocation(Reference.MOD_ID, "skeletons/withering_skeleton");
+		
+		public static final ResourceLocation ENTITYMAGMAENDERMAN = new ResourceLocation(Reference.MOD_ID, "endermen/magma_enderman");
+		public static final ResourceLocation ENTITYICEENDERMAN = new ResourceLocation(Reference.MOD_ID, "endermen/ice_enderman");
 	}
 
 }

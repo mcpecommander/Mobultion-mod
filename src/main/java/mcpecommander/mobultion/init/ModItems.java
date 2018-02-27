@@ -7,6 +7,7 @@ import mcpecommander.mobultion.items.ItemEnderFlake;
 import mcpecommander.mobultion.items.ItemFang;
 import mcpecommander.mobultion.items.ItemFangNecklace;
 import mcpecommander.mobultion.items.ItemFireSword;
+import mcpecommander.mobultion.items.ItemFlamingChip;
 import mcpecommander.mobultion.items.ItemForestBow;
 import mcpecommander.mobultion.items.ItemFork;
 import mcpecommander.mobultion.items.ItemHammer;
@@ -17,7 +18,17 @@ import mcpecommander.mobultion.items.ItemHeartArrow;
 import mcpecommander.mobultion.items.ItemHolyShard;
 import mcpecommander.mobultion.items.ItemHypnoBall;
 import mcpecommander.mobultion.items.ItemKnife;
+import mcpecommander.mobultion.items.ItemMagicTouch;
 import mcpecommander.mobultion.items.ItemMagmaArrow;
+import mcpecommander.mobultion.items.ItemNetherRuby;
+import mcpecommander.mobultion.items.ItemPigmanFlesh;
+import mcpecommander.mobultion.items.ItemSorcererBreath;
+import mcpecommander.mobultion.items.ItemSpineAsh;
+import mcpecommander.mobultion.items.ItemWitherSpine;
+import mcpecommander.mobultion.items.pigsheathArmor.ItemPigsheathBoots;
+import mcpecommander.mobultion.items.pigsheathArmor.ItemPigsheathHelmet;
+import mcpecommander.mobultion.items.pigsheathArmor.ItemPigsheathLeggings;
+import mcpecommander.mobultion.items.pigsheathArmor.ItemPigsheathTunic;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -60,6 +71,28 @@ public class ModItems {
 	public static ItemFang fang;
 	@GameRegistry.ObjectHolder("mobultion:item_magma_arrow")
 	public static ItemMagmaArrow magmaArrow;
+	@GameRegistry.ObjectHolder("mobultion:item_magic_touch")
+	public static ItemMagicTouch magicTouch;
+	@GameRegistry.ObjectHolder("mobultion:item_sorcerer_breath")
+	public static ItemSorcererBreath sorcererBreath;
+	@GameRegistry.ObjectHolder("mobultion:item_spine_ash")
+	public static ItemSpineAsh spineAsh;
+	@GameRegistry.ObjectHolder("mobultion:item_wither_spine")
+	public static ItemWitherSpine witherSpine;
+	@GameRegistry.ObjectHolder("mobultion:item_flaming_chip")
+	public static ItemFlamingChip flamingChip;
+	@GameRegistry.ObjectHolder("mobultion:item_nether_ruby")
+	public static ItemNetherRuby netherRuby;
+	@GameRegistry.ObjectHolder("mobultion:item_pigman_flesh")
+	public static ItemPigmanFlesh pigmanFlesh;
+	@GameRegistry.ObjectHolder("mobultion:item_pigsheath_tunic")
+	public static ItemPigsheathTunic pigsheathTunic;
+	@GameRegistry.ObjectHolder("mobultion:item_pigsheath_helmet")
+	public static ItemPigsheathHelmet pigsheathHelmet;
+	@GameRegistry.ObjectHolder("mobultion:item_pigsheath_leggings")
+	public static ItemPigsheathLeggings pigsheathLeggings;
+	@GameRegistry.ObjectHolder("mobultion:item_pigsheath_boots")
+	public static ItemPigsheathBoots pigsheathBoots;
 
 	@SideOnly(Side.CLIENT)
     public static void initModels() {
@@ -81,6 +114,17 @@ public class ModItems {
 		fangNecklace.initModel();
 		fang.initModel();
 		magmaArrow.initModel();
+		magicTouch.initModel();
+		sorcererBreath.initModel();
+		witherSpine.initModel();
+		spineAsh.initModel();
+		pigsheathTunic.initModel();
+		pigsheathHelmet.initModel();
+		pigsheathBoots.initModel();
+		pigsheathLeggings.initModel();
+		flamingChip.initModel();
+		netherRuby.initModel();
+		pigmanFlesh.initModel();
     }
 	
 

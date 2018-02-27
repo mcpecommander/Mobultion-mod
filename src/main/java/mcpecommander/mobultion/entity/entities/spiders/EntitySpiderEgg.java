@@ -182,12 +182,14 @@ public class EntitySpiderEgg extends EntityLivingBase implements IAnimated{
 			
 			if (this.getHealth() >= 40f) {
 				this.setEntityInvulnerable(false);
-				this.coolDown--;
+				if(this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(10)).size() <= 10){
+					this.coolDown--;
+				}
 				if (this.coolDown <= 0 && this.isCoolingDown()) {
 					this.setPregnant((byte) 0);
 				}
 				if (!this.isCoolingDown() && this.isHatching()) {
-					EntityMob spider = this.getDimension() == 0 ? new EntitySpider(this.world) : new EntityMagmaSpider(this.world);
+					EntityMob spider = this.getRNG().nextInt(6) != 0 ? new EntitySpider(this.world) : new EntityMiniSpider(this.world);
 					BlockPos pos = new BlockPos(posX + (this.getRNG().nextBoolean() ? ((this.getRNG().nextFloat() + 1) * 2)
 							: (-(this.getRNG().nextFloat() + 1) * 2)),
 					posY, posZ + (this.getRNG().nextBoolean() ? ((this.getRNG().nextFloat() + 1) * 2)
@@ -207,7 +209,7 @@ public class EntitySpiderEgg extends EntityLivingBase implements IAnimated{
 					WorldServer world = (WorldServer) this.world;
 					world.spawnParticle(EnumParticleTypes.CLOUD, this.posX, this.posY + 1.5d, this.posZ,
 							3, 0, 0, 0, 0.01);
-					spider.setAttackTarget(getRevengeTarget());
+					if(spider instanceof EntitySpider)spider.setAttackTarget(getRevengeTarget());
 					this.world.spawnEntity(spider);
 					this.coolDown = (short) SpidersConfig.spiders.mother.eggHatchingTime;
 					this.setPregnant((byte) -1);

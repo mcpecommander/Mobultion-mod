@@ -7,15 +7,6 @@ item.mobultion:fork.name=Gabel
 item.mobultion:knife.name=Messer
 item.mobultion:hammer.name=Hammer
 item.mobultion:hat.name=Hut
-item.mobultion:holy_shard.name=Heilige Scherbe
-item.mobultion:hypno_ball.name=Hypnoball
-item.mobultion:ender_flake.name=Enderflocke
-item.mobultion:ender_blaze.name=Enderglut
-item.mobultion:corrupted_bone.name=Verdorbener Knochen
-item.mobultion:corrupted_bonemeal.name=Verdorbenes Knochenmehl
-item.mobultion:fang_necklace.name=Spinnengiftzahn-Halskette
-item.mobultion:fang.name=Spinnengiftzahn
-item.mobultion:magma_arrow.name=Magmapfeil
 
 entity.corrupted_skeleton.name=Verdorbenes Skelett
 entity.joker_skeleton.name=Narrenskelett
@@ -49,26 +40,5 @@ entity.magma_enderman.name=Magma-Enderman
 entity.ice_enderman.name=Eis-Enderman
 
 entity.woodmite.name=Holzmilbe
-
-mobultion:effect.blessed=Gesegnet
-mobultion:effect.jokerness=Witzbold
-mobultion:effect.freeze=Frost
-mobultion:effect.hypnotize=Hypnose
-mobultion:effect.vomit=Kotze
-
-mobultion:ench.blessed=Gesegnet
-
-mobultion.subtitles.fire_arrow_shot=Feuerpfeil wird geschossen
-mobultion.subtitles.entity_respawn=Lebewesen respawnt
-mobultion.subtitles.magma_remains_death=Magmaskelett-Überreste sterben
-mobultion.subtitles.forest_skeleton_shoot=Scharfschützenskelett schießt
-mobultion.subtitles.joker_ambient=Narrenskelett lacht
-mobultion.subtitles.ravenous_eating=Gefräßiger Zombie frisst
-mobultion.subtitles.burp=Gefräßiger Zombie rülpst
-mobultion.subtitles.shield_block=Magisches Schild blockiert
-mobultion.subtitles.vampire_bite=Vampirskelett beißt
-mobultion.subtitles.bat_morph=Vampirskelett verwandelt sich
-mobultion.subtitles.puke=Gefräßiger Zombie kotzt
-mobultion.subtitles.spit=Magma-Enderman spuckt
 
 itemGroup.tabMobultionMod=Mobultion Tab

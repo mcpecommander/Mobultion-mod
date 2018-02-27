@@ -21,6 +21,7 @@ import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -57,6 +58,11 @@ public class EntityMagmaSpider extends EntityAnimatedSpider{
     public double getMountedYOffset()
     {
         return (double)(this.height * 0.6F);
+    }
+    
+    @Override
+    protected ResourceLocation getLootTable() {
+    	return Reference.LootTables.ENTITYMAGMASPIDER;
     }
 
     @Override

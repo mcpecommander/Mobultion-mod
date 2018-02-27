@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
@@ -28,6 +29,11 @@ public class EntitySorcererSpider extends EntityAnimatedSpider{
 	public EntitySorcererSpider(World worldIn) {
 		super(worldIn);
 		this.setSize(1.4f, 0.9f);
+	}
+	
+	@Override
+	protected ResourceLocation getLootTable() {
+		return Reference.LootTables.ENTITYSORCERERSPIDER;
 	}
 
 	@Override

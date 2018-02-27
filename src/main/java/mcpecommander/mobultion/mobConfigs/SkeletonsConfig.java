@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 import mcpecommander.mobultion.Reference;
 import net.minecraftforge.common.config.Config;
 
-@Config(modid = Reference.MOD_ID, category = "Skeletons", name = "Skeletons")
+@Config(modid = Reference.MOD_ID, category = "mobs", name = "Mobultion/Skeletons")
 public class SkeletonsConfig {
 
 	@Config.Comment("Skeletons' Configs")

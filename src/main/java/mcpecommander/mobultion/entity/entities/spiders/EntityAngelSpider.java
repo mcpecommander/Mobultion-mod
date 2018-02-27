@@ -71,7 +71,7 @@ public class EntityAngelSpider extends EntityAnimatedSpider {
 	
 	@Override
 	protected ResourceLocation getLootTable() {
-		return new ResourceLocation(Reference.MOD_ID, "spiders/angel_spider");
+		return Reference.LootTables.ENTITYANGELSPIDER;
 	}
 
 	@Override

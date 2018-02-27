@@ -30,6 +30,7 @@ public class EntitySpeedySpider extends EntityAnimatedSpider{
 	public EntitySpeedySpider(World worldIn) {
 		super(worldIn);
 		this.setSize(1.4f, 0.9f);
+		this.stepHeight = 1.0f;
 	}
 
 	@Override

@@ -9,7 +9,9 @@ import mcpecommander.mobultion.init.ModSounds;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -64,6 +66,14 @@ public class ItemForestBow extends Item{
             }
         });
     }
+	
+	@Override
+	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+		if(enchantment.type.equals(EnumEnchantmentType.BOW)){
+			return true;
+		}
+		return false;
+	}
 
     private ItemStack findAmmo(EntityPlayer player)
     {

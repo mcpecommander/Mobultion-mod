@@ -28,10 +28,16 @@ public class RenderWitherSpider extends RenderLiving<EntityWitherSpider>{
 		if(entitylivingbaseIn.getHealth() < 20f){
 			((ModelCraftStudioSon) this.getMainModel()).getModelRendererFromName("Head1").showModel = false;
 			((ModelCraftStudioSon) this.getMainModel()).getModelRendererFromName("HeadBase1").showModel = false;
+		}else{
+			((ModelCraftStudioSon) this.getMainModel()).getModelRendererFromName("Head1").showModel = true;
+			((ModelCraftStudioSon) this.getMainModel()).getModelRendererFromName("HeadBase1").showModel = true;
 		}
 		if(entitylivingbaseIn.getHealth() < 10f){
 			((ModelCraftStudioSon) this.getMainModel()).getModelRendererFromName("Head2").showModel = false;
 			((ModelCraftStudioSon) this.getMainModel()).getModelRendererFromName("HeadBase2").showModel = false;
+		}else{
+			((ModelCraftStudioSon) this.getMainModel()).getModelRendererFromName("Head2").showModel = true;
+			((ModelCraftStudioSon) this.getMainModel()).getModelRendererFromName("HeadBase2").showModel = true;
 		}
 		super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 	}

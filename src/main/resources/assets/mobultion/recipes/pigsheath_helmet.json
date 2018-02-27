@@ -1,0 +1,12 @@
+{
+  "type": "forge:ore_shaped",
+  "result": { "item": "mobultion:item_pigsheath_helmet" },
+  "pattern": [
+    "prp",
+    "p p"
+  ],
+  "key": {
+    "p": { "item": "mobultion:item_pigman_flesh" },
+    "r": { "item": "mobultion:item_nether_ruby" }
+  }
+}

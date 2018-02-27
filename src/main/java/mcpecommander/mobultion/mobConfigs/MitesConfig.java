@@ -8,7 +8,7 @@ import mcpecommander.mobultion.mobConfigs.EndermenConfig.Endermen.Magma;
 import mcpecommander.mobultion.mobConfigs.EndermenConfig.Endermen.Magma.Spawn;
 import net.minecraftforge.common.config.Config;
 
-@Config(modid=Reference.MOD_ID, name="Mites", category="Mites")
+@Config(modid=Reference.MOD_ID, name="Mobultion/Mites", category="mobs")
 public class MitesConfig {
 
 	@Config.Comment("Mites' Configs")

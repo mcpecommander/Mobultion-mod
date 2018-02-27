@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "result": { "item": "mobultion:item_sorcerer_breath" },
+  "ingredients": [
+    {
+      "item": "mobultion:item_magic_touch",
+      "data": 0
+    },
+	{
+      "item": "mobultion:item_magic_touch",
+      "data": 0
+    },
+	{
+      "item": "mobultion:item_magic_touch",
+      "data": 0
+    }
+  ]
+}

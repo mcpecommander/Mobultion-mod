@@ -60,7 +60,7 @@ public class EntityHypnoSpider extends EntityAnimatedSpider{
     
     @Override
     protected ResourceLocation getLootTable() {
-    	return new ResourceLocation(Reference.MOD_ID, "spiders/hypno_spider");
+    	return Reference.LootTables.ENTITYHYPNOSPIDER;
     }
 
     @Override

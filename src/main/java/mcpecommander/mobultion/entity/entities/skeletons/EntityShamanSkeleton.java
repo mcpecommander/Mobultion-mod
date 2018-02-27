@@ -21,11 +21,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTableList;
 
 public class EntityShamanSkeleton extends EntityAnimatedSkeleton {
 	boolean flag = false;
@@ -42,6 +40,11 @@ public class EntityShamanSkeleton extends EntityAnimatedSkeleton {
 	public EntityShamanSkeleton(World worldIn) {
 		super(worldIn);
 		this.setSize(0.6F, 1.99F);
+	}
+	
+	@Override
+	public boolean getCanSpawnHere() {
+		return this.world.getEntitiesWithinAABB(EntityShamanSkeleton.class, this.getEntityBoundingBox().grow(10)).isEmpty() && super.getCanSpawnHere();
 	}
 
 	@Override

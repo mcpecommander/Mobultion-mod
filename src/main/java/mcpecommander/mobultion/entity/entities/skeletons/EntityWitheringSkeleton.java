@@ -203,7 +203,7 @@ public class EntityWitheringSkeleton extends EntityAnimatedSkeleton {
 	
 	@Override
 	protected ResourceLocation getLootTable() {
-		return null; //new ResourceLocation(Reference.MOD_ID, "skeletons/withering_skeleton");
+		return Reference.LootTables.ENTITYWITHERINGSKELETON;
 	}
 
 	@Override

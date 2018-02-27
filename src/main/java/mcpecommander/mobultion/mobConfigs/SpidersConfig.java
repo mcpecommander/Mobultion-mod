@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 import mcpecommander.mobultion.Reference;
 import net.minecraftforge.common.config.Config;
 
-@Config(modid = Reference.MOD_ID, category = "Spiders", name = "Spiders")
+@Config(modid = Reference.MOD_ID, category = "mobs", name = "Mobultion/Spiders")
 public class SpidersConfig {
 
 	@Config.Comment("Spiders' Configs")

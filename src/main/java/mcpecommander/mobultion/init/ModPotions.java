@@ -3,6 +3,7 @@ package mcpecommander.mobultion.init;
 import mcpecommander.mobultion.potion.PotionBlessed;
 import mcpecommander.mobultion.potion.PotionFreeze;
 import mcpecommander.mobultion.potion.PotionHypnotize;
+import mcpecommander.mobultion.potion.PotionInvert;
 import mcpecommander.mobultion.potion.PotionJokerness;
 import mcpecommander.mobultion.potion.PotionVomit;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -18,5 +19,7 @@ public class ModPotions {
 	public static PotionVomit potionVomit;
 	@GameRegistry.ObjectHolder("mobultion:blessed_potion")
 	public static PotionBlessed potionBlessed;
+	@GameRegistry.ObjectHolder("mobultion:invert_potion")
+	public static PotionInvert potionInvert;
 	
 }

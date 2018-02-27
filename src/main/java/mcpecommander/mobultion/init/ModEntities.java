@@ -74,6 +74,7 @@ import mcpecommander.mobultion.mobConfigs.MitesConfig;
 import mcpecommander.mobultion.mobConfigs.SkeletonsConfig;
 import mcpecommander.mobultion.mobConfigs.SpidersConfig;
 import mcpecommander.mobultion.mobConfigs.ZombiesConfig;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.util.ResourceLocation;
@@ -109,7 +110,7 @@ public class ModEntities {
 				list.add(add);
 			} else {
 				MobultionMod.logger.log(Level.ERROR,
-						"NPE, The id " + id + " is probably misswritten, PS:The biomes do not support non-vanilla yet (Under Tests)");
+						"NPE, The id " + id + " is probably misswritten, PS:Any and every biome must be written in this form MODID:BiomeRegistryName");
 			}
 		}
 		if (!list.isEmpty()) {
@@ -471,6 +472,7 @@ public class ModEntities {
 				.id(Reference.MobultionEntities.ENDERFLAKE.getRegistryName(), 31)
 				.name(Reference.MobultionEntities.ENDERFLAKE.getUnlocalizedName()).tracker(64, 3, true).build();
 		event.getRegistry().register(enderFlake);
+
 	}
 
 	@SideOnly(Side.CLIENT)

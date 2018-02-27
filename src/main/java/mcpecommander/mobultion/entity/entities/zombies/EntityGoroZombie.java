@@ -5,6 +5,10 @@ import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.animation.AnimationRiding;
 import mcpecommander.mobultion.entity.entityAI.zombiesAI.EntityAIKnightAttackMelee;
 import mcpecommander.mobultion.entity.entityAI.zombiesAI.EntityAIMoveToNearestDoctor;
+import mcpecommander.mobultion.integration.JEI;
+import mezz.jei.api.recipe.IFocus.Mode;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -20,10 +24,14 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class EntityGoroZombie extends EntityAnimatedZombie {
 

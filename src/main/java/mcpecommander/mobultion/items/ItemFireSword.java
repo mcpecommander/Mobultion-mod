@@ -36,7 +36,7 @@ public class ItemFireSword extends ItemSword{
 			if(entityIn instanceof EntityPlayer){
 				if(worldIn.rand.nextInt(100) == 0){
 					stack.damageItem(1, (EntityLivingBase) entityIn);
-				}else if(worldIn.rand.nextInt(500) == 1){
+				}else if(worldIn.rand.nextInt(500) == 0){
 					entityIn.setFire(7);
 				}
 			}

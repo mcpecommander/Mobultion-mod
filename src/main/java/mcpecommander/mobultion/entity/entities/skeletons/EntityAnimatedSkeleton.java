@@ -4,7 +4,11 @@ import com.leviathanstudio.craftstudio.CraftStudioApi;
 import com.leviathanstudio.craftstudio.common.animation.AnimationHandler;
 import com.leviathanstudio.craftstudio.common.animation.IAnimated;
 
+import mcpecommander.mobultion.integration.JEI;
+import mezz.jei.api.recipe.IFocus.Mode;
 import net.minecraft.block.Block;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -13,16 +17,24 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntityTippedArrow;
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemMonsterPlacer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -36,6 +48,24 @@ public abstract class EntityAnimatedSkeleton extends EntityMob implements IRange
     {
         super(worldIn);
     }
+    
+    @Override
+	protected boolean processInteract(EntityPlayer player, EnumHand hand) {
+		if(player instanceof EntityPlayerSP && hand.equals(EnumHand.MAIN_HAND) && player.getHeldItemMainhand().isEmpty() && player.isCreative() && GuiScreen.isShiftKeyDown()){
+			ItemStack stack = new ItemStack(Items.SPAWN_EGG, 1);
+			for(EntityEntry entry : ForgeRegistries.ENTITIES.getValuesCollection()){
+				if(entry.getEntityClass() == this.getClass()){				
+					ItemMonsterPlacer.applyEntityIdToItemStack(stack, entry.getRegistryName());
+				}
+			}
+			if(stack.getTagCompound().hasKey("EntityTag") && Loader.isModLoaded("jei")){
+				JEI.JEIShowGUI(stack);
+				return true;
+			}
+		}
+		return false;
+	}
+    
     @Override
     protected void entityInit()
     {

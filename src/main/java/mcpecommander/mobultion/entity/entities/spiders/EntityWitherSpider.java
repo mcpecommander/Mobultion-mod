@@ -22,6 +22,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -53,6 +54,11 @@ public class EntityWitherSpider extends EntityAnimatedSpider {
 	@Override
 	public double getMountedYOffset() {
 		return (double) (this.height * 0.6F);
+	}
+	
+	@Override
+	protected ResourceLocation getLootTable() {
+		return Reference.LootTables.ENTITYWITHERSPIDER;
 	}
 
 	@Override

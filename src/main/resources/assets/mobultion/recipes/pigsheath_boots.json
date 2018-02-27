@@ -1,0 +1,11 @@
+{
+  "type": "forge:ore_shaped",
+  "result": { "item": "mobultion:item_pigsheath_boots" },
+  "pattern": [
+    "p p",
+    "p p"
+  ],
+  "key": {
+    "p": { "item": "mobultion:item_pigman_flesh" }
+  }
+}

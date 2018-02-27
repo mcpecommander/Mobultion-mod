@@ -5,9 +5,9 @@ import javax.annotation.Nullable;
 import mcpecommander.mobultion.Reference;
 import net.minecraftforge.common.config.Config;
 
-@Config(modid = Reference.MOD_ID, category = "Zombies", name = "Zombies")
+@Config(modid = Reference.MOD_ID, category = "mobs", name = "Mobultion/Zombies")
 public class ZombiesConfig {
-	
+
 	@Config.Comment("Zombies' Configs")
 	public static final Zombies zombies = new Zombies();
 
@@ -30,7 +30,7 @@ public class ZombiesConfig {
 
 			@Config.Comment("Should this mob get hurt from water or rain")
 			public boolean wetDamage = true;
-			
+
 			@Config.Comment("Is the fire sword craftable")
 			public boolean craftableSword = false;
 
@@ -38,8 +38,8 @@ public class ZombiesConfig {
 			@Config.Comment("Spawn configuration")
 			public Spawn spawnRates = new Spawn(100, 2, 4, "desert", "desert_hills", "savanna_rock", "mutated_desert",
 					"mutated_savanna", "mutated_savanna_rock", "hell");
-			
-			public static class Spawn{
+
+			public static class Spawn {
 
 				public Spawn(int weight, int min, int max, @Nullable String... biomes) {
 					this.weight = weight;
@@ -47,27 +47,23 @@ public class ZombiesConfig {
 					this.max = max;
 					this.biomes = biomes;
 				}
-				
+
 				@Config.RangeInt(min = 1, max = 500)
 				@Config.Comment("Spawn weight")
 				public int weight;
-				
+
 				@Config.RangeInt(min = 1, max = 16)
 				@Config.Comment("Minimum spawn count")
 				public int min;
-				
+
 				@Config.RangeInt(min = 1, max = 16)
 				@Config.Comment("Maximum spawn count")
 				public int max;
-				
+
 				@Config.Comment("Biomes to spawn in")
 				public String[] biomes;
-				
+
 			}
-			
-//			@Config.Comment("Where this will spawn")
-//			public String[] spawnLocations = { "desert", "desert_hills", "savanna_rock", "mutated_desert",
-//					"mutated_savanna", "mutated_savanna_rock", "hell" };
 
 		}
 
@@ -90,8 +86,8 @@ public class ZombiesConfig {
 			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")
 			public Spawn spawnRates = new Spawn(50, 1, 2, "all");
-			
-			public static class Spawn{
+
+			public static class Spawn {
 
 				public Spawn(int weight, int min, int max, @Nullable String... biomes) {
 					this.weight = weight;
@@ -99,26 +95,23 @@ public class ZombiesConfig {
 					this.max = max;
 					this.biomes = biomes;
 				}
-				
+
 				@Config.RangeInt(min = 1, max = 500)
 				@Config.Comment("Spawn weight")
 				public int weight;
-				
+
 				@Config.RangeInt(min = 1, max = 16)
 				@Config.Comment("Minimum spawn count")
 				public int min;
-				
+
 				@Config.RangeInt(min = 1, max = 16)
 				@Config.Comment("Maximum spawn count")
 				public int max;
-				
+
 				@Config.Comment("Biomes to spawn in")
 				public String[] biomes;
-				
+
 			}
-			
-//			@Config.Comment("Where this will spawn")
-//			public String[] spawnLocations = { "all", "m" };
 
 		}
 
@@ -133,10 +126,12 @@ public class ZombiesConfig {
 
 			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")
-			public Spawn spawnRates = new Spawn(100, 2, 4, "extreme_hills", "smaller_extreme_hills", "extreme_hills_with_trees",
-					"mutated_extreme_hills", "mutated_extreme_hills_with_trees");
-			
-			public static class Spawn{
+			public Spawn spawnRates = new Spawn(100, 2, 4, "plains", "swampland", "forest_hills",
+					"smaller_extreme_hills", "birch_forest_hills", "redwood_taiga_hills", "extreme_hills_with_trees",
+					"mesa", "mesa_rock", "mesa_clear_rock", "mutated_extreme_hills", "mutated_birch_forest_hills",
+					"mutated_redwood_taiga_hills", "mutated_mesa", "mutated_mesa_rock", "mutated_mesa_clear_rock");
+
+			public static class Spawn {
 
 				public Spawn(int weight, int min, int max, @Nullable String... biomes) {
 					this.weight = weight;
@@ -144,28 +139,24 @@ public class ZombiesConfig {
 					this.max = max;
 					this.biomes = biomes;
 				}
-				
+
 				@Config.RangeInt(min = 1, max = 500)
 				@Config.Comment("Spawn weight")
 				public int weight;
-				
+
 				@Config.RangeInt(min = 1, max = 16)
 				@Config.Comment("Minimum spawn count")
 				public int min;
-				
+
 				@Config.RangeInt(min = 1, max = 16)
 				@Config.Comment("Maximum spawn count")
 				public int max;
-				
+
 				@Config.Comment("Biomes to spawn in")
 				public String[] biomes;
-				
+
 			}
-			
-//			@Config.Comment("Where this will spawn")
-//			public String[] spawnLocations = { "extreme_hills", "smaller_extreme_hills", "extreme_hills_with_trees",
-//					"mutated_extreme_hills", "mutated_extreme_hills_with_trees" };
-			
+
 			@Config.Comment("Should this monster hammer the player into the ground "
 					+ "(cancel this feature on skyblock maps)")
 			public boolean hammerAttack = true;
@@ -183,10 +174,9 @@ public class ZombiesConfig {
 
 			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")
-			public Spawn spawnRates = new Spawn(100, 2, 4, "extreme_hills", "smaller_extreme_hills", "extreme_hills_with_trees",
-					"mutated_extreme_hills", "mutated_extreme_hills_with_trees");
-			
-			public static class Spawn{
+			public Spawn spawnRates = new Spawn(100, 2, 4, "all");
+
+			public static class Spawn {
 
 				public Spawn(int weight, int min, int max, @Nullable String... biomes) {
 					this.weight = weight;
@@ -194,28 +184,23 @@ public class ZombiesConfig {
 					this.max = max;
 					this.biomes = biomes;
 				}
-				
+
 				@Config.RangeInt(min = 1, max = 500)
 				@Config.Comment("Spawn weight")
 				public int weight;
-				
+
 				@Config.RangeInt(min = 1, max = 16)
 				@Config.Comment("Minimum spawn count")
 				public int min;
-				
+
 				@Config.RangeInt(min = 1, max = 16)
 				@Config.Comment("Maximum spawn count")
 				public int max;
-				
+
 				@Config.Comment("Biomes to spawn in")
 				public String[] biomes;
-				
-			}
-			
-//			@Config.Comment("Where this will spawn")
-//			public String[] spawnLocations = { "extreme_hills", "smaller_extreme_hills", "extreme_hills_with_trees",
-//					"mutated_extreme_hills", "mutated_extreme_hills_with_trees" };
 
+			}
 		}
 
 		@Config.Comment("Goro Zombie")
@@ -229,10 +214,10 @@ public class ZombiesConfig {
 
 			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")
-			public Spawn spawnRates = new Spawn(40, 1, 2, "extreme_hills", "smaller_extreme_hills", "extreme_hills_with_trees",
-					"mutated_extreme_hills", "mutated_extreme_hills_with_trees");
-			
-			public static class Spawn{
+			public Spawn spawnRates = new Spawn(40, 1, 2, "extreme_hills", "smaller_extreme_hills",
+					"extreme_hills_with_trees", "mutated_extreme_hills", "mutated_extreme_hills_with_trees");
+
+			public static class Spawn {
 
 				public Spawn(int weight, int min, int max, @Nullable String... biomes) {
 					this.weight = weight;
@@ -240,26 +225,26 @@ public class ZombiesConfig {
 					this.max = max;
 					this.biomes = biomes;
 				}
-				
+
 				@Config.RangeInt(min = 1, max = 500)
 				@Config.Comment("Spawn weight")
 				public int weight;
-				
+
 				@Config.RangeInt(min = 1, max = 16)
 				@Config.Comment("Minimum spawn count")
 				public int min;
-				
+
 				@Config.RangeInt(min = 1, max = 16)
 				@Config.Comment("Maximum spawn count")
 				public int max;
-				
+
 				@Config.Comment("Biomes to spawn in")
 				public String[] biomes;
-				
+
 			}
 
 		}
-		
+
 		@Config.Comment("Ravenous Zombie")
 		public Ravenous ravenous = new Ravenous();
 
@@ -273,12 +258,12 @@ public class ZombiesConfig {
 			@Config.Comment("Spawn configuration")
 			public Spawn spawnRates = new Spawn(100, 1, 2, "plains", "forest_hills", "mutated_plains",
 					"mutated_birch_forest_hills");
-			
+
 			@Config.Comment("Will this mob explode on death, "
 					+ "The explosion will not affect blocks if mob griefing is off")
 			public boolean explodeOnDeath = true;
-			
-			public static class Spawn{
+
+			public static class Spawn {
 
 				public Spawn(int weight, int min, int max, @Nullable String... biomes) {
 					this.weight = weight;
@@ -286,22 +271,22 @@ public class ZombiesConfig {
 					this.max = max;
 					this.biomes = biomes;
 				}
-				
+
 				@Config.RangeInt(min = 1, max = 500)
 				@Config.Comment("Spawn weight")
 				public int weight;
-				
+
 				@Config.RangeInt(min = 1, max = 16)
 				@Config.Comment("Minimum spawn count")
 				public int min;
-				
+
 				@Config.RangeInt(min = 1, max = 16)
 				@Config.Comment("Maximum spawn count")
 				public int max;
-				
+
 				@Config.Comment("Biomes to spawn in")
 				public String[] biomes;
-				
+
 			}
 
 		}

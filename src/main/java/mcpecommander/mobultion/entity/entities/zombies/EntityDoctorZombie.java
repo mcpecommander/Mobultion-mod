@@ -10,7 +10,6 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMoveThroughVillage;
 import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
@@ -44,6 +43,11 @@ public class EntityDoctorZombie extends EntityAnimatedZombie {
 	public EntityDoctorZombie(World worldIn) {
 		super(worldIn);
 		this.setSize(0.7F, 2F);
+	}
+	
+	@Override
+	public boolean getCanSpawnHere() {
+		return this.world.getEntitiesWithinAABB(EntityDoctorZombie.class, this.getEntityBoundingBox().grow(10)).isEmpty() && super.getCanSpawnHere();
 	}
 
 	@Override
@@ -88,7 +92,9 @@ public class EntityDoctorZombie extends EntityAnimatedZombie {
 			this.dataManager.setDirty(ACTIVE);
 		}
 	}
-
+	
+	
+	
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
 		super.onInitialSpawn(difficulty, livingdata);

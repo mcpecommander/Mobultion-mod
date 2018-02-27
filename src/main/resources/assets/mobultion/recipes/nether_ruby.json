@@ -1,0 +1,11 @@
+{
+  "type": "forge:ore_shaped",
+  "result": { "item": "mobultion:item_nether_ruby" },
+  "pattern": [
+    "pp",
+    "pp"
+  ],
+  "key": {
+    "p": { "item": "mobultion:item_flaming_chip" }
+  }
+}

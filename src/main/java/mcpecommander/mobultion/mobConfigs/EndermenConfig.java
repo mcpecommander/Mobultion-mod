@@ -6,7 +6,7 @@ import mcpecommander.mobultion.Reference;
 import net.minecraft.init.Items;
 import net.minecraftforge.common.config.Config;
 
-@Config(modid = Reference.MOD_ID, category = "Endermen", name = "Endermen")
+@Config(modid = Reference.MOD_ID, category = "mobs", name = "Mobultion/Endermen")
 public class EndermenConfig {
 
 	@Config.Comment("Endermen' Configs")

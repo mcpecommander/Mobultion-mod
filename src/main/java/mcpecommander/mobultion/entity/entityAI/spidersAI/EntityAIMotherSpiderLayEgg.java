@@ -50,7 +50,7 @@ public class EntityAIMotherSpiderLayEgg extends EntityAIBase {
 	@Override
 	public void updateTask() {
 		if (this.averageTime-- <= 0) {
-			if (!this.world.isRemote) {
+			if (!this.world.isRemote && this.world.getEntitiesWithinAABB(EntitySpiderEgg.class, this.entity.getEntityBoundingBox().grow(10)).size() < 3) {
 				EntitySpiderEgg egg = this.entity.getAttackingEntity() != null
 						? new EntitySpiderEgg(this.world, this.entity.getAttackingEntity().getName())
 						: new EntitySpiderEgg(this.world);
