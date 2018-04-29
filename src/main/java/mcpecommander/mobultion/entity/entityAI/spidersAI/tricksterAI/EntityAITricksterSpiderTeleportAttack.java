@@ -24,9 +24,10 @@ public class EntityAITricksterSpiderTeleportAttack extends EntityAIAttackMelee{
 		return false;
 	}
 	
+	@Override
 	protected double getAttackReachSqr(EntityLivingBase attackTarget)
     {
-        return (double)(4.0F + attackTarget.width);
+        return 4.0F + attackTarget.width;
     }
 	
     protected void teleportToEntity(Entity target)

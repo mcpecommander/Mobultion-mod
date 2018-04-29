@@ -31,7 +31,8 @@ public class EntityAIFindPlayer  extends EntityAINearestAttackableTarget<EntityP
         double d0 = this.getTargetDistance();
         this.player = this.enderman.world.getNearestAttackablePlayer(this.enderman.posX, this.enderman.posY, this.enderman.posZ, d0, d0, (Function)null, new Predicate<EntityPlayer>()
         {
-            public boolean apply(@Nullable EntityPlayer player)
+            @Override
+			public boolean apply(@Nullable EntityPlayer player)
             {
                 return player != null && EntityAIFindPlayer.this.enderman.shouldAttackPlayer(player);
             }
@@ -70,7 +71,7 @@ public class EntityAIFindPlayer  extends EntityAINearestAttackableTarget<EntityP
         }
         else
         {
-            return this.targetEntity != null && ((EntityPlayer)this.targetEntity).isEntityAlive() ? true : super.shouldContinueExecuting();
+            return this.targetEntity != null && this.targetEntity.isEntityAlive() ? true : super.shouldContinueExecuting();
         }
     }
 
@@ -90,16 +91,16 @@ public class EntityAIFindPlayer  extends EntityAINearestAttackableTarget<EntityP
         {
             if (this.targetEntity != null)
             {
-                if (this.enderman.shouldAttackPlayer((EntityPlayer)this.targetEntity))
+                if (this.enderman.shouldAttackPlayer(this.targetEntity))
                 {
-                    if (((EntityPlayer)this.targetEntity).getDistanceSq(this.enderman) < 16.0D)
+                    if (this.targetEntity.getDistanceSq(this.enderman) < 16.0D)
                     {
                         this.enderman.teleportRandomly();
                     }
 
                     this.teleportTime = 0;
                 }
-                else if (((EntityPlayer)this.targetEntity).getDistanceSq(this.enderman) > 256.0D && this.teleportTime++ >= 30 && this.enderman.teleportToEntity(this.targetEntity))
+                else if (this.targetEntity.getDistanceSq(this.enderman) > 256.0D && this.teleportTime++ >= 30 && this.enderman.teleportToEntity(this.targetEntity))
                 {
                     this.teleportTime = 0;
                 }

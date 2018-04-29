@@ -40,7 +40,7 @@ public class PotionFreeze extends Potion{
 				&& entityLivingBaseIn.isPotionActive(ModPotions.potionFreeze)) {
 			
 			if(!isReady){
-				temp = 0.98f / (float)entityLivingBaseIn.getActivePotionEffect(ModPotions.potionFreeze).getDuration();
+				temp = 0.98f / entityLivingBaseIn.getActivePotionEffect(ModPotions.potionFreeze).getDuration();
 			}
 			this.isReady = true;
 			this.mul += temp/2.5f;
@@ -62,9 +62,9 @@ public class PotionFreeze extends Potion{
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-        bufferbuilder.pos(0.0D, (double)e.getResolution().getScaledHeight(), -90.0D).tex(0.0D, 1.0D).endVertex();
-        bufferbuilder.pos((double)e.getResolution().getScaledWidth(), (double)e.getResolution().getScaledHeight(), -90.0D).tex(1.0D, 1.0D).endVertex();
-        bufferbuilder.pos((double)e.getResolution().getScaledWidth(), 0.0D, -90.0D).tex(1.0D, 0.0D).endVertex();
+        bufferbuilder.pos(0.0D, e.getResolution().getScaledHeight(), -90.0D).tex(0.0D, 1.0D).endVertex();
+        bufferbuilder.pos(e.getResolution().getScaledWidth(), e.getResolution().getScaledHeight(), -90.0D).tex(1.0D, 1.0D).endVertex();
+        bufferbuilder.pos(e.getResolution().getScaledWidth(), 0.0D, -90.0D).tex(1.0D, 0.0D).endVertex();
         bufferbuilder.pos(0.0D, 0.0D, -90.0D).tex(0.0D, 0.0D).endVertex();
         tessellator.draw();
         GlStateManager.depthMask(true);

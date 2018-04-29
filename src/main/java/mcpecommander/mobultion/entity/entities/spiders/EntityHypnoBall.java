@@ -28,7 +28,7 @@ public class EntityHypnoBall extends EntityFireball{
         this.motionX = 0.0D;
         this.motionY = 0.0D;
         this.motionZ = 0.0D;
-        double d0 = (double)MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
+        double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
         this.accelerationX = accelX / d0 * 0.1D;
         this.accelerationY = accelY / d0 * 0.1D;
         this.accelerationZ = accelZ / d0 * 0.1D;
@@ -39,7 +39,8 @@ public class EntityHypnoBall extends EntityFireball{
     	return false;
     }
 
-    protected void onImpact(RayTraceResult result)
+    @Override
+	protected void onImpact(RayTraceResult result)
     {
         if (!this.world.isRemote)
         {
@@ -59,12 +60,14 @@ public class EntityHypnoBall extends EntityFireball{
         }
     }
 
-    public boolean canBeCollidedWith()
+    @Override
+	public boolean canBeCollidedWith()
     {
         return false;
     }
 
-    public boolean attackEntityFrom(DamageSource source, float amount)
+    @Override
+	public boolean attackEntityFrom(DamageSource source, float amount)
     {
         return false;
     }

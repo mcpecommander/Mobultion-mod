@@ -31,7 +31,6 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -46,13 +45,15 @@ public class EntitySniperSkeleton extends EntityAnimatedSkeleton{
     private final EntityAIAttackMelee aiAttackOnCollide = new EntityAIAttackMelee(this, 1.2D, false)
     {
 
-        public void resetTask()
+        @Override
+		public void resetTask()
         {
             super.resetTask();
             EntitySniperSkeleton.this.setSwingingArms(false);
         }
 
-        public void startExecuting()
+        @Override
+		public void startExecuting()
         {
             super.startExecuting();
             EntitySniperSkeleton.this.setSwingingArms(true);
@@ -171,9 +172,9 @@ public class EntitySniperSkeleton extends EntityAnimatedSkeleton{
     {
         EntityArrow entityarrow = this.getArrow(distanceFactor);
         double d0 = target.posX - this.posX;
-        double d1 = target.getEntityBoundingBox().minY + (double)(target.height / 3.0F) - entityarrow.posY;
+        double d1 = target.getEntityBoundingBox().minY + target.height / 3.0F - entityarrow.posY;
         double d2 = target.posZ - this.posZ;
-        double d3 = (double)MathHelper.sqrt(d0 * d0 + d2 * d2);
+        double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
         entityarrow.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 1.6F, (float) SkeletonsConfig.skeletons.sniper.inaccuracy);
         this.playSound(ModSounds.forest_skeleton_shoot, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
         this.world.spawnEntity(entityarrow);
@@ -198,7 +199,7 @@ public class EntitySniperSkeleton extends EntityAnimatedSkeleton{
     	if (this.world.isDaytime() && !this.world.isRemote)
         {
             float f = this.getBrightness();
-            BlockPos blockpos = this.getRidingEntity() instanceof EntityBoat ? (new BlockPos(this.posX, (double)Math.round(this.posY), this.posZ)).up() : new BlockPos(this.posX, (double)Math.round(this.posY), this.posZ);
+            BlockPos blockpos = this.getRidingEntity() instanceof EntityBoat ? (new BlockPos(this.posX, Math.round(this.posY), this.posZ)).up() : new BlockPos(this.posX, Math.round(this.posY), this.posZ);
 
             if (f > 0.5F && this.rand.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.world.canSeeSky(blockpos))
             {

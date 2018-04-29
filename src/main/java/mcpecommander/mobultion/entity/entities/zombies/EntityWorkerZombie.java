@@ -119,7 +119,7 @@ public class EntityWorkerZombie extends EntityAnimatedZombie{
         {
             float f = this.getBrightness();
 
-            if (f > 0.5F && this.rand.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.world.canSeeSky(new BlockPos(this.posX, this.posY + (double)this.getEyeHeight(), this.posZ)))
+            if (f > 0.5F && this.rand.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.world.canSeeSky(new BlockPos(this.posX, this.posY + this.getEyeHeight(), this.posZ)))
             {
                 boolean flag = true;
                 ItemStack itemstack = this.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
@@ -157,8 +157,7 @@ public class EntityWorkerZombie extends EntityAnimatedZombie{
     			}
     		}
     		if(this.getAttacking() && !this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "worker_hammering", this) && this.deathTime < 1){
-    			this.getAnimationHandler().stopAnimation(Reference.MOD_ID, "skeleton_walk_hands", this);
-        		this.getAnimationHandler().startAnimation(Reference.MOD_ID, "worker_hammering", 0, this);
+    			this.getAnimationHandler().stopStartAnimation(Reference.MOD_ID, "skeleton_walk_hands", Reference.MOD_ID, "worker_hammering", 0, this);
         	}
         	
         	if(!this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "skeleton_walk", this) && this.getMoving() && this.deathTime < 1 && !this.isRiding()){
@@ -166,16 +165,14 @@ public class EntityWorkerZombie extends EntityAnimatedZombie{
         	}
         	
         	if(!this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "skeleton_walk_hands", this) && !this.getAttacking() && this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "skeleton_walk", this)){
-        		this.getAnimationHandler().stopAnimation(Reference.MOD_ID, "worker_hammering", this);
-    			this.getAnimationHandler().startAnimation(Reference.MOD_ID, "skeleton_walk_hands", 0, this);
+        		this.getAnimationHandler().stopStartAnimation(Reference.MOD_ID, "worker_hammering", Reference.MOD_ID, "skeleton_walk_hands", 0, this);
     		}
 
         	if (!this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "lookat", this) && this.deathTime < 1){
                 this.getAnimationHandler().startAnimation(Reference.MOD_ID, "lookat", this);
         	}
         	if(!this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "riding", this) && this.isRiding()){
-        		this.getAnimationHandler().stopAnimation(Reference.MOD_ID, "skeleton_walk", this);
-        		this.getAnimationHandler().startAnimation(Reference.MOD_ID, "riding", this);  
+        		this.getAnimationHandler().stopStartAnimation(Reference.MOD_ID, "skeleton_walk", Reference.MOD_ID, "riding", 0, this);
         	}
     	}
 		

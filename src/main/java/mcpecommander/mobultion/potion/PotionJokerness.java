@@ -68,13 +68,13 @@ public class PotionJokerness extends Potion {
 				}
 				GlStateManager.enableAlpha();
 				GlStateManager.color(rand3, 0F, 0F, alpha -= 0.02f);
-				ingameGui.drawModalRectWithCustomSizedTexture(0 + rand1, 0 + rand2, 0, 0, 16, 16, 16, 64);
+				Gui.drawModalRectWithCustomSizedTexture(0 + rand1, 0 + rand2, 0, 0, 16, 16, 16, 64);
 				GlStateManager.color(rand6, 0F, 0F, alpha);
-				ingameGui.drawModalRectWithCustomSizedTexture(0 + rand4, 0 + rand5, 0, 16, 16, 16, 16, 64);
+				Gui.drawModalRectWithCustomSizedTexture(0 + rand4, 0 + rand5, 0, 16, 16, 16, 16, 64);
 				GlStateManager.color(rand9, 0F, 0F, alpha);
-				ingameGui.drawModalRectWithCustomSizedTexture(0 + rand7, 0 + rand8, 0, 32, 16, 16, 16, 64);
+				Gui.drawModalRectWithCustomSizedTexture(0 + rand7, 0 + rand8, 0, 32, 16, 16, 16, 64);
 				GlStateManager.color(rand12, 0F, 0F, alpha);
-				ingameGui.drawModalRectWithCustomSizedTexture(0 + rand10, 0 + rand11, 0, 48, 16, 16, 16, 64);
+				Gui.drawModalRectWithCustomSizedTexture(0 + rand10, 0 + rand11, 0, 48, 16, 16, 16, 64);
 				GlStateManager.disableAlpha();
 				if (alpha <= 0) {
 					flag = true;

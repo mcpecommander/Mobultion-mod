@@ -6,7 +6,6 @@ import mcpecommander.mobultion.entity.entityAI.spidersAI.EntityAIHypnoBallAttack
 import mcpecommander.mobultion.entity.entityAI.spidersAI.EntityAISpiderAttack;
 import mcpecommander.mobultion.entity.entityAI.spidersAI.EntityAISpiderTarget;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILeapAtTarget;
@@ -16,15 +15,14 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityHypnoSpider extends EntityAnimatedSpider{
 	
 	static {
-    	EntityHypnoSpider.animHandler.addAnim(Reference.MOD_ID, "spider_move", "hypno_spider", false);
-    	EntityHypnoSpider.animHandler.addAnim(Reference.MOD_ID, "hypno_rotate", "hypno_spider", false);
-    	EntityHypnoSpider.animHandler.addAnim(Reference.MOD_ID, "lookat", new AnimationLookAt("Head"));
+		EntityHypnoSpider.animHandler.addAnim(Reference.MOD_ID, "spider_move", "hypno_spider", false);
+		EntityHypnoSpider.animHandler.addAnim(Reference.MOD_ID, "hypno_rotate", "hypno_spider", false);
+		EntityHypnoSpider.animHandler.addAnim(Reference.MOD_ID, "lookat", new AnimationLookAt("Head"));
 	}
 
 	public EntityHypnoSpider(World worldIn) {
@@ -55,7 +53,7 @@ public class EntityHypnoSpider extends EntityAnimatedSpider{
     @Override
     public double getMountedYOffset()
     {
-        return (double)(this.height * 0.6F);
+        return this.height * 0.6F;
     }
     
     @Override

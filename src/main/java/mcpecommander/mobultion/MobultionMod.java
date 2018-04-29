@@ -4,14 +4,13 @@ import org.apache.logging.log4j.Logger;
 
 import mcpecommander.mobultion.proxy.CommonProxy;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.NAME, version = Reference.VERSION, dependencies = "required-after:craftstudioapi;" + "after:forge@[14.23.2.2616,);" , acceptedMinecraftVersions = Reference.ACCEPTED_MINECRAFT_VERSIONS, useMetadata = true, certificateFingerprint = "19decc55f198eb92721115bdc23bf30da2bbfc8e")
+@Mod(modid = Reference.MOD_ID, name = Reference.NAME, version = Reference.VERSION, dependencies = "required-after:craftstudioapi;" + "after:forge@[14.23.3.2650,);" , acceptedMinecraftVersions = Reference.ACCEPTED_MINECRAFT_VERSIONS, useMetadata = true, certificateFingerprint = "19decc55f198eb92721115bdc23bf30da2bbfc8e")
 
 public class MobultionMod {
 
@@ -25,6 +24,8 @@ public class MobultionMod {
 	public static final CreativeTabs MOBULTION_TAB = new MobultionModTab();
 	
 	public static Logger logger;
+	
+	public static final int GUI_CONFIG = 1;
 
 
 	@Mod.EventHandler

@@ -31,6 +31,7 @@ public class EntityAIFollowPlayerWithPigsheath extends EntityAIBase {
 			return false;
 		}
 		List<EntityPlayer> list = this.childAnimal.world.getEntitiesWithinAABB(EntityPlayer.class, this.childAnimal.getEntityBoundingBox().grow(10), new Predicate<EntityPlayer>() {
+			@Override
 			public boolean apply(EntityPlayer input) {
 				if ( (!input.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty() && input.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemPigsheathHelmet) || 
 						(!input.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty() && input.getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemPigsheathTunic) ||

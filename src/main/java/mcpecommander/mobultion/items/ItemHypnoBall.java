@@ -11,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -34,6 +33,7 @@ public class ItemHypnoBall extends Item{
 			EntityHypnoBall hypno = new EntityHypnoBall(worldIn, playerIn, vec.x, vec.y, vec.z);
 			worldIn.spawnEntity(hypno);
 			hypno.playSound(SoundEvents.ENTITY_BLAZE_SHOOT, .5f, 1.5f);
+			playerIn.getHeldItem(handIn).shrink(1);
 			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 		}
 		return super.onItemRightClick(worldIn, playerIn, handIn);

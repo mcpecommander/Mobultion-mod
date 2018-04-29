@@ -1,0 +1,504 @@
+{
+  "title": "Shatter",
+  "duration": 80,
+  "holdLastKeyframe": true,
+  "nodeAnimations": {
+    "Body": {
+      "position": {
+        "0": [ 0, 0, 0 ],
+        "80": [ 0, 0, 0 ]
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -0.9, -0.9, -0.9 ]
+      }
+    },
+    "LeftArm": {
+      "position": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -5, 1, 0 ]
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -0.9, -0.9, -0.9 ]
+      }
+    },
+    "RightArm": {
+      "position": {
+        "0": [ 0, 0, 0 ],
+        "80": [ 5, 1, 0 ]
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ 1.1, -0.9, -0.9 ]
+      }
+    },
+    "RightLeg": {
+      "position": {
+        "0": [ 0, 0, 0 ],
+        "80": [ 2, 13, 0 ]
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -0.9, -0.9, -0.9 ]
+      }
+    },
+    "LeftLeg": {
+      "position": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -2, 13, 0 ]
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ 1.1, -0.9, -0.9 ]
+      }
+    },
+    "Jaw": {
+      "position": {
+        "0": [ 0, 0, 0 ],
+        "80": [ 0, -7, 0 ]
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -0.9, -0.9, -0.9 ]
+      }
+    },
+    "Head": {
+      "position": {
+        "0": [ 0, 0, 0 ],
+        "80": [ 0, -11, 0 ]
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -0.9, -0.9, -0.9 ]
+      }
+    },
+    "GlassShot": {
+      "position": {
+        "0": [ 0, 0, 0 ],
+        "40": [ -7, -6.5, -7 ],
+        "80": [ -14, -13, 0 ]
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+        "0": [ 0, 0, 0 ],
+        "20": [ 0, 89.99999, 0 ],
+        "40": [ 0, 180, 0 ],
+        "60": [ 0, -89.99999, 0 ],
+        "80": [ 0, 0, 0 ]
+      },
+      "stretch": {
+      }
+    },
+    "GlassShotA": {
+      "position": {
+        "0": [ 0, 0, 0 ],
+        "40": [ 7, -6.5, 7 ],
+        "80": [ 14, -13, 0 ]
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+        "0": [ 0, 0, 0 ],
+        "20": [ 0, -89.99999, 0 ],
+        "40": [ 0, -180, 0 ],
+        "60": [ 0, 89.99999, 0 ],
+        "80": [ 0, 0, 0 ]
+      },
+      "stretch": {
+      }
+    },
+    "GlassShotB": {
+      "position": {
+        "0": [ 0, 0, 0 ],
+        "80": [ 0, -19, 0 ]
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+        "0": [ 0, 0, 0 ],
+        "8": [ 0, 72, 0 ],
+        "16": [ 0, 144, 0 ],
+        "24": [ 0, -144, 0 ],
+        "32": [ 0, -72, 0 ],
+        "40": [ 0, 0, 0 ],
+        "48": [ 0, 72, 0 ],
+        "56": [ 0, 144, 0 ],
+        "64": [ 0, -144, 0 ],
+        "72": [ 0, -72, 0 ],
+        "80": [ 0, 0, 0 ]
+      },
+      "stretch": {
+      }
+    },
+    "LeftArm1": {
+      "position": {
+        "0": [ 0, 0, 0 ],
+        "80": [ 5, 13.5, 0 ]
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+        "0": [ 0, 0, 0 ],
+        "80": [ 0, 0, -45 ]
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -0.9, -0.9, -0.9 ]
+      }
+    },
+    "RightArm1": {
+      "position": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -8, 7.5, 0 ]
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+        "0": [ 0, 0, 0 ],
+        "80": [ 0, 0, 89.99999 ]
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ 1.1, -0.9, -0.9 ]
+      }
+    },
+    "RightLeg1": {
+      "position": {
+        "0": [ 0, 0, 0 ],
+        "80": [ 0, 15.5, 0 ]
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -0.9, -0.9, -0.9 ]
+      }
+    },
+    "LeftLeg1": {
+      "position": {
+        "0": [ 0, 0, 0 ],
+        "80": [ 0, 15.5, 0 ]
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ 1.1, -0.9, -0.9 ]
+      }
+    },
+    "Tentacle": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -1, -1, -1 ]
+      }
+    },
+    "Tentacle1": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -0.75, -0.75, -0.75 ]
+      }
+    },
+    "Tentacle2": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -1, -1, -1 ]
+      }
+    },
+    "Tentacle3": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -0.75, -0.75, -0.75 ]
+      }
+    },
+    "Tentacle4": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -0.5, -0.5, -0.5 ]
+      }
+    },
+    "Tentacle5": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -0.25, -0.25, -0.25 ]
+      }
+    },
+    "TentacleA": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -1, -1, -1 ]
+      }
+    },
+    "TentacleA1": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -0.75, -0.75, -0.75 ]
+      }
+    },
+    "TentacleA2": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -1, -1, -1 ]
+      }
+    },
+    "TentacleA3": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -0.75, -0.75, -0.75 ]
+      }
+    },
+    "TentacleA4": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -0.5, -0.5, -0.5 ]
+      }
+    },
+    "TentacleA5": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -0.25, -0.25, -0.25 ]
+      }
+    },
+    "TentacleB": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -1, -1, -1 ]
+      }
+    },
+    "TentacleB1": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -0.75, -0.75, -0.75 ]
+      }
+    },
+    "TentacleB2": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -1, -1, -1 ]
+      }
+    },
+    "TentacleB3": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -0.75, -0.75, -0.75 ]
+      }
+    },
+    "TentacleB4": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -0.5, -0.5, -0.5 ]
+      }
+    },
+    "TentacleB5": {
+      "position": {
+      },
+      "offsetFromPivot": {
+      },
+      "size": {
+      },
+      "rotation": {
+      },
+      "stretch": {
+        "0": [ 0, 0, 0 ],
+        "80": [ -0.25, -0.25, -0.25 ]
+      }
+    }
+  }
+}

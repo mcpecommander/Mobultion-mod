@@ -11,6 +11,7 @@ import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILeapAtTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,9 +25,9 @@ import net.minecraft.world.World;
 public class EntityMotherSpider extends EntityAnimatedSpider{
 	private static final DataParameter<Boolean> PREGNANT = EntityDataManager.<Boolean>createKey(EntityMotherSpider.class, DataSerializers.BOOLEAN);
 	static {
-    	EntityMotherSpider.animHandler.addAnim(Reference.MOD_ID, "spider_move", "mother_spider", false);
-    	EntityMotherSpider.animHandler.addAnim(Reference.MOD_ID, "mother_pregnant", "mother_spider", false);
-    	EntityMotherSpider.animHandler.addAnim(Reference.MOD_ID, "lookat", new AnimationLookAt("Head"));
+		EntityMotherSpider.animHandler.addAnim(Reference.MOD_ID, "spider_move", "mother_spider", false);
+		EntityMotherSpider.animHandler.addAnim(Reference.MOD_ID, "mother_pregnant", "mother_spider", false);
+		EntityMotherSpider.animHandler.addAnim(Reference.MOD_ID, "lookat", new AnimationLookAt("Head"));
 	}
 	
 	public EntityMotherSpider(World worldIn) {
@@ -49,7 +50,7 @@ public class EntityMotherSpider extends EntityAnimatedSpider{
     @Override
     public double getMountedYOffset()
     {
-        return (double)(this.height * 0.6F);
+        return this.height * 0.6F;
     }
 
     @Override
@@ -82,7 +83,7 @@ public class EntityMotherSpider extends EntityAnimatedSpider{
     	this.dataManager.setDirty(PREGNANT);
     }
     
-    @Override
+	@Override
     public void onLivingUpdate() {
     	super.onLivingUpdate();
     	EntityAILeapAtTarget task = new EntityAILeapAtTarget(this, 0.4F);
@@ -91,7 +92,7 @@ public class EntityMotherSpider extends EntityAnimatedSpider{
     		this.motionX = motionX/1.3;
     		this.motionY = motionY/1.3;
     		this.motionZ = motionZ/1.3;
-    	}else if (!this.tasks.taskEntries.contains(task)){
+    	}else if (taskCheck()){
     		this.tasks.addTask(3, task);
     	}
     	
@@ -114,6 +115,15 @@ public class EntityMotherSpider extends EntityAnimatedSpider{
     			}
 			}
 		}
+    }
+    
+    private boolean taskCheck() {
+    	for (EntityAITaskEntry entries : this.tasks.taskEntries) {
+    		if (entries.action instanceof EntityAILeapAtTarget) {
+    			return false;
+    		}
+    	}
+    	return true;
     }
     
     @Override

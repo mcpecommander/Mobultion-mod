@@ -29,4 +29,6 @@ public class ModSounds {
 	public static SoundEvent puke = new SoundEvent(loc11).setRegistryName(loc11);
 	private static ResourceLocation loc12 = new ResourceLocation(Reference.MOD_ID, "spit");
 	public static SoundEvent spit = new SoundEvent(loc12).setRegistryName(loc12);
+	private static ResourceLocation loc13 = new ResourceLocation(Reference.MOD_ID, "vampire_death");
+	public static SoundEvent vampire_death = new SoundEvent(loc13).setRegistryName(loc13);
 }

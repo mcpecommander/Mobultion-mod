@@ -11,8 +11,9 @@ public class EntityAIMiniSpiderAttack extends EntityAIAttackMelee{
         super(spider, 1.0D, true);
     }
 
-    protected double getAttackReachSqr(EntityLivingBase attackTarget)
+    @Override
+	protected double getAttackReachSqr(EntityLivingBase attackTarget)
     {
-        return (double)(4.0F + attackTarget.width);
+        return 4.0F + attackTarget.width;
     }
 }

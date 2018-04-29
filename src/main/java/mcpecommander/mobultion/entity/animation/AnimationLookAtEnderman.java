@@ -14,7 +14,7 @@ public class AnimationLookAtEnderman extends CustomChannel{
 	private String headPart, jawPart;
 	
 	public AnimationLookAtEnderman(String headPart, String jawPart) {
-		super("lookat");
+		super("lookatenderman");
         this.headPart = headPart;
         this.jawPart = jawPart;
 	}

@@ -18,10 +18,6 @@ public class ZombiesConfig {
 
 		public static class Magma {
 
-			@Config.RequiresMcRestart
-			@Config.Comment("Do you want to unregister this mob?")
-			public boolean spawn = true;
-
 			@Config.Comment("Will this mob spawn lava upno death from the lava sword")
 			public boolean lavaMaking = true;
 
@@ -36,8 +32,8 @@ public class ZombiesConfig {
 
 			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")
-			public Spawn spawnRates = new Spawn(100, 2, 4, "desert", "desert_hills", "savanna_rock", "mutated_desert",
-					"mutated_savanna", "mutated_savanna_rock", "hell");
+			public Spawn spawnRates = new Spawn(100, 2, 4, "minecraft:desert", "minecraft:desert_hills", "minecraft:savanna_rock", "minecraft:mutated_desert",
+					"minecraft:mutated_savanna", "minecraft:mutated_savanna_rock", "minecraft:hell");
 
 			public static class Spawn {
 
@@ -71,10 +67,6 @@ public class ZombiesConfig {
 		public Doctor doctor = new Doctor();
 
 		public static class Doctor {
-
-			@Config.RequiresMcRestart
-			@Config.Comment("Do you want to unregister this mob?")
-			public boolean spawn = true;
 
 			@Config.Comment("Should this mob extinguish burning zombies")
 			public boolean shouldExtinguish = true;
@@ -121,15 +113,11 @@ public class ZombiesConfig {
 		public static class Worker {
 
 			@Config.RequiresMcRestart
-			@Config.Comment("Do you want to unregister this mob?")
-			public boolean spawn = true;
-
-			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")
-			public Spawn spawnRates = new Spawn(100, 2, 4, "plains", "swampland", "forest_hills",
-					"smaller_extreme_hills", "birch_forest_hills", "redwood_taiga_hills", "extreme_hills_with_trees",
-					"mesa", "mesa_rock", "mesa_clear_rock", "mutated_extreme_hills", "mutated_birch_forest_hills",
-					"mutated_redwood_taiga_hills", "mutated_mesa", "mutated_mesa_rock", "mutated_mesa_clear_rock");
+			public Spawn spawnRates = new Spawn(70, 1, 2, "minecraft:plains", "minecraft:swampland", "minecraft:forest_hills",
+					"minecraft:smaller_extreme_hills", "minecraft:birch_forest_hills", "minecraft:redwood_taiga_hills", "minecraft:extreme_hills_with_trees",
+					"minecraft:mesa", "minecraft:mesa_rock", "minecraft:mesa_clear_rock", "minecraft:mutated_extreme_hills", "minecraft:mutated_birch_forest_hills",
+					"minecraft:mutated_redwood_taiga_hills", "minecraft:mutated_mesa", "minecraft:mutated_mesa_rock", "minecraft:mutated_mesa_clear_rock");
 
 			public static class Spawn {
 
@@ -169,10 +157,6 @@ public class ZombiesConfig {
 		public static class Knight {
 
 			@Config.RequiresMcRestart
-			@Config.Comment("Do you want to unregister this mob?")
-			public boolean spawn = true;
-
-			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")
 			public Spawn spawnRates = new Spawn(100, 2, 4, "all");
 
@@ -209,13 +193,9 @@ public class ZombiesConfig {
 		public static class Goro {
 
 			@Config.RequiresMcRestart
-			@Config.Comment("Do you want to unregister this mob?")
-			public boolean spawn = true;
-
-			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")
-			public Spawn spawnRates = new Spawn(40, 1, 2, "extreme_hills", "smaller_extreme_hills",
-					"extreme_hills_with_trees", "mutated_extreme_hills", "mutated_extreme_hills_with_trees");
+			public Spawn spawnRates = new Spawn(40, 1, 2, "minecraft:extreme_hills", "minecraft:smaller_extreme_hills",
+					"minecraft:extreme_hills_with_trees", "minecraft:mutated_extreme_hills", "minecraft:mutated_extreme_hills_with_trees");
 
 			public static class Spawn {
 
@@ -251,13 +231,9 @@ public class ZombiesConfig {
 		public static class Ravenous {
 
 			@Config.RequiresMcRestart
-			@Config.Comment("Do you want to unregister this mob?")
-			public boolean spawn = true;
-
-			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")
-			public Spawn spawnRates = new Spawn(100, 1, 2, "plains", "forest_hills", "mutated_plains",
-					"mutated_birch_forest_hills");
+			public Spawn spawnRates = new Spawn(100, 1, 2, "minecraft:plains", "minecraft:forest_hills", "minecraft:mutated_plains",
+					"minecraft:mutated_birch_forest_hills");
 
 			@Config.Comment("Will this mob explode on death, "
 					+ "The explosion will not affect blocks if mob griefing is off")

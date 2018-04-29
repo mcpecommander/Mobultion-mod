@@ -11,7 +11,8 @@ public class EntityAISpiderTarget<T extends EntityLivingBase> extends EntityAINe
         super(spider, classTarget, true);
     }
 
-    public boolean shouldExecute()
+    @Override
+	public boolean shouldExecute()
     {
         double D = this.taskOwner.getBrightness();
         return D >= 0.5F ? false : super.shouldExecute();

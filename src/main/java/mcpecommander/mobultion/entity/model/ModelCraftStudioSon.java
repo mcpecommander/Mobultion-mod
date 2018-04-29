@@ -15,7 +15,7 @@ public class ModelCraftStudioSon extends ModelCraftStudio{
 	public CSModelRenderer getModelRendererFromName(String name) {
         CSModelRenderer result;
         for (CSModelRenderer parent : this.getParentBlocks()) {
-            result = this.getModelRendererFromNameAndBlocks(name, parent);
+            result = ModelCraftStudioSon.getModelRendererFromNameAndBlocks(name, parent);
             if (result != null)
                 return result;
         }

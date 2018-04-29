@@ -1,0 +1,48 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "mobultion:items/thunder_wand"
+    },
+	"display": {
+    "thirdperson_righthand": {
+        "rotation": [ 0, 280, 0 ],
+        "translation": [ 0.00, -8.00, 1.75 ],
+        "scale": [ 0.44, 2.20, 1.00 ]
+    },
+    "thirdperson_lefthand": {
+        "rotation": [ 0, 90, 0 ],
+        "translation": [ 0.00, -8.00, 1.75 ],
+        "scale": [ 0.44, 2.20, 1.00 ]
+    },
+    "firstperson_righthand": {
+        "rotation": [ 0, 280, 0 ],
+        "translation": [ 0.00, -8.75, 0.00 ],
+        "scale": [ 0.44, 2.20, 1.00 ]
+    },
+    "firstperson_lefthand": {
+        "rotation": [ 0, 90, 0 ],
+        "translation": [ 0.00, -8.75, 0.00 ],
+        "scale": [ 0.44, 2.20, 1.00 ]
+    },
+    "gui": {
+        "rotation": [ 0, 0, 322 ],
+        "translation": [ 0.00, 0.00, 0.00 ],
+        "scale": [ 0.44, 1.07, 1.00 ]
+    },
+    "head": {
+        "rotation": [ 0, 0, 0 ],
+        "translation": [ 0.00, 0.00, 0.00 ],
+        "scale": [ 1.00, 1.00, 1.00 ]
+    },
+    "fixed": {
+        "rotation": [ 0, 0, 0 ],
+        "translation": [ 0.00, 0.00, 0.00 ],
+        "scale": [ 1.00, 1.00, 1.00 ]
+    },
+    "ground": {
+        "rotation": [ 0, 0, 314 ],
+        "translation": [ 0.00, 0.00, 0.00 ],
+        "scale": [ 0.44, 1.00, 1.00 ]
+    }
+}
+}

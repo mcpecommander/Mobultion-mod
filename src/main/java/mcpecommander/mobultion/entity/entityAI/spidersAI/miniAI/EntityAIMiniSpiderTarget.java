@@ -46,7 +46,8 @@ public class EntityAIMiniSpiderTarget<T extends EntityLivingBase> extends Entity
         this.setMutexBits(1);
         this.targetEntitySelector = new Predicate<T>()
         {
-            public boolean apply(@Nullable T entity)
+            @Override
+			public boolean apply(@Nullable T entity)
             {
                 if (entity == null)
                 {
@@ -64,7 +65,8 @@ public class EntityAIMiniSpiderTarget<T extends EntityLivingBase> extends Entity
         };
     }
 
-    public boolean shouldExecute()
+    @Override
+	public boolean shouldExecute()
     {
     	if(this.taskOwner.getHealth() > 2f && !this.taskOwner.isRiding()){
 	    	if (this.targetChance > 0 && this.taskOwner.getRNG().nextInt(this.targetChance) != 0)
@@ -99,7 +101,8 @@ public class EntityAIMiniSpiderTarget<T extends EntityLivingBase> extends Entity
         return this.taskOwner.getEntityBoundingBox().grow(targetDistance, 4.0D, targetDistance);
     }
 
-    public void startExecuting()
+    @Override
+	public void startExecuting()
     {
         this.taskOwner.setAttackTarget(this.targetEntity);
         super.startExecuting();
@@ -122,7 +125,8 @@ public class EntityAIMiniSpiderTarget<T extends EntityLivingBase> extends Entity
                 this.entity = entityIn;
             }
 
-            public int compare(Entity p_compare_1_, Entity p_compare_2_)
+            @Override
+			public int compare(Entity p_compare_1_, Entity p_compare_2_)
             {
                 double d0 = this.entity.getDistanceSq(p_compare_1_);
                 double d1 = this.entity.getDistanceSq(p_compare_2_);

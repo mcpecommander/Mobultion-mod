@@ -22,7 +22,8 @@ public class LayerSorcererSpiderEyes<T extends EntitySorcererSpider> implements 
         this.renderSorcererSpider = renderSorcererSpider;
     }
 
-    public void doRenderLayer(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
+    @Override
+	public void doRenderLayer(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
     {
         this.renderSorcererSpider.bindTexture(SPIDER_EYES);
         GlStateManager.enableBlend();
@@ -41,7 +42,7 @@ public class LayerSorcererSpiderEyes<T extends EntitySorcererSpider> implements 
         int i = 61680;
         int j = i % 65536;
         int k = i / 65536;
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, j, k);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
         this.renderSorcererSpider.getMainModel().render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
@@ -49,14 +50,15 @@ public class LayerSorcererSpiderEyes<T extends EntitySorcererSpider> implements 
         i = entitylivingbaseIn.getBrightnessForRender();
         j = i % 65536;
         k = i / 65536;
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, j, k);
         this.renderSorcererSpider.setLightmap(entitylivingbaseIn);
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
-    public boolean shouldCombineTextures()
+    @Override
+	public boolean shouldCombineTextures()
     {
         return false;
     }

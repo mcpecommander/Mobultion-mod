@@ -57,7 +57,7 @@ public class EntityMagmaSpider extends EntityAnimatedSpider{
     @Override
     public double getMountedYOffset()
     {
-        return (double)(this.height * 0.6F);
+        return this.height * 0.6F;
     }
     
     @Override

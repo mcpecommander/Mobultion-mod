@@ -41,7 +41,8 @@ public class EntityAIKnightAttackMelee extends EntityAIBase
     /**
      * Returns whether the EntityAIBase should begin execution.
      */
-    public boolean shouldExecute()
+    @Override
+	public boolean shouldExecute()
     {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
 
@@ -84,7 +85,8 @@ public class EntityAIKnightAttackMelee extends EntityAIBase
     /**
      * Returns whether an in-progress EntityAIBase should continue executing
      */
-    public boolean shouldContinueExecuting()
+    @Override
+	public boolean shouldContinueExecuting()
     {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
 
@@ -113,7 +115,8 @@ public class EntityAIKnightAttackMelee extends EntityAIBase
     /**
      * Execute a one shot task or start executing a continuous task
      */
-    public void startExecuting()
+    @Override
+	public void startExecuting()
     {
         this.attacker.getNavigator().setPath(this.entityPathEntity, this.speedTowardsTarget);
         this.delayCounter = 0;
@@ -122,7 +125,8 @@ public class EntityAIKnightAttackMelee extends EntityAIBase
     /**
      * Reset the task's internal state. Called when this task is interrupted by another one
      */
-    public void resetTask()
+    @Override
+	public void resetTask()
     {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
 
@@ -138,7 +142,8 @@ public class EntityAIKnightAttackMelee extends EntityAIBase
     /**
      * Keep ticking a continuous task that has already been started
      */
-    public void updateTask()
+    @Override
+	public void updateTask()
     {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
         this.attacker.getLookHelper().setLookPositionWithEntity(entitylivingbase, 30.0F, 30.0F);
@@ -206,7 +211,7 @@ public class EntityAIKnightAttackMelee extends EntityAIBase
 
     protected double getAttackReachSqr(EntityLivingBase attackTarget)
     {
-        return (double)(this.attacker.width * 2.0F * this.attacker.width * 2.0F + attackTarget.width);
+        return this.attacker.width * 2.0F * this.attacker.width * 2.0F + attackTarget.width;
     }
 
 }

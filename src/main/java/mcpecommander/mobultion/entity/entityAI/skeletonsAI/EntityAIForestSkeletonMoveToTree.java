@@ -1,31 +1,17 @@
 package mcpecommander.mobultion.entity.entityAI.skeletonsAI;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-import com.google.common.collect.AbstractIterator;
 import com.google.common.collect.Lists;
 
-import net.minecraft.block.BlockAir;
 import net.minecraft.block.BlockLeaves;
-import net.minecraft.block.BlockLog;
-import net.minecraft.block.BlockNewLog;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -68,7 +54,7 @@ public class EntityAIForestSkeletonMoveToTree extends EntityAIBase{
 			if (this.entity.getNavigator().noPath()) {
 				count++;
 				if (this.lastPos != this.entity.getPosition() && count > 4) {
-					 tree = this.getAllInBox(entity.getPosition().add(-radius, -3, -radius),
+					 tree = EntityAIForestSkeletonMoveToTree.getAllInBox(entity.getPosition().add(-radius, -3, -radius),
 							entity.getPosition().add(radius, 3, radius), world);
 					 this.lastPos = this.entity.getPosition();
 				}
@@ -89,7 +75,7 @@ public class EntityAIForestSkeletonMoveToTree extends EntityAIBase{
 	
 	private boolean getSpotPathPoint(BlockPos TreeBlock){
 		if(TreeBlock != null){
-			List<BlockPos> blocks = Lists.newArrayList(TreeBlock.getAllInBox(TreeBlock.add(-1, -1, -1), TreeBlock.add(1, 1, 1)));
+			List<BlockPos> blocks = Lists.newArrayList(BlockPos.getAllInBox(TreeBlock.add(-1, -1, -1), TreeBlock.add(1, 1, 1)));
 			//System.out.println(blocks);
 			blocks = this.filter(blocks);
 			//System.out.println(blocks);
@@ -110,7 +96,7 @@ public class EntityAIForestSkeletonMoveToTree extends EntityAIBase{
 	
 	private static boolean checkForLeaves(BlockPos pos, int amount, World world){
 		int i = 0;
-		for(BlockPos block : pos.getAllInBox(pos.add(-1, -1, -1), pos.add(1, 1, 1))){
+		for(BlockPos block : BlockPos.getAllInBox(pos.add(-1, -1, -1), pos.add(1, 1, 1))){
 			IBlockState state = world.getBlockState(block);
 			if(state.getBlock() instanceof BlockLeaves){
 				//System.out.println(i);

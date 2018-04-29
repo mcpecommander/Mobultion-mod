@@ -2,7 +2,7 @@ package mcpecommander.mobultion.entity.renderer.endermenRenderer;
 
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.entities.endermen.EntityIceEnderman;
-import mcpecommander.mobultion.entity.layers.endermenLayers.LayerEndermanTongue;
+import mcpecommander.mobultion.entity.layers.endermenLayers.LayerEndermanEyes;
 import mcpecommander.mobultion.entity.layers.skeletonLayers.LayerCustomHeadCraftstudio;
 import mcpecommander.mobultion.entity.model.ModelCraftStudioSon;
 import net.minecraft.client.renderer.entity.Render;
@@ -18,6 +18,7 @@ public class RenderIceEnderman<T extends EntityIceEnderman> extends RenderLiving
     public RenderIceEnderman(RenderManager manager) {
         super(manager, model, 0.5F);
         this.addLayer(new LayerCustomHeadCraftstudio(model.getModelRendererFromName("Head")));
+        this.addLayer(new LayerEndermanEyes(this));
     }
 
     @Override

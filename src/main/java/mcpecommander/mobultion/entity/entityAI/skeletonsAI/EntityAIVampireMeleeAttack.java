@@ -42,7 +42,8 @@ public class EntityAIVampireMeleeAttack extends EntityAIBase
     /**
      * Returns whether the EntityAIBase should begin execution.
      */
-    public boolean shouldExecute()
+    @Override
+	public boolean shouldExecute()
     {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
 
@@ -85,7 +86,8 @@ public class EntityAIVampireMeleeAttack extends EntityAIBase
     /**
      * Returns whether an in-progress EntityAIBase should continue executing
      */
-    public boolean shouldContinueExecuting()
+    @Override
+	public boolean shouldContinueExecuting()
     {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
 
@@ -114,7 +116,8 @@ public class EntityAIVampireMeleeAttack extends EntityAIBase
     /**
      * Execute a one shot task or start executing a continuous task
      */
-    public void startExecuting()
+    @Override
+	public void startExecuting()
     {
         this.attacker.getNavigator().setPath(this.path, this.speedTowardsTarget);
         this.delayCounter = 0;
@@ -123,7 +126,8 @@ public class EntityAIVampireMeleeAttack extends EntityAIBase
     /**
      * Reset the task's internal state. Called when this task is interrupted by another one
      */
-    public void resetTask()
+    @Override
+	public void resetTask()
     {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
 
@@ -139,7 +143,8 @@ public class EntityAIVampireMeleeAttack extends EntityAIBase
     /**
      * Keep ticking a continuous task that has already been started
      */
-    public void updateTask()
+    @Override
+	public void updateTask()
     {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
         if((!this.world.canSeeSky(this.attacker.getPosition()) && !this.world.canSeeSky(entitylivingbase.getPosition())) && !this.world.isDaytime()){
@@ -210,6 +215,6 @@ public class EntityAIVampireMeleeAttack extends EntityAIBase
 
     protected double getAttackReachSqr(EntityLivingBase attackTarget)
     {
-        return (double)(this.attacker.width * 2.0F * this.attacker.width * 2.0F + attackTarget.width);
+        return this.attacker.width * 2.0F * this.attacker.width * 2.0F + attackTarget.width;
     }
 }

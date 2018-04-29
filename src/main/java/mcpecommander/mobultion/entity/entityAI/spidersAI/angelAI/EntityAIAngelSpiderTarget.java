@@ -87,7 +87,8 @@ public class EntityAIAngelSpiderTarget <T extends EntityLivingBase> extends Enti
                 this.entity = entityIn;
             }
 
-            public int compare(Entity entity1, Entity entity2)
+            @Override
+			public int compare(Entity entity1, Entity entity2)
             {
                 double h0 = ((EntityLivingBase) entity1).getMaxHealth() - ((EntityLivingBase) entity1).getHealth();
                 double h1 = ((EntityLivingBase) entity2).getMaxHealth() - ((EntityLivingBase) entity2).getHealth();

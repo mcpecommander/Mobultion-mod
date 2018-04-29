@@ -18,10 +18,6 @@ public class SpidersConfig {
 
 		public static class Angel {
 
-			@Config.RequiresMcRestart
-			@Config.Comment("Do you want to unregister this mob?")
-			public boolean spawn = true;
-
 			@Config.RangeInt(min = 0, max = 16)
 			@Config.Comment("how much the Angel spider heals")
 			public float healAmount = 4f;
@@ -32,7 +28,7 @@ public class SpidersConfig {
 			
 			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")
-			public Spawn spawnRates = new Spawn(100, 1, 4, "extreme_hills", "ice_mountains", "cold_beach", "mutated_ice_flats" );
+			public Spawn spawnRates = new Spawn(100, 1, 4, "minecraft:extreme_hills", "minecraft:ice_mountains", "minecraft:cold_beach", "minecraft:mutated_ice_flats" );
 			
 			public static class Spawn{
 
@@ -59,9 +55,6 @@ public class SpidersConfig {
 				public String[] biomes;
 				
 			}
-
-//			@Config.Comment("Where this spider can spawn")
-//			public String[] spawnLocations = { "extreme_hills", "ice_mountains", "cold_beach", "mutated_ice_flats" };
 
 		}
 
@@ -70,19 +63,15 @@ public class SpidersConfig {
 
 		public static class Hypno {
 
-			@Config.RequiresMcRestart
-			@Config.Comment("Do you want to unregister this mob?")
-			public boolean spawn = true;
-
 			@Config.RangeInt(min = 20, max = 600)
 			@Config.Comment("how much time (in ticks) does it take for the mob to fire again")
 			public int fireDelay = 100;
 
 			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")
-			public Spawn spawnRates = new Spawn(100, 3, 6, "swampland", "mushroom_island", "mushroom_island_shore", "taiga_hills",
-					"mesa", "mesa_rock", "mesa_clear_rock", "mutated_desert", "mutated_swampland", "mutated_mesa",
-					"mutated_mesa_rock", "mutated_mesa_clear_rock" );
+			public Spawn spawnRates = new Spawn(100, 3, 6, "minecraft:swampland", "minecraft:mushroom_island", "minecraft:mushroom_island_shore", "minecraft:taiga_hills",
+					"minecraft:mesa", "minecraft:mesa_rock", "minecraft:mesa_clear_rock", "minecraft:mutated_desert", "minecraft:mutated_swampland", "minecraft:mutated_mesa",
+					"minecraft:mutated_mesa_rock", "minecraft:mutated_mesa_clear_rock" );
 			
 			public static class Spawn{
 
@@ -109,21 +98,13 @@ public class SpidersConfig {
 				public String[] biomes;
 				
 			}
-			
-//			@Config.Comment("Where this spider can spawn")
-//			public String[] spawnLocations = { "swampland", "mushroom_island", "mushroom_island_shore", "taiga_hills",
-//					"mesa", "mesa_rock", "mesa_clear_rock", "mutated_desert", "mutated_swampland", "mutated_mesa",
-//					"mutated_mesa_rock", "mutated_mesa_clear_rock" };
+	
 		}
 
 		@Config.Comment("Magma Spider config")
 		public Magma magma = new Magma();
 
 		public static class Magma {
-
-			@Config.RequiresMcRestart
-			@Config.Comment("Do you want to unregister this mob?")
-			public boolean spawn = true;
 
 			@Config.RangeInt(min = 20, max = 1000)
 			@Config.Comment("How much is the chance (1/this number) to spawn the spider as a spider jockey")
@@ -138,7 +119,7 @@ public class SpidersConfig {
 
 			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")
-			public Spawn spawnRates = new Spawn(100, 3, 5, "desert", "desert_hills", "mutated_desert" );
+			public Spawn spawnRates = new Spawn(100, 3, 5, "minecraft:desert", "minecraft:desert_hills", "minecraft:mutated_desert" );
 			
 			public static class Spawn{
 
@@ -165,9 +146,6 @@ public class SpidersConfig {
 				public String[] biomes;
 				
 			}
-			
-//			@Config.Comment("Where this spider can spawn")
-//			public String[] spawnLocations = { "desert", "desert_hills", "mutated_desert" };
 
 			@Config.Comment("Should this spider spawn on the nether fortress")
 			public boolean netherFortressSpawn = true;
@@ -177,10 +155,6 @@ public class SpidersConfig {
 		public Mini mini = new Mini();
 
 		public static class Mini {
-
-			@Config.RequiresMcRestart
-			@Config.Comment("Do you want to unregister this mob?")
-			public boolean spawn = true;
 
 			@Config.RangeDouble(min = 0.1, max = 1)
 			@Config.Comment("how fast is this mob (a zombie is 0.23)")
@@ -197,10 +171,6 @@ public class SpidersConfig {
 
 		public static class Mother {
 
-			@Config.RequiresMcRestart
-			@Config.Comment("Do you want to unregister this mob?")
-			public boolean spawn = true;
-
 			@Config.RangeInt(min = 20, max = 1000)
 			@Config.Comment("How long (in ticks) does this mob take to lay an egg")
 			public int pregnancyTime = 80;
@@ -211,8 +181,8 @@ public class SpidersConfig {
 
 			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")
-			public Spawn spawnRates = new Spawn(60, 1, 2, "extreme_hills", "smaller_extreme_hills", "mutated_extreme_hills",
-					"mutated_extreme_hills_with_trees");
+			public Spawn spawnRates = new Spawn(60, 1, 2, "minecraft:extreme_hills", "minecraft:smaller_extreme_hills", "minecraft:mutated_extreme_hills",
+					"minecraft:mutated_extreme_hills_with_trees");
 			
 			public static class Spawn{
 
@@ -239,20 +209,12 @@ public class SpidersConfig {
 				public String[] biomes;
 				
 			}
-			
-//			@Config.Comment("Where this spider can spawn")
-//			public String[] spawnLocations = { "extreme_hills", "smaller_extreme_hills", "mutated_extreme_hills",
-//					"mutated_extreme_hills_with_trees" };
 		}
 
 		@Config.Comment("Sorcerer Spider config")
 		public Sorcerer sorcerer = new Sorcerer();
 
 		public static class Sorcerer {
-
-			@Config.RequiresMcRestart
-			@Config.Comment("Do you want to unregister this mob?")
-			public boolean spawn = true;
 
 			@Config.RangeInt(min = 10, max = 100)
 			@Config.Comment("How long (in ticks) does this mob take to cast its spell")
@@ -265,9 +227,9 @@ public class SpidersConfig {
 
 			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")
-			public Spawn spawnRates = new Spawn(100, 1, 4, "forest", "forest_hills", "jungle", "jungle_hills", "jungle_edge",
-					"birch_forest", "birch_forest_hills", "roofed_forest", "mutated_forest", "mutated_jungle",
-					"mutated_birch_forest", "mutated_roofed_forest");
+			public Spawn spawnRates = new Spawn(100, 1, 4, "minecraft:forest", "minecraft:forest_hills", "minecraft:jungle", "minecraft:jungle_hills", "minecraft:jungle_edge",
+					"minecraft:birch_forest", "minecraft:birch_forest_hills", "minecraft:roofed_forest", "minecraft:mutated_forest", "minecraft:mutated_jungle",
+					"minecraft:mutated_birch_forest", "minecraft:mutated_roofed_forest");
 			
 			public static class Spawn{
 
@@ -294,21 +256,12 @@ public class SpidersConfig {
 				public String[] biomes;
 				
 			}
-			
-//			@Config.Comment("Where this spider can spawn")
-//			public String[] spawnLocations = { "forest", "forest_hills", "jungle", "jungle_hills", "jungle_edge",
-//					"birch_forest", "birch_forest_hills", "roofed_forest", "mutated_forest", "mutated_jungle",
-//					"mutated_birch_forest", "mutated_roofed_forest" };
 		}
 
 		@Config.Comment("Speedy Spider config")
 		public Speedy speedy = new Speedy();
 
 		public static class Speedy {
-
-			@Config.RequiresMcRestart
-			@Config.Comment("Do you want to unregister this mob?")
-			public boolean spawn = true;
 
 			@Config.RangeInt(min = 20, max = 1000)
 			@Config.Comment("How much is the chance (1/this number) to spawn the spider as a spider jockey")
@@ -320,8 +273,8 @@ public class SpidersConfig {
 
 			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")
-			public Spawn spawnRates = new Spawn(100, 2, 4, "ice_flats", "plains", "beaches", "mutated_plains",
-					"mutated_ice_flats");
+			public Spawn spawnRates = new Spawn(100, 2, 4, "minecraft:ice_flats", "minecraft:plains", "minecraft:beaches", "minecraft:mutated_plains",
+					"minecraft:mutated_ice_flats");
 			
 			public static class Spawn{
 
@@ -348,10 +301,6 @@ public class SpidersConfig {
 				public String[] biomes;
 				
 			}
-			
-//			@Config.Comment("Where this will spawn")
-//			public String[] spawnLocations = { "ice_flats", "plains", "beaches", "mutated_plains",
-//					"mutated_ice_flats" };
 
 		}
 
@@ -359,10 +308,6 @@ public class SpidersConfig {
 		public Wither wither = new Wither();
 
 		public static class Wither {
-
-			@Config.RequiresMcRestart
-			@Config.Comment("Do you want to unregister this mob?")
-			public boolean spawn = true;
 
 			@Config.RangeInt(min = 20, max = 1000)
 			@Config.Comment("How much is the chance (1/this number) to spawn the spider as a spider jockey")
@@ -374,7 +319,7 @@ public class SpidersConfig {
 
 			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")
-			public Spawn spawnRates = new Spawn(50, 1, 2, "sky", "stone_beach");
+			public Spawn spawnRates = new Spawn(50, 1, 2, "minecraft:sky", "minecraft:stone_beach");
 			
 			public static class Spawn{
 
@@ -401,9 +346,6 @@ public class SpidersConfig {
 				public String[] biomes;
 				
 			}
-			
-//			@Config.Comment("Where this will spawn")
-//			public String[] spawnLocations = { "sky", "stone_beach" };
 
 		}
 	}

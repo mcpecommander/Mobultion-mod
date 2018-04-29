@@ -1,26 +1,13 @@
 package mcpecommander.mobultion;
 
-import java.util.HashMap;
-
-import javax.annotation.Nonnull;
-
-import mcpecommander.mobultion.init.ModItems;
-import net.minecraft.init.Biomes;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class Reference {
 	
 	public static final String MOD_ID = "mobultion";
 	public static final String NAME = "mcpeCommander's mobultion mod";
-	public static final String VERSION = "0.1";
+	public static final String VERSION = "0.3";
 	public static final String ACCEPTED_MINECRAFT_VERSIONS = "[1.12, 1.13)";
 	
 	public static final String CLIENT_PROXY_CLASS = "mcpecommander.mobultion.proxy.ClientProxy";
@@ -28,13 +15,13 @@ public class Reference {
 	
 	
 	
-	public static boolean removeEnchant(int id, ItemStack item){
-		if(item.isEmpty()){
+	public static boolean removeEnchant(int id, ItemStack itemStack){
+		if(itemStack.isEmpty()){
 			return false;
 		}
-		for(int i = 0; i < item.getEnchantmentTagList().tagCount(); i++){
-			if(item.getEnchantmentTagList().getCompoundTagAt(i).getShort("id") == id){
-				item.getEnchantmentTagList().removeTag(i);
+		for(int i = 0; i < itemStack.getEnchantmentTagList().tagCount(); i++){
+			if(itemStack.getEnchantmentTagList().getCompoundTagAt(i).getShort("id") == id){
+				itemStack.getEnchantmentTagList().removeTag(i);
 				return true;
 			}
 		}
@@ -56,6 +43,7 @@ public class Reference {
 		HAT("hat","item_hat"),
 		ENDERBLAZE("ender_blaze","item_ender_blaze"),
 		ENDERFLAKE("ender_flake","item_ender_flake"),
+		ENDERGLASSSHOT("ender_glass_shot","item_ender_glass_shot"),
 		CORRUPTEDBONE("corrupted_bone","item_corrupted_bone"),
 		CORRUPTEDBONEMEAL("corrupted_bonemeal","item_corrupted_bonemeal"),
 		HOLYSHARD("holy_shard","item_holy_shard"),
@@ -73,7 +61,10 @@ public class Reference {
 		PIGSHEATHTUNIC("pigsheath_tunic", "item_pigsheath_tunic"),
 		PIGSHEATHHELMET("pigsheath_helmet", "item_pigsheath_helmet"),
 		PIGSHEATHLEGGINGS("pigsheath_leggings", "item_pigsheath_leggings"),
-		PIGSHEATHBOOTS("pigsheath_boots", "item_pigsheath_boots");
+		PIGSHEATHBOOTS("pigsheath_boots", "item_pigsheath_boots"),
+		THUNDERWAND("thunder_wand", "item_thunder_wand"),
+		HAYHAT("hay_hat", "item_hay_hat"),
+		SPAWNCHANGER("spawn_changer", "item_spawn_changer");
 		
 		private String unlocalizedName;
 		private String registryName;
@@ -130,8 +121,11 @@ public class Reference {
 		//Endermen
 		MAGMAENDERMAN(new ResourceLocation(MOD_ID, "magma_enderman"), "magma_enderman", "mobultion:magma_enderman.info"),
 		ICEENDERMAN(new ResourceLocation(MOD_ID, "ice_enderman"), "ice_enderman", "mobultion:ice_enderman.info"),
-		ENDERBLAZE(new ResourceLocation(MOD_ID, "ender_blaze"), "ender_blaze", ""),
-		ENDERFLAKE(new ResourceLocation(MOD_ID, "ender_flake"), "ender_flake", ""),
+		WANDERINGENDERMAN(new ResourceLocation(MOD_ID, "wandering_enderman"), "wandering_enderman", "mobultion:wandering_enderman.info"),
+		GARDENERENDERMAN(new ResourceLocation(MOD_ID, "gardener_enderman"), "gardener_enderman", "mobultion:gardener_enderman.info"),
+		GLASSENDERMAN(new ResourceLocation(MOD_ID, "glass_enderman"), "glass_enderman", "mobultion:glass_enderman.info"),
+		ENDERPROJECTILE(new ResourceLocation(MOD_ID, "ender_projectile"), "ender_projectile", ""),
+		GLASSSHOT(new ResourceLocation(MOD_ID, "glass_shot"), "glass_shot", ""),
 		
 		//Mites
 		WOODMITE(new ResourceLocation(MOD_ID, "woodmite"), "woodmite", "mobultion:woodmite.info")
@@ -153,7 +147,7 @@ public class Reference {
 		}
 		
 		public String getUnlocalizedName(){
-			return unlocalizedName;
+			return registryName.toString();
 		}
 		
 		public ResourceLocation getRegistryName(){

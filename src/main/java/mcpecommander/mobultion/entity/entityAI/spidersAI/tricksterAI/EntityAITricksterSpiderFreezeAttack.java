@@ -20,7 +20,8 @@ public class EntityAITricksterSpiderFreezeAttack extends EntityAIBase{
         this.setMutexBits(3);
     }
 
-    public boolean shouldExecute()
+    @Override
+	public boolean shouldExecute()
     {
         EntityLivingBase entitylivingbase = this.trickster.getAttackTarget();
         if(entitylivingbase != null && entitylivingbase.isEntityAlive()){
@@ -31,18 +32,21 @@ public class EntityAITricksterSpiderFreezeAttack extends EntityAIBase{
         
     }
 
-    public void startExecuting()
+    @Override
+	public void startExecuting()
     {
         this.attackTime = 80;
     }
     
-    public void resetTask()
+    @Override
+	public void resetTask()
     {
         super.resetTask();
     }
 
 
-    public void updateTask()
+    @Override
+	public void updateTask()
     {
         --this.attackTime;
         EntityLivingBase entitylivingbase = this.trickster.getAttackTarget();

@@ -23,8 +23,8 @@ import net.minecraft.world.World;
 public class EntityMiniSpider extends EntityAnimatedSpider{
 	
 	static {
-    	EntityMiniSpider.animHandler.addAnim(Reference.MOD_ID, "spider_move", "mini_spider", false);
-    	EntityMiniSpider.animHandler.addAnim(Reference.MOD_ID, "lookat", new AnimationLookAt("Head"));
+		EntityMiniSpider.animHandler.addAnim(Reference.MOD_ID, "spider_move", "mini_spider", false);
+		EntityMiniSpider.animHandler.addAnim(Reference.MOD_ID, "lookat", new AnimationLookAt("Head"));
 	}
 	
 	public EntityMiniSpider(World worldIn) {
@@ -50,7 +50,7 @@ public class EntityMiniSpider extends EntityAnimatedSpider{
 
 	@Override
 	public double getMountedYOffset() {
-		return (double) (this.height * 0.6F);
+		return this.height * 0.6F;
 	}
 
 	@Override

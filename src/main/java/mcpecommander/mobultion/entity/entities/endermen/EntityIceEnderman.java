@@ -27,10 +27,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class EntityIceEnderman extends EntityAnimatedEnderman {
 
+	//A dataParameter that auto-syncs to the client (not backwards). This is used to define if this should play the biting animation.
 	private static final DataParameter<Boolean> BITING = EntityDataManager.<Boolean>createKey(EntityIceEnderman.class,
 			DataSerializers.BOOLEAN);
 
@@ -49,16 +49,19 @@ public class EntityIceEnderman extends EntityAnimatedEnderman {
 		this.stepHeight = 1.0F;
 	}
 	
+	//Stopped 
 	@Override
 	public boolean handleWaterMovement() {
 		return false;
 	}
 	
+	//Not tested enough. Do not use.
 	@Override
 	protected float getWaterSlowDown() {
 		return -0.546f;
 	}
 	
+	//Should stop water from pushing the entity. Combine with stopping the handleWanterMovement.
 	@Override
 	public boolean isPushedByWater() {
 		return false;
@@ -76,17 +79,20 @@ public class EntityIceEnderman extends EntityAnimatedEnderman {
 
 	}
 	
+	//Grouped all the loot tables for easier rewriting later on if needed. Also thanks vanilla
 	@Override
 	protected ResourceLocation getLootTable() {
-		return new ResourceLocation(Reference.MOD_ID, "endermen/ice_enderman");
+		return Reference.LootTables.ENTITYICEENDERMAN;
 	}
 
+	//Every data parameter must be registered in this method if you do not want the game to crash.
 	@Override
 	protected void entityInit() {
 		super.entityInit();
 		this.dataManager.register(BITING, Boolean.valueOf(false));
 	}
 
+	//A setter that sets the parameter and set it dirty (as in minecraft need to sync this to the client). SetDirty is not required but is used for faster sync rates.
 	public void setBiting(boolean biting) {
 		this.dataManager.set(BITING, Boolean.valueOf(biting));
 		this.dataManager.setDirty(BITING);
@@ -96,6 +102,7 @@ public class EntityIceEnderman extends EntityAnimatedEnderman {
 		return this.dataManager.get(BITING);
 	}
 
+	//A good method to run server sided shit. Mostly used for damaging(or healing in this case) the entity from water in my mod.
 	@Override
 	protected void updateAITasks() {
 		if (this.world.isDaytime() && this.ticksExisted >= this.targetChangeTime + 600) {
@@ -108,14 +115,14 @@ public class EntityIceEnderman extends EntityAnimatedEnderman {
 			}
 		}
 
-		if (this.isWet() && this.getRNG().nextInt(10) == 0) {
+		if (this.isWet() && this.getRNG().nextInt(50) == 0) {
 			this.heal(1f);
-			;
 		}
 
 		super.updateAITasks();
 	}
 
+	//Summon the lingering effect cloud with the freeze potion effect.
 	@Override
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
@@ -127,13 +134,14 @@ public class EntityIceEnderman extends EntityAnimatedEnderman {
 			entityareaeffectcloud.setRadiusOnUse(-0.5F);
 			entityareaeffectcloud.setWaitTime(10);
 			entityareaeffectcloud
-					.setRadiusPerTick(-entityareaeffectcloud.getRadius() / (float) entityareaeffectcloud.getDuration());
+					.setRadiusPerTick(-entityareaeffectcloud.getRadius() / entityareaeffectcloud.getDuration());
 			entityareaeffectcloud.addEffect(new PotionEffect(ModPotions.potionFreeze, 100, 0));
 			// entityareaeffectcloud.setPotion(PotionType.getPotionTypeForName("mobultion:freeze_potion"));
 			this.world.spawnEntity(entityareaeffectcloud);
 		}
 	}
 
+	//Normal enderman behavior to arrows and other entities with an added punishment of freezing the player if attacked with an empty hand.
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		if (source.equals(DamageSource.ON_FIRE)) {
@@ -174,11 +182,12 @@ public class EntityIceEnderman extends EntityAnimatedEnderman {
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(64.0D);
 	}
 
+	//The magic copy-pasta from vanilla that determines whether the player is looking at the enderman. (modified to lower the chance of becoming angry)
 	@Override
 	public boolean shouldAttackPlayer(EntityPlayer player) {
 		Vec3d vec3d = player.getLook(1.0F).normalize();
 		Vec3d vec3d1 = new Vec3d(this.posX - player.posX, this.getEntityBoundingBox().minY
-				+ (double) this.getEyeHeight() - (player.posY + (double) player.getEyeHeight()),
+				+ this.getEyeHeight() - (player.posY + player.getEyeHeight()),
 				this.posZ - player.posZ);
 		double d0 = vec3d1.lengthVector();
 		vec3d1 = vec3d1.normalize();
@@ -186,6 +195,7 @@ public class EntityIceEnderman extends EntityAnimatedEnderman {
 		return d1 > 1.0D - 0.015D / d0 ? player.canEntityBeSeen(this) : false;
 	}
 
+	//Do not, I repeat do not try to understand what is happening here. It is related to the animation sequence and when to play them but it is highly unoptimized.
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
@@ -242,12 +252,13 @@ public class EntityIceEnderman extends EntityAnimatedEnderman {
 				this.getAnimationHandler().startAnimation(Reference.MOD_ID, "riding", this);
 			}
 
+			//Since the particle is vanilla this won't crash on class loading on dedicated servers. Otherwise must be in its own client sided method. 
 			double yaw = ((this.rotationYawHead + 90) * Math.PI) / 180;
 			double z = Math.sin(yaw);
 			double x = Math.cos(yaw);
-			double d0 = (double) (9237234 >> 16 & 255) / 255.0D;
-			double d1 = (double) (9237234 >> 8 & 255) / 255.0D;
-			double d2 = (double) (9237234 >> 0 & 255) / 255.0D;
+			double d0 = (9237234 >> 16 & 255) / 255.0D;
+			double d1 = (9237234 >> 8 & 255) / 255.0D;
+			double d2 = (9237234 >> 0 & 255) / 255.0D;
 			if (this.isScreaming() && ticksExisted % 5 == 0) {
 				this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX + (x * 0.35D),
 						this.posY + this.getEyeHeight(), this.posZ + (z * 0.35D), d0, d1, d2);
@@ -255,16 +266,5 @@ public class EntityIceEnderman extends EntityAnimatedEnderman {
 		}
 	}
 
-	// @Override
-	// public void updatePassenger(Entity passenger)
-	// {
-	// if (this.isPassenger(passenger))
-	// {
-	// double yaw = ((this.rotationYawHead + 90) * Math.PI) / 180;
-	// double z = Math.sin(yaw);
-	// double x = Math.cos(yaw);
-	// passenger.setPosition(this.posX + x, this.posY, this.posZ + z);
-	// }
-	// }
 
 }

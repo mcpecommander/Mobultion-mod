@@ -23,7 +23,8 @@ public class LayerVampireSuit implements LayerRenderer<EntityVampireSkeleton>
         this.layerModel = (ModelCraftStudioSon) this.renderer.getMainModel();
     }
 
-    public void doRenderLayer(EntityVampireSkeleton entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
+    @Override
+	public void doRenderLayer(EntityVampireSkeleton entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
     {
     	GlStateManager.pushMatrix();
     	GlStateManager.scale(1.01F, 1.01F, 1.01F);
@@ -36,7 +37,8 @@ public class LayerVampireSuit implements LayerRenderer<EntityVampireSkeleton>
         GlStateManager.popMatrix();     
     }
 
-    public boolean shouldCombineTextures()
+    @Override
+	public boolean shouldCombineTextures()
     {
         return false;
     }

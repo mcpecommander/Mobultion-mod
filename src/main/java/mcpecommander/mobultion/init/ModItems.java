@@ -4,6 +4,7 @@ import mcpecommander.mobultion.items.ItemCorruptedBone;
 import mcpecommander.mobultion.items.ItemCorruptedBonemeal;
 import mcpecommander.mobultion.items.ItemEnderBlaze;
 import mcpecommander.mobultion.items.ItemEnderFlake;
+import mcpecommander.mobultion.items.ItemEnderGlassShot;
 import mcpecommander.mobultion.items.ItemFang;
 import mcpecommander.mobultion.items.ItemFangNecklace;
 import mcpecommander.mobultion.items.ItemFireSword;
@@ -12,6 +13,7 @@ import mcpecommander.mobultion.items.ItemForestBow;
 import mcpecommander.mobultion.items.ItemFork;
 import mcpecommander.mobultion.items.ItemHammer;
 import mcpecommander.mobultion.items.ItemHat;
+import mcpecommander.mobultion.items.ItemHayHat;
 import mcpecommander.mobultion.items.ItemHealingWand;
 import mcpecommander.mobultion.items.ItemHealth;
 import mcpecommander.mobultion.items.ItemHeartArrow;
@@ -23,7 +25,9 @@ import mcpecommander.mobultion.items.ItemMagmaArrow;
 import mcpecommander.mobultion.items.ItemNetherRuby;
 import mcpecommander.mobultion.items.ItemPigmanFlesh;
 import mcpecommander.mobultion.items.ItemSorcererBreath;
+import mcpecommander.mobultion.items.ItemSpawnChanger;
 import mcpecommander.mobultion.items.ItemSpineAsh;
+import mcpecommander.mobultion.items.ItemThunderWand;
 import mcpecommander.mobultion.items.ItemWitherSpine;
 import mcpecommander.mobultion.items.pigsheathArmor.ItemPigsheathBoots;
 import mcpecommander.mobultion.items.pigsheathArmor.ItemPigsheathHelmet;
@@ -93,6 +97,15 @@ public class ModItems {
 	public static ItemPigsheathLeggings pigsheathLeggings;
 	@GameRegistry.ObjectHolder("mobultion:item_pigsheath_boots")
 	public static ItemPigsheathBoots pigsheathBoots;
+	@GameRegistry.ObjectHolder("mobultion:item_thunder_wand")
+	public static ItemThunderWand thunderWand;
+	@GameRegistry.ObjectHolder("mobultion:item_hay_hat")
+	public static ItemHayHat hayHat;
+	@GameRegistry.ObjectHolder("mobultion:item_ender_glass_shot")
+	public static ItemEnderGlassShot enderGlassShot;
+	@GameRegistry.ObjectHolder("mobultion:item_spawn_changer")
+	public static ItemSpawnChanger spawnChanger;
+
 
 	@SideOnly(Side.CLIENT)
     public static void initModels() {
@@ -107,6 +120,7 @@ public class ModItems {
 		hat.initModel();
 		enderFlake.initModel();
 		enderBlaze.initModel();
+		enderGlassShot.initModel();
 		corruptedBone.initModel();
 		corruptedBonemeal.initModel();
 		holyShard.initModel();
@@ -125,6 +139,9 @@ public class ModItems {
 		flamingChip.initModel();
 		netherRuby.initModel();
 		pigmanFlesh.initModel();
+		thunderWand.initModel();
+		hayHat.initModel();
+		spawnChanger.initModel();
     }
 	
 

@@ -36,7 +36,8 @@ public class EntityTricksterSpider extends EntityAnimatedSpider{
 		this.setSize(1.4f, 0.9f);
 	}
 
-    protected void initEntityAI()
+    @Override
+	protected void initEntityAI()
     {
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(3, new EntityAILeapAtTarget(this, 0.4F));
@@ -50,12 +51,14 @@ public class EntityTricksterSpider extends EntityAnimatedSpider{
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
     }
     
-    public double getMountedYOffset()
+    @Override
+	public double getMountedYOffset()
     {
-        return (double)(this.height * 0.6F);
+        return this.height * 0.6F;
     }
 
-    protected void applyEntityAttributes()
+    @Override
+	protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(18.0D);
@@ -63,7 +66,8 @@ public class EntityTricksterSpider extends EntityAnimatedSpider{
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
     } 
     
-    @Nullable
+    @Override
+	@Nullable
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata)
     {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
@@ -80,12 +84,14 @@ public class EntityTricksterSpider extends EntityAnimatedSpider{
         return livingdata;
     }
 
-    public float getEyeHeight()
+    @Override
+	public float getEyeHeight()
     {
         return 0.65F;
     }
     
-    protected void entityInit()
+    @Override
+	protected void entityInit()
     {
         super.entityInit();
         this.dataManager.register(MODE, Byte.valueOf((byte)0));

@@ -1,14 +1,10 @@
 package mcpecommander.mobultion.entity.entityAI;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 
 import mcpecommander.mobultion.entity.entityAI.spidersAI.sorcererAI.EntityAISorcererSpiderTarget;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.monster.EntityMob;

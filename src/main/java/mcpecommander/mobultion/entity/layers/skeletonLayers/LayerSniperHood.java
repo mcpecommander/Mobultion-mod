@@ -24,7 +24,8 @@ public class LayerSniperHood implements LayerRenderer<EntitySniperSkeleton>
         this.layerModel = (ModelCraftStudioSon) this.renderer.getMainModel();
     }
 
-    public void doRenderLayer(EntitySniperSkeleton entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
+    @Override
+	public void doRenderLayer(EntitySniperSkeleton entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
     {
     	GlStateManager.pushMatrix();
     	GlStateManager.scale(1.01F, 1.01F, 1.01F);
@@ -32,9 +33,9 @@ public class LayerSniperHood implements LayerRenderer<EntitySniperSkeleton>
         this.layerModel.setLivingAnimations(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks);
         int color = BiomeColorHelper.getGrassColorAtPos(entitylivingbaseIn.world, entitylivingbaseIn.getPosition());
         if(color != -1){
-        	double d0 = (double)(color >> 16 & 255) / 255.0D;
-            double d1 = (double)(color >> 8 & 255) / 255.0D;
-            double d2 = (double)(color >> 0 & 255) / 255.0D;
+        	double d0 = (color >> 16 & 255) / 255.0D;
+            double d1 = (color >> 8 & 255) / 255.0D;
+            double d2 = (color >> 0 & 255) / 255.0D;
             GlStateManager.color((float)d0, (float)d1, (float)d2, .99F);
         }else{
         	GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -48,7 +49,8 @@ public class LayerSniperHood implements LayerRenderer<EntitySniperSkeleton>
         
     }
 
-    public boolean shouldCombineTextures()
+    @Override
+	public boolean shouldCombineTextures()
     {
         return true;
     }

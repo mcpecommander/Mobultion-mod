@@ -2,7 +2,6 @@ package mcpecommander.mobultion.items.pigsheathArmor;
 
 import mcpecommander.mobultion.MobultionMod;
 import mcpecommander.mobultion.Reference;
-import mcpecommander.mobultion.init.ModItems;
 import mcpecommander.mobultion.particle.VomitParticle;
 import mcpecommander.mobultion.proxy.CommonProxy;
 import net.minecraft.client.Minecraft;
@@ -10,12 +9,12 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -34,7 +33,7 @@ public class ItemPigsheathBoots extends ItemArmor{
 		if((player.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty() || !(player.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemPigsheathHelmet)) &&
 				(player.getItemStackFromSlot(EntityEquipmentSlot.LEGS).isEmpty() || !(player.getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() instanceof ItemPigsheathLeggings)) &&
 				(player.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty() || !(player.getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemPigsheathTunic))){
-			if(world.isRemote && this.itemRand.nextInt(10) == 0){
+			if(world.isRemote && Item.itemRand.nextInt(10) == 0){
 				this.spawnParticles(world, player);
 			}
 		}
@@ -42,7 +41,7 @@ public class ItemPigsheathBoots extends ItemArmor{
 	
 	@SideOnly(Side.CLIENT)
 	private void spawnParticles(World world, EntityPlayer player){
-		VomitParticle particle = new VomitParticle(world, player.posX + (this.itemRand.nextDouble() - 0.5), player.posY + player.height, player.posZ + (this.itemRand.nextDouble() - 0.5), (this.itemRand.nextGaussian() - 0.5d)/100d, 0.05, (this.itemRand.nextGaussian() - 0.5d)/100d, this.itemRand.nextFloat() + 0.8f);
+		VomitParticle particle = new VomitParticle(world, player.posX + (Item.itemRand.nextDouble() - 0.5), player.posY + player.height, player.posZ + (Item.itemRand.nextDouble() - 0.5), (Item.itemRand.nextGaussian() - 0.5d)/100d, 0.05, (Item.itemRand.nextGaussian() - 0.5d)/100d, Item.itemRand.nextFloat() + 0.8f);
 		Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 	}
 	

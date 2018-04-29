@@ -16,7 +16,8 @@ public class RenderHeartArrow extends RenderArrow<EntityHeartArrow>{
         super(manager);
     }
 
-    protected ResourceLocation getEntityTexture(EntityHeartArrow entity)
+    @Override
+	protected ResourceLocation getEntityTexture(EntityHeartArrow entity)
     {
         return arrow;
     }

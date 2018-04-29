@@ -103,10 +103,10 @@ public class RenderShamanSkeleton extends RenderLiving<EntityShamanSkeleton>{
             }
             else
             {
-                float f1 = (float)(i >> 24 & 255) / 255.0F;
-                float f2 = (float)(i >> 16 & 255) / 255.0F;
-                float f3 = (float)(i >> 8 & 255) / 255.0F;
-                float f4 = (float)(i & 255) / 255.0F;
+                float f1 = (i >> 24 & 255) / 255.0F;
+                float f2 = (i >> 16 & 255) / 255.0F;
+                float f3 = (i >> 8 & 255) / 255.0F;
+                float f4 = (i & 255) / 255.0F;
                 this.brightnessBuffer.put(f2);
                 this.brightnessBuffer.put(f3);
                 this.brightnessBuffer.put(f4);
@@ -132,6 +132,7 @@ public class RenderShamanSkeleton extends RenderLiving<EntityShamanSkeleton>{
         }
 	}
 	
+	@Override
 	public void transformHeldFull3DItemLayer()
     {
         GlStateManager.translate(0.09375F, 0.1875F, 0.0F);

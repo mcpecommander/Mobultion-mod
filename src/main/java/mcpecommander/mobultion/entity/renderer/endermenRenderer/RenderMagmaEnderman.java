@@ -2,13 +2,9 @@ package mcpecommander.mobultion.entity.renderer.endermenRenderer;
 
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.entities.endermen.EntityMagmaEnderman;
-import mcpecommander.mobultion.entity.entities.zombies.EntityDoctorZombie;
 import mcpecommander.mobultion.entity.layers.endermenLayers.LayerEndermanTongue;
 import mcpecommander.mobultion.entity.layers.skeletonLayers.LayerCustomHeadCraftstudio;
-import mcpecommander.mobultion.entity.layers.skeletonLayers.LayerHeldItemCraftStudio;
-import mcpecommander.mobultion.entity.layers.zombieLayers.LayerZombieArmor;
 import mcpecommander.mobultion.entity.model.ModelCraftStudioSon;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;

@@ -18,10 +18,6 @@ public class SkeletonsConfig {
 
 		public static class Corrupted {
 
-			@Config.RequiresMcRestart
-			@Config.Comment("Do you want to unregister this mob?")
-			public boolean spawn = true;
-
 			@Config.RangeInt(min = 20, max = 1000)
 			@Config.Comment("How long(in ticks) the mining fatigue effect will last")
 			public int miningFatigue = 100;
@@ -32,8 +28,8 @@ public class SkeletonsConfig {
 
 			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")
-			public Spawn spawnRates = new Spawn(100, 1, 4, "desert", "desert_hills", "savanna_rock", "mutated_desert",
-					"mutated_savanna", "mutated_savanna_rock");
+			public Spawn spawnRates = new Spawn(100, 1, 4, "minecraft:desert", "minecraft:desert_hills", "minecraft:savanna_rock", "minecraft:mutated_desert",
+					"minecraft:mutated_savanna", "minecraft:mutated_savanna_rock");
 			
 			public static class Spawn{
 
@@ -61,10 +57,6 @@ public class SkeletonsConfig {
 				
 			}
 			
-//			@Config.Comment("Where this will spawn")
-//			public String[] spawnLocations = { "desert", "desert_hills", "savanna_rock", "mutated_desert",
-//					"mutated_savanna", "mutated_savanna_rock" };
-
 			@Config.Comment("If this skeleton should spawn" + " from the desert temple loot chest (base chance is 2%)")
 			public boolean spawnFromLootChests = true;
 
@@ -77,10 +69,6 @@ public class SkeletonsConfig {
 		public Joker joker = new Joker();
 
 		public static class Joker {
-
-			@Config.RequiresMcRestart
-			@Config.Comment("Do you want to unregister this mob?")
-			public boolean spawn = true;
 
 			@Config.RangeDouble(min = 0.01D, max = 10D)
 			@Config.Comment("How much this arrow deals damage + a hardcoded calculated damage from the velocity")
@@ -99,12 +87,12 @@ public class SkeletonsConfig {
 
 			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")
-			public Spawn spawnRates = new Spawn(100, 3, 7, "mutated_plains", "mutated_desert", "mutated_extreme_hills",
-					"mutated_forest", "mutated_taiga", "mutated_swampland", "mutated_ice_flats", "mutated_jungle",
-					"mutated_jungle_edge", "mutated_birch_forest", "mutated_birch_forest_hills",
-					"mutated_roofed_forest", "mutated_taiga_cold", "mutated_redwood_taiga",
-					"mutated_redwood_taiga_hills", "mutated_extreme_hills_with_trees", "mutated_savanna",
-					"mutated_savanna_rock", "mutated_mesa", "mutated_mesa_rock", "mutated_mesa_clear_rock");
+			public Spawn spawnRates = new Spawn(100, 3, 7, "minecraft:mutated_plains", "minecraft:mutated_desert", "minecraft:mutated_extreme_hills",
+					"minecraft:mutated_forest", "minecraft:mutated_taiga", "minecraft:mutated_swampland", "minecraft:mutated_ice_flats", "minecraft:mutated_jungle",
+					"minecraft:mutated_jungle_edge", "minecraft:mutated_birch_forest", "minecraft:mutated_birch_forest_hills",
+					"minecraft:mutated_roofed_forest", "minecraft:mutated_taiga_cold", "minecraft:mutated_redwood_taiga",
+					"minecraft:mutated_redwood_taiga_hills", "minecraft:mutated_extreme_hills_with_trees", "minecraft:mutated_savanna",
+					"minecraft:mutated_savanna_rock", "minecraft:mutated_mesa", "minecraft:mutated_mesa_rock", "minecraft:mutated_mesa_clear_rock");
 			
 			public static class Spawn{
 
@@ -131,14 +119,6 @@ public class SkeletonsConfig {
 				public String[] biomes;
 				
 			}
-			
-//			@Config.Comment("Where this will spawn")
-//			public String[] spawnLocations = { "mutated_plains", "mutated_desert", "mutated_extreme_hills",
-//					"mutated_forest", "mutated_taiga", "mutated_swampland", "mutated_ice_flats", "mutated_jungle",
-//					"mutated_jungle_edge", "mutated_birch_forest", "mutated_birch_forest_hills",
-//					"mutated_roofed_forest", "mutated_taiga_cold", "mutated_redwood_taiga",
-//					"mutated_redwood_taiga_hills", "mutated_extreme_hills_with_trees", "mutated_savanna",
-//					"mutated_savanna_rock", "mutated_mesa", "mutated_mesa_rock", "mutated_mesa_clear_rock" };
 
 		}
 
@@ -146,10 +126,6 @@ public class SkeletonsConfig {
 		public Magma magma = new Magma();
 
 		public static class Magma {
-
-			@Config.RequiresMcRestart
-			@Config.Comment("Do you want to unregister this mob?")
-			public boolean spawn = true;
 
 			@Config.Comment("Can the arrow make glass when hitting sand")
 			public boolean glassMaking = true;
@@ -162,8 +138,8 @@ public class SkeletonsConfig {
 
 			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")
-			public Spawn spawnRates = new Spawn(80, 3, 4, "desert", "desert_hills", "savanna_rock", "mutated_desert",
-					"mutated_savanna", "mutated_savanna_rock", "hell");
+			public Spawn spawnRates = new Spawn(80, 3, 4, "minecraft:desert", "minecraft:desert_hills", "minecraft:savanna_rock", "minecraft:mutated_desert",
+					"minecraft:mutated_savanna", "minecraft:mutated_savanna_rock", "minecraft:hell");
 			
 			public static class Spawn{
 
@@ -190,10 +166,6 @@ public class SkeletonsConfig {
 				public String[] biomes;
 				
 			}
-			
-//			@Config.Comment("Where this will spawn")
-//			public String[] spawnLocations = { "desert", "desert_hills", "savanna_rock", "mutated_desert",
-//					"mutated_savanna", "mutated_savanna_rock", "hell" };
 
 		}
 
@@ -201,10 +173,6 @@ public class SkeletonsConfig {
 		public Shaman shaman = new Shaman();
 
 		public static class Shaman {
-
-			@Config.RequiresMcRestart
-			@Config.Comment("Do you want to unregister this mob?")
-			public boolean spawn = true;
 
 			@Config.RangeInt(min = 1, max = 1200)
 			@Config.Comment("How many ticks does this mob add to the graves "
@@ -221,10 +189,10 @@ public class SkeletonsConfig {
 
 			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")
-			public Spawn spawnRates = new Spawn(100, 1, 1, "extreme_hills", "forest", "swampland", "mushroom_island",
-					"mushroom_island_shore", "jungle", "forest_hills", "jungle_hills", "jungle_edge", "birch_forest",
-					"birch_forest_hills", "roofed_forest", "mutated_forest", "mutated_jungle", "mutated_swampland",
-					"mutated_birch_forest");
+			public Spawn spawnRates = new Spawn(100, 1, 1, "minecraft:extreme_hills", "minecraft:forest", "minecraft:swampland", "minecraft:mushroom_island",
+					"minecraft:mushroom_island_shore", "minecraft:jungle", "minecraft:forest_hills", "minecraft:jungle_hills", "minecraft:jungle_edge", "minecraft:birch_forest",
+					"minecraft:birch_forest_hills", "minecraft:roofed_forest", "minecraft:mutated_forest", "minecraft:mutated_jungle", "minecraft:mutated_swampland",
+					"minecraft:mutated_birch_forest");
 			
 			public static class Spawn{
 
@@ -251,12 +219,6 @@ public class SkeletonsConfig {
 				public String[] biomes;
 				
 			}
-			
-//			@Config.Comment("Where this will spawn")
-//			public String[] spawnLocations = { "extreme_hills", "forest", "swampland", "mushroom_island",
-//					"mushroom_island_shore", "jungle", "forest_hills", "jungle_hills", "jungle_edge", "birch_forest",
-//					"birch_forest_hills", "roofed_forest", "mutated_forest", "mutated_jungle", "mutated_swampland",
-//					"mutated_birch_forest" };
 
 		}
 
@@ -264,10 +226,6 @@ public class SkeletonsConfig {
 		public Sniper sniper = new Sniper();
 
 		public static class Sniper {
-
-			@Config.RequiresMcRestart
-			@Config.Comment("Do you want to unregister this mob?")
-			public boolean spawn = true;
 
 			@Config.RangeInt(min = 5, max = 50)
 			@Config.Comment("The tree serach radius, Warning: extremly heavy on the system,"
@@ -288,8 +246,8 @@ public class SkeletonsConfig {
 
 			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")
-			public Spawn spawnRates = new Spawn(50, 1, 1, "forest", "birch_forest", "roofed_forest", "birch_forest_hills",
-					"mutated_forest", "mutated_birch_forest", "mutated_roofed_forest");
+			public Spawn spawnRates = new Spawn(50, 1, 1, "minecraft:forest", "minecraft:birch_forest", "minecraft:roofed_forest", "minecraft:birch_forest_hills",
+					"minecraft:mutated_forest", "minecraft:mutated_birch_forest", "minecraft:mutated_roofed_forest");
 			
 			public static class Spawn{
 
@@ -316,10 +274,6 @@ public class SkeletonsConfig {
 				public String[] biomes;
 				
 			}
-			
-//			@Config.Comment("Where this will spawn")
-//			public String[] spawnLocations = { "forest", "birch_forest", "roofed_forest", "birch_forest_hills",
-//					"mutated_forest", "mutated_birch_forest", "mutated_roofed_forest" };
 
 		}
 
@@ -327,10 +281,6 @@ public class SkeletonsConfig {
 		public Withering withering = new Withering();
 
 		public static class Withering {
-
-			@Config.RequiresMcRestart
-			@Config.Comment("Do you want to unregister this mob?")
-			public boolean spawn = true;
 
 			@Config.RangeInt(min = 10, max = 1000)
 			@Config.Comment("How long (in ticks) is the wither effect going to be (from the arrow)")
@@ -341,7 +291,7 @@ public class SkeletonsConfig {
 
 			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")
-			public Spawn spawnRates = new Spawn(100, 1, 3, "sky");
+			public Spawn spawnRates = new Spawn(100, 1, 3, "minecraft:sky");
 			
 			public static class Spawn{
 
@@ -368,7 +318,6 @@ public class SkeletonsConfig {
 				public String[] biomes;
 				
 			}
-			
 
 		}
 		
@@ -378,12 +327,8 @@ public class SkeletonsConfig {
 		public static class Vampire {
 
 			@Config.RequiresMcRestart
-			@Config.Comment("Do you want to unregister this mob?")
-			public boolean spawn = true;
-
-			@Config.RequiresMcRestart
 			@Config.Comment("Spawn configuration")
-			public Spawn spawnRates = new Spawn(100, 1, 3, "jungle", "jungle_hills", "jungle_edge", "mutated_jungle", "mutated_jungle_edge");
+			public Spawn spawnRates = new Spawn(100, 1, 3, "minecraft:jungle", "minecraft:jungle_hills", "minecraft:jungle_edge", "minecraft:mutated_jungle", "minecraft:mutated_jungle_edge");
 			
 			public static class Spawn{
 
@@ -413,5 +358,23 @@ public class SkeletonsConfig {
 			
 
 		}
+	}
+	
+	@Config.Comment("Skeleton Remains")
+	public static Remains remains = new Remains();
+
+	public static class Remains {
+		
+		@Config.Comment("Remains max health")
+		@Config.RangeDouble(min = 1, max = 100)
+		public double health = 50d;
+		
+		@Config.Comment("How many days does it need to reach max health")
+		@Config.RangeInt(min = 1, max = 100)
+		public int days = 10;
+		
+		@Config.Comment("How many seconds does it take to respawn")
+		@Config.RangeInt(min = 5, max = 1000)
+		public int respawnTime = 60;
 	}
 }

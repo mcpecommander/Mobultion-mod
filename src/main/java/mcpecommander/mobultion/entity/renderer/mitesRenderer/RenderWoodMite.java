@@ -3,7 +3,6 @@ package mcpecommander.mobultion.entity.renderer.mitesRenderer;
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.entities.mites.EntityWoodMite;
 import mcpecommander.mobultion.entity.model.ModelCraftStudioSon;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;

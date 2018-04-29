@@ -37,7 +37,8 @@ public class EntityAIAttackRangedModBow<T extends EntityMob & IRangedAttackMob> 
     /**
      * Returns whether the EntityAIBase should begin execution.
      */
-    public boolean shouldExecute()
+    @Override
+	public boolean shouldExecute()
     {
         return this.entity.getAttackTarget() == null ? false : this.isBowInMainhand();
     }
@@ -50,7 +51,8 @@ public class EntityAIAttackRangedModBow<T extends EntityMob & IRangedAttackMob> 
     /**
      * Returns whether an in-progress EntityAIBase should continue executing
      */
-    public boolean shouldContinueExecuting()
+    @Override
+	public boolean shouldContinueExecuting()
     {
         return (this.shouldExecute() || !this.entity.getNavigator().noPath()) && this.isBowInMainhand();
     }
@@ -58,7 +60,8 @@ public class EntityAIAttackRangedModBow<T extends EntityMob & IRangedAttackMob> 
     /**
      * Execute a one shot task or start executing a continuous task
      */
-    public void startExecuting()
+    @Override
+	public void startExecuting()
     {
         super.startExecuting();
         ((IRangedAttackMob)this.entity).setSwingingArms(true);
@@ -67,7 +70,8 @@ public class EntityAIAttackRangedModBow<T extends EntityMob & IRangedAttackMob> 
     /**
      * Reset the task's internal state. Called when this task is interrupted by another one
      */
-    public void resetTask()
+    @Override
+	public void resetTask()
     {
         super.resetTask();
         ((IRangedAttackMob)this.entity).setSwingingArms(false);
@@ -79,7 +83,8 @@ public class EntityAIAttackRangedModBow<T extends EntityMob & IRangedAttackMob> 
     /**
      * Keep ticking a continuous task that has already been started
      */
-    public void updateTask()
+    @Override
+	public void updateTask()
     {
         EntityLivingBase entitylivingbase = this.entity.getAttackTarget();
 
@@ -103,7 +108,7 @@ public class EntityAIAttackRangedModBow<T extends EntityMob & IRangedAttackMob> 
                 --this.seeTime;
             }
 
-            if (d0 <= (double)this.maxAttackDistance && this.seeTime >= 20)
+            if (d0 <= this.maxAttackDistance && this.seeTime >= 20)
             {
                 this.entity.getNavigator().clearPath();
                 ++this.strafingTime;
@@ -116,12 +121,12 @@ public class EntityAIAttackRangedModBow<T extends EntityMob & IRangedAttackMob> 
 
             if (this.strafingTime >= 20)
             {
-                if ((double)this.entity.getRNG().nextFloat() < 0.3D)
+                if (this.entity.getRNG().nextFloat() < 0.3D)
                 {
                     this.strafingClockwise = !this.strafingClockwise;
                 }
 
-                if ((double)this.entity.getRNG().nextFloat() < 0.3D)
+                if (this.entity.getRNG().nextFloat() < 0.3D)
                 {
                     this.strafingBackwards = !this.strafingBackwards;
                 }
@@ -131,11 +136,11 @@ public class EntityAIAttackRangedModBow<T extends EntityMob & IRangedAttackMob> 
 
             if (this.strafingTime > -1)
             {
-                if (d0 > (double)(this.maxAttackDistance * 0.75F))
+                if (d0 > this.maxAttackDistance * 0.75F)
                 {
                     this.strafingBackwards = false;
                 }
-                else if (d0 < (double)(this.maxAttackDistance * 0.25F))
+                else if (d0 < this.maxAttackDistance * 0.25F)
                 {
                     this.strafingBackwards = true;
                 }

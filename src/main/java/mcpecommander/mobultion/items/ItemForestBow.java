@@ -44,7 +44,8 @@ public class ItemForestBow extends Item{
         this.setCreativeTab(MobultionMod.MOBULTION_TAB);
         this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter()
         {
-            @SideOnly(Side.CLIENT)
+            @Override
+			@SideOnly(Side.CLIENT)
             public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn)
             {
                 if (entityIn == null)
@@ -53,13 +54,14 @@ public class ItemForestBow extends Item{
                 }
                 else
                 {
-                    return entityIn.getActiveItemStack().getItem() != ModItems.forestBow ? 0.0F : (float)(stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F;
+                    return entityIn.getActiveItemStack().getItem() != ModItems.forestBow ? 0.0F : (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F;
                 }
             }
         });
         this.addPropertyOverride(new ResourceLocation("pulling"), new IItemPropertyGetter()
         {
-            @SideOnly(Side.CLIENT)
+            @Override
+			@SideOnly(Side.CLIENT)
             public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn)
             {
                 return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F;
@@ -109,7 +111,8 @@ public class ItemForestBow extends Item{
     /**
      * Called when the player stops using an Item (stops holding the right mouse button).
      */
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft)
+    @Override
+	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft)
     {
         if (entityLiving instanceof EntityPlayer)
         {
@@ -130,7 +133,7 @@ public class ItemForestBow extends Item{
 
                 float f = getArrowVelocity(i);
 
-                if ((double)f >= 0.1D)
+                if (f >= 0.1D)
                 {
                     boolean flag1 = entityplayer.capabilities.isCreativeMode || (itemstack.getItem() instanceof ItemArrow && ((ItemArrow) itemstack.getItem()).isInfinite(itemstack, stack, entityplayer));
 
@@ -149,7 +152,7 @@ public class ItemForestBow extends Item{
 
                         if (j > 0)
                         {
-                            entityarrow.setDamage(entityarrow.getDamage() + (double)j * 0.5D + 0.5D);
+                            entityarrow.setDamage(entityarrow.getDamage() + j * 0.5D + 0.5D);
                         }
 
                         int k = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
@@ -197,7 +200,7 @@ public class ItemForestBow extends Item{
      */
     public static float getArrowVelocity(int charge)
     {
-        float f = (float)charge / 20.0F;
+        float f = charge / 20.0F;
         f = (f * f + f * 2.0F) / 3.0F;
 
         if (f > 1.0F)
@@ -211,7 +214,8 @@ public class ItemForestBow extends Item{
     /**
      * How long it takes to use or consume an item
      */
-    public int getMaxItemUseDuration(ItemStack stack)
+    @Override
+	public int getMaxItemUseDuration(ItemStack stack)
     {
         return 72000;
     }
@@ -219,7 +223,8 @@ public class ItemForestBow extends Item{
     /**
      * returns the action that specifies what animation to play when the items is being used
      */
-    public EnumAction getItemUseAction(ItemStack stack)
+    @Override
+	public EnumAction getItemUseAction(ItemStack stack)
     {
         return EnumAction.BOW;
     }
@@ -227,7 +232,8 @@ public class ItemForestBow extends Item{
     /**
      * Called when the equipped item is right clicked.
      */
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
+    @Override
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
     {
         ItemStack itemstack = playerIn.getHeldItem(handIn);
         boolean flag = !this.findAmmo(playerIn).isEmpty();
@@ -249,7 +255,8 @@ public class ItemForestBow extends Item{
     /**
      * Return the enchantability factor of the item, most of the time is based on material.
      */
-    public int getItemEnchantability()
+    @Override
+	public int getItemEnchantability()
     {
         return 1;
     }

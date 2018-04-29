@@ -30,7 +30,8 @@ public class LayerGoroHeldItem implements LayerRenderer<EntityLivingBase>
         this.livingEntityRenderer = livingEntityRendererIn;
     }
 
-    public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
+    @Override
+	public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
     {
         boolean flag = entitylivingbaseIn.getPrimaryHand() == EnumHandSide.RIGHT;
         ItemStack itemstack = flag ? entitylivingbaseIn.getHeldItemOffhand() : entitylivingbaseIn.getHeldItemMainhand();
@@ -334,7 +335,8 @@ public class LayerGoroHeldItem implements LayerRenderer<EntityLivingBase>
 		}
     } 
 
-    public boolean shouldCombineTextures()
+    @Override
+	public boolean shouldCombineTextures()
     {
         return false;
     }

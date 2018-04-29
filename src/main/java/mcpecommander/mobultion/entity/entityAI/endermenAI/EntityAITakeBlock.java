@@ -41,9 +41,9 @@ public class EntityAITakeBlock extends EntityAIBase {
 		IBlockState iblockstate = world.getBlockState(blockpos);
 		Block block = iblockstate.getBlock();
 		RayTraceResult raytraceresult = world.rayTraceBlocks(
-				new Vec3d((double) ((float) MathHelper.floor(this.enderman.posX) + 0.5F), (double) ((float) j + 0.5F),
-						(double) ((float) MathHelper.floor(this.enderman.posZ) + 0.5F)),
-				new Vec3d((double) ((float) i + 0.5F), (double) ((float) j + 0.5F), (double) ((float) k + 0.5F)), false,
+				new Vec3d(MathHelper.floor(this.enderman.posX) + 0.5F, j + 0.5F,
+						MathHelper.floor(this.enderman.posZ) + 0.5F),
+				new Vec3d(i + 0.5F, j + 0.5F, k + 0.5F), false,
 				true, false);
 		boolean flag = raytraceresult != null && raytraceresult.getBlockPos().equals(blockpos);
 

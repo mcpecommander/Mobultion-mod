@@ -1,0 +1,34 @@
+{
+  "title": "GlassShot",
+  "tree": [
+    {
+      "name": "GlassShot",
+      "position": [ 0, 2, 0 ],
+      "offsetFromPivot": [ 0, 0, 0 ],
+      "size": [ 2, 2, 2 ],
+      "rotation": [ 0, 0, 0 ],
+      "texOffset": [ 0, 0 ],
+      "children": [
+        {
+          "name": "GlassShot1",
+          "position": [ 0, 0, 0 ],
+          "offsetFromPivot": [ 0, 0, 0 ],
+          "size": [ 2, 2, 2 ],
+          "rotation": [ 36, -5.906945E-07, 45 ],
+          "texOffset": [ 0, 0 ],
+          "children": [
+            {
+              "name": "GlassShot2",
+              "position": [ -5.009504E-06, 5.489172E-07, -3.883589E-06 ],
+              "offsetFromPivot": [ 0, 0, 0 ],
+              "size": [ 2, 2, 2 ],
+              "rotation": [ 42.26, -65.31998, -27.82999 ],
+              "texOffset": [ 0, 0 ],
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

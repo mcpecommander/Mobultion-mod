@@ -9,9 +9,9 @@ import com.leviathanstudio.craftstudio.CraftStudioApi;
 import com.leviathanstudio.craftstudio.common.animation.AnimationHandler;
 import com.leviathanstudio.craftstudio.common.animation.IAnimated;
 
-import mcpecommander.mobultion.entity.entities.zombies.EntityAnimatedZombie;
 import mcpecommander.mobultion.integration.JEI;
-import mezz.jei.api.recipe.IFocus.Mode;
+import mcpecommander.mobultion.mobConfigs.EndermenConfig;
+import mcpecommander.mobultion.mobConfigs.EndermenConfig.Endermen.Magma;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -25,10 +25,8 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -36,10 +34,8 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Loader;
@@ -136,7 +132,7 @@ public abstract class EntityAnimatedEnderman extends EntityMob implements IAnima
 			this.lastCreepySound = this.ticksExisted;
 
 			if (!this.isSilent()) {
-				this.world.playSound(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ,
+				this.world.playSound(this.posX, this.posY + this.getEyeHeight(), this.posZ,
 						SoundEvents.ENTITY_ENDERMEN_STARE, this.getSoundCategory(), 2.5F, 1.0F, false);
 			}
 		}
@@ -208,18 +204,18 @@ public abstract class EntityAnimatedEnderman extends EntityMob implements IAnima
 	public boolean teleportRandomly()
     {
         double d0 = this.posX + (this.rand.nextDouble() - 0.5D) * 64.0D;
-        double d1 = this.posY + (double)(this.rand.nextInt(64) - 32);
+        double d1 = this.posY + (this.rand.nextInt(64) - 32);
         double d2 = this.posZ + (this.rand.nextDouble() - 0.5D) * 64.0D;
         return this.teleportTo(d0, d1, d2);
     }
 	
 	public boolean teleportToEntity(Entity entity)
     {
-        Vec3d vec3d = new Vec3d(this.posX - entity.posX, this.getEntityBoundingBox().minY + (double)(this.height / 2.0F) - entity.posY + (double)entity.getEyeHeight(), this.posZ - entity.posZ);
+        Vec3d vec3d = new Vec3d(this.posX - entity.posX, this.getEntityBoundingBox().minY + this.height / 2.0F - entity.posY + entity.getEyeHeight(), this.posZ - entity.posZ);
         vec3d = vec3d.normalize();
         double d0 = 16.0D;
         double d1 = this.posX + (this.rand.nextDouble() - 0.5D) * 8.0D - vec3d.x * 16.0D;
-        double d2 = this.posY + (double)(this.rand.nextInt(16) - 8) - vec3d.y * 16.0D;
+        double d2 = this.posY + (this.rand.nextInt(16) - 8) - vec3d.y * 16.0D;
         double d3 = this.posZ + (this.rand.nextDouble() - 0.5D) * 8.0D - vec3d.z * 16.0D;
         return this.teleportTo(d1, d2, d3);
     }
@@ -259,16 +255,13 @@ public abstract class EntityAnimatedEnderman extends EntityMob implements IAnima
 	
 	public boolean isScreaming()
     {
-        return ((Boolean)this.dataManager.get(SCREAMING)).booleanValue();
+        return this.dataManager.get(SCREAMING).booleanValue();
     }
 	
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		this.getAnimationHandler().animationsUpdate(this);
-		if(!isWorldRemote() && this.isScreaming() && ticksExisted % 80 == 0){
-			this.playSound(SoundEvents.ENTITY_ENDERMEN_STARE, 2.5F, 1.0F);
-		}
 	}
 
 	@Override

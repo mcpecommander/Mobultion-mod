@@ -30,7 +30,6 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
@@ -44,11 +43,13 @@ public class EntityWitheringSkeleton extends EntityAnimatedSkeleton {
 			this, 1.0D, 20, 15.0F);
 	private final EntityAIAttackMelee aiAttackOnCollide = new EntityAIAttackMelee(this, 1.2D, false) {
 
+		@Override
 		public void resetTask() {
 			super.resetTask();
 			EntityWitheringSkeleton.this.setSwingingArms(false);
 		}
 
+		@Override
 		public void startExecuting() {
 			super.startExecuting();
 			EntityWitheringSkeleton.this.setSwingingArms(true);
@@ -134,9 +135,9 @@ public class EntityWitheringSkeleton extends EntityAnimatedSkeleton {
 	public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
 		EntityArrow entityarrow = this.getArrow(distanceFactor);
 		double d0 = target.posX - this.posX;
-		double d1 = target.getEntityBoundingBox().minY + (double) (target.height / 3.0F) - entityarrow.posY;
+		double d1 = target.getEntityBoundingBox().minY + target.height / 3.0F - entityarrow.posY;
 		double d2 = target.posZ - this.posZ;
-		double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
+		double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
 		entityarrow.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 1.6F, 14f);
 		this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
 		this.world.spawnEntity(entityarrow);

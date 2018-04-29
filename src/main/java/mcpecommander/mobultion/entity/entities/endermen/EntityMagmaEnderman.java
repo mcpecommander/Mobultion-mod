@@ -23,6 +23,7 @@ import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -82,7 +83,7 @@ public class EntityMagmaEnderman extends EntityAnimatedEnderman {
 	@Override
 	public boolean teleportRandomly() {
 		double d0 = this.posX + (this.rand.nextDouble() - 0.5D) * EndermenConfig.endermen.magma.teleportDistance;
-		double d1 = this.posY + (double) (this.rand.nextInt((int) EndermenConfig.endermen.magma.teleportDistance)
+		double d1 = this.posY + (this.rand.nextInt((int) EndermenConfig.endermen.magma.teleportDistance)
 				- (int) (EndermenConfig.endermen.magma.teleportDistance / 2));
 		double d2 = this.posZ + (this.rand.nextDouble() - 0.5D) * EndermenConfig.endermen.magma.teleportDistance;
 		return this.teleportTo(d0, d1, d2);
@@ -92,7 +93,7 @@ public class EntityMagmaEnderman extends EntityAnimatedEnderman {
 	public boolean shouldAttackPlayer(EntityPlayer player) {
 		Vec3d vec3d = player.getLook(1.0F).normalize();
 		Vec3d vec3d1 = new Vec3d(this.posX - player.posX, this.getEntityBoundingBox().minY
-				+ (double) this.getEyeHeight() - (player.posY + (double) player.getEyeHeight()),
+				+ this.getEyeHeight() - (player.posY + player.getEyeHeight()),
 				this.posZ - player.posZ);
 		double d0 = vec3d1.lengthVector();
 		vec3d1 = vec3d1.normalize();
@@ -141,6 +142,11 @@ public class EntityMagmaEnderman extends EntityAnimatedEnderman {
 			return flag;
 		}
 	}
+	
+	@Override
+	protected ResourceLocation getLootTable() {
+		return Reference.LootTables.ENTITYMAGMAENDERMAN;
+	}
 
 	@Override
 	public void applyEntityAttributes() {
@@ -158,6 +164,7 @@ public class EntityMagmaEnderman extends EntityAnimatedEnderman {
 			this.setMoving(Boolean.valueOf(this.isMoving(this)));
 		}
 		if (isWorldRemote()) {
+			//System.out.println(this.limbSwing + " " + this.limbSwingAmount + " " + Math.cos(this.limbSwing * 0.6662F));
 			if (this.getAnimationHandler().isAnimationActive(Reference.MOD_ID, "scream", this) && !this.isScreaming()) {
 				this.getAnimationHandler().stopAnimation(Reference.MOD_ID, "scream", this);
 			}
@@ -197,30 +204,6 @@ public class EntityMagmaEnderman extends EntityAnimatedEnderman {
 				this.getAnimationHandler().stopAnimation(Reference.MOD_ID, "skeleton_walk", this);
 				this.getAnimationHandler().startAnimation(Reference.MOD_ID, "riding", this);
 			}
-
-//			double yaw = ((this.rotationYawHead + 90) * Math.PI) / 180;
-//			double z = Math.sin(yaw);
-//			double x = Math.cos(yaw);
-//			double d0 = (double) (16712965 >> 16 & 255) / 255.0D;
-//			double d1 = (double) (16712965 >> 8 & 255) / 255.0D;
-//			double d2 = (double) (16712965 >> 0 & 255) / 255.0D;
-//			if (this.isScreaming() && ticksExisted % 5 == 0) {
-//				this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX + (x * 0.35D),
-//						this.posY + this.getEyeHeight(), this.posZ + (z * 0.35D), d0, d1, d2);
-//			}
-//
-//			if (ticksExisted % 20 == 0 && this.getRNG().nextInt(10) == 0) {
-//				this.world.playSound(posX, posY, posZ, ModSounds.spit, SoundCategory.HOSTILE, getSoundVolume() * 2f,
-//						getSoundPitch(), false);
-//				for (int i = 0; i < 6; i++) {
-//					ColoredLavaParticle particle = new ColoredLavaParticle(this.world,
-//							this.posX + (this.getRNG().nextFloat() * 0.2f) + (x * 0.25D),
-//							this.posY + this.getEyeHeight(),
-//							this.posZ + (this.getRNG().nextFloat() * 0.2f) + (z * 0.25D), (x * 0.07D), -0.11D,
-//							(z * 0.07D));
-//					Minecraft.getMinecraft().effectRenderer.addEffect(particle);
-//				}
-//			}
 			performEffect();
 		}
 	}
@@ -230,9 +213,9 @@ public class EntityMagmaEnderman extends EntityAnimatedEnderman {
 		double yaw = ((this.rotationYawHead + 90) * Math.PI) / 180;
 		double z = Math.sin(yaw);
 		double x = Math.cos(yaw);
-		double d0 = (double) (16712965 >> 16 & 255) / 255.0D;
-		double d1 = (double) (16712965 >> 8 & 255) / 255.0D;
-		double d2 = (double) (16712965 >> 0 & 255) / 255.0D;
+		double d0 = (16712965 >> 16 & 255) / 255.0D;
+		double d1 = (16712965 >> 8 & 255) / 255.0D;
+		double d2 = (16712965 >> 0 & 255) / 255.0D;
 		if (this.isScreaming() && ticksExisted % 5 == 0) {
 			this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX + (x * 0.35D),
 					this.posY + this.getEyeHeight(), this.posZ + (z * 0.35D), d0, d1, d2);

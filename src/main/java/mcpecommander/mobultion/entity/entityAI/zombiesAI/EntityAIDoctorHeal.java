@@ -92,9 +92,9 @@ public class EntityAIDoctorHeal extends EntityAIBase{
             		if(!this.entity.world.isRemote && dis <= (15D*15D) && flag){
 						EntityPotion potion = new EntityPotion(this.entity.world, this.entity, this.entity.getHeldItemMainhand());
 						double d0 = entitylivingbase.posX - this.entity.posX;
-					    double d1 = entitylivingbase.getEntityBoundingBox().minY + (double)(entitylivingbase.height / 3.0F) - potion.posY;
+					    double d1 = entitylivingbase.getEntityBoundingBox().minY + entitylivingbase.height / 3.0F - potion.posY;
 					    double d2 = entitylivingbase.posZ - this.entity.posZ;
-					    double d3 = (double)MathHelper.sqrt(d0 * d0 + d2 * d2);
+					    double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
 					    potion.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 1.6F, 0f);
 						this.entity.world.spawnEntity(potion);
 						this.resetTask();

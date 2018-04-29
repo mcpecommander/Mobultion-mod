@@ -9,7 +9,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntityTippedArrow;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -74,15 +73,15 @@ public class EntityMagmaArrow extends EntityArrow {
 		int i = this.getColor();
 
 		if (i != -1 && particleCount > 0) {
-			double d0 = (double) (i >> 16 & 255) / 255.0D;
-			double d1 = (double) (i >> 8 & 255) / 255.0D;
-			double d2 = (double) (i >> 0 & 255) / 255.0D;
+			double d0 = (i >> 16 & 255) / 255.0D;
+			double d1 = (i >> 8 & 255) / 255.0D;
+			double d2 = (i >> 0 & 255) / 255.0D;
 
 			for (int j = 0; j < particleCount; ++j) {
 				this.world.spawnParticle(EnumParticleTypes.LAVA,
-						this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width,
-						this.posY + this.rand.nextDouble() * (double) this.height,
-						this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width, d0, d1, d2);
+						this.posX + (this.rand.nextDouble() - 0.5D) * this.width,
+						this.posY + this.rand.nextDouble() * this.height,
+						this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, d0, d1, d2);
 			}
 		}
 	}
@@ -120,9 +119,10 @@ public class EntityMagmaArrow extends EntityArrow {
 	}
 
 	public int getColor() {
-		return ((Integer) this.dataManager.get(COLOR)).intValue();
+		return this.dataManager.get(COLOR).intValue();
 	}
 
+	@Override
 	protected ItemStack getArrowStack() {
 		return new ItemStack(ModItems.magmaArrow);
 	}
@@ -130,21 +130,22 @@ public class EntityMagmaArrow extends EntityArrow {
 	/**
 	 * Handler for {@link World#setEntityState}
 	 */
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void handleStatusUpdate(byte id) {
 		if (id == 0) {
 			int i = this.getColor();
 
 			if (i != -1) {
-				double d0 = (double) (i >> 16 & 255) / 255.0D;
-				double d1 = (double) (i >> 8 & 255) / 255.0D;
-				double d2 = (double) (i >> 0 & 255) / 255.0D;
+				double d0 = (i >> 16 & 255) / 255.0D;
+				double d1 = (i >> 8 & 255) / 255.0D;
+				double d2 = (i >> 0 & 255) / 255.0D;
 
 				for (int j = 0; j < 20; ++j) {
 					this.world.spawnParticle(EnumParticleTypes.LAVA,
-							this.posX + (this.rand.nextDouble() - 0.5D) * (double) this.width,
-							this.posY + this.rand.nextDouble() * (double) this.height,
-							this.posZ + (this.rand.nextDouble() - 0.5D) * (double) this.width, d0, d1, d2);
+							this.posX + (this.rand.nextDouble() - 0.5D) * this.width,
+							this.posY + this.rand.nextDouble() * this.height,
+							this.posZ + (this.rand.nextDouble() - 0.5D) * this.width, d0, d1, d2);
 				}
 			}
 		} else {

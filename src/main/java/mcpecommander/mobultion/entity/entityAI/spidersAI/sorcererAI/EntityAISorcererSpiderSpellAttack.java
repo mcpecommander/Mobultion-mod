@@ -10,7 +10,6 @@ import mcpecommander.mobultion.entity.entities.spiders.EntitySpeedySpider;
 import mcpecommander.mobultion.entity.entities.spiders.EntityWitherSpider;
 import mcpecommander.mobultion.mobConfigs.SpidersConfig;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.monster.EntityCaveSpider;

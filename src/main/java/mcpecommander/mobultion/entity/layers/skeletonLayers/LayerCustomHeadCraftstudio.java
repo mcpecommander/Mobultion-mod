@@ -11,6 +11,7 @@ import com.leviathanstudio.craftstudio.client.model.CSModelRenderer;
 import com.leviathanstudio.craftstudio.client.util.MathHelper;
 import com.mojang.authlib.GameProfile;
 
+import mcpecommander.mobultion.entity.entities.endermen.EntityGardenerEnderman;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -36,7 +37,8 @@ public class LayerCustomHeadCraftstudio implements LayerRenderer<EntityLivingBas
         this.head = head;
     }
 
-    public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
+    @Override
+	public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
     {
     	//System.out.println(entitylivingbaseIn);
         ItemStack itemstack = entitylivingbaseIn.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
@@ -81,6 +83,9 @@ public class LayerCustomHeadCraftstudio implements LayerRenderer<EntityLivingBas
             {
                 GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
                 GlStateManager.scale(0.625F, -0.625F, -0.625F);
+                if(entitylivingbaseIn instanceof EntityGardenerEnderman){
+                	GlStateManager.translate(0, 0.5, 0);
+                }
                 
                 minecraft.getItemRenderer().renderItem(entitylivingbaseIn, itemstack, ItemCameraTransforms.TransformType.HEAD);
             }
@@ -167,7 +172,8 @@ public class LayerCustomHeadCraftstudio implements LayerRenderer<EntityLivingBas
     	System.out.println( Math.atan2(siny, cosy));
     }
 
-    public boolean shouldCombineTextures()
+    @Override
+	public boolean shouldCombineTextures()
     {
         return false;
     }

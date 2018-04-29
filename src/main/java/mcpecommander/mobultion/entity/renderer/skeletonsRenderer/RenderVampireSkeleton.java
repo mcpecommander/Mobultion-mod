@@ -42,7 +42,7 @@ public class RenderVampireSkeleton<T extends EntityVampireSkeleton> extends Rend
 	@Override
 	protected boolean setBrightness(T entitylivingbaseIn, float partialTicks, boolean combineTextures) {
 		float f = entitylivingbaseIn.getBrightness();
-		int i = this.getColorMultiplier((T) entitylivingbaseIn, f, partialTicks);
+		int i = this.getColorMultiplier(entitylivingbaseIn, f, partialTicks);
 		boolean flag = (i >> 24 & 255) > 0;
 		boolean flag1 = entitylivingbaseIn.hurtTime > 0;
 
@@ -83,10 +83,10 @@ public class RenderVampireSkeleton<T extends EntityVampireSkeleton> extends Rend
 				this.brightnessBuffer.put(0.0F);
 				this.brightnessBuffer.put(0.3F);
 			} else {
-				float f1 = (float) (i >> 24 & 255) / 255.0F;
-				float f2 = (float) (i >> 16 & 255) / 255.0F;
-				float f3 = (float) (i >> 8 & 255) / 255.0F;
-				float f4 = (float) (i & 255) / 255.0F;
+				float f1 = (i >> 24 & 255) / 255.0F;
+				float f2 = (i >> 16 & 255) / 255.0F;
+				float f3 = (i >> 8 & 255) / 255.0F;
+				float f4 = (i & 255) / 255.0F;
 				this.brightnessBuffer.put(f2);
 				this.brightnessBuffer.put(f3);
 				this.brightnessBuffer.put(f4);
@@ -112,6 +112,7 @@ public class RenderVampireSkeleton<T extends EntityVampireSkeleton> extends Rend
 		}
 	}
 
+	@Override
 	public void transformHeldFull3DItemLayer() {
 		GlStateManager.translate(0.09375F, 0.1875F, 0.0F);
 	}

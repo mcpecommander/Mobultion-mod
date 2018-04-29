@@ -53,7 +53,8 @@ public class EntityAISorcererSpiderTarget<T extends EntityLivingBase> extends En
         this.setMutexBits(1);
         this.targetEntitySelector = new Predicate<T>()
         {
-            public boolean apply(@Nullable T p_apply_1_)
+            @Override
+			public boolean apply(@Nullable T p_apply_1_)
             {
                 if (p_apply_1_ == null)
                 {
@@ -74,7 +75,8 @@ public class EntityAISorcererSpiderTarget<T extends EntityLivingBase> extends En
     /**
      * Returns whether the EntityAIBase should begin execution.
      */
-    public boolean shouldExecute()
+    @Override
+	public boolean shouldExecute()
     {
         if (this.targetChance > 0 && this.taskOwner.getRNG().nextInt(this.targetChance) != 0)
         {
@@ -97,9 +99,10 @@ public class EntityAISorcererSpiderTarget<T extends EntityLivingBase> extends En
         }
         else
         {
-            this.targetEntity = (T)this.taskOwner.world.getNearestAttackablePlayer(this.taskOwner.posX, this.taskOwner.posY + (double)this.taskOwner.getEyeHeight(), this.taskOwner.posZ, this.getTargetDistance(), this.getTargetDistance(), new Function<EntityPlayer, Double>()
+            this.targetEntity = (T)this.taskOwner.world.getNearestAttackablePlayer(this.taskOwner.posX, this.taskOwner.posY + this.taskOwner.getEyeHeight(), this.taskOwner.posZ, this.getTargetDistance(), this.getTargetDistance(), new Function<EntityPlayer, Double>()
             {
-                @Nullable
+                @Override
+				@Nullable
                 public Double apply(@Nullable EntityPlayer p_apply_1_)
                 {
                     ItemStack itemstack = p_apply_1_.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
@@ -132,7 +135,8 @@ public class EntityAISorcererSpiderTarget<T extends EntityLivingBase> extends En
     /**
      * Execute a one shot task or start executing a continuous task
      */
-    public void startExecuting()
+    @Override
+	public void startExecuting()
     {
         this.taskOwner.setAttackTarget(this.targetEntity);
         super.startExecuting();
@@ -147,7 +151,8 @@ public class EntityAISorcererSpiderTarget<T extends EntityLivingBase> extends En
                 this.entity = entityIn;
             }
 
-            public int compare(Entity p_compare_1_, Entity p_compare_2_)
+            @Override
+			public int compare(Entity p_compare_1_, Entity p_compare_2_)
             {
                 double d0 = this.entity.getDistanceSq(p_compare_1_);
                 double d1 = this.entity.getDistanceSq(p_compare_2_);

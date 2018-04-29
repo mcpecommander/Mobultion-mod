@@ -76,7 +76,8 @@ public class EntityAIShamanSkeletonTarget extends EntityAITarget{
             this.entity = entityIn;
         }
 
-        public int compare(Entity p_compare_1_, Entity p_compare_2_)
+        @Override
+		public int compare(Entity p_compare_1_, Entity p_compare_2_)
         {
             double d0 = this.entity.getDistanceSq(p_compare_1_);
             double d1 = this.entity.getDistanceSq(p_compare_2_);

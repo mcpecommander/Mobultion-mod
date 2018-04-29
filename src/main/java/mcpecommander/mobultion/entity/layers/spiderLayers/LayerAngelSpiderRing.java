@@ -22,7 +22,8 @@ public class LayerAngelSpiderRing<T extends EntityAngelSpider> implements LayerR
         this.renderAngelSpider = renderAngelSpider;
     }
 
-    public void doRenderLayer(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
+    @Override
+	public void doRenderLayer(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
     {
         this.renderAngelSpider.bindTexture(SPIDER_RING);
         GlStateManager.enableBlend();
@@ -41,7 +42,7 @@ public class LayerAngelSpiderRing<T extends EntityAngelSpider> implements LayerR
         int i = 61680;
         int j = i % 65536;
         int k = i / 65536;
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, j, k);
         GlStateManager.color(0.88F, 1F, 0.0F, 1F);
         Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
         this.renderAngelSpider.getMainModel().render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
@@ -49,14 +50,15 @@ public class LayerAngelSpiderRing<T extends EntityAngelSpider> implements LayerR
         i = entitylivingbaseIn.getBrightnessForRender();
         j = i % 65536;
         k = i / 65536;
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, j, k);
         this.renderAngelSpider.setLightmap(entitylivingbaseIn);
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
-    public boolean shouldCombineTextures()
+    @Override
+	public boolean shouldCombineTextures()
     {
         return false;
     }

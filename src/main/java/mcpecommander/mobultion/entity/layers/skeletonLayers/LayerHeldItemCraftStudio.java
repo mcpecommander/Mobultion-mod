@@ -7,6 +7,7 @@ import javax.vecmath.Quat4f;
 import com.leviathanstudio.craftstudio.client.model.CSModelRenderer;
 import com.leviathanstudio.craftstudio.client.util.MathHelper;
 
+import mcpecommander.mobultion.entity.entities.endermen.EntityAnimatedEnderman;
 import mcpecommander.mobultion.entity.entities.zombies.EntityDoctorZombie;
 import mcpecommander.mobultion.entity.model.ModelCraftStudioSon;
 import net.minecraft.client.Minecraft;
@@ -30,7 +31,8 @@ public class LayerHeldItemCraftStudio implements LayerRenderer<EntityLivingBase>
         this.livingEntityRenderer = livingEntityRendererIn;
     }
 
-    public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
+    @Override
+	public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
     {
         boolean flag = entitylivingbaseIn.getPrimaryHand() == EnumHandSide.RIGHT;
         ItemStack itemstack = flag ? entitylivingbaseIn.getHeldItemOffhand() : entitylivingbaseIn.getHeldItemMainhand();
@@ -66,10 +68,20 @@ public class LayerHeldItemCraftStudio implements LayerRenderer<EntityLivingBase>
 				GlStateManager.rotate(-180f, 1.0F, 0.0F, 0.0F);
 				GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
 				GlStateManager.translate(0, -0.45f, -0.2);
-			}else{
+			}else {
 				GlStateManager.rotate(-90f, 1.0F, 0.0F, 0.0F);
 				GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
 			}
+			if(entity instanceof EntityAnimatedEnderman){
+				if(!flag){
+					GlStateManager.translate(0, 0, -0.35);
+					GlStateManager.rotate(10.0F, 1.0F, 0.0F, 0.0F);
+				}else{
+					GlStateManager.rotate(90.0F, 0.0F, 1.0F, 0.0F);
+					GlStateManager.translate(-.1, -.25, 0.1);
+				}
+			}
+			
 
 			GlStateManager.translate(0, 0.1, -0.165F);
 
@@ -195,7 +207,8 @@ public class LayerHeldItemCraftStudio implements LayerRenderer<EntityLivingBase>
 		}
     } 
 
-    public boolean shouldCombineTextures()
+    @Override
+	public boolean shouldCombineTextures()
     {
         return false;
     }

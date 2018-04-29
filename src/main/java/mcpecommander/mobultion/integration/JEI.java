@@ -22,7 +22,6 @@ import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -43,7 +42,7 @@ public class JEI implements IModPlugin {
 						ForgeRegistries.RECIPES
 								.getValue(new ResourceLocation(Reference.MOD_ID, "fang_necklace_repair")),
 						VanillaRecipeCategoryUid.CRAFTING));
-		this.jeiRuntime = jeiRuntime;
+		JEI.jeiRuntime = jeiRuntime;
 	}
 	
 	@Override
@@ -76,6 +75,8 @@ public class JEI implements IModPlugin {
 		registry.addIngredientInfo(Lists.newArrayList(armorStack), ItemStack.class, "mobultion:pigsheath_armor.info");
 		registry.addIngredientInfo(new ItemStack(ModItems.flamingChip), ItemStack.class, "mobultion:flaming_chip.info");
 		registry.addIngredientInfo(new ItemStack(ModItems.netherRuby), ItemStack.class, "mobultion:nether_ruby.info");
+		registry.addIngredientInfo(new ItemStack(ModItems.hayHat), ItemStack.class, "mobultion:hay_hat.info");
+		registry.addIngredientInfo(new ItemStack(ModItems.thunderWand), ItemStack.class, "mobultion:thunder_wand.info");
 		
 		for (EntityList.EntityEggInfo info : EntityList.ENTITY_EGGS.values())
         {
@@ -96,7 +97,7 @@ public class JEI implements IModPlugin {
             		for(Biome biome : ForgeRegistries.BIOMES.getValuesCollection()){
             			for(Biome.SpawnListEntry entry :biome.getSpawnableList(EnumCreatureType.MONSTER)){
             				if(entry.entityClass == entity.getClass()){
-            					spawnList.add(biome.getRegistryName().getResourceDomain() + ":" + biome.getBiomeName());
+            					spawnList.add(biome.getBiomeName() + " ");
             				}
             			}
             		}

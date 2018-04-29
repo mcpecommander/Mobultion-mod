@@ -2,8 +2,6 @@ package mcpecommander.mobultion.items;
 
 import mcpecommander.mobultion.MobultionMod;
 import mcpecommander.mobultion.Reference;
-import mezz.jei.api.IModPlugin;
-import mezz.jei.api.JEIPlugin;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;

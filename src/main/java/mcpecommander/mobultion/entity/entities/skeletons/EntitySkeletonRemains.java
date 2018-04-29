@@ -1,7 +1,5 @@
 package mcpecommander.mobultion.entity.entities.skeletons;
 
-import java.util.Random;
-
 import javax.annotation.Nullable;
 
 import org.apache.logging.log4j.Level;
@@ -10,15 +8,18 @@ import com.leviathanstudio.craftstudio.CraftStudioApi;
 import com.leviathanstudio.craftstudio.common.animation.AnimationHandler;
 import com.leviathanstudio.craftstudio.common.animation.IAnimated;
 
+import io.netty.util.internal.MathUtil;
 import mcpecommander.mobultion.MobultionMod;
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.init.ModSounds;
+import mcpecommander.mobultion.mobConfigs.SkeletonsConfig;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -31,12 +32,13 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
 
-public class EntitySkeletonRemains extends EntityLivingBase implements IAnimated {
+public class EntitySkeletonRemains extends EntityLivingBase implements IAnimated, IMob {
 	private static final DataParameter<Byte> TYPE = EntityDataManager.<Byte>createKey(EntitySkeletonRemains.class,
 			DataSerializers.BYTE);
 	protected static AnimationHandler animHandler = CraftStudioApi.getNewAnimationHandler(EntitySkeletonRemains.class);
@@ -110,7 +112,7 @@ public class EntitySkeletonRemains extends EntityLivingBase implements IAnimated
                 double d2 = this.rand.nextGaussian() * 0.02D;
                 double d0 = this.rand.nextGaussian() * 0.02D;
                 double d1 = this.rand.nextGaussian() * 0.02D;
-                this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d2, d0, d1);
+                this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + this.rand.nextFloat() * this.width * 2.0F - this.width, this.posY + this.rand.nextFloat() * this.height, this.posZ + this.rand.nextFloat() * this.width * 2.0F - this.width, d2, d0, d1);
             }
         }
 	}
@@ -130,14 +132,23 @@ public class EntitySkeletonRemains extends EntityLivingBase implements IAnimated
 		return .3f;
 	}
 
+	@Override
 	protected void entityInit() {
 		super.entityInit();
 		this.dataManager.register(TYPE, Byte.valueOf((byte) 0));
 	}
 
+	@Override
 	public void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50.0D);
+		//Total world time in ticks
+		Long total = this.world.getTotalWorldTime();
+		double health = SkeletonsConfig.remains.health;
+		if(total < Double.MAX_VALUE) {
+			//A formula to increase its health over a configurable amount of days.
+			health = health/SkeletonsConfig.remains.days * (MathHelper.clamp(total, 0, 24000 * SkeletonsConfig.remains.days) / 24000);
+		}
+		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(health);
 		this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1000.0D);
 	}
 
@@ -168,7 +179,7 @@ public class EntitySkeletonRemains extends EntityLivingBase implements IAnimated
 
 	@Override
 	public boolean isEntityInvulnerable(DamageSource source) {
-		if (source == DamageSource.IN_WALL) {
+		if (source == DamageSource.IN_WALL || source == DamageSource.DROWN) {
 			return true;
 		}
 		return super.isEntityInvulnerable(source);
@@ -183,13 +194,16 @@ public class EntitySkeletonRemains extends EntityLivingBase implements IAnimated
 			this.dataManager.setDirty(TYPE);
 		}
 
-		if (this.isWorldRemote() && this.ticksExisted >= 1185
-				&& !this.getAnimationHandler().isHoldAnimationActive("mobultion:remains_rebirth", this)) {
-			this.getAnimationHandler().startAnimation(Reference.MOD_ID, "remains_rebirth", 0, this);
-		}
+//		if (this.isWorldRemote() && this.ticksExisted >= 1185
+//				&& !this.getAnimationHandler().isHoldAnimationActive("mobultion:remains_rebirth", this)) {
+//			this.getAnimationHandler().startAnimation(Reference.MOD_ID, "remains_rebirth", 0, this);
+//		}
 		if (!this.isWorldRemote()) {
+			if(this.ticksExisted >= (SkeletonsConfig.remains.respawnTime * 20) - 15 && !this.getAnimationHandler().isHoldAnimationActive("mobultion:remains_rebirth", this)) {
+				this.getAnimationHandler().networkStartAnimation(Reference.MOD_ID, "remains_rebirth", 0, this, false);
+			}
 			if (this.getTYPE() == 7) {
-				if (this.ticksExisted >= 1200 && !this.world.isDaytime()) {
+				if (this.ticksExisted >= SkeletonsConfig.remains.respawnTime * 20 && !this.world.isDaytime()) {
 					this.setDead();
 					this.playSound(ModSounds.entity_respawn, 1f, .5f);
 					EntityLiving skele = this.getSkeleton(this.getTYPE());
@@ -198,7 +212,7 @@ public class EntitySkeletonRemains extends EntityLivingBase implements IAnimated
 					this.world.spawnEntity(skele);
 				}
 			} else {
-				if (ticksExisted >= 1200) {
+				if (ticksExisted >= SkeletonsConfig.remains.respawnTime * 20) {
 					this.setDead();
 					this.playSound(ModSounds.entity_respawn, 1f, .5f);
 					EntityLiving skele = this.getSkeleton(this.getTYPE());

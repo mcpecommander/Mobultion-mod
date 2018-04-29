@@ -25,7 +25,8 @@ public class RenderHypnoBall extends Render<EntityHypnoBall>{
     /**
      * Renders the desired {@code T} type Entity.
      */
-    public void doRender(EntityHypnoBall entity, double x, double y, double z, float entityYaw, float partialTicks)
+    @Override
+	public void doRender(EntityHypnoBall entity, double x, double y, double z, float entityYaw, float partialTicks)
     {
     	GlStateManager.pushMatrix();
         this.bindEntityTexture(entity);
@@ -38,7 +39,7 @@ public class RenderHypnoBall extends Render<EntityHypnoBall>{
         float f1 = 0.5F;
         float f2 = 0.25F;
         GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate((float)(this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate((this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
 
         if (this.renderOutlines)
         {
@@ -64,7 +65,8 @@ public class RenderHypnoBall extends Render<EntityHypnoBall>{
         super.doRender(entity, x, y, z, entityYaw, partialTicks);
     }
 
-    protected ResourceLocation getEntityTexture(EntityHypnoBall entity)
+    @Override
+	protected ResourceLocation getEntityTexture(EntityHypnoBall entity)
     {
         return mobTexture;
     }

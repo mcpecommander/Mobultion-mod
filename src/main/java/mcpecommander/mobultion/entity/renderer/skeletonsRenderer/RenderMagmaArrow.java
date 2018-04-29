@@ -15,7 +15,8 @@ public class RenderMagmaArrow extends RenderArrow<EntityMagmaArrow>{
         super(manager);
     }
 
-    protected ResourceLocation getEntityTexture(EntityMagmaArrow entity)
+    @Override
+	protected ResourceLocation getEntityTexture(EntityMagmaArrow entity)
     {
         return RES_TIPPED_ARROW;
     }

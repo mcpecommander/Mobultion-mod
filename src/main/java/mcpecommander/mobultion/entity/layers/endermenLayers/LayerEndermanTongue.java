@@ -1,8 +1,7 @@
 package mcpecommander.mobultion.entity.layers.endermenLayers;
 
 import mcpecommander.mobultion.Reference;
-import mcpecommander.mobultion.entity.entities.endermen.EntityMagmaEnderman;
-import mcpecommander.mobultion.entity.entities.spiders.EntityAnimatedSpider;
+import mcpecommander.mobultion.entity.entities.endermen.EntityAnimatedEnderman;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -13,7 +12,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class LayerEndermanTongue<T extends EntityMagmaEnderman> implements LayerRenderer<T>
+public class LayerEndermanTongue<T extends EntityAnimatedEnderman> implements LayerRenderer<T>
 {
     private static final ResourceLocation TONGUE = new ResourceLocation(Reference.MOD_ID, "textures/entity/enderman_tongue.png");
     private final RenderLiving renderLiving;
@@ -23,7 +22,8 @@ public class LayerEndermanTongue<T extends EntityMagmaEnderman> implements Layer
         this.renderLiving = renderLiving;
     }
 
-    public void doRenderLayer(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
+    @Override
+	public void doRenderLayer(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
     {
         this.renderLiving.bindTexture(TONGUE);
         GlStateManager.enableBlend();
@@ -42,7 +42,7 @@ public class LayerEndermanTongue<T extends EntityMagmaEnderman> implements Layer
         int i = 61680;
         int j = i % 65536;
         int k = i / 65536;
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, j, k);
         GlStateManager.color(1F, 1F, 1F, 1.0F);
         Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
         this.renderLiving.getMainModel().render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
@@ -50,13 +50,14 @@ public class LayerEndermanTongue<T extends EntityMagmaEnderman> implements Layer
         i = entitylivingbaseIn.getBrightnessForRender();
         j = i % 65536;
         k = i / 65536;
-        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, j, k);
         this.renderLiving.setLightmap(entitylivingbaseIn);
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
     }
 
-    public boolean shouldCombineTextures()
+    @Override
+	public boolean shouldCombineTextures()
     {
         return false;
     }

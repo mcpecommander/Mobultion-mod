@@ -23,7 +23,8 @@ public class LayerShamanRobe implements LayerRenderer<EntityShamanSkeleton>
         this.layerModel = (ModelCraftStudioSon) this.renderer.getMainModel();
     }
 
-    public void doRenderLayer(EntityShamanSkeleton entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
+    @Override
+	public void doRenderLayer(EntityShamanSkeleton entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
     {
     	GlStateManager.pushMatrix();
     	GlStateManager.scale(1.05F, 1.05F, 1.05F);
@@ -36,7 +37,8 @@ public class LayerShamanRobe implements LayerRenderer<EntityShamanSkeleton>
         GlStateManager.popMatrix();     
     }
 
-    public boolean shouldCombineTextures()
+    @Override
+	public boolean shouldCombineTextures()
     {
         return true;
     }

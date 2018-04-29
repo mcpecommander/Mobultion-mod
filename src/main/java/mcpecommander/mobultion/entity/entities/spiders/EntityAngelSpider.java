@@ -14,8 +14,6 @@ import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -60,6 +58,7 @@ public class EntityAngelSpider extends EntityAnimatedSpider {
 		return this.world.getEntityByID(this.dataManager.get(TARGET));
 	}
 
+	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(3, new EntityAIAvoidEntity(this, EntityPlayer.class, 3.0F, 1.0D, 1.2D));
@@ -80,16 +79,19 @@ public class EntityAngelSpider extends EntityAnimatedSpider {
 		this.dataManager.register(TARGET, -1);
 	}
 
+	@Override
 	public double getMountedYOffset() {
-		return (double) (this.height * 0.6F);
+		return this.height * 0.6F;
 	}
 
+	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(15.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
 	}
 
+	@Override
 	public float getEyeHeight() {
 		return 0.65F;
 	}
@@ -136,13 +138,13 @@ public class EntityAngelSpider extends EntityAnimatedSpider {
 	@SideOnly(Side.CLIENT)
 	private void performEffect(){
 		Vec3d vec3d = new Vec3d(this.posX - this.getTarget().posX,
-				this.getEntityBoundingBox().minY + (double) this.getEyeHeight()
-						- (this.getTarget().posY + (double) this.getTarget().getEyeHeight()),
+				this.getEntityBoundingBox().minY + this.getEyeHeight()
+						- (this.getTarget().posY + this.getTarget().getEyeHeight()),
 				this.posZ - this.getTarget().posZ).normalize();
 		HealParticle heal = new HealParticle(world, this.posX, this.posY + this.getEyeHeight(), this.posZ,
 				this.getRNG().nextFloat(), vec3d,
 				new BlockPos(this.getTarget().posX,
-						(this.getTarget().posY + (double) this.getTarget().getEyeHeight()),
+						(this.getTarget().posY + this.getTarget().getEyeHeight()),
 						this.getTarget().posZ));
 		Minecraft.getMinecraft().effectRenderer.addEffect(heal);
 	}

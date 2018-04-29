@@ -5,7 +5,6 @@ import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.entityAI.spidersAI.sorcererAI.EntityAISorcererSpiderSpellAttack;
 import mcpecommander.mobultion.entity.entityAI.spidersAI.sorcererAI.EntityAISorcererSpiderTarget;
 import mcpecommander.mobultion.mobConfigs.SpidersConfig;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -15,15 +14,14 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntitySorcererSpider extends EntityAnimatedSpider{
 	private static final DataParameter<Boolean> SPELLCASTING = EntityDataManager.<Boolean>createKey(EntitySorcererSpider.class, DataSerializers.BOOLEAN);
 	static {
-    	EntitySorcererSpider.animHandler.addAnim(Reference.MOD_ID, "spider_move", "sorcerer_spider", false);
-    	EntitySorcererSpider.animHandler.addAnim(Reference.MOD_ID, "lookat", new AnimationLookAt("Head"));
-    	EntitySorcererSpider.animHandler.addAnim(Reference.MOD_ID, "sorcerer_cast", "sorcerer_spider", false);
+		EntitySorcererSpider.animHandler.addAnim(Reference.MOD_ID, "spider_move", "sorcerer_spider", false);
+		EntitySorcererSpider.animHandler.addAnim(Reference.MOD_ID, "lookat", new AnimationLookAt("Head"));
+		EntitySorcererSpider.animHandler.addAnim(Reference.MOD_ID, "sorcerer_cast", "sorcerer_spider", false);
 	}
 	
 	public EntitySorcererSpider(World worldIn) {
@@ -49,7 +47,7 @@ public class EntitySorcererSpider extends EntityAnimatedSpider{
 	@Override
     public double getMountedYOffset()
     {
-        return (double)(this.height * 0.6F);
+        return this.height * 0.6F;
     }
 
 	@Override

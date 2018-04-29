@@ -5,22 +5,16 @@ import javax.annotation.Nonnull;
 import com.google.gson.JsonObject;
 
 import mcpecommander.mobultion.Reference;
-import net.minecraft.block.Block;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemEnchantedBook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.crafting.CraftingHelper.ShapedPrimer;
 import net.minecraftforge.common.crafting.IRecipeFactory;
-import net.minecraftforge.common.crafting.IShapedRecipe;
 import net.minecraftforge.common.crafting.JsonContext;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 public class NBTType implements IRecipeFactory {
@@ -53,7 +47,7 @@ public class NBTType implements IRecipeFactory {
 	            	EnchantmentData data = new EnchantmentData(enc, lvl);
 	            	ItemEnchantedBook book = (ItemEnchantedBook) newOutput.getItem();
 	            	if(enc != null){
-	            		book.addEnchantment(newOutput, data);
+	            		ItemEnchantedBook.addEnchantment(newOutput, data);
 	            	}
             	}else{
 	            	Enchantment enc = Enchantment.getEnchantmentByLocation(id);

@@ -43,13 +43,15 @@ public class EntityMagmaSkeleton extends EntityAnimatedSkeleton{
     private final EntityAIAttackMelee aiAttackOnCollide = new EntityAIAttackMelee(this, 1.2D, false)
     {
 
-        public void resetTask()
+        @Override
+		public void resetTask()
         {
             super.resetTask();
             EntityMagmaSkeleton.this.setSwingingArms(false);
         }
 
-        public void startExecuting()
+        @Override
+		public void startExecuting()
         {
             super.startExecuting();
             EntityMagmaSkeleton.this.setSwingingArms(true);
@@ -122,10 +124,11 @@ public class EntityMagmaSkeleton extends EntityAnimatedSkeleton{
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if(this.world.isRemote && ticksExisted % 9 == 0 && !this.isWet() && this.deathTime < 1){
-	        this.spawnEffect(this.world, this.posX , this.posY + (double)this.height/1.5, this.posZ , 2);
-
-		}
+		//Stopped until solving the issue with the layer.
+//		if(this.world.isRemote && ticksExisted % 9 == 0 && !this.isWet() && this.deathTime < 1){
+//	        this.spawnEffect(this.world, this.posX , this.posY + this.height/1.5, this.posZ , 2);
+//
+//		}
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -166,9 +169,9 @@ public class EntityMagmaSkeleton extends EntityAnimatedSkeleton{
     {
         EntityArrow entityarrow = this.getArrow(distanceFactor);
         double d0 = target.posX - this.posX;
-        double d1 = target.getEntityBoundingBox().minY + (double)(target.height / 3.0F) - entityarrow.posY;
+        double d1 = target.getEntityBoundingBox().minY + target.height / 3.0F - entityarrow.posY;
         double d2 = target.posZ - this.posZ;
-        double d3 = (double)MathHelper.sqrt(d0 * d0 + d2 * d2);
+        double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
         entityarrow.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 1.6F, 14f);
         this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
         this.world.spawnEntity(entityarrow);

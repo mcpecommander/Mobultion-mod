@@ -1,10 +1,7 @@
 package mcpecommander.mobultion.potion;
 
 import mcpecommander.mobultion.Reference;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
 

@@ -8,18 +8,14 @@ import com.leviathanstudio.craftstudio.CraftStudioApi;
 import com.leviathanstudio.craftstudio.common.animation.AnimationHandler;
 import com.leviathanstudio.craftstudio.common.animation.IAnimated;
 
-import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.integration.JEI;
-import mezz.jei.api.recipe.IFocus.Mode;
 import net.minecraft.block.Block;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.EntityList.EntityEggInfo;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.monster.EntityMob;
@@ -112,7 +108,7 @@ public abstract class EntityAnimatedZombie extends EntityMob implements IAnimate
 	@Override
 	public boolean isChild()
     {
-        return ((Boolean)this.getDataManager().get(IS_CHILD)).booleanValue();
+        return this.getDataManager().get(IS_CHILD).booleanValue();
     }
 	
 	public void setChild(boolean childZombie)
@@ -217,7 +213,7 @@ public abstract class EntityAnimatedZombie extends EntityMob implements IAnimate
 
         if (this.isChild())
         {
-            f = (float)((double)f - 0.81D);
+            f = (float)(f - 0.81D);
         }
 
         return f;
@@ -256,7 +252,8 @@ public abstract class EntityAnimatedZombie extends EntityMob implements IAnimate
         return this.isChild() ? 0.0D : -0.45D;
     }
     
-    @Nullable
+    @Override
+	@Nullable
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata)
     {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
@@ -281,7 +278,7 @@ public abstract class EntityAnimatedZombie extends EntityMob implements IAnimate
 //        this.setEquipmentBasedOnDifficulty(difficulty);
 //        this.setEnchantmentBasedOnDifficulty(difficulty);
         this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).applyModifier(new AttributeModifier("Random spawn bonus", this.rand.nextDouble() * 0.05000000074505806D, 0));
-        double d0 = this.rand.nextDouble() * 1.5D * (double)f;
+        double d0 = this.rand.nextDouble() * 1.5D * f;
 
         if (d0 > 1.0D)
         {

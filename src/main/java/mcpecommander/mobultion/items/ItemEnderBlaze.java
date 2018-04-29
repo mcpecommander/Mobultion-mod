@@ -2,7 +2,7 @@ package mcpecommander.mobultion.items;
 
 import mcpecommander.mobultion.MobultionMod;
 import mcpecommander.mobultion.Reference;
-import mcpecommander.mobultion.entity.entities.endermen.EntityEnderBlaze;
+import mcpecommander.mobultion.entity.entities.endermen.EntityEnderProjectile;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -32,7 +32,6 @@ public class ItemEnderBlaze extends Item{
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
     {
         ItemStack itemstack = playerIn.getHeldItem(handIn);
-
         if (!playerIn.capabilities.isCreativeMode)
         {
             itemstack.shrink(1);
@@ -43,7 +42,8 @@ public class ItemEnderBlaze extends Item{
 
         if (!worldIn.isRemote)
         {
-            EntityEnderBlaze entityenderpearl = new EntityEnderBlaze(worldIn, playerIn, 6.5f);
+            EntityEnderProjectile entityenderpearl = new EntityEnderProjectile(worldIn, playerIn, 6.5f, .2f);
+            entityenderpearl.setType((byte)0);
             entityenderpearl.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 2.5F, 3.5F);
             worldIn.spawnEntity(entityenderpearl);
         }

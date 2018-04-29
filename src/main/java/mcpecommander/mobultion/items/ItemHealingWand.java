@@ -8,7 +8,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -56,9 +55,9 @@ public class ItemHealingWand extends Item {
 			double z = Math.sin(yaw);
 			double x = Math.cos(yaw);
 			double y = Math.cos(pitch);
-			double d0 = (double) (16135577 >> 16 & 255) / 255.0D;
-			double d1 = (double) (16135577 >> 8 & 255) / 255.0D;
-			double d2 = (double) (16135577 >> 0 & 255) / 255.0D;
+			double d0 = (16135577 >> 16 & 255) / 255.0D;
+			double d1 = (16135577 >> 8 & 255) / 255.0D;
+			double d2 = (16135577 >> 0 & 255) / 255.0D;
 			player.world.spawnParticle(EnumParticleTypes.SPELL_MOB, player.posX + (x * 0.8D),
 					player.posY + player.getEyeHeight() + y, player.posZ + (z * 0.8D), d0, d1, d2);
 		}

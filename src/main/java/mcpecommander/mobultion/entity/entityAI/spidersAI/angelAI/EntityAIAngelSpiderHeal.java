@@ -3,18 +3,12 @@ package mcpecommander.mobultion.entity.entityAI.spidersAI.angelAI;
 import java.util.UUID;
 
 import mcpecommander.mobultion.entity.entities.spiders.EntityAngelSpider;
-import mcpecommander.mobultion.init.ModPotions;
 import mcpecommander.mobultion.mobConfigs.SpidersConfig;
-import mcpecommander.mobultion.particle.ColoredLavaParticle;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 

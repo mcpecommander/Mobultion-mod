@@ -11,7 +11,8 @@ public class EntityAISpiderAttack extends EntityAIAttackMelee{
         super(spider, 1.0D, true);
     }
 
-    public boolean shouldContinueExecuting()
+    @Override
+	public boolean shouldContinueExecuting()
     {
         float f = this.attacker.getBrightness();
 
@@ -27,8 +28,9 @@ public class EntityAISpiderAttack extends EntityAIAttackMelee{
     }
     
 
-    protected double getAttackReachSqr(EntityLivingBase attackTarget)
+    @Override
+	protected double getAttackReachSqr(EntityLivingBase attackTarget)
     {
-        return (double)(4.0F + attackTarget.width);
+        return 4.0F + attackTarget.width;
     }
 }

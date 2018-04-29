@@ -28,9 +28,11 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 public class EntityVampireSkeleton extends EntityAnimatedSkeleton {
 	private static final DataParameter<Byte> MORPHING = EntityDataManager.<Byte>createKey(EntityVampireSkeleton.class, DataSerializers.BYTE);
@@ -128,15 +130,20 @@ public class EntityVampireSkeleton extends EntityAnimatedSkeleton {
 
 	@Override
 	public void onLivingUpdate() {
+		
 		super.onLivingUpdate();
-//		if(this.ticksExisted % 20 == 0){
-//			System.out.println(this.getHealth());
-//		}
+		if (this.world.isRemote && this.rand.nextInt(20) == 0)
+        {
+            for (int i = 0; i < 2; ++i)
+            {
+                this.world.spawnParticle(EnumParticleTypes.PORTAL, this.posX + (this.rand.nextDouble() - 0.5D) * (double)this.width, this.posY + this.rand.nextDouble() * (double)this.height - 0.25D, this.posZ + (this.rand.nextDouble() - 0.5D) * (double)this.width, (this.rand.nextDouble() - 0.5D) , this.rand.nextDouble(), (this.rand.nextDouble() - 0.5D) );
+            }
+        }
 		if (!this.world.isRemote) {
 			if (this.world.isDaytime() && !this.isChild()) {
 				float f = this.getBrightness();
 				if (f > 0.5F && this.rand.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.world
-						.canSeeSky(new BlockPos(this.posX, this.posY + (double) this.getEyeHeight(), this.posZ))) {
+						.canSeeSky(new BlockPos(this.posX, this.posY + this.getEyeHeight(), this.posZ))) {
 					boolean flag = true;
 					ItemStack itemstack = this.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
 
@@ -154,7 +161,12 @@ public class EntityVampireSkeleton extends EntityAnimatedSkeleton {
 					}
 
 					if (flag) {
-						this.setHealth(0f);
+						this.setDead();
+						for (int i = 0; i < 32; ++i)
+					    {
+					        ((WorldServer)this.world).spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY + this.rand.nextDouble() * 2.0D, this.posZ, 1, this.rand.nextGaussian(), 0.0D, this.rand.nextGaussian(), 0.1);
+					        this.playSound(ModSounds.vampire_death, this.getSoundVolume(), 1f);
+					    }
 					}
 				}
 			}

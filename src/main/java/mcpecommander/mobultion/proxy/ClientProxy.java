@@ -11,7 +11,6 @@ import mcpecommander.mobultion.init.ModEntities;
 import mcpecommander.mobultion.init.ModItems;
 import mcpecommander.mobultion.particle.TextureStitcherBreathFX;
 import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -84,9 +83,20 @@ public class ClientProxy extends CommonProxy{
         
         //Endermen
         csRegistryHelper.register(EnumResourceType.MODEL, EnumRenderType.ENTITY, "enderman");
+        csRegistryHelper.register(EnumResourceType.MODEL, EnumRenderType.ENTITY, "gardener_enderman");
+        csRegistryHelper.register(EnumResourceType.MODEL, EnumRenderType.ENTITY, "wandering_enderman");
+        csRegistryHelper.register(EnumResourceType.MODEL, EnumRenderType.ENTITY, "glass_enderman");
+        
+        csRegistryHelper.register(EnumResourceType.MODEL, EnumRenderType.ENTITY, "glass_shot");
         
         csRegistryHelper.register(EnumResourceType.ANIM, EnumRenderType.ENTITY, "scream");
         csRegistryHelper.register(EnumResourceType.ANIM, EnumRenderType.ENTITY, "enderman_bite");
+        csRegistryHelper.register(EnumResourceType.ANIM, EnumRenderType.ENTITY, "gardener_water");
+        csRegistryHelper.register(EnumResourceType.ANIM, EnumRenderType.ENTITY, "gardener_garden");
+        csRegistryHelper.register(EnumResourceType.ANIM, EnumRenderType.ENTITY, "glass_rotate");
+        csRegistryHelper.register(EnumResourceType.ANIM, EnumRenderType.ENTITY, "glass_shot");
+        csRegistryHelper.register(EnumResourceType.ANIM, EnumRenderType.ENTITY, "shot_rotate");
+        csRegistryHelper.register(EnumResourceType.ANIM, EnumRenderType.ENTITY, "shatter");
         
         //Mites
         csRegistryHelper.register(EnumResourceType.MODEL, EnumRenderType.ENTITY, "woodmite");

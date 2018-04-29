@@ -260,7 +260,7 @@ public class EntityWoodMite extends EntityMob implements IAnimated {
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		this.animHandler.animationsUpdate(this);
+		EntityWoodMite.animHandler.animationsUpdate(this);
 		if (!this.isWorldRemote() && this.isRiding()) {
 			if(((EntityPlayerMP) this.ridingPlayer).motionY > 0.1d && this.ticksExisted % 5 == 0){
 				this.attackEntityFrom(DamageSource.causeMobDamage(this.ridingPlayer), 0.5f);

@@ -27,8 +27,6 @@ public class RenderHypnoSpider extends RenderLiving<EntityHypnoSpider>{
     protected ResourceLocation getEntityTexture(@Nonnull EntityHypnoSpider entity) {
         return mobTexture;
     }
-	
-	
 
     public static class Factory implements IRenderFactory<EntityHypnoSpider> {
 

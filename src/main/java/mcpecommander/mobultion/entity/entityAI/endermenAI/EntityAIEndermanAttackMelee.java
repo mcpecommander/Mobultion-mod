@@ -1,7 +1,6 @@
 package mcpecommander.mobultion.entity.entityAI.endermenAI;
 
 import mcpecommander.mobultion.entity.entities.endermen.EntityIceEnderman;
-import mcpecommander.mobultion.entity.entities.zombies.EntityAnimatedZombie;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -42,7 +41,8 @@ public class EntityAIEndermanAttackMelee extends EntityAIBase
     /**
      * Returns whether the EntityAIBase should begin execution.
      */
-    public boolean shouldExecute()
+    @Override
+	public boolean shouldExecute()
     {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
 
@@ -85,7 +85,8 @@ public class EntityAIEndermanAttackMelee extends EntityAIBase
     /**
      * Returns whether an in-progress EntityAIBase should continue executing
      */
-    public boolean shouldContinueExecuting()
+    @Override
+	public boolean shouldContinueExecuting()
     {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
 
@@ -114,7 +115,8 @@ public class EntityAIEndermanAttackMelee extends EntityAIBase
     /**
      * Execute a one shot task or start executing a continuous task
      */
-    public void startExecuting()
+    @Override
+	public void startExecuting()
     {
         this.attacker.getNavigator().setPath(this.entityPathEntity, this.speedTowardsTarget);
         this.delayCounter = 0;
@@ -123,7 +125,8 @@ public class EntityAIEndermanAttackMelee extends EntityAIBase
     /**
      * Reset the task's internal state. Called when this task is interrupted by another one
      */
-    public void resetTask()
+    @Override
+	public void resetTask()
     {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
 
@@ -139,7 +142,8 @@ public class EntityAIEndermanAttackMelee extends EntityAIBase
     /**
      * Keep ticking a continuous task that has already been started
      */
-    public void updateTask()
+    @Override
+	public void updateTask()
     {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
         this.attacker.getLookHelper().setLookPositionWithEntity(entitylivingbase, 30.0F, 30.0F);
@@ -207,7 +211,7 @@ public class EntityAIEndermanAttackMelee extends EntityAIBase
 
     protected double getAttackReachSqr(EntityLivingBase attackTarget)
     {
-        return (double)(this.attacker.width * 2.0F * this.attacker.width * 2.0F + attackTarget.width);
+        return this.attacker.width * 2.0F * this.attacker.width * 2.0F + attackTarget.width;
     }
 
 }

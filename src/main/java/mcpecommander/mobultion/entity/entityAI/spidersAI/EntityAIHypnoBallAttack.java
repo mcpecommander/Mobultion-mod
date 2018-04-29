@@ -20,24 +20,28 @@ public class EntityAIHypnoBallAttack extends EntityAIBase{
         this.setMutexBits(3);
     }
 
-    public boolean shouldExecute()
+    @Override
+	public boolean shouldExecute()
     {
         EntityLivingBase entitylivingbase = this.hypno.getAttackTarget();
         return entitylivingbase != null && entitylivingbase.isEntityAlive();
     }
 
-    public void startExecuting()
+    @Override
+	public void startExecuting()
     {
         this.attackTime = 80;
     }
     
-    public void resetTask()
+    @Override
+	public void resetTask()
     {
         super.resetTask();
     }
 
 
-    public void updateTask()
+    @Override
+	public void updateTask()
     {
         --this.attackTime;
         EntityLivingBase entitylivingbase = this.hypno.getAttackTarget();
@@ -56,7 +60,7 @@ public class EntityAIHypnoBallAttack extends EntityAIBase{
         else if (d0 < this.getFollowDistance() * this.getFollowDistance())
         {
             double d1 = entitylivingbase.posX - this.hypno.posX;
-            double d2 = entitylivingbase.getEntityBoundingBox().minY + (double)(entitylivingbase.height / 2.0F) - (this.hypno.posY + (double)(this.hypno.height / 2.0F));
+            double d2 = entitylivingbase.getEntityBoundingBox().minY + entitylivingbase.height / 2.0F - (this.hypno.posY + this.hypno.height / 2.0F);
             double d3 = entitylivingbase.posZ - this.hypno.posZ;
             //--this.attackTime;
 
@@ -64,7 +68,7 @@ public class EntityAIHypnoBallAttack extends EntityAIBase{
             {
                  this.hypno.world.playEvent((EntityPlayer)null, 1018, new BlockPos((int)this.hypno.posX, (int)this.hypno.posY, (int)this.hypno.posZ), 0);
                  EntityHypnoBall hypnoBall = new EntityHypnoBall(this.hypno.world, this.hypno, d1 , d2, d3 );
-                 hypnoBall.posY = this.hypno.posY + (double)(this.hypno.height / 2.0F) + 0.5D;
+                 hypnoBall.posY = this.hypno.posY + this.hypno.height / 2.0F + 0.5D;
                  this.hypno.world.spawnEntity(hypnoBall);
                  this.attackTime = SpidersConfig.spiders.hypno.fireDelay;
             } 

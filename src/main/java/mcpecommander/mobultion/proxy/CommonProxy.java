@@ -1,8 +1,9 @@
 package mcpecommander.mobultion.proxy;
 
-import mcpecommander.mobultion.Reference.MobultionItems;
+import mcpecommander.mobultion.MobultionMod;
 import mcpecommander.mobultion.enchantments.EnchantmentBlessed;
 import mcpecommander.mobultion.events.SpawnEvent;
+import mcpecommander.mobultion.gui.GuiProxy;
 import mcpecommander.mobultion.init.ModDictionary;
 import mcpecommander.mobultion.init.ModItems;
 import mcpecommander.mobultion.init.ModPotionTypes;
@@ -11,6 +12,7 @@ import mcpecommander.mobultion.items.ItemCorruptedBone;
 import mcpecommander.mobultion.items.ItemCorruptedBonemeal;
 import mcpecommander.mobultion.items.ItemEnderBlaze;
 import mcpecommander.mobultion.items.ItemEnderFlake;
+import mcpecommander.mobultion.items.ItemEnderGlassShot;
 import mcpecommander.mobultion.items.ItemFang;
 import mcpecommander.mobultion.items.ItemFangNecklace;
 import mcpecommander.mobultion.items.ItemFireSword;
@@ -19,6 +21,7 @@ import mcpecommander.mobultion.items.ItemForestBow;
 import mcpecommander.mobultion.items.ItemFork;
 import mcpecommander.mobultion.items.ItemHammer;
 import mcpecommander.mobultion.items.ItemHat;
+import mcpecommander.mobultion.items.ItemHayHat;
 import mcpecommander.mobultion.items.ItemHealingWand;
 import mcpecommander.mobultion.items.ItemHealth;
 import mcpecommander.mobultion.items.ItemHeartArrow;
@@ -30,7 +33,9 @@ import mcpecommander.mobultion.items.ItemMagmaArrow;
 import mcpecommander.mobultion.items.ItemNetherRuby;
 import mcpecommander.mobultion.items.ItemPigmanFlesh;
 import mcpecommander.mobultion.items.ItemSorcererBreath;
+import mcpecommander.mobultion.items.ItemSpawnChanger;
 import mcpecommander.mobultion.items.ItemSpineAsh;
+import mcpecommander.mobultion.items.ItemThunderWand;
 import mcpecommander.mobultion.items.ItemWitherSpine;
 import mcpecommander.mobultion.items.pigsheathArmor.ItemPigsheathBoots;
 import mcpecommander.mobultion.items.pigsheathArmor.ItemPigsheathHelmet;
@@ -60,7 +65,6 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.potion.PotionType;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
@@ -69,7 +73,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class CommonProxy {
@@ -90,6 +94,7 @@ public class CommonProxy {
 
 	public void init(FMLInitializationEvent e) {
 		ModDictionary.registerDict();
+		NetworkRegistry.INSTANCE.registerGuiHandler(MobultionMod.instance, new GuiProxy());
 	}
 
 	public void postInit(FMLPostInitializationEvent e) {
@@ -100,13 +105,13 @@ public class CommonProxy {
 		pigmanFlesh = new ItemPigmanFlesh();
 		event.getRegistry().registerAll(new ItemForestBow(), new ItemHealingWand(), new ItemHeartArrow(),
 				new ItemHammer(), new ItemFireSword(), new ItemHealth(), new ItemFork(), new ItemKnife(), new ItemHat(),
-				new ItemEnderFlake(), new ItemEnderBlaze(), new ItemCorruptedBone(), new ItemCorruptedBonemeal(),
+				new ItemEnderFlake(), new ItemEnderBlaze(), new ItemEnderGlassShot(), new ItemCorruptedBone(), new ItemCorruptedBonemeal(),
 				new ItemHolyShard(), new ItemHypnoBall(), new ItemFangNecklace(), new ItemFang(), new ItemMagmaArrow(),
 				new ItemMagicTouch(), new ItemSorcererBreath(), new ItemSpineAsh(), new ItemWitherSpine(),
 				pigmanFlesh, new ItemFlamingChip(), new ItemNetherRuby());
 		PIG_SHEATH = EnumHelper.addArmorMaterial("mobultion:pigsheath", "something", 120, new int[]{1,2,3,1}, 20, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0.0f).setRepairItem(new ItemStack(pigmanFlesh));
 		event.getRegistry().registerAll( new ItemPigsheathTunic(), new ItemPigsheathHelmet(), new ItemPigsheathLeggings(),
-				new ItemPigsheathBoots());
+				new ItemPigsheathBoots(), new ItemThunderWand(), new ItemHayHat(), new ItemSpawnChanger());
 	}
 
 	@SubscribeEvent
@@ -159,6 +164,7 @@ public class CommonProxy {
 		e.getRegistry().register(ModSounds.bat_morph);
 		e.getRegistry().register(ModSounds.puke);
 		e.getRegistry().register(ModSounds.spit);
+		e.getRegistry().register(ModSounds.vampire_death);
 	}
 
 	@SubscribeEvent

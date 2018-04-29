@@ -35,7 +35,8 @@ public class EntityAITricksterSpiderConfusionAttack extends EntityAIBase
         this.setMutexBits(3);
     }
 
-    public boolean shouldExecute()
+    @Override
+	public boolean shouldExecute()
     {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
 
@@ -75,7 +76,8 @@ public class EntityAITricksterSpiderConfusionAttack extends EntityAIBase
         }
     }
 
-    public boolean shouldContinueExecuting()
+    @Override
+	public boolean shouldContinueExecuting()
     {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
 
@@ -101,13 +103,15 @@ public class EntityAITricksterSpiderConfusionAttack extends EntityAIBase
         }
     }
 
-    public void startExecuting()
+    @Override
+	public void startExecuting()
     {
         this.attacker.getNavigator().setPath(this.entityPathEntity, this.speedTowardsTarget);
         this.delayCounter = 0;
     }
 
-    public void resetTask()
+    @Override
+	public void resetTask()
     {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
 
@@ -119,7 +123,8 @@ public class EntityAITricksterSpiderConfusionAttack extends EntityAIBase
         this.attacker.getNavigator().clearPath();
     }
 
-    public void updateTask()
+    @Override
+	public void updateTask()
     {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
         this.attacker.getLookHelper().setLookPositionWithEntity(entitylivingbase, 30.0F, 30.0F);
@@ -216,6 +221,6 @@ public class EntityAITricksterSpiderConfusionAttack extends EntityAIBase
 
     protected double getAttackReachSqr(EntityLivingBase attackTarget)
     {
-        return (double)(4.0F + attackTarget.width);
+        return 4.0F + attackTarget.width;
     }
 }

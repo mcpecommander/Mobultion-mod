@@ -53,5 +53,9 @@
   "spit": {
     "subtitle": "mobultion.subtitles.spit",
     "sounds": [ "mobultion:spit" ]
+  },
+  "vampire_death": {
+    "subtitle": "mobultion.subtitles.vampire_death",
+    "sounds": [ "mobultion:vampire_death" ]
   }
 }

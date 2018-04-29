@@ -3,6 +3,7 @@ package mcpecommander.mobultion.events;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import com.google.common.base.Predicate;
@@ -32,10 +33,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
+import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.monster.EntitySpider;
@@ -62,7 +65,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.LootEntryItem;
 import net.minecraft.world.storage.loot.LootPool;
@@ -70,7 +72,6 @@ import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraft.world.storage.loot.RandomValueRange;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
-import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraft.world.storage.loot.functions.LootingEnchantBonus;
 import net.minecraft.world.storage.loot.functions.SetCount;
 import net.minecraftforge.common.config.Config;
@@ -101,7 +102,8 @@ public class CommonEvent {
 	public static void onLivingDeath(LivingDeathEvent e) {
 		EntityLivingBase entity = e.getEntityLiving();
 		if (entity instanceof EntitySpider || entity instanceof EntityAnimatedSpider) {
-			if (entity.getAttributeMap().getAttributeInstanceByName("generic.blessed").getAttributeValue() > 0.0d) {
+			IAttributeInstance instance = entity.getAttributeMap().getAttributeInstanceByName("generic.blessed");
+			if (instance != null && instance.getAttributeValue() > 0.0d) {
 				if (entity.getRNG().nextInt(SpidersConfig.spiders.angel.reviveChance) == 0) {
 					entity.setHealth(entity.getMaxHealth());
 					entity.playSound(SoundEvents.ITEM_TOTEM_USE, 1f, 1f);
@@ -174,18 +176,19 @@ public class CommonEvent {
 
 	@SubscribeEvent
 	public static void onInteract(PlayerInteractEvent.RightClickBlock e) {
-		// For testing, please stop deleting it. You will need it later on
-		// dumbass.
-		// if(!e.getEntityPlayer().getHeldItemMainhand().isEmpty() &&
-		// e.getEntityPlayer().getHeldItemMainhand().getTagCompound() != null){
-		// System.out.println(e.getEntityPlayer().getHeldItemMainhand().getTagCompound().toString());
-		// }
+		// For testing, please stop deleting it. You will need it later on dumbass.
+//		 if(!e.getEntityPlayer().getHeldItemMainhand().isEmpty() 
+//		 ){
+//		 System.out.println(e.getEntityPlayer().getHeldItemMainhand().getItem());
+//		 System.out.println(e.getWorld().getBlockState(e.getPos()).getBlock());
+//		 }
 		TileEntity tile = e.getWorld().getTileEntity(e.getPos());
 		if (tile != null && tile instanceof TileEntityChest) {
 			TileEntityLockableLoot chest = (TileEntityLockableLoot) tile;
 			if (chest.getLootTable() != null && chest.getLootTable().equals(LootTableList.CHESTS_DESERT_PYRAMID)
 					&& e.getEntityPlayer().getRNG().nextFloat() < 0.02f) {
-				BlockPos pos = findPos(e.getPos().getAllInBox(e.getPos().add(-1, 0, -1), e.getPos().add(1, 1, 1)),
+				e.getPos();
+				BlockPos pos = findPos(BlockPos.getAllInBox(e.getPos().add(-1, 0, -1), e.getPos().add(1, 1, 1)),
 						e.getWorld());
 				if (pos != null && SkeletonsConfig.skeletons.corrupted.spawnFromLootChests) {
 					EntityCorruptedSkeleton entity = new EntityCorruptedSkeleton(e.getWorld());
@@ -246,20 +249,30 @@ public class CommonEvent {
 		}
 
 	}
+	
+	private static boolean setCheck(Set<EntityAITaskEntry> set, Class task) {
+		for(EntityAITaskEntry entries : set) {
+			if(entries.action.getClass() == task) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 	@SubscribeEvent
 	public static void onJoin(EntityJoinWorldEvent e) {
 		if (e.getEntity() instanceof EntityZombie && !e.getWorld().isRemote) {
 			EntityZombie zombie = (EntityZombie) e.getEntity();
 			EntityAIMoveToNearestDoctor task = new EntityAIMoveToNearestDoctor(zombie, 1.2D, 16D);
-			if (!zombie.tasks.taskEntries.contains(task)) {
+			if (setCheck(zombie.tasks.taskEntries, EntityAIMoveToNearestDoctor.class)) {
 				zombie.tasks.addTask(1, task);
 			}
+			
 		}
 		if (e.getEntity() instanceof EntityOcelot && !e.getWorld().isRemote) {
 			EntityOcelot ocelot = (EntityOcelot) e.getEntity();
 			EntityAIFollowPlayerWithPigsheath task = new EntityAIFollowPlayerWithPigsheath(ocelot, 1.1D);
-			if (!ocelot.tasks.taskEntries.contains(task)) {
+			if (setCheck(ocelot.tasks.taskEntries, EntityAIFollowPlayerWithPigsheath.class)) {
 				ocelot.tasks.addTask(3, task);
 			}
 			for (EntityAITaskEntry entry : ocelot.tasks.taskEntries) {
@@ -267,6 +280,7 @@ public class CommonEvent {
 					ocelot.tasks.taskEntries.remove(entry);
 					EntityAIAvoidEntity<EntityPlayer> newTask = new EntityAIAvoidEntity<EntityPlayer>(ocelot,
 							EntityPlayer.class, new Predicate<EntityPlayer>() {
+								@Override
 								public boolean apply(EntityPlayer player) {
 									if ((player.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty()
 											|| !(player.getItemStackFromSlot(EntityEquipmentSlot.HEAD)
@@ -418,7 +432,7 @@ public class CommonEvent {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+
 	@SubscribeEvent
 	public static void spawnMiniSpider(LivingSpawnEvent.CheckSpawn e) {
 		if (!e.isSpawner() && e.getResult() == Result.ALLOW) {
@@ -431,19 +445,6 @@ public class CommonEvent {
 				}
 			}
 		}
-		// Not really needed
-		// if (!e.isSpawner() && e.getResult() == Result.ALLOW) {
-		// if (e.getEntityLiving() instanceof EntityAnimatedZombie ||
-		// e.getEntityLiving() instanceof EntityZombie) {
-		// if (e.getEntityLiving().getRNG().nextInt(100) == 1) {
-		// EntityDoctorZombie doctor = new EntityDoctorZombie(e.getWorld());
-		// doctor.setLocationAndAngles(e.getX() +
-		// e.getEntityLiving().getRNG().nextGaussian(), e.getY(),
-		// e.getZ() + e.getEntityLiving().getRNG().nextGaussian(), 0, 0);
-		// e.getWorld().spawnEntity(doctor);
-		// }
-		// }
-		// }
 	}
 
 }

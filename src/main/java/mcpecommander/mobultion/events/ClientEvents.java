@@ -2,27 +2,14 @@ package mcpecommander.mobultion.events;
 
 import java.util.Random;
 
-import com.leviathanstudio.craftstudio.client.model.CSModelRenderer;
-import com.leviathanstudio.craftstudio.common.animation.IAnimated;
-
 import mcpecommander.mobultion.Reference;
-import mcpecommander.mobultion.entity.model.ModelCraftStudioSon;
 import mcpecommander.mobultion.init.ModPotions;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Side.CLIENT)
 public class ClientEvents {

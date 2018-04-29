@@ -13,6 +13,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntitySpider;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -29,7 +30,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
-public class EntitySpiderEgg extends EntityLivingBase implements IAnimated{
+public class EntitySpiderEgg extends EntityLivingBase implements IAnimated, IMob{
 	
 	private static final DataParameter<Byte> PREGNANT = EntityDataManager.<Byte>createKey(EntitySpiderEgg.class, DataSerializers.BYTE);
 	protected static AnimationHandler animHandler = CraftStudioApi.getNewAnimationHandler(EntitySpiderEgg.class);
@@ -73,7 +74,7 @@ public class EntitySpiderEgg extends EntityLivingBase implements IAnimated{
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		this.animHandler.animationsUpdate(this);
+		EntitySpiderEgg.animHandler.animationsUpdate(this);
 	}
 
 	@Override

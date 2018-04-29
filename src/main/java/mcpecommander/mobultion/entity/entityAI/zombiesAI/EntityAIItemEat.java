@@ -1,13 +1,9 @@
 package mcpecommander.mobultion.entity.entityAI.zombiesAI;
 
 import mcpecommander.mobultion.entity.entities.zombies.EntityRavenousZombie;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.ItemFood;
-import net.minecraft.util.math.AxisAlignedBB;
 
 public class EntityAIItemEat extends EntityAIBase{
 	

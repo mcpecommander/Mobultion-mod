@@ -51,7 +51,7 @@ public class EntityShamanSkeleton extends EntityAnimatedSkeleton {
 	protected void initEntityAI() {
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(3, new EntityAIAvoidEntity(this, EntityWolf.class, 6.0F, 1.0D, 1.2D));
-		this.tasks.addTask(3, new EntityAIAvoidEntity(this, EntityPlayer.class, 2.5F, 1.0D, 1.2D));
+		this.tasks.addTask(3, new EntityAIAvoidEntity(this, EntityPlayer.class, 4.5F, 1.0D, 1.2D));
 		this.tasks.addTask(4, new EntityAIShamanSkeletonHeal(this, 1.2D));
 		this.tasks.addTask(5, new EntityAIWanderAvoidWater(this, 1.0D));
 		this.tasks.addTask(6, new EntityAILookIdle(this));

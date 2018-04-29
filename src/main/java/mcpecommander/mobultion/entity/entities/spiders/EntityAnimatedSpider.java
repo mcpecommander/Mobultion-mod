@@ -7,7 +7,6 @@ import com.leviathanstudio.craftstudio.common.animation.AnimationHandler;
 import com.leviathanstudio.craftstudio.common.animation.IAnimated;
 
 import mcpecommander.mobultion.integration.JEI;
-import mezz.jei.api.recipe.IFocus.Mode;
 import net.minecraft.block.Block;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
@@ -153,12 +152,12 @@ public abstract class EntityAnimatedSpider extends EntityMob implements IAnimate
     
     public boolean isBesideClimbableBlock()
     {
-        return (((Byte)this.dataManager.get(CLIMBING)).byteValue() & 1) != 0;
+        return (this.dataManager.get(CLIMBING).byteValue() & 1) != 0;
     }
     
     public void setBesideClimbableBlock(boolean climbing)
     {
-        byte b0 = ((Byte)this.dataManager.get(CLIMBING)).byteValue();
+        byte b0 = this.dataManager.get(CLIMBING).byteValue();
 
         if (climbing)
         {

@@ -5,7 +5,6 @@ import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.animation.AnimationRiding;
 import mcpecommander.mobultion.entity.entityAI.zombiesAI.EntityAIKnightAttackMelee;
 import mcpecommander.mobultion.entity.entityAI.zombiesAI.EntityAIMoveToNearestDoctor;
-import mcpecommander.mobultion.init.ModItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -107,7 +106,7 @@ public class EntityKnightZombie extends EntityAnimatedZombie{
         {
             float f = this.getBrightness();
 
-            if (f > 0.5F && this.rand.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.world.canSeeSky(new BlockPos(this.posX, this.posY + (double)this.getEyeHeight(), this.posZ)))
+            if (f > 0.5F && this.rand.nextFloat() * 30.0F < (f - 0.4F) * 2.0F && this.world.canSeeSky(new BlockPos(this.posX, this.posY + this.getEyeHeight(), this.posZ)))
             {
                 boolean flag = true;
                 ItemStack itemstack = this.getItemStackFromSlot(EntityEquipmentSlot.HEAD);

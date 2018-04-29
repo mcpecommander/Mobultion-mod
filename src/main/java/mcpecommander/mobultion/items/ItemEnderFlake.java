@@ -2,7 +2,7 @@ package mcpecommander.mobultion.items;
 
 import mcpecommander.mobultion.MobultionMod;
 import mcpecommander.mobultion.Reference;
-import mcpecommander.mobultion.entity.entities.endermen.EntityEnderFlake;
+import mcpecommander.mobultion.entity.entities.endermen.EntityEnderProjectile;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -43,7 +43,8 @@ public class ItemEnderFlake extends Item{
 
         if (!worldIn.isRemote)
         {
-            EntityEnderFlake entityenderpearl = new EntityEnderFlake(worldIn, playerIn);
+            EntityEnderProjectile entityenderpearl = new EntityEnderProjectile(worldIn, playerIn, 0.0f, 0.0f);
+            entityenderpearl.setType((byte)1);
             entityenderpearl.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 0.8F, 0F);
             worldIn.spawnEntity(entityenderpearl);
         }

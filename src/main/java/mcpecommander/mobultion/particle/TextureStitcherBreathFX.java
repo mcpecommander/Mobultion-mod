@@ -1,7 +1,6 @@
 package mcpecommander.mobultion.particle;
 
 import mcpecommander.mobultion.Reference;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;

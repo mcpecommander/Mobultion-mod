@@ -44,6 +44,7 @@ public class EntityHeartArrow extends EntityArrow {
 		}
 	}
 
+	@Override
 	protected ItemStack getArrowStack() {
 		return new ItemStack(ModItems.heartArrow);
 	}
