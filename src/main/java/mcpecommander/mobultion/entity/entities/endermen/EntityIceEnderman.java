@@ -1,5 +1,9 @@
 package mcpecommander.mobultion.entity.entities.endermen;
 
+import com.leviathanstudio.craftstudio.CraftStudioApi;
+import com.leviathanstudio.craftstudio.common.animation.AnimationHandler;
+import com.leviathanstudio.craftstudio.common.animation.IAnimated;
+
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAtEnderman;
 import mcpecommander.mobultion.entity.animation.AnimationRiding;
@@ -30,6 +34,7 @@ import net.minecraft.world.World;
 
 public class EntityIceEnderman extends EntityAnimatedEnderman {
 
+	protected static AnimationHandler animHandler = CraftStudioApi.getNewAnimationHandler(EntityIceEnderman.class);
 	//A dataParameter that auto-syncs to the client (not backwards). This is used to define if this should play the biting animation.
 	private static final DataParameter<Boolean> BITING = EntityDataManager.<Boolean>createKey(EntityIceEnderman.class,
 			DataSerializers.BOOLEAN);
@@ -47,6 +52,11 @@ public class EntityIceEnderman extends EntityAnimatedEnderman {
 		super(worldIn);
 		this.setSize(0.6F, 2.9F);
 		this.stepHeight = 1.0F;
+	}
+	
+	@Override
+	public <T extends IAnimated> AnimationHandler<T> getAnimationHandler() {
+		return EntityIceEnderman.animHandler;
 	}
 	
 	//Stopped 

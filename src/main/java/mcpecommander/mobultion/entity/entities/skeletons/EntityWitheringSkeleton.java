@@ -1,5 +1,9 @@
 package mcpecommander.mobultion.entity.entities.skeletons;
 
+import com.leviathanstudio.craftstudio.CraftStudioApi;
+import com.leviathanstudio.craftstudio.common.animation.AnimationHandler;
+import com.leviathanstudio.craftstudio.common.animation.IAnimated;
+
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.animation.AnimationRiding;
@@ -39,6 +43,7 @@ import net.minecraft.world.World;
 public class EntityWitheringSkeleton extends EntityAnimatedSkeleton {
 
 	private boolean flag = false;
+	protected static AnimationHandler animHandler = CraftStudioApi.getNewAnimationHandler(EntityWitheringSkeleton.class);
 	private final EntityAIAttackRangedBow<EntityWitheringSkeleton> aiArrowAttack = new EntityAIAttackRangedBow<EntityWitheringSkeleton>(
 			this, 1.0D, 20, 15.0F);
 	private final EntityAIAttackMelee aiAttackOnCollide = new EntityAIAttackMelee(this, 1.2D, false) {
@@ -69,6 +74,11 @@ public class EntityWitheringSkeleton extends EntityAnimatedSkeleton {
 		super(worldIn);
 		this.setSize(0.6F, 1.99F);
 		this.setCombatTask();
+	}
+	
+	@Override
+	public <T extends IAnimated> AnimationHandler<T> getAnimationHandler() {
+		return EntityWitheringSkeleton.animHandler;
 	}
 
 	@Override

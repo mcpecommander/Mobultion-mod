@@ -7,7 +7,8 @@ public class Reference {
 	
 	public static final String MOD_ID = "mobultion";
 	public static final String NAME = "mcpeCommander's mobultion mod";
-	public static final String VERSION = "0.3";
+	public static final String UPDATE_CHECKER = "https://github.com/mcpecommander/Mobultion-mod/blob/master/update_checker.json";
+	public static final String VERSION = "0.4.1";
 	public static final String ACCEPTED_MINECRAFT_VERSIONS = "[1.12, 1.13)";
 	
 	public static final String CLIENT_PROXY_CLASS = "mcpecommander.mobultion.proxy.ClientProxy";
@@ -187,6 +188,7 @@ public class Reference {
 		
 		public static final ResourceLocation ENTITYMAGMAENDERMAN = new ResourceLocation(Reference.MOD_ID, "endermen/magma_enderman");
 		public static final ResourceLocation ENTITYICEENDERMAN = new ResourceLocation(Reference.MOD_ID, "endermen/ice_enderman");
+		public static final ResourceLocation ENTITYGLASSENDERMAN = new ResourceLocation(Reference.MOD_ID, "endermen/glass_enderman");
 	}
 
 }

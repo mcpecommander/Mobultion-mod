@@ -1,5 +1,9 @@
 package mcpecommander.mobultion.entity.entities.zombies;
 
+import com.leviathanstudio.craftstudio.CraftStudioApi;
+import com.leviathanstudio.craftstudio.common.animation.AnimationHandler;
+import com.leviathanstudio.craftstudio.common.animation.IAnimated;
+
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.animation.AnimationRiding;
@@ -27,6 +31,7 @@ import net.minecraft.world.World;
 
 public class EntityGoroZombie extends EntityAnimatedZombie {
 
+	protected static AnimationHandler animHandler = CraftStudioApi.getNewAnimationHandler(EntityGoroZombie.class);
 	static {
 		EntityGoroZombie.animHandler.addAnim(Reference.MOD_ID, "skeleton_walk", "goro_zombie", true);
 		EntityGoroZombie.animHandler.addAnim(Reference.MOD_ID, "goro_hands", "goro_zombie", true);
@@ -38,6 +43,11 @@ public class EntityGoroZombie extends EntityAnimatedZombie {
 	public EntityGoroZombie(World worldIn) {
 		super(worldIn);
 		this.setSize(0.7F, 2F);
+	}
+	
+	@Override
+	public <T extends IAnimated> AnimationHandler<T> getAnimationHandler() {
+		return EntityGoroZombie.animHandler;
 	}
 
 	@Override

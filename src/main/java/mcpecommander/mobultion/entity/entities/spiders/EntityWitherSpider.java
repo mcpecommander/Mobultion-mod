@@ -2,6 +2,10 @@ package mcpecommander.mobultion.entity.entities.spiders;
 
 import javax.annotation.Nullable;
 
+import com.leviathanstudio.craftstudio.CraftStudioApi;
+import com.leviathanstudio.craftstudio.common.animation.AnimationHandler;
+import com.leviathanstudio.craftstudio.common.animation.IAnimated;
+
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAtWither;
 import mcpecommander.mobultion.entity.entityAI.spidersAI.EntityAISpiderAttack;
@@ -29,6 +33,8 @@ import net.minecraft.world.World;
 
 public class EntityWitherSpider extends EntityAnimatedSpider {
 
+	protected static AnimationHandler animHandler = CraftStudioApi.getNewAnimationHandler(EntityWitherSpider.class);
+	
 	static {
 		EntityWitherSpider.animHandler.addAnim(Reference.MOD_ID, "spider_move", "wither_spider", false);
 		EntityWitherSpider.animHandler.addAnim(Reference.MOD_ID, "lookat", new AnimationLookAtWither("Head", "Head1", "Head2"));
@@ -37,6 +43,11 @@ public class EntityWitherSpider extends EntityAnimatedSpider {
 	public EntityWitherSpider(World worldIn) {
 		super(worldIn);
 		this.setSize(1.4f, 1.15f);
+	}
+	
+	@Override
+	public <T extends IAnimated> AnimationHandler<T> getAnimationHandler() {
+		return EntityWitherSpider.animHandler;
 	}
 
 	@Override

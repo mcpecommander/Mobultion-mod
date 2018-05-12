@@ -2,6 +2,10 @@ package mcpecommander.mobultion.entity.entities.spiders;
 
 import javax.annotation.Nullable;
 
+import com.leviathanstudio.craftstudio.CraftStudioApi;
+import com.leviathanstudio.craftstudio.common.animation.AnimationHandler;
+import com.leviathanstudio.craftstudio.common.animation.IAnimated;
+
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.entityAI.spidersAI.EntityAISpiderAttack;
@@ -28,6 +32,8 @@ import net.minecraft.world.World;
 
 public class EntityMagmaSpider extends EntityAnimatedSpider{
 	
+	protected static AnimationHandler animHandler = CraftStudioApi.getNewAnimationHandler(EntityMagmaSpider.class);
+	
 	static{
 		EntityMagmaSpider.animHandler.addAnim(Reference.MOD_ID, "spider_move", "magma_spider", false);
 		EntityMagmaSpider.animHandler.addAnim(Reference.MOD_ID, "lookat", new AnimationLookAt("Head"));
@@ -38,6 +44,11 @@ public class EntityMagmaSpider extends EntityAnimatedSpider{
 		this.setSize(1.4f, 0.9f);
 		this.isImmuneToFire = true;
 		this.setPathPriority(PathNodeType.WATER, -1.0F);
+	}
+	
+	@Override
+	public <T extends IAnimated> AnimationHandler<T> getAnimationHandler() {
+		return EntityMagmaSpider.animHandler;
 	}
 
 	@Override

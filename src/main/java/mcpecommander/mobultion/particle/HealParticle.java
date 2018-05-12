@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -17,9 +17,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class HealParticle extends Particle{
 	private final ResourceLocation lava = new ResourceLocation(Reference.MOD_ID ,"particle/heal");
-	private BlockPos finalTarget;
+	private AxisAlignedBB finalTarget;
 
-	public HealParticle(World worldIn, double posXIn, double posYIn, double posZIn, float red, Vec3d vec3, BlockPos pos) {
+	public HealParticle(World worldIn, double posXIn, double posYIn, double posZIn, float red, Vec3d vec3, AxisAlignedBB pos) {
 		super(worldIn, posXIn, posYIn, posZIn);
 		
 		particleGravity = Blocks.BONE_BLOCK.blockParticleGravity;
@@ -115,16 +115,12 @@ public class HealParticle extends Particle{
         }
 
         float f = (float)this.particleAge / (float)this.particleMaxAge;
-        
-        //System.out.println(finalTarget.distanceSq(this.posX, this.posY, this.posZ));
-        if(finalTarget.getDistance((int)(this.posX), (int)(this.posY), (int) this.posZ) <= .5D){
+//        
+//        System.out.println(finalTarget.distanceSq(this.posX, this.posY, this.posZ));
+        if(this.getBoundingBox().intersects(finalTarget)){
         	this.setExpired();
+        	
         }
-
-//        if (this.rand.nextFloat() > f)
-//        {
-//            this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY, this.posZ, this.motionX, this.motionY, this.motionZ);
-//        }
 
     }
 

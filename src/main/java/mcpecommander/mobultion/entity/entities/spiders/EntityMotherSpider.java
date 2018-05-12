@@ -1,5 +1,9 @@
 package mcpecommander.mobultion.entity.entities.spiders;
 
+import com.leviathanstudio.craftstudio.CraftStudioApi;
+import com.leviathanstudio.craftstudio.common.animation.AnimationHandler;
+import com.leviathanstudio.craftstudio.common.animation.IAnimated;
+
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.entityAI.spidersAI.EntityAIMotherSpiderLayEgg;
@@ -23,7 +27,10 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 public class EntityMotherSpider extends EntityAnimatedSpider{
+	
+	protected static AnimationHandler animHandler = CraftStudioApi.getNewAnimationHandler(EntityMotherSpider.class);
 	private static final DataParameter<Boolean> PREGNANT = EntityDataManager.<Boolean>createKey(EntityMotherSpider.class, DataSerializers.BOOLEAN);
+	
 	static {
 		EntityMotherSpider.animHandler.addAnim(Reference.MOD_ID, "spider_move", "mother_spider", false);
 		EntityMotherSpider.animHandler.addAnim(Reference.MOD_ID, "mother_pregnant", "mother_spider", false);
@@ -33,6 +40,11 @@ public class EntityMotherSpider extends EntityAnimatedSpider{
 	public EntityMotherSpider(World worldIn) {
 		super(worldIn);
 		this.setSize(1.4f, 0.9f);
+	}
+	
+	@Override
+	public <T extends IAnimated> AnimationHandler<T> getAnimationHandler() {
+		return EntityMotherSpider.animHandler;
 	}
 
 	@Override
@@ -129,7 +141,7 @@ public class EntityMotherSpider extends EntityAnimatedSpider{
     @Override
     public void onDeath(DamageSource cause) {
     	if(!this.isWorldRemote()){
-    		if(cause.getTrueSource() instanceof EntityPlayerMP){
+    		if(cause.getTrueSource() instanceof EntityPlayerMP && !((EntityPlayer)cause.getTrueSource()).capabilities.isCreativeMode){
     			EntitySpiderEgg egg = new EntitySpiderEgg(this.world, cause.getTrueSource().getName());
     			egg.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
     			this.world.spawnEntity(egg);

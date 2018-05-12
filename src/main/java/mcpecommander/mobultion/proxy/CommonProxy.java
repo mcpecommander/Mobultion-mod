@@ -3,6 +3,7 @@ package mcpecommander.mobultion.proxy;
 import mcpecommander.mobultion.MobultionMod;
 import mcpecommander.mobultion.enchantments.EnchantmentBlessed;
 import mcpecommander.mobultion.events.SpawnEvent;
+import mcpecommander.mobultion.gen.GenTest;
 import mcpecommander.mobultion.gui.GuiProxy;
 import mcpecommander.mobultion.init.ModDictionary;
 import mcpecommander.mobultion.init.ModItems;
@@ -89,7 +90,7 @@ public class CommonProxy {
 	}
 
 	public void preInit(FMLPreInitializationEvent e) {
-
+		GameRegistry.registerWorldGenerator(new GenTest(), 1);
 	}
 
 	public void init(FMLInitializationEvent e) {

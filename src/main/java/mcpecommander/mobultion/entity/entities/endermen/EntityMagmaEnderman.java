@@ -1,5 +1,9 @@
 package mcpecommander.mobultion.entity.entities.endermen;
 
+import com.leviathanstudio.craftstudio.CraftStudioApi;
+import com.leviathanstudio.craftstudio.common.animation.AnimationHandler;
+import com.leviathanstudio.craftstudio.common.animation.IAnimated;
+
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAtEnderman;
 import mcpecommander.mobultion.entity.animation.AnimationRiding;
@@ -32,6 +36,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityMagmaEnderman extends EntityAnimatedEnderman {
+	
+	protected static AnimationHandler animHandler = CraftStudioApi.getNewAnimationHandler(EntityMagmaEnderman.class);
 
 	static {
 		EntityMagmaEnderman.animHandler.addAnim(Reference.MOD_ID, "scream", "enderman", true);
@@ -47,6 +53,11 @@ public class EntityMagmaEnderman extends EntityAnimatedEnderman {
 		this.stepHeight = 1.0F;
 		this.setPathPriority(PathNodeType.WATER, -1.0F);
 		this.isImmuneToFire = true;
+	}
+	
+	@Override
+	public <T extends IAnimated> AnimationHandler<T> getAnimationHandler() {
+		return EntityMagmaEnderman.animHandler;
 	}
 
 	@Override

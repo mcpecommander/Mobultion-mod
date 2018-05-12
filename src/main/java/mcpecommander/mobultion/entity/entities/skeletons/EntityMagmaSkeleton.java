@@ -1,5 +1,9 @@
 package mcpecommander.mobultion.entity.entities.skeletons;
 
+import com.leviathanstudio.craftstudio.CraftStudioApi;
+import com.leviathanstudio.craftstudio.common.animation.AnimationHandler;
+import com.leviathanstudio.craftstudio.common.animation.IAnimated;
+
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.animation.AnimationRiding;
@@ -39,6 +43,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityMagmaSkeleton extends EntityAnimatedSkeleton{
 
+	protected static AnimationHandler animHandler = CraftStudioApi.getNewAnimationHandler(EntityMagmaSkeleton.class);
 	private final EntityAIAttackRangedBow<EntityMagmaSkeleton> aiArrowAttack = new EntityAIAttackRangedBow<>(this, 1.0D, 20, 15.0F);
     private final EntityAIAttackMelee aiAttackOnCollide = new EntityAIAttackMelee(this, 1.2D, false)
     {
@@ -75,6 +80,11 @@ public class EntityMagmaSkeleton extends EntityAnimatedSkeleton{
 		this.isImmuneToFire = true;
 		this.setPathPriority(PathNodeType.WATER, -1.0F);
 
+	}
+	
+	@Override
+	public <T extends IAnimated> AnimationHandler<T> getAnimationHandler() {
+		return EntityMagmaSkeleton.animHandler;
 	}
 	
 	@Override

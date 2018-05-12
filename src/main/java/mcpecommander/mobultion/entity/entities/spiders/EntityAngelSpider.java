@@ -1,5 +1,9 @@
 package mcpecommander.mobultion.entity.entities.spiders;
 
+import com.leviathanstudio.craftstudio.CraftStudioApi;
+import com.leviathanstudio.craftstudio.common.animation.AnimationHandler;
+import com.leviathanstudio.craftstudio.common.animation.IAnimated;
+
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.entityAI.spidersAI.angelAI.EntityAIAngelSpiderHeal;
@@ -20,7 +24,6 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -30,6 +33,8 @@ public class EntityAngelSpider extends EntityAnimatedSpider {
 
 	private static final DataParameter<Integer> TARGET = EntityDataManager.<Integer>createKey(EntityAngelSpider.class,
 			DataSerializers.VARINT);
+	
+	protected static AnimationHandler animHandler = CraftStudioApi.getNewAnimationHandler(EntityAngelSpider.class);
 
 	static {
 		EntityAngelSpider.animHandler.addAnim(Reference.MOD_ID, "spider_move", "angel_spider", false);
@@ -40,6 +45,11 @@ public class EntityAngelSpider extends EntityAnimatedSpider {
 	public EntityAngelSpider(World worldIn) {
 		super(worldIn);
 		this.setSize(1.4f, 1f);
+	}
+	
+	@Override
+	public <T extends IAnimated> AnimationHandler<T> getAnimationHandler() {
+		return EntityAngelSpider.animHandler;
 	}
 
 	@Override
@@ -121,16 +131,6 @@ public class EntityAngelSpider extends EntityAnimatedSpider {
 			}
 			if (this.getTarget() != null && ticksExisted % 5 == 0) {
 				performEffect();
-//				Vec3d vec3d = new Vec3d(this.posX - this.getTarget().posX,
-//						this.getEntityBoundingBox().minY + (double) this.getEyeHeight()
-//								- (this.getTarget().posY + (double) this.getTarget().getEyeHeight()),
-//						this.posZ - this.getTarget().posZ).normalize();
-//				HealParticle heal = new HealParticle(world, this.posX, this.posY + this.getEyeHeight(), this.posZ,
-//						this.getRNG().nextFloat(), vec3d,
-//						new BlockPos(this.getTarget().posX,
-//								(this.getTarget().posY + (double) this.getTarget().getEyeHeight()),
-//								this.getTarget().posZ));
-//				Minecraft.getMinecraft().effectRenderer.addEffect(heal);
 			}
 		}
 	}
@@ -143,9 +143,7 @@ public class EntityAngelSpider extends EntityAnimatedSpider {
 				this.posZ - this.getTarget().posZ).normalize();
 		HealParticle heal = new HealParticle(world, this.posX, this.posY + this.getEyeHeight(), this.posZ,
 				this.getRNG().nextFloat(), vec3d,
-				new BlockPos(this.getTarget().posX,
-						(this.getTarget().posY + this.getTarget().getEyeHeight()),
-						this.getTarget().posZ));
+				this.getTarget().getEntityBoundingBox());
 		Minecraft.getMinecraft().effectRenderer.addEffect(heal);
 	}
 	

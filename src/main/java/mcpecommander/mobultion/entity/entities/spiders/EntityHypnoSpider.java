@@ -1,5 +1,9 @@
 package mcpecommander.mobultion.entity.entities.spiders;
 
+import com.leviathanstudio.craftstudio.CraftStudioApi;
+import com.leviathanstudio.craftstudio.common.animation.AnimationHandler;
+import com.leviathanstudio.craftstudio.common.animation.IAnimated;
+
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.entityAI.spidersAI.EntityAIHypnoBallAttack;
@@ -14,10 +18,15 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 public class EntityHypnoSpider extends EntityAnimatedSpider{
+	
+	protected static AnimationHandler animHandler = CraftStudioApi.getNewAnimationHandler(EntityHypnoSpider.class);
+	
+	private boolean natural = false;
 	
 	static {
 		EntityHypnoSpider.animHandler.addAnim(Reference.MOD_ID, "spider_move", "hypno_spider", false);
@@ -28,6 +37,22 @@ public class EntityHypnoSpider extends EntityAnimatedSpider{
 	public EntityHypnoSpider(World worldIn) {
 		super(worldIn);
 		this.setSize(1.4f, 0.9f);
+	}
+	
+	public EntityHypnoSpider(World worldIn, boolean natural) {
+		this(worldIn);
+		this.natural = natural;
+		
+	}
+	
+	@Override
+	public <T extends IAnimated> AnimationHandler<T> getAnimationHandler() {
+		return EntityHypnoSpider.animHandler;
+	}
+	
+	@Override
+	protected boolean canDespawn() {
+		return super.canDespawn() && !natural;
 	}
 
 	private boolean isMoving(EntityLiving entity){
@@ -54,6 +79,20 @@ public class EntityHypnoSpider extends EntityAnimatedSpider{
     public double getMountedYOffset()
     {
         return this.height * 0.6F;
+    }
+    
+    @Override
+    public void writeEntityToNBT(NBTTagCompound compound) {
+    	super.writeEntityToNBT(compound);
+    	compound.setBoolean("natural", true);
+    }
+    
+    @Override
+    public void readEntityFromNBT(NBTTagCompound compound) {
+    	super.readEntityFromNBT(compound);
+    	if(compound.hasKey("natural")) {
+    		natural = compound.getBoolean("natural");
+    	}
     }
     
     @Override

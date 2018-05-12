@@ -1,5 +1,9 @@
 package mcpecommander.mobultion.entity.entities.spiders;
 
+import com.leviathanstudio.craftstudio.CraftStudioApi;
+import com.leviathanstudio.craftstudio.common.animation.AnimationHandler;
+import com.leviathanstudio.craftstudio.common.animation.IAnimated;
+
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.entityAI.spidersAI.miniAI.EntityAIMiniSpiderAttack;
@@ -22,6 +26,8 @@ import net.minecraft.world.World;
 
 public class EntityMiniSpider extends EntityAnimatedSpider{
 	
+	protected static AnimationHandler animHandler = CraftStudioApi.getNewAnimationHandler(EntityMiniSpider.class);
+	
 	static {
 		EntityMiniSpider.animHandler.addAnim(Reference.MOD_ID, "spider_move", "mini_spider", false);
 		EntityMiniSpider.animHandler.addAnim(Reference.MOD_ID, "lookat", new AnimationLookAt("Head"));
@@ -30,6 +36,11 @@ public class EntityMiniSpider extends EntityAnimatedSpider{
 	public EntityMiniSpider(World worldIn) {
 		super(worldIn);
 		this.setSize(0.8f, 0.7f);
+	}
+	
+	@Override
+	public <T extends IAnimated> AnimationHandler<T> getAnimationHandler() {
+		return EntityMiniSpider.animHandler;
 	}
 
 	@Override

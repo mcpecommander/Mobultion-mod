@@ -1,5 +1,9 @@
 package mcpecommander.mobultion.entity.entities.skeletons;
 
+import com.leviathanstudio.craftstudio.CraftStudioApi;
+import com.leviathanstudio.craftstudio.common.animation.AnimationHandler;
+import com.leviathanstudio.craftstudio.common.animation.IAnimated;
+
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.animation.AnimationRaiseHands;
@@ -35,6 +39,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 public class EntityVampireSkeleton extends EntityAnimatedSkeleton {
+	
+	protected static AnimationHandler animHandler = CraftStudioApi.getNewAnimationHandler(EntityVampireSkeleton.class);
 	private static final DataParameter<Byte> MORPHING = EntityDataManager.<Byte>createKey(EntityVampireSkeleton.class, DataSerializers.BYTE);
 	
 	private boolean flag = false;
@@ -52,6 +58,11 @@ public class EntityVampireSkeleton extends EntityAnimatedSkeleton {
 	public EntityVampireSkeleton(World worldIn) {
 		super(worldIn);
 		this.setSize(0.6F, 1.99F);
+	}
+	
+	@Override
+	public <T extends IAnimated> AnimationHandler<T> getAnimationHandler() {
+		return EntityVampireSkeleton.animHandler;
 	}
 	
 	public void setMorphing(byte isMorphing){

@@ -1,5 +1,9 @@
 package mcpecommander.mobultion.entity.entities.skeletons;
 
+import com.leviathanstudio.craftstudio.CraftStudioApi;
+import com.leviathanstudio.craftstudio.common.animation.AnimationHandler;
+import com.leviathanstudio.craftstudio.common.animation.IAnimated;
+
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.animation.AnimationRiding;
@@ -32,6 +36,8 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityCorruptedSkeleton extends EntityAnimatedSkeleton {
+	
+	protected static AnimationHandler animHandler = CraftStudioApi.getNewAnimationHandler(EntityCorruptedSkeleton.class);
 	private boolean flag = false;
 
 	static {
@@ -46,6 +52,11 @@ public class EntityCorruptedSkeleton extends EntityAnimatedSkeleton {
 	public EntityCorruptedSkeleton(World worldIn) {
 		super(worldIn);
 		this.setSize(0.6F, 1.99F);
+	}
+	
+	@Override
+	public <T extends IAnimated> AnimationHandler<T> getAnimationHandler() {
+		return EntityCorruptedSkeleton.animHandler;
 	}
 
 	@Override

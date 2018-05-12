@@ -2,6 +2,10 @@ package mcpecommander.mobultion.entity.entities.skeletons;
 
 import javax.annotation.Nullable;
 
+import com.leviathanstudio.craftstudio.CraftStudioApi;
+import com.leviathanstudio.craftstudio.common.animation.AnimationHandler;
+import com.leviathanstudio.craftstudio.common.animation.IAnimated;
+
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.animation.AnimationRiding;
@@ -35,6 +39,8 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityJokerSkeleton extends EntityAnimatedSkeleton {
+	
+	protected static AnimationHandler animHandler = CraftStudioApi.getNewAnimationHandler(EntityJokerSkeleton.class);
 
 	private final EntityAIAttackRangedBow<EntityJokerSkeleton> aiArrowAttack = new EntityAIAttackRangedBow<EntityJokerSkeleton>(
 			this, 1.0D, 50, 15.0F);
@@ -68,6 +74,11 @@ public class EntityJokerSkeleton extends EntityAnimatedSkeleton {
 		super(worldIn);
 		this.setSize(0.6F, 1.99F);
 		this.setCombatTask();
+	}
+	
+	@Override
+	public <T extends IAnimated> AnimationHandler<T> getAnimationHandler() {
+		return EntityJokerSkeleton.animHandler;
 	}
 
 	@Override

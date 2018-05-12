@@ -1,5 +1,9 @@
 package mcpecommander.mobultion.entity.entities.endermen;
 
+import com.leviathanstudio.craftstudio.CraftStudioApi;
+import com.leviathanstudio.craftstudio.common.animation.AnimationHandler;
+import com.leviathanstudio.craftstudio.common.animation.IAnimated;
+
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.animation.AnimationRiding;
@@ -25,6 +29,8 @@ import net.minecraft.world.World;
 
 public class EntityGardenerEnderman extends EntityAnimatedEnderman{
 	
+	protected static AnimationHandler animHandler = CraftStudioApi.getNewAnimationHandler(EntityGardenerEnderman.class);
+	
 	static {
 		EntityGardenerEnderman.animHandler.addAnim(Reference.MOD_ID, "gardener_water", "gardener_enderman", false);
 		EntityGardenerEnderman.animHandler.addAnim(Reference.MOD_ID, "gardener_garden", "gardener_enderman", false);
@@ -39,6 +45,11 @@ public class EntityGardenerEnderman extends EntityAnimatedEnderman{
 		this.setSize(0.6F, 2.9F);
 		this.stepHeight = 1.0F;
 		
+	}
+	
+	@Override
+	public <T extends IAnimated> AnimationHandler<T> getAnimationHandler() {
+		return EntityGardenerEnderman.animHandler;
 	}
 	
 	private Gardener getConfig() {

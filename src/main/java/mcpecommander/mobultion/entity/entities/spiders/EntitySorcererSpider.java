@@ -1,5 +1,9 @@
 package mcpecommander.mobultion.entity.entities.spiders;
 
+import com.leviathanstudio.craftstudio.CraftStudioApi;
+import com.leviathanstudio.craftstudio.common.animation.AnimationHandler;
+import com.leviathanstudio.craftstudio.common.animation.IAnimated;
+
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAt;
 import mcpecommander.mobultion.entity.entityAI.spidersAI.sorcererAI.EntityAISorcererSpiderSpellAttack;
@@ -17,7 +21,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 public class EntitySorcererSpider extends EntityAnimatedSpider{
+	
+	protected static AnimationHandler animHandler = CraftStudioApi.getNewAnimationHandler(EntitySorcererSpider.class);
+	
 	private static final DataParameter<Boolean> SPELLCASTING = EntityDataManager.<Boolean>createKey(EntitySorcererSpider.class, DataSerializers.BOOLEAN);
+	
 	static {
 		EntitySorcererSpider.animHandler.addAnim(Reference.MOD_ID, "spider_move", "sorcerer_spider", false);
 		EntitySorcererSpider.animHandler.addAnim(Reference.MOD_ID, "lookat", new AnimationLookAt("Head"));
@@ -27,6 +35,11 @@ public class EntitySorcererSpider extends EntityAnimatedSpider{
 	public EntitySorcererSpider(World worldIn) {
 		super(worldIn);
 		this.setSize(1.4f, 0.9f);
+	}
+	
+	@Override
+	public <T extends IAnimated> AnimationHandler<T> getAnimationHandler() {
+		return EntitySorcererSpider.animHandler;
 	}
 	
 	@Override

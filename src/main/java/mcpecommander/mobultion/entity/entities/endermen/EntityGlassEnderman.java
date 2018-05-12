@@ -1,6 +1,9 @@
 package mcpecommander.mobultion.entity.entities.endermen;
 
 import com.google.common.base.Optional;
+import com.leviathanstudio.craftstudio.CraftStudioApi;
+import com.leviathanstudio.craftstudio.common.animation.AnimationHandler;
+import com.leviathanstudio.craftstudio.common.animation.IAnimated;
 
 import mcpecommander.mobultion.Reference;
 import mcpecommander.mobultion.entity.animation.AnimationLookAtEnderman;
@@ -25,12 +28,14 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class EntityGlassEnderman extends EntityAnimatedEnderman {
 	
 	private boolean flag = false;
+	protected static AnimationHandler animHandler = CraftStudioApi.getNewAnimationHandler(EntityGlassEnderman.class);
 	private static final DataParameter<Boolean> SHOTING = EntityDataManager.<Boolean>createKey(EntityGlassEnderman.class, DataSerializers.BOOLEAN);
 
 	static {
@@ -48,6 +53,11 @@ public class EntityGlassEnderman extends EntityAnimatedEnderman {
 		super(worldIn);
 		this.setSize(0.6F, 2.9F);
 		this.stepHeight = 1.0F;
+	}
+	
+	@Override
+	public <T extends IAnimated> AnimationHandler<T> getAnimationHandler() {
+		return EntityGlassEnderman.animHandler;
 	}
 
 	@Override
@@ -106,6 +116,11 @@ public class EntityGlassEnderman extends EntityAnimatedEnderman {
 			this.getAnimationHandler().startAnimation(Reference.MOD_ID, "shatter", 0, this);
 			flag = true;
 		}
+	}
+	
+	@Override
+	protected ResourceLocation getLootTable() {
+		return Reference.LootTables.ENTITYGLASSENDERMAN;
 	}
 	
 	@Override
