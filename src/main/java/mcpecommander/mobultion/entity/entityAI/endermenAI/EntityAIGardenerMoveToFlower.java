@@ -23,6 +23,7 @@ public class EntityAIGardenerMoveToFlower extends EntityAIMoveToBlock {
 
 	private EntityGardenerEnderman gardener;
 	private int penalty = 0;
+	//0 = nothing, 1 = bonemeal the grass, 2 = turn dirt into grass, 3 = apply bonemeal to plant, 4 = water the farmland.
 	private byte task;
 	private boolean flag = false;
 
@@ -192,7 +193,7 @@ public class EntityAIGardenerMoveToFlower extends EntityAIMoveToBlock {
 	private boolean hasCrops(World worldIn, BlockPos pos) {
 		Block block = worldIn.getBlockState(pos.up()).getBlock();
 		return block instanceof IPlantable
-				&& block.canSustainPlant(worldIn.getBlockState(pos), worldIn, pos, EnumFacing.UP, (IPlantable) block);
+				&& block.canSustainPlant(worldIn.getBlockState(pos.up()), worldIn, pos, EnumFacing.UP, (IPlantable) block);
 	}
 
 }
