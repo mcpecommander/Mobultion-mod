@@ -42,22 +42,27 @@ public class ItemSpawnChanger extends Item {
 		if (player.world.isRemote && (entity instanceof EntityAnimatedEnderman
 				|| entity instanceof EntityAnimatedSkeleton || entity instanceof EntityAnimatedZombie || entity instanceof EntityAnimatedSpider)) {
 			if (EntityList.getKey(entity) != null && !(entity instanceof EntityMiniSpider)) {
-				ResourceLocation reg = EntityList.getKey(entity);
-				GuiMobBiomes gui = new GuiMobBiomes();
-				gui.entity = (EntityLiving) entity;
-				gui.maxS = String.valueOf(getEntityMaxByName(reg.getResourcePath()));
-				gui.minS = String.valueOf(getEntityMinByName(reg.getResourcePath()));
-				gui.weightS = String.valueOf(getEntityWeightByName(reg.getResourcePath()));
-				String[] temp = getEntityBiomesByName(reg.getResourcePath());
-				for (int i = 0; i < temp.length; i++) {
-					gui.biomesList.add(temp[i]);
-				}
-				Minecraft.getMinecraft().displayGuiScreen(gui);
+				displayGUI(entity);
 			}else if(entity instanceof EntityMiniSpider) {
 				player.sendStatusMessage(new TextComponentString("The Mini spider is not intended to be spawned naturally"), true);
 			}
 		}
 		return true;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void displayGUI(Entity entity) {
+		ResourceLocation reg = EntityList.getKey(entity);
+		GuiMobBiomes gui = new GuiMobBiomes();
+		gui.entity = (EntityLiving) entity;
+		gui.maxS = String.valueOf(getEntityMaxByName(reg.getResourcePath()));
+		gui.minS = String.valueOf(getEntityMinByName(reg.getResourcePath()));
+		gui.weightS = String.valueOf(getEntityWeightByName(reg.getResourcePath()));
+		String[] temp = getEntityBiomesByName(reg.getResourcePath());
+		for (int i = 0; i < temp.length; i++) {
+			gui.biomesList.add(temp[i]);
+		}
+		Minecraft.getMinecraft().displayGuiScreen(gui);
 	}
 
 	public static int getEntityMinByName(String name) {

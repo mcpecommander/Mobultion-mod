@@ -18,6 +18,7 @@ import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -33,7 +34,7 @@ public class EntityAngelSpider extends EntityAnimatedSpider {
 
 	private static final DataParameter<Integer> TARGET = EntityDataManager.<Integer>createKey(EntityAngelSpider.class,
 			DataSerializers.VARINT);
-	
+
 	protected static AnimationHandler animHandler = CraftStudioApi.getNewAnimationHandler(EntityAngelSpider.class);
 
 	static {
@@ -46,7 +47,7 @@ public class EntityAngelSpider extends EntityAnimatedSpider {
 		super(worldIn);
 		this.setSize(1.4f, 1f);
 	}
-	
+
 	@Override
 	public <T extends IAnimated> AnimationHandler<T> getAnimationHandler() {
 		return EntityAngelSpider.animHandler;
@@ -77,7 +78,7 @@ public class EntityAngelSpider extends EntityAnimatedSpider {
 		this.tasks.addTask(6, new EntityAILookIdle(this));
 		this.targetTasks.addTask(1, new EntityAIAngelSpiderTarget(this));
 	}
-	
+
 	@Override
 	protected ResourceLocation getLootTable() {
 		return Reference.LootTables.ENTITYANGELSPIDER;
@@ -110,9 +111,11 @@ public class EntityAngelSpider extends EntityAnimatedSpider {
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 
-		if (this.getTarget() != null && ((EntityLivingBase) this.getTarget()).getAttributeMap()
-				.getAttributeInstanceByName("generic.blessed").getAttributeValue() > 0.0D) {
-			if (((EntityLivingBase) this.getTarget()).getActivePotionEffect(ModPotions.potionBlessed) == null) {
+		if (this.getTarget() != null) {
+			IAttributeInstance attribute = ((EntityLivingBase) this.getTarget()).getAttributeMap()
+					.getAttributeInstanceByName("generic.blessed");
+			if (attribute != null && attribute.getAttributeValue() > 0.0D
+					&& ((EntityLivingBase) this.getTarget()).getActivePotionEffect(ModPotions.potionBlessed) == null) {
 				PotionEffect effect = new PotionEffect(ModPotions.potionBlessed, Integer.MAX_VALUE, 0, false, false);
 				((EntityLivingBase) this.getTarget()).addPotionEffect(effect);
 			}
@@ -134,18 +137,16 @@ public class EntityAngelSpider extends EntityAnimatedSpider {
 			}
 		}
 	}
-	
+
 	@SideOnly(Side.CLIENT)
-	private void performEffect(){
+	private void performEffect() {
 		Vec3d vec3d = new Vec3d(this.posX - this.getTarget().posX,
 				this.getEntityBoundingBox().minY + this.getEyeHeight()
 						- (this.getTarget().posY + this.getTarget().getEyeHeight()),
 				this.posZ - this.getTarget().posZ).normalize();
 		HealParticle heal = new HealParticle(world, this.posX, this.posY + this.getEyeHeight(), this.posZ,
-				this.getRNG().nextFloat(), vec3d,
-				this.getTarget().getEntityBoundingBox());
+				this.getRNG().nextFloat(), vec3d, this.getTarget().getEntityBoundingBox());
 		Minecraft.getMinecraft().effectRenderer.addEffect(heal);
 	}
-	
-	
+
 }

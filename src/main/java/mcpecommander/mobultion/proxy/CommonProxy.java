@@ -90,7 +90,7 @@ public class CommonProxy {
 	}
 
 	public void preInit(FMLPreInitializationEvent e) {
-		GameRegistry.registerWorldGenerator(new GenTest(), 1);
+		//GameRegistry.registerWorldGenerator(new GenTest(), 1);
 	}
 
 	public void init(FMLInitializationEvent e) {

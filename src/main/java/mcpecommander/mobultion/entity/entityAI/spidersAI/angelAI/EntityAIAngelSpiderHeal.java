@@ -17,7 +17,7 @@ public class EntityAIAngelSpiderHeal extends EntityAIBase {
 	World world;
 	private EntityAngelSpider attacker;
 	private int healCoolDown;
-	private static final UUID BLESSED_ID = UUID.fromString("020E0DFB-87AE-4653-9556-561210E291A0");
+	public static final UUID BLESSED_ID = UUID.fromString("020E0DFB-87AE-4653-9556-561210E291A0");
 	private static final AttributeModifier BLESSED = (new AttributeModifier(BLESSED_ID, "blessed", 0.1D, 0))
 			.setSaved(true);
 

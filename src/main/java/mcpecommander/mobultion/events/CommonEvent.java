@@ -15,6 +15,7 @@ import mcpecommander.mobultion.entity.entities.spiders.EntityAnimatedSpider;
 import mcpecommander.mobultion.entity.entities.spiders.EntityMiniSpider;
 import mcpecommander.mobultion.entity.entityAI.EntityAIFollowPlayerWithPigsheath;
 import mcpecommander.mobultion.entity.entityAI.EntityAITargetHurtBoss;
+import mcpecommander.mobultion.entity.entityAI.spidersAI.angelAI.EntityAIAngelSpiderHeal;
 import mcpecommander.mobultion.entity.entityAI.zombiesAI.EntityAIMoveToNearestDoctor;
 import mcpecommander.mobultion.init.ModEnchantments;
 import mcpecommander.mobultion.init.ModItems;
@@ -94,8 +95,8 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 public class CommonEvent {
-	private static final UUID BLESSED_ID = UUID.fromString("020E6DFB-87AE-9653-9556-561210E291A0");
-	private static final AttributeModifier UNBLESSED = (new AttributeModifier(BLESSED_ID, "un_blessed", -0.1D, 0))
+	private static final UUID UNBLESSED_ID = UUID.fromString("020E6DFB-87AE-9653-9556-561210E291A0");
+	private static final AttributeModifier UNBLESSED = (new AttributeModifier(UNBLESSED_ID, "un_blessed", -0.1D, 0))
 			.setSaved(true);
 
 	@SubscribeEvent
@@ -108,7 +109,8 @@ public class CommonEvent {
 					entity.setHealth(entity.getMaxHealth());
 					entity.playSound(SoundEvents.ITEM_TOTEM_USE, 1f, 1f);
 					entity.removeActivePotionEffect(ModPotions.potionBlessed);
-					entity.getAttributeMap().getAttributeInstanceByName("generic.blessed").removeAllModifiers();
+					entity.getAttributeMap().getAttributeInstanceByName("generic.blessed").removeModifier(EntityAIAngelSpiderHeal.BLESSED_ID);
+					entity.getAttributeMap().getAttributeInstanceByName("generic.blessed").removeModifier(UNBLESSED_ID);
 					entity.getAttributeMap().getAttributeInstanceByName("generic.blessed").applyModifier(UNBLESSED);
 				}
 			}

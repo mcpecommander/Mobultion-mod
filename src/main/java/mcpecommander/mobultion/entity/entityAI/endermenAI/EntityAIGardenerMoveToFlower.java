@@ -165,7 +165,7 @@ public class EntityAIGardenerMoveToFlower extends EntityAIMoveToBlock {
 			this.task = 2;
 			return true;
 		}
-		if (block == Blocks.FARMLAND && state.getValue(BlockFarmland.MOISTURE).intValue() > 0) {
+		if (block == Blocks.FARMLAND && state.getValue(BlockFarmland.MOISTURE).intValue() >= 0) {
 			if (hasCrops(worldIn, pos)) {
 				this.task = 3;
 			} else {
@@ -193,7 +193,7 @@ public class EntityAIGardenerMoveToFlower extends EntityAIMoveToBlock {
 	private boolean hasCrops(World worldIn, BlockPos pos) {
 		Block block = worldIn.getBlockState(pos.up()).getBlock();
 		return block instanceof IPlantable
-				&& block.canSustainPlant(worldIn.getBlockState(pos.up()), worldIn, pos, EnumFacing.UP, (IPlantable) block);
+				&& worldIn.getBlockState(pos).getBlock().canSustainPlant(worldIn.getBlockState(pos), worldIn, pos, EnumFacing.UP, (IPlantable) block);
 	}
 
 }

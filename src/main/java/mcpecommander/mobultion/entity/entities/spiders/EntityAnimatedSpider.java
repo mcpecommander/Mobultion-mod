@@ -46,16 +46,18 @@ public abstract class EntityAnimatedSpider extends EntityMob implements IAnimate
 	
 	@Override
 	protected boolean processInteract(EntityPlayer player, EnumHand hand) {
-		if(player instanceof EntityPlayerSP && hand.equals(EnumHand.MAIN_HAND) && player.getHeldItemMainhand().isEmpty() && player.isCreative() && GuiScreen.isShiftKeyDown()){
-			ItemStack stack = new ItemStack(Items.SPAWN_EGG, 1);
-			for(EntityEntry entry : ForgeRegistries.ENTITIES.getValuesCollection()){
-				if(entry.getEntityClass() == this.getClass()){				
-					ItemMonsterPlacer.applyEntityIdToItemStack(stack, entry.getRegistryName());
+		if(this.world.isRemote) {
+			if(player instanceof EntityPlayerSP && hand.equals(EnumHand.MAIN_HAND) && player.getHeldItemMainhand().isEmpty() && player.isCreative() && GuiScreen.isShiftKeyDown()){
+				ItemStack stack = new ItemStack(Items.SPAWN_EGG, 1);
+				for(EntityEntry entry : ForgeRegistries.ENTITIES.getValuesCollection()){
+					if(entry.getEntityClass() == this.getClass()){				
+						ItemMonsterPlacer.applyEntityIdToItemStack(stack, entry.getRegistryName());
+					}
 				}
-			}
-			if(stack.getTagCompound().hasKey("EntityTag") && Loader.isModLoaded("jei")){
-				JEI.JEIShowGUI(stack);
-				return true;
+				if(stack.getTagCompound().hasKey("EntityTag") && Loader.isModLoaded("jei")){
+					JEI.JEIShowGUI(stack);
+					return true;
+				}
 			}
 		}
 		return false;

@@ -146,7 +146,6 @@ public class EntityIceEnderman extends EntityAnimatedEnderman {
 			entityareaeffectcloud
 					.setRadiusPerTick(-entityareaeffectcloud.getRadius() / entityareaeffectcloud.getDuration());
 			entityareaeffectcloud.addEffect(new PotionEffect(ModPotions.potionFreeze, 100, 0));
-			// entityareaeffectcloud.setPotion(PotionType.getPotionTypeForName("mobultion:freeze_potion"));
 			this.world.spawnEntity(entityareaeffectcloud);
 		}
 	}

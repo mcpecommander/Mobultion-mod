@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.NAME, version = Reference.VERSION, dependencies = "required-after:craftstudioapi;"
-		+ "after:forge@[14.23.3.2650,);", acceptedMinecraftVersions = Reference.ACCEPTED_MINECRAFT_VERSIONS, useMetadata = true, certificateFingerprint = "4fe096bf3ddb2da90a69bb82abd57398549af8a5", updateJSON = Reference.UPDATE_CHECKER)
+		+ "after:forge@[14.23.3.2650,);", acceptedMinecraftVersions = Reference.ACCEPTED_MINECRAFT_VERSIONS, certificateFingerprint = "4fe096bf3ddb2da90a69bb82abd57398549af8a5", updateJSON = Reference.UPDATE_CHECKER)
 
 public class MobultionMod {
 
