@@ -105,18 +105,18 @@ tipped_arrow.effect.type.wither=凋灵药水箭
 
 enchantment.mobultion:ench.blessed=祝福
 
-mobultion.subtitles.fire_arrow_shot=火箭射击
-mobultion.subtitles.entity_respawn=蜘蛛重新产卵
-mobultion.subtitles.magma_remains_death=岩浆骷髅残骸死亡
-mobultion.subtitles.forest_skeleton_shoot=狙击手骷髅射击
-mobultion.subtitles.joker_ambient=小丑笑
-mobultion.subtitles.ravenous_eating=贪婪僵尸吃东西
-mobultion.subtitles.burp=饥饿僵尸打嗝
-mobultion.subtitles.shield_block=魔法盾格挡
-mobultion.subtitles.vampire_bite=吸血鬼骨架响声
-mobultion.subtitles.bat_morph=吸血鬼骨骼形态
-mobultion.subtitles.puke=饥饿的呕吐僵尸
-mobultion.subtitles.spit=岩浆末影人吐痰
+mobultion.subtitles.fire_arrow_shot=着火的箭如离弦般射出
+mobultion.subtitles.entity_respawn=怪物被生成
+mobultion.subtitles.magma_remains_death=岩浆骷髅不甘的死亡
+mobultion.subtitles.forest_skeleton_shoot=狙击手骷髅箭发如飞电
+mobultion.subtitles.joker_ambient=小丑骷髅发出邪恶的笑声
+mobultion.subtitles.ravenous_eating=拿着刀叉的小僵尸在啃食生物
+mobultion.subtitles.burp=小僵尸吃饱了并打了一个饱嗝
+mobultion.subtitles.shield_block=魔法蜘蛛释放了魔法挡住了攻击
+mobultion.subtitles.vampire_bite=吸血鬼骷髅在贪婪的吸血
+mobultion.subtitles.bat_morph=吸血鬼骷髅正在变身
+mobultion.subtitles.puke=小僵尸在呕吐
+mobultion.subtitles.spit=岩浆末影人吐出火球
 
 itemGroup.tabMobultionMod=进化怪物
 
