@@ -1,10 +1,7 @@
 package dev.mcpecommander.mobultion.setup;
 
 import dev.mcpecommander.mobultion.Mobultion;
-import dev.mcpecommander.mobultion.entities.spiders.renderers.AngelSpiderRenderer;
-import dev.mcpecommander.mobultion.entities.spiders.renderers.HypnoSpiderRenderer;
-import dev.mcpecommander.mobultion.entities.spiders.renderers.MagmaSpiderRenderer;
-import dev.mcpecommander.mobultion.entities.spiders.renderers.WitchSpiderRenderer;
+import dev.mcpecommander.mobultion.entities.spiders.renderers.*;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraftforge.api.distmarker.Dist;
@@ -27,6 +24,8 @@ public class ClientSetup {
                 HypnoSpiderRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.MAGMASPIDER.get(),
                 MagmaSpiderRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(Registration.WITHERSPIDER.get(),
+                WitherSpiderRenderer::new);
         //Minecraft.getInstance().particleEngine.register(Registration.HEAL_PARTICLE.get(), HealParticle.Factory::new);
     }
 }

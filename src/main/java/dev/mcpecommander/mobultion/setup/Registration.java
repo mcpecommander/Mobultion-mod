@@ -1,10 +1,7 @@
 package dev.mcpecommander.mobultion.setup;
 
 import dev.mcpecommander.mobultion.blocks.TestBlock;
-import dev.mcpecommander.mobultion.entities.spiders.entities.AngelSpiderEntity;
-import dev.mcpecommander.mobultion.entities.spiders.entities.HypnoSpiderEntity;
-import dev.mcpecommander.mobultion.entities.spiders.entities.MagmaSpiderEntity;
-import dev.mcpecommander.mobultion.entities.spiders.entities.WitchSpiderEntity;
+import dev.mcpecommander.mobultion.entities.spiders.entities.*;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -63,6 +60,13 @@ public class Registration {
     public static final RegistryObject<EntityType<MagmaSpiderEntity>> MAGMASPIDER = ENTITIES.register("magmsspider", () -> MAGMASPIDER_TYPE);
     public static final RegistryObject<Item> MAGMASPIDER_EGG = ITEMS.register("magmaspider_egg"
             , () -> new SpawnEggItem(MAGMASPIDER_TYPE, 0x230E0E, 0xF01414,
+                    (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
+
+    private static final EntityType<WitherSpiderEntity> WITHERSPIDER_TYPE = EntityType.Builder.of(WitherSpiderEntity::new, EntityClassification.MONSTER)
+            .sized(1.4f, 1f).build("witherspider");
+    public static final RegistryObject<EntityType<WitherSpiderEntity>> WITHERSPIDER = ENTITIES.register("witherspider", () -> WITHERSPIDER_TYPE);
+    public static final RegistryObject<Item> WITHERSPIDER_EGG = ITEMS.register("witherspider_egg"
+            , () -> new SpawnEggItem(MAGMASPIDER_TYPE, 0x666666, 0x444444,
                     (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
 
 
