@@ -15,7 +15,14 @@ import static dev.mcpecommander.mobultion.Mobultion.MODID;
 /* Created by McpeCommander on 2021/06/18 */
 public class AngelRingLayer extends GeoLayerRenderer<AngelSpiderEntity> {
 
+    /**
+     * The resource location for a texture that matches the model texture in size but highlights the parts that will
+     * light.
+     */
     private static final ResourceLocation SPIDER_RING = new ResourceLocation(MODID, "textures/entity/angelring.png");
+    /**
+     * The resource location for the geckolib model of the entity that has this layer.
+     */
     private static final ResourceLocation ANGEL_SPIDER = new ResourceLocation(MODID, "geo/angelspider.json");
     AngelSpiderRenderer renderer;
 

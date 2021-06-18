@@ -14,21 +14,42 @@ import static dev.mcpecommander.mobultion.Mobultion.MODID;
 /* Created by McpeCommander on 2021/06/18 */
 public class AngelSpiderModel extends AnimatedGeoModel<AngelSpiderEntity>{
 
+	/**
+	 * Gets the model json file.
+	 * @param entity: The entity for which the model file is getting called.
+	 * @return A resource location for the model file.
+	 */
 	@Override
-	public ResourceLocation getModelLocation(AngelSpiderEntity object) {
+	public ResourceLocation getModelLocation(AngelSpiderEntity entity) {
 		return new ResourceLocation(MODID, "geo/angelspider.json");
 	}
 
+	/**
+	 * Gets the texture file for the model.
+	 * @param entity: The entity for which the texture will be applied on.
+	 * @return A resource location for the texture file.
+	 */
 	@Override
-	public ResourceLocation getTextureLocation(AngelSpiderEntity object) {
+	public ResourceLocation getTextureLocation(AngelSpiderEntity entity) {
 		return new ResourceLocation(MODID, "textures/entity/angelspider.png");
 	}
 
+	/**
+	 * Gets the animation file
+	 * @param animatable: The entity for which the animation file is being called.
+	 * @return A resource location for the animation file.
+	 */
 	@Override
 	public ResourceLocation getAnimationFileLocation(AngelSpiderEntity animatable) {
 		return new ResourceLocation(MODID, "animations/angelspider.animation.json");
 	}
 
+	/**
+	 * The animation ticking and rotation happens here.
+	 * @param entity: The entity that is being ticked.
+	 * @param uniqueID: The entity ID.
+	 * @param customPredicate: The animation event which has information about the animation.
+	 */
 	@Override
 	public void setLivingAnimations(AngelSpiderEntity entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
 		super.setLivingAnimations(entity, uniqueID, customPredicate);

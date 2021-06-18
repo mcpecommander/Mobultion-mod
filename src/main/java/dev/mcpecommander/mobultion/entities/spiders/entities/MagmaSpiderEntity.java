@@ -26,7 +26,13 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 /* Created by McpeCommander on 2021/06/18 */
 public class MagmaSpiderEntity extends MobultionSpiderEntity{
 
+    /**
+     * The animation factory, for more information check GeckoLib.
+     */
     private final AnimationFactory factory = new AnimationFactory(this);
+    /**
+     * A tick timer for the smoke death particles
+     */
     private int flameParticleTick = 0;
 
     public MagmaSpiderEntity(EntityType<? extends MonsterEntity> mob, World world) {
@@ -34,16 +40,29 @@ public class MagmaSpiderEntity extends MobultionSpiderEntity{
         this.maxDeathTimer = 35;
     }
 
+    /**
+     * Register the AI/goals here. Server side only.
+     */
     @Override
     protected void registerGoals() {
         super.registerGoals();
 
     }
 
+    /**
+     * Gets called in the main class to init the attributes.
+     * @see dev.mcpecommander.mobultion.Mobultion
+     * @return AttributeModifierMap.MutableAttribute
+     */
     public static AttributeModifierMap.MutableAttribute createAttributes() {
         return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 26.0D).add(Attributes.MOVEMENT_SPEED, 0.3D);
     }
 
+    /**
+     * The predicate for animation controller
+     * @param event: The animation event that includes the bone animations and animation status
+     * @return PlayState.CONTINUE or PlayState.STOP depending on which needed.
+     */
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
     {
         if(this.isDeadOrDying()) {
@@ -58,10 +77,15 @@ public class MagmaSpiderEntity extends MobultionSpiderEntity{
         return PlayState.CONTINUE;
     }
 
+    /**
+     * Sets the rotation of the entity
+     * @param xRot: x axis rotation in degrees.
+     * @param yRot: y axis rotation in degrees.
+     */
     @Override
-    protected void setRot(float p_70101_1_, float p_70101_2_) {
+    protected void setRot(float xRot, float yRot) {
         if(isDeadOrDying()) return;
-        super.setRot(p_70101_1_, p_70101_2_);
+        super.setRot(xRot, yRot);
     }
 
     @Override
@@ -70,12 +94,20 @@ public class MagmaSpiderEntity extends MobultionSpiderEntity{
         return super.rotate(p_184229_1_);
     }
 
+    /**
+     * Sets the body rotation (entities body only rotate on the y axis)
+     * @param yBodyRot: the wanted y axis rotation angle in degrees.
+     */
     @Override
-    public void setYBodyRot(float p_181013_1_) {
+    public void setYBodyRot(float yBodyRot) {
         if(isDeadOrDying()) return;
-        super.setYBodyRot(p_181013_1_);
+        super.setYBodyRot(yBodyRot);
     }
 
+    /**
+     * Register the animation controller here and any other particle/sound listeners.
+     * @param data: Animation data that adds animation controllers.
+     */
     @Override
     public void registerControllers(AnimationData data) {
         AnimationController controller = new AnimationController<>(this, "controller", 0, this::predicate);
@@ -83,11 +115,19 @@ public class MagmaSpiderEntity extends MobultionSpiderEntity{
         data.addAnimationController(controller);
     }
 
+    /**
+     * Getter for the animation factory. Client side only but not null on the server.
+     * @return AnimationFactory
+     */
     @Override
     public AnimationFactory getFactory() {
         return this.factory;
     }
 
+    /**
+     * The main update method which ticks on both sides all the time until the entity is removed.
+     * Ticks on the server side only when the entity is not rendered anymore.
+     */
     @Override
     public void tick() {
         super.tick();
@@ -103,11 +143,19 @@ public class MagmaSpiderEntity extends MobultionSpiderEntity{
         }
     }
 
+    /**
+     * Is the entity immune to fire like {@link net.minecraft.entity.monster.BlazeEntity}
+     * @return true if the entity is immune to fire
+     */
     @Override
     public boolean fireImmune() {
         return true;
     }
 
+    /**
+     * The particle listener which gets called every time there is a particle effect in the current animation.
+     * @param event: gives access to the locator name, particle name and script data.
+     */
     private <T extends IAnimatable> void particleListener(ParticleKeyFrameEvent<T> event) {
         switch (event.locator){
             case "all":
@@ -181,6 +229,9 @@ public class MagmaSpiderEntity extends MobultionSpiderEntity{
         }
     }
 
+    /**
+     * Ticks on both sides when isDeadOrDying() is true.
+     */
     @Override
     protected void tickDeath() {
         if(this.deathTimer++ == maxDeathTimer){

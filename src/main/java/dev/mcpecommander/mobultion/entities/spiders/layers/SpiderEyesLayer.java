@@ -14,7 +14,14 @@ import static dev.mcpecommander.mobultion.Mobultion.MODID;
 /* Created by McpeCommander on 2021/06/18 */
 public class SpiderEyesLayer<T extends MobultionSpiderEntity> extends GeoLayerRenderer<T> {
 
+    /**
+     * The resource location for a texture that matches the model texture in size but highlights the parts that will
+     * light.
+     */
     private static final ResourceLocation SPIDER_EYES = new ResourceLocation(MODID,"textures/entity/spidereyes.png");
+    /**
+     * The resource location for the geckolib model of the entity that has this layer.
+     */
     private final ResourceLocation SPIDER_MODEL;
     IGeoRenderer<MobultionSpiderEntity> renderer;
 

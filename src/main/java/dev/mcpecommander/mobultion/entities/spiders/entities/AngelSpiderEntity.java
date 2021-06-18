@@ -14,8 +14,6 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.pathfinding.ClimberPathNavigator;
-import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.AnimationState;
@@ -33,14 +31,23 @@ import javax.annotation.Nullable;
 @SuppressWarnings("NullableProblems")
 public class AngelSpiderEntity extends MobultionSpiderEntity {
 
+    /**
+     * A data parameter to help keep the target in sync and to be saved when quiting the game.
+     */
     private static final DataParameter<Integer> TARGET = EntityDataManager.defineId(AngelSpiderEntity.class, DataSerializers.INT);
+    /**
+     * The animation factory, for more information check GeckoLib.
+     */
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    public AngelSpiderEntity(EntityType<? extends MonsterEntity> p_i48553_1_, World p_i48553_2_) {
-        super(p_i48553_1_, p_i48553_2_);
+    public AngelSpiderEntity(EntityType<? extends MonsterEntity> mob, World world) {
+        super(mob, world);
         this.maxDeathTimer = 20;
     }
 
+    /**
+     * Register the AI/goals here. Server side only.
+     */
     @Override
     protected void registerGoals() {
         super.registerGoals();
@@ -49,11 +56,20 @@ public class AngelSpiderEntity extends MobultionSpiderEntity {
         this.targetSelector.addGoal(1, new AngelSpiderTargetGoal(this));
     }
 
+    /**
+     * Gets called in the main class to init the attributes.
+     * @see dev.mcpecommander.mobultion.Mobultion
+     * @return AttributeModifierMap.MutableAttribute
+     */
     public static AttributeModifierMap.MutableAttribute createAttributes() {
         return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.MOVEMENT_SPEED, 0.4D);
     }
 
-
+    /**
+     *
+     * @param event: The animation event that includes the bone animations and animation status
+     * @return PlayState.CONTINUE or PlayState.STOP depending on which needed.
+     */
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
     {
         if(this.getTarget() != null){
@@ -83,27 +99,37 @@ public class AngelSpiderEntity extends MobultionSpiderEntity {
         return PlayState.CONTINUE;
     }
 
+    /**
+     * Register the animation controller here and any other particle/sound listeners.
+     * @param data: Animation data that adds animation controllers.
+     */
     @Override
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController<>(this, "controller", 0, this::predicate));
     }
 
+    /**
+     * Getter for the animation factory. Client side only but not null on the server.
+     * @return AnimationFactory
+     */
     @Override
     public AnimationFactory getFactory() {
         return this.factory;
     }
 
-    @Override
-    protected PathNavigator createNavigation(World p_175447_1_) {
-        return new ClimberPathNavigator(this, p_175447_1_);
-    }
-
+    /**
+     * Register/define the default value of the data parameter here.
+     */
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(TARGET, -1);
     }
 
+    /**
+     * Try to see if the target is not null otherwise try to retrieve it via the data parameter.
+     * @return the current LivingEntity that this mob is targeting.
+     */
     @Nullable
     @Override
     public LivingEntity getTarget() {
@@ -111,6 +137,10 @@ public class AngelSpiderEntity extends MobultionSpiderEntity {
         return target != null ? target : (LivingEntity) this.level.getEntity(this.entityData.get(TARGET));
     }
 
+    /**
+     * Write the target ID into the data parameter for syncing easy retrieval purposes later.
+     * @param target A living entity or null if we want to reset the target.
+     */
     @Override
     public void setTarget(@Nullable LivingEntity target) {
         super.setTarget(target);
@@ -121,12 +151,14 @@ public class AngelSpiderEntity extends MobultionSpiderEntity {
         }
     }
 
+    /**
+     * Weather this mob can be affected by the potion effect in the params.
+     * @param effect: the potion effect instance.
+     * @return true if the mob can be affected.
+     */
     @Override
-    public boolean canBeAffected(EffectInstance p_70687_1_) {
+    public boolean canBeAffected(EffectInstance effect) {
         return true;
     }
-
-    @Override
-    public void setBaby(boolean p_82227_1_) {}
 
 }

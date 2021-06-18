@@ -16,6 +16,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 @Mod.EventBusSubscriber(modid = Mobultion.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ClientSetup {
 
+    //Register rendering related stuff here.
     public static void init(final FMLClientSetupEvent event) {
         RenderTypeLookup.setRenderLayer(Registration.TESTBLOCK.get(), RenderType.translucent());
         RenderingRegistry.registerEntityRenderingHandler(Registration.ANGELSPIDER.get(),

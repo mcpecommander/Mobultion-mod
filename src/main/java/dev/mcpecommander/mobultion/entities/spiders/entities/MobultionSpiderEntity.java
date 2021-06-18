@@ -12,6 +12,8 @@ import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.ClimberPathNavigator;
+import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -99,6 +101,10 @@ public abstract class MobultionSpiderEntity extends MonsterEntity implements IAn
         this.entityData.set(DATA_FLAGS_ID, b0);
     }
 
+    @Override
+    protected PathNavigator createNavigation(World p_175447_1_) {
+        return new ClimberPathNavigator(this, p_175447_1_);
+    }
 
     @Override
     protected void tickDeath() {

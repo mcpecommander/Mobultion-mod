@@ -13,21 +13,43 @@ import static dev.mcpecommander.mobultion.Mobultion.MODID;
 
 /* Created by McpeCommander on 2021/06/18 */
 public class MagmaSpiderModel extends AnimatedGeoModel<MagmaSpiderEntity> {
+
+    /**
+     * Gets the model json file.
+     * @param entity: The entity for which the model file is getting called.
+     * @return A resource location for the model file.
+     */
     @Override
-    public ResourceLocation getModelLocation(MagmaSpiderEntity object) {
+    public ResourceLocation getModelLocation(MagmaSpiderEntity entity) {
         return new ResourceLocation(MODID, "geo/magmaspider.json");
     }
 
+    /**
+     * Gets the texture file for the model.
+     * @param entity: The entity for which the texture will be applied on.
+     * @return A resource location for the texture file.
+     */
     @Override
-    public ResourceLocation getTextureLocation(MagmaSpiderEntity object) {
+    public ResourceLocation getTextureLocation(MagmaSpiderEntity entity) {
         return new ResourceLocation(MODID, "textures/entity/magmaspider.png");
     }
 
+    /**
+     * Gets the animation file
+     * @param animatable: The entity for which the animation file is being called.
+     * @return A resource location for the animation file.
+     */
     @Override
     public ResourceLocation getAnimationFileLocation(MagmaSpiderEntity animatable) {
         return new ResourceLocation(MODID, "animations/magmaspider.animation.json");
     }
 
+    /**
+     * The animation ticking and rotation happens here.
+     * @param entity: The entity that is being ticked.
+     * @param uniqueID: The entity ID.
+     * @param customPredicate: The animation event which has information about the animation.
+     */
     @Override
     public void setLivingAnimations(MagmaSpiderEntity entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);

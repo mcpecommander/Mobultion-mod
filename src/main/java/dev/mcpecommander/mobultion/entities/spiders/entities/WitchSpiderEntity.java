@@ -20,12 +20,18 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 /* Created by McpeCommander on 2021/06/18 */
 public class WitchSpiderEntity extends MobultionSpiderEntity{
 
+    /**
+     * The animation factory, for more information check GeckoLib.
+     */
     private final AnimationFactory factory = new AnimationFactory(this);
 
     public WitchSpiderEntity(EntityType<? extends MonsterEntity> mob, World world) {
         super(mob, world);
     }
 
+    /**
+     * Register the AI/goals here. Server side only.
+     */
     @Override
     protected void registerGoals() {
         super.registerGoals();
@@ -34,10 +40,20 @@ public class WitchSpiderEntity extends MobultionSpiderEntity{
 //        this.targetSelector.addGoal(1, new AngelSpiderTargetGoal(this));
     }
 
+    /**
+     * Gets called in the main class to init the attributes.
+     * @see dev.mcpecommander.mobultion.Mobultion
+     * @return AttributeModifierMap.MutableAttribute
+     */
     public static AttributeModifierMap.MutableAttribute createAttributes() {
         return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 20.0D).add(Attributes.MOVEMENT_SPEED, 0.3D);
     }
 
+    /**
+     * The predicate for the normal controller (movement, death etc)
+     * @param event: The animation event that includes the bone animations and animation status
+     * @return PlayState.CONTINUE or PlayState.STOP depending on which needed.
+     */
     private <E extends IAnimatable> PlayState predicateController(AnimationEvent<E> event)
     {
         if(this.isDeadOrDying()) {
@@ -52,6 +68,13 @@ public class WitchSpiderEntity extends MobultionSpiderEntity{
         return PlayState.CONTINUE;
     }
 
+    /**
+     * The predicate for the idle controller that only controls Idle animation which can play at the same time as the
+     * movement animation. Only one animation can be played by one controller and that is why we need two controllers
+     * and two predicates for the idle animation.
+     * @param event: The animation event that includes the bone animations and animation status
+     * @return PlayState.CONTINUE or PlayState.STOP depending on which needed.
+     */
     private <E extends IAnimatable> PlayState predicateIdle(AnimationEvent<E> event)
     {
         if(this.isDeadOrDying()) return PlayState.STOP;
@@ -63,6 +86,10 @@ public class WitchSpiderEntity extends MobultionSpiderEntity{
         return PlayState.STOP;
     }
 
+    /**
+     * Register the animation controller here and any other particle/sound listeners.
+     * @param data: Animation data that adds animation controllers.
+     */
     @Override
     public void registerControllers(AnimationData data) {
         AnimationController controller = new AnimationController<>(this, "controller", 0, this::predicateController);
@@ -71,6 +98,10 @@ public class WitchSpiderEntity extends MobultionSpiderEntity{
         data.addAnimationController(controller);
     }
 
+    /**
+     * The particle listener which gets called every time there is a particle effect in the current animation.
+     * @param event: gives access to the locator name, particle name and script data.
+     */
     private <T extends IAnimatable> void particleListener(ParticleKeyFrameEvent<T> event) {
         for(int i = 0; i < 20; ++i) {
             double d0 = this.random.nextGaussian() * 0.02D;
@@ -80,13 +111,22 @@ public class WitchSpiderEntity extends MobultionSpiderEntity{
         }
     }
 
+    /**
+     * Getter for the animation factory. Client side only but not null on the server.
+     * @return AnimationFactory
+     */
     @Override
     public AnimationFactory getFactory() {
         return this.factory;
     }
 
+    /**
+     * Weather this mob can be affected by the potion effect in the params.
+     * @param effect: the potion effect instance.
+     * @return true if the mob can be affected.
+     */
     @Override
-    public boolean canBeAffected(EffectInstance p_70687_1_) {
+    public boolean canBeAffected(EffectInstance effect) {
         return true;
     }
 
