@@ -26,14 +26,27 @@ import javax.annotation.ParametersAreNonnullByDefault;
 /* Created by McpeCommander on 2021/06/18 */
 public abstract class MobultionSpiderEntity extends MonsterEntity implements IAnimatable{
 
+    /**
+     * A data parameter copied from the minecraft spider that sets the spider climbing.
+     */
     private static final DataParameter<Byte> DATA_FLAGS_ID = EntityDataManager.defineId(MobultionSpiderEntity.class, DataSerializers.BYTE);
+    /**
+     * A death timer that replaces {@code net.minecraft.entity.LivingEntity.deathTime} to avoid messing with the
+     * renderer of every mob with a special death animation.
+     */
     protected int deathTimer = 0;
+    /**
+     * The maximum death tick timer that is changed in every subclass according to how long the death animation is.
+     */
     protected int maxDeathTimer = 40;
 
     protected MobultionSpiderEntity(EntityType<? extends MonsterEntity> mob, World world) {
         super(mob, world);
     }
 
+    /**
+     * Register the AI/goals here. Server side only.
+     */
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new SwimGoal(this));
@@ -41,12 +54,19 @@ public abstract class MobultionSpiderEntity extends MonsterEntity implements IAn
         this.goalSelector.addGoal(6, new LookRandomlyGoal(this));
     }
 
+    /**
+     * Register/define the default value of the data parameter here.
+     */
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_FLAGS_ID, (byte) 0);
     }
 
+    /**
+     * The main update method which ticks on both sides all the time until the entity is removed.
+     * Ticks on the server side only when the entity is not rendered anymore.
+     */
     @Override
     public void tick() {
         super.tick();
@@ -55,23 +75,41 @@ public abstract class MobultionSpiderEntity extends MonsterEntity implements IAn
         }
     }
 
+    /**
+     * The ambient sound of the creature
+     * @return SoundEvent of the ambient sound
+     */
     @Override
     protected SoundEvent getAmbientSound() {
         return SoundEvents.SPIDER_AMBIENT;
     }
 
+    /**
+     * The sound that the entity makes when hurt. Can be different depending on the damage source.
+     * @param damageSource: The type of the damage the entity took
+     * @return SoundEvent of the damage sound
+     */
     @Override
-    protected SoundEvent getHurtSound(@ParametersAreNonnullByDefault DamageSource p_184601_1_) {
+    protected SoundEvent getHurtSound(@ParametersAreNonnullByDefault DamageSource damageSource) {
         return SoundEvents.SPIDER_HURT;
     }
 
+    /**
+     * The sound that entity makes when it dies.
+     * @return SoundEvent of the death sound
+     */
     @Override
     protected SoundEvent getDeathSound() {
         return SoundEvents.SPIDER_DEATH;
     }
 
+    /**
+     * Play the step sound in this method. It supplies the blockstate and the position of the block the entity walked on
+     * @param blockPosition
+     * @param blockState
+     */
     @Override
-    protected void playStepSound(@ParametersAreNonnullByDefault BlockPos p_180429_1_, @ParametersAreNonnullByDefault BlockState p_180429_2_) {
+    protected void playStepSound(@ParametersAreNonnullByDefault BlockPos blockPosition, @ParametersAreNonnullByDefault BlockState blockState) {
         this.playSound(SoundEvents.SPIDER_STEP, 0.15F, 1.0F);
     }
 
@@ -80,19 +118,30 @@ public abstract class MobultionSpiderEntity extends MonsterEntity implements IAn
         return this.isClimbing();
     }
 
+    /**
+     * Gets if the entity climbing from the data parameter.
+     * @return true if the entity is climbing.
+     */
     public boolean isClimbing() {
         return (this.entityData.get(DATA_FLAGS_ID) & 1) != 0;
     }
 
+    /**
+     *
+     * @return The creature attribute that this entity belongs to.
+     */
     @Override
     public CreatureAttribute getMobType() {
         return CreatureAttribute.ARTHROPOD;
     }
 
-
-    public void setClimbing(boolean p_70839_1_) {
+    /**
+     * Set the entity climbing data parameter to sync it and save it.
+     * @param isClimbing
+     */
+    public void setClimbing(boolean isClimbing) {
         byte b0 = this.entityData.get(DATA_FLAGS_ID);
-        if (p_70839_1_) {
+        if (isClimbing) {
             b0 = (byte)(b0 | 1);
         } else {
             b0 = (byte)(b0 & -2);
@@ -101,11 +150,19 @@ public abstract class MobultionSpiderEntity extends MonsterEntity implements IAn
         this.entityData.set(DATA_FLAGS_ID, b0);
     }
 
+    /**
+     * Changes the kind of path navigation system this entity uses.
+     * @param world: the world of this entity.
+     * @return PathNavigator
+     */
     @Override
-    protected PathNavigator createNavigation(World p_175447_1_) {
-        return new ClimberPathNavigator(this, p_175447_1_);
+    protected PathNavigator createNavigation(World world) {
+        return new ClimberPathNavigator(this, world);
     }
 
+    /**
+     * Ticks on both sides when isDeadOrDying() is true.
+     */
     @Override
     protected void tickDeath() {
         if(this.deathTimer++ == maxDeathTimer){
@@ -113,8 +170,16 @@ public abstract class MobultionSpiderEntity extends MonsterEntity implements IAn
         }
     }
 
+    /**
+     * Gets the eye height of the entity allowing to change based on different poses or different sizes like babies or
+     * different sizes of slimes.
+     * @param pose: The pose of the entity.
+     * @param entitySize: An instance of EntitySize that has information about he width, height and bounding box of
+     *                  the entity.
+     * @return a float representing the eye height.
+     */
     @Override
-    protected float getStandingEyeHeight(Pose p_213348_1_, EntitySize p_213348_2_) {
+    protected float getStandingEyeHeight(Pose pose, EntitySize entitySize) {
         return 0.65F;
     }
 

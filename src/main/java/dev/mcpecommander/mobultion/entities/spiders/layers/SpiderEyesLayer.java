@@ -37,4 +37,6 @@ public class SpiderEyesLayer<T extends MobultionSpiderEntity> extends GeoLayerRe
         this.renderer.render(this.getEntityModel().getModel(SPIDER_MODEL), entitylivingbaseIn, partialTicks, eyes, matrixStackIn, bufferIn, bufferIn.getBuffer(eyes), packedLightIn, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, 1f);
     }
 
+
+
 }
