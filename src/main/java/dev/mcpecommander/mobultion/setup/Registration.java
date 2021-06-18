@@ -66,7 +66,7 @@ public class Registration {
             .sized(1.4f, 1f).build("witherspider");
     public static final RegistryObject<EntityType<WitherSpiderEntity>> WITHERSPIDER = ENTITIES.register("witherspider", () -> WITHERSPIDER_TYPE);
     public static final RegistryObject<Item> WITHERSPIDER_EGG = ITEMS.register("witherspider_egg"
-            , () -> new SpawnEggItem(MAGMASPIDER_TYPE, 0x666666, 0x444444,
+            , () -> new SpawnEggItem(WITHERSPIDER_TYPE, 0x666666, 0x444444,
                     (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
 
 

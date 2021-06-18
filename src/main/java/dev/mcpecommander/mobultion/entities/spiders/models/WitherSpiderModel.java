@@ -64,16 +64,24 @@ public class WitherSpiderModel extends AnimatedGeoModel<WitherSpiderEntity> {
         IBone head2 = this.getAnimationProcessor().getBone("Head2");
 
         head1.setHidden(entity.getHealth() < 2f/3f * entity.getMaxHealth());
-        if(entity.getHealth() < 2f/3f * entity.getMaxHealth() && entity.tickCount % 2 == 0){
-            Vector3d decapHead1 = new Vector3d( (9.1f/16f), (18.5d/16d), (6.3f/16f));
+        if(entity.getHealth() < 2f/3f * entity.getMaxHealth() && entity.tickCount % 6 == 0){
+            Vector3d decapHead1 = new Vector3d( (10f/16f), (19d/16d), (9.3f/16f));
             decapHead1 = decapHead1.yRot((float) Math.toRadians(-entity.yBodyRot)).add(entity.position());
-            entity.level.addParticle(ParticleTypes.DRIPPING_OBSIDIAN_TEAR, decapHead1.x, decapHead1.y, decapHead1.z,
+            entity.level.addParticle(ParticleTypes.DRAGON_BREATH, decapHead1.x, decapHead1.y, decapHead1.z,
                     0, 0, 0);
             entity.level.addParticle(ParticleTypes.SMOKE, decapHead1.x, decapHead1.y, decapHead1.z,
-                    Math.random() * 0.1f - 0.05f, 0.1f, Math.random() * 0.1f - 0.05f);
+                    Math.random() * 0.05f - 0.025f, 0.05f, Math.random() * 0.05f - 0.025f);
         }
         head2.setHidden(entity.getHealth() < 1f/3f * entity.getMaxHealth());
-
+        if(entity.getHealth() < 1f/3f * entity.getMaxHealth() && entity.tickCount % 6 == 0){
+            Vector3d decapHead2 = new Vector3d( (-10f/16f), (19d/16d), (9.3f/16f));
+            decapHead2 = decapHead2.yRot((float) Math.toRadians(-entity.yBodyRot)).add(entity.position());
+            entity.level.addParticle(ParticleTypes.DRAGON_BREATH, decapHead2.x, decapHead2.y, decapHead2.z,
+                    0, 0, 0);
+            entity.level.addParticle(ParticleTypes.SMOKE, decapHead2.x, decapHead2.y, decapHead2.z,
+                    Math.random() * 0.05f - 0.025f, 0.05f, Math.random() * 0.05f - 0.025f);
+        }
+        head.setHidden(entity.isDeadOrDying());
         assert customPredicate != null;
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
         head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));

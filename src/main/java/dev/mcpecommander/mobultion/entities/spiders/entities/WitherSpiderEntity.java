@@ -1,10 +1,13 @@
 package dev.mcpecommander.mobultion.entities.spiders.entities;
 
+import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -24,6 +27,7 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
 
     public WitherSpiderEntity(EntityType<? extends MonsterEntity> mob, World world) {
         super(mob, world);
+        this.maxDeathTimer = 35;
     }
 
     /**
@@ -79,5 +83,21 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
     @Override
     public AnimationFactory getFactory() {
         return this.factory;
+    }
+
+    @Override
+    public void remove() {
+        super.remove();
+        if(!this.level.isClientSide) {
+            AreaEffectCloudEntity areaeffectcloudentity = new AreaEffectCloudEntity(this.level, this.getX(), this.getY(), this.getZ());
+            areaeffectcloudentity.setOwner(this);
+            areaeffectcloudentity.setRadius(3.0F);
+            areaeffectcloudentity.setRadiusOnUse(-0.5F);
+            areaeffectcloudentity.setWaitTime(10);
+            areaeffectcloudentity.setRadiusPerTick(-areaeffectcloudentity.getRadius() / (float) areaeffectcloudentity.getDuration());
+            areaeffectcloudentity.addEffect(new EffectInstance(Effects.WITHER));
+
+            this.level.addFreshEntity(areaeffectcloudentity);
+        }
     }
 }
