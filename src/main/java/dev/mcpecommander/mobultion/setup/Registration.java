@@ -69,6 +69,9 @@ public class Registration {
             , () -> new SpawnEggItem(WITHERSPIDER_TYPE, 0x666666, 0x444444,
                     (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
 
+    private static final EntityType<WitherHeadBugEntity> WITHERHEADBUG_TYPE = EntityType.Builder.of(WitherHeadBugEntity::new, EntityClassification.MONSTER)
+            .sized(0.7f, 0.7f).build("witherheadbug");
+    public static final RegistryObject<EntityType<WitherHeadBugEntity>> WITHERHEADBUG = ENTITIES.register("witherheadbug", () -> WITHERHEADBUG_TYPE);
 
 
 }

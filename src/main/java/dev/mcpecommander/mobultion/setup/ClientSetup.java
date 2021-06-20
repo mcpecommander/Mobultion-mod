@@ -26,6 +26,8 @@ public class ClientSetup {
                 MagmaSpiderRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.WITHERSPIDER.get(),
                 WitherSpiderRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(Registration.WITHERHEADBUG.get(),
+                WitherHeadBugRenderer::new);
         //Minecraft.getInstance().particleEngine.register(Registration.HEAL_PARTICLE.get(), HealParticle.Factory::new);
     }
 }

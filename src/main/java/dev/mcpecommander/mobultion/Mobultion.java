@@ -36,6 +36,7 @@ public class Mobultion
         event.put(Registration.HYPNOSPIDER.get(), HypnoSpiderEntity.createAttributes().build());
         event.put(Registration.MAGMASPIDER.get(), MagmaSpiderEntity.createAttributes().build());
         event.put(Registration.WITHERSPIDER.get(), WitherSpiderEntity.createAttributes().build());
+        event.put(Registration.WITHERHEADBUG.get(), WitherHeadBugEntity.createAttributes().build());
     }
 
 
