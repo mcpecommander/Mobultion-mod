@@ -65,7 +65,7 @@ public abstract class MobultionSpiderEntity extends MonsterEntity implements IAn
 
     /**
      * The main update method which ticks on both sides all the time until the entity is removed.
-     * Ticks on the server side only when the entity is not rendered anymore.
+     * Ticks on the server side only when the entity is not rendered.
      */
     @Override
     public void tick() {
