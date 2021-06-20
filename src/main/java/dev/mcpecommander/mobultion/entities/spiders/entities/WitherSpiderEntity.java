@@ -10,6 +10,7 @@ import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.potion.Potions;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
@@ -179,7 +180,8 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
             areaeffectcloudentity.setRadiusOnUse(-0.5F);
             areaeffectcloudentity.setWaitTime(10);
             areaeffectcloudentity.setRadiusPerTick(-areaeffectcloudentity.getRadius() / (float) areaeffectcloudentity.getDuration());
-            areaeffectcloudentity.addEffect(new EffectInstance(Effects.WITHER));
+            areaeffectcloudentity.addEffect(new EffectInstance(Effects.WITHER, 160));
+            areaeffectcloudentity.setPotion(Potions.EMPTY);
 
             this.level.addFreshEntity(areaeffectcloudentity);
         }
