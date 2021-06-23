@@ -1,6 +1,7 @@
 package dev.mcpecommander.mobultion.setup;
 
 import dev.mcpecommander.mobultion.blocks.TestBlock;
+import dev.mcpecommander.mobultion.entities.skeletons.entities.JokerSkeletonEntity;
 import dev.mcpecommander.mobultion.entities.spiders.entities.*;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityClassification;
@@ -73,5 +74,11 @@ public class Registration {
             .sized(0.7f, 0.7f).build("witherheadbug");
     public static final RegistryObject<EntityType<WitherHeadBugEntity>> WITHERHEADBUG = ENTITIES.register("witherheadbug", () -> WITHERHEADBUG_TYPE);
 
+    private static final EntityType<JokerSkeletonEntity> JOKERSKELETON_TYPE = EntityType.Builder.of(JokerSkeletonEntity::new, EntityClassification.MONSTER)
+            .sized(0.6F, 1.99F).build("witherspider");
+    public static final RegistryObject<EntityType<JokerSkeletonEntity>> JOKERSKELETON = ENTITIES.register("jokerskeleton", () -> JOKERSKELETON_TYPE);
+    public static final RegistryObject<Item> JOKERSKELETON_EGG = ITEMS.register("jokerskeleton_egg"
+            , () -> new SpawnEggItem(JOKERSKELETON_TYPE, 0xFF0000, 0xFFFF00,
+                    (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
 
 }

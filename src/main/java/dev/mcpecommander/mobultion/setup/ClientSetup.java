@@ -1,6 +1,7 @@
 package dev.mcpecommander.mobultion.setup;
 
 import dev.mcpecommander.mobultion.Mobultion;
+import dev.mcpecommander.mobultion.entities.skeletons.renderers.JokerSkeletonRenderer;
 import dev.mcpecommander.mobultion.entities.spiders.renderers.*;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -28,6 +29,8 @@ public class ClientSetup {
                 WitherSpiderRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.WITHERHEADBUG.get(),
                 WitherHeadBugRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(Registration.JOKERSKELETON.get(),
+                JokerSkeletonRenderer::new);
         //Minecraft.getInstance().particleEngine.register(Registration.HEAL_PARTICLE.get(), HealParticle.Factory::new);
     }
 }
