@@ -3,6 +3,7 @@ package dev.mcpecommander.mobultion.setup;
 import dev.mcpecommander.mobultion.blocks.TestBlock;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.JokerSkeletonEntity;
 import dev.mcpecommander.mobultion.entities.spiders.entities.*;
+import dev.mcpecommander.mobultion.items.ThunderStaffItem;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -34,6 +35,8 @@ public class Registration {
 
     public static final RegistryObject<TestBlock> TESTBLOCK = BLOCKS.register("testblock", TestBlock::new);
     public static final RegistryObject<Item> TESTBLOCK_ITEM = ITEMS.register("testblock", () -> new BlockItem(TESTBLOCK.get(), new Item.Properties().tab(ModSetup.ITEM_GROUP)));
+
+    public static final RegistryObject<ThunderStaffItem> THUNDERSTAFF = ITEMS.register("thunderstaffitem", ThunderStaffItem::new);
 
     private static final EntityType<AngelSpiderEntity> ANGELSPIDER_TYPE = EntityType.Builder.of(AngelSpiderEntity::new, EntityClassification.MONSTER)
             .sized(1.4f, 1f).build("angelspider");

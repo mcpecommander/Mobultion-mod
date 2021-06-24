@@ -10,7 +10,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 @Mod.EventBusSubscriber(modid = Mobultion.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModSetup {
 
-    public static final ItemGroup ITEM_GROUP = new ItemGroup("mytutorial") {
+    public static final ItemGroup ITEM_GROUP = new ItemGroup("mobultion") {
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(Registration.TESTBLOCK.get());
