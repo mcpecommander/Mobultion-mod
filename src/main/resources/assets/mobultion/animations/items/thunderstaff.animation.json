@@ -3,7 +3,7 @@
 	"animations": {
 		"light": {
 			"loop": "hold_on_last_frame",
-			"animation_length": 2.24,
+			"animation_length": 2.04,
 			"bones": {
 				"Lightning": {
 					"rotation": {
@@ -13,6 +13,10 @@
 						"0.56": {
 							"vector": [-45, 0, 0],
 							"easing": "easeInOutQuint"
+						},
+						"1.32": {
+							"vector": [-87.5, 0, 0],
+							"easing": "easeOutCirc"
 						}
 					},
 					"position": {
@@ -26,8 +30,8 @@
 						"1.32": {
 							"vector": [0, 5, 0]
 						},
-						"2.24": {
-							"vector": [0, -4, -20],
+						"2.04": {
+							"vector": [10, 7, -20],
 							"easing": "easeOutCirc"
 						}
 					},
@@ -41,13 +45,16 @@
 						"1.32": {
 							"vector": [1, 1.4, 1]
 						},
-						"2.24": {
-							"vector": [0, 0, 0],
+						"1.72": {
+							"vector": [0, 1, 0],
 							"easing": "easeOutCirc"
 						}
 					}
 				}
 			}
+		},
+		"reset": {
+			"loop": true
 		}
 	}
 }
