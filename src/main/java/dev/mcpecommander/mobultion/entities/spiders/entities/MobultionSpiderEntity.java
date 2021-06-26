@@ -40,7 +40,7 @@ public abstract class MobultionSpiderEntity extends MonsterEntity implements IAn
      */
     protected int maxDeathTimer = 40;
 
-    protected MobultionSpiderEntity(EntityType<? extends MonsterEntity> mob, World world) {
+    protected MobultionSpiderEntity(EntityType<? extends MobultionSpiderEntity> mob, World world) {
         super(mob, world);
     }
 
