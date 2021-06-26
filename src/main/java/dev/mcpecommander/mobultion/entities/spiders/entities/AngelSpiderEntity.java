@@ -8,7 +8,6 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.AvoidEntityGoal;
-import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -40,7 +39,7 @@ public class AngelSpiderEntity extends MobultionSpiderEntity {
      */
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    public AngelSpiderEntity(EntityType<? extends MonsterEntity> mob, World world) {
+    public AngelSpiderEntity(EntityType<AngelSpiderEntity> mob, World world) {
         super(mob, world);
         this.maxDeathTimer = 20;
     }

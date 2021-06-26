@@ -4,7 +4,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.world.World;
@@ -24,7 +23,7 @@ public class HypnoSpiderEntity extends MobultionSpiderEntity{
      */
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    public HypnoSpiderEntity(EntityType<? extends MonsterEntity> mob, World world) {
+    public HypnoSpiderEntity(EntityType<HypnoSpiderEntity> mob, World world) {
         super(mob, world);
         this.maxDeathTimer = 30;
     }

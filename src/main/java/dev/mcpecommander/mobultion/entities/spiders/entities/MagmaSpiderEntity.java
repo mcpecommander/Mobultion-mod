@@ -6,7 +6,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Rotation;
@@ -35,7 +34,7 @@ public class MagmaSpiderEntity extends MobultionSpiderEntity{
      */
     private int flameParticleTick = 0;
 
-    public MagmaSpiderEntity(EntityType<? extends MonsterEntity> mob, World world) {
+    public MagmaSpiderEntity(EntityType<MagmaSpiderEntity> mob, World world) {
         super(mob, world);
         this.maxDeathTimer = 35;
     }

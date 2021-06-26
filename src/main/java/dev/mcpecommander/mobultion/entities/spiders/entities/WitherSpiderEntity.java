@@ -6,7 +6,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -34,7 +33,7 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
     int timer = -1;
     boolean isDroppingHead1, isDroppingHead2 = false;
 
-    public WitherSpiderEntity(EntityType<? extends MonsterEntity> mob, World world) {
+    public WitherSpiderEntity(EntityType<WitherSpiderEntity> mob, World world) {
         super(mob, world);
         this.maxDeathTimer = 35;
         prevHealth = this.getMaxHealth();

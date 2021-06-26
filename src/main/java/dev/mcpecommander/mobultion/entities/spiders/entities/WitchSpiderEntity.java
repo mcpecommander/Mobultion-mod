@@ -4,7 +4,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.world.World;
@@ -25,7 +24,7 @@ public class WitchSpiderEntity extends MobultionSpiderEntity{
      */
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    public WitchSpiderEntity(EntityType<? extends MonsterEntity> mob, World world) {
+    public WitchSpiderEntity(EntityType<WitchSpiderEntity> mob, World world) {
         super(mob, world);
     }
 
