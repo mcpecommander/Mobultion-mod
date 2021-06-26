@@ -1,5 +1,6 @@
 package dev.mcpecommander.mobultion;
 
+import dev.mcpecommander.mobultion.entities.endermen.entities.WanderingEndermanEntity;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.JokerSkeletonEntity;
 import dev.mcpecommander.mobultion.entities.spiders.entities.*;
 import dev.mcpecommander.mobultion.setup.ClientSetup;
@@ -39,6 +40,7 @@ public class Mobultion
         event.put(Registration.WITHERSPIDER.get(), WitherSpiderEntity.createAttributes().build());
         event.put(Registration.WITHERHEADBUG.get(), WitherHeadBugEntity.createAttributes().build());
         event.put(Registration.JOKERSKELETON.get(), JokerSkeletonEntity.createAttributes().build());
+        event.put(Registration.WANDERINGENDERMAN.get(), WanderingEndermanEntity.createAttributes().build());
     }
 
 
