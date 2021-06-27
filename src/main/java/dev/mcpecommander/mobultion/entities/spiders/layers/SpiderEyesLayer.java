@@ -23,16 +23,16 @@ public class SpiderEyesLayer<T extends MobultionSpiderEntity> extends GeoLayerRe
      * The resource location for the geckolib model of the entity that has this layer.
      */
     private final ResourceLocation SPIDER_MODEL;
-    IGeoRenderer<MobultionSpiderEntity> renderer;
+    IGeoRenderer<T> renderer;
 
-    public SpiderEyesLayer(IGeoRenderer entityRendererIn, String spiderName) {
+    public SpiderEyesLayer(IGeoRenderer<T> entityRendererIn, String spiderName) {
         super(entityRendererIn);
         this.renderer = entityRendererIn;
         SPIDER_MODEL = new ResourceLocation(MODID, "geo/" + spiderName + ".json");;
     }
 
     @Override
-    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, MobultionSpiderEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         RenderType eyes =  RenderType.eyes(SPIDER_EYES);
         this.renderer.render(this.getEntityModel().getModel(SPIDER_MODEL), entitylivingbaseIn, partialTicks, eyes, matrixStackIn, bufferIn, bufferIn.getBuffer(eyes), packedLightIn, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, 1f);
     }
