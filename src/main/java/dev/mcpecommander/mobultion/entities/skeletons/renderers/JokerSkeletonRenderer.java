@@ -18,7 +18,6 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 /* McpeCommander created on 21/06/2021 inside the package - dev.mcpecommander.mobultion.entities.skeletons.renderers */
 public class JokerSkeletonRenderer extends GeoEntityRenderer<JokerSkeletonEntity> {
 
-    JokerSkeletonEntity entity;
     AnimationController controller;
 
     public JokerSkeletonRenderer(EntityRendererManager renderManager) {
@@ -30,7 +29,6 @@ public class JokerSkeletonRenderer extends GeoEntityRenderer<JokerSkeletonEntity
     @Override
     public void render(JokerSkeletonEntity entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
         super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
-        this.entity = entity;
         if(controller == null){
             controller = entity.getFactory().getOrCreateAnimationData(entity.getId()).getAnimationControllers().get("controller");
         }
@@ -39,7 +37,7 @@ public class JokerSkeletonRenderer extends GeoEntityRenderer<JokerSkeletonEntity
     @Override
     public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
 
-        if (bone.getName().equals("Holder") && controller != null) { // rArmRuff is the name of the bone you to set the item to attach too. Please see Note
+        if (bone.getName().equals("Holder") && controller != null) {
             stack.pushPose();
             if(controller.getCurrentAnimation() == null || controller.getAnimationState() == AnimationState.Stopped){
                 //You'll need to play around with these to get item to render in the correct orientation
