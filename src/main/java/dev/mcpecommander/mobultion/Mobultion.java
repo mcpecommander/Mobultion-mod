@@ -1,5 +1,6 @@
 package dev.mcpecommander.mobultion;
 
+import dev.mcpecommander.mobultion.entities.endermen.entities.MagmaEndermanEntity;
 import dev.mcpecommander.mobultion.entities.endermen.entities.WanderingEndermanEntity;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.JokerSkeletonEntity;
 import dev.mcpecommander.mobultion.entities.spiders.entities.*;
@@ -11,6 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import software.bernie.example.GeckoLibMod;
 import software.bernie.geckolib3.GeckoLib;
 
 /* Created by McpeCommander on 2021/06/18 */
@@ -23,6 +25,7 @@ public class Mobultion
 
     public Mobultion() {
 
+        GeckoLibMod.DISABLE_IN_DEV = true;
         GeckoLib.initialize();
         Registration.init();
 
@@ -41,6 +44,7 @@ public class Mobultion
         event.put(Registration.WITHERHEADBUG.get(), WitherHeadBugEntity.createAttributes().build());
         event.put(Registration.JOKERSKELETON.get(), JokerSkeletonEntity.createAttributes().build());
         event.put(Registration.WANDERINGENDERMAN.get(), WanderingEndermanEntity.createAttributes().build());
+        event.put(Registration.MAGMAENDERMAN.get(), MagmaEndermanEntity.createAttributes().build());
     }
 
 

@@ -1,6 +1,7 @@
 package dev.mcpecommander.mobultion.setup;
 
 import dev.mcpecommander.mobultion.blocks.TestBlock;
+import dev.mcpecommander.mobultion.entities.endermen.entities.MagmaEndermanEntity;
 import dev.mcpecommander.mobultion.entities.endermen.entities.WanderingEndermanEntity;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.JokerSkeletonEntity;
 import dev.mcpecommander.mobultion.entities.spiders.entities.*;
@@ -86,10 +87,17 @@ public class Registration {
                     (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
 
     private static final EntityType<WanderingEndermanEntity> WANDERINGENDERMAN_TYPE = EntityType.Builder.of(WanderingEndermanEntity::new, EntityClassification.MONSTER)
-            .sized(0.6F, 1.99F).build("wanderingenderman");
+            .sized(0.7F, 2.9F).build("wanderingenderman");
     public static final RegistryObject<EntityType<WanderingEndermanEntity>> WANDERINGENDERMAN = ENTITIES.register("wanderingenderman", () -> WANDERINGENDERMAN_TYPE);
     public static final RegistryObject<Item> WANDERINGENDERMAN_EGG = ITEMS.register("wanderingenderman_egg"
             , () -> new SpawnEggItem(WANDERINGENDERMAN_TYPE, 0x422C01, 0x036303,
+                    (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
+
+    private static final EntityType<MagmaEndermanEntity> MAGMAENDERMAN_TYPE = EntityType.Builder.of(MagmaEndermanEntity::new, EntityClassification.MONSTER)
+            .sized(0.7F, 2.9F).build("magmaenderman");
+    public static final RegistryObject<EntityType<MagmaEndermanEntity>> MAGMAENDERMAN = ENTITIES.register("magmaenderman", () -> MAGMAENDERMAN_TYPE);
+    public static final RegistryObject<Item> MAGMAENDERMAN_EGG = ITEMS.register("magmaenderman_egg"
+            , () -> new SpawnEggItem(MAGMAENDERMAN_TYPE, 0xB40A0A, 0xE7E740,
                     (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
 
 }

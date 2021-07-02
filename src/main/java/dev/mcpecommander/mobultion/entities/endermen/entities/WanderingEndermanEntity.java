@@ -1,5 +1,7 @@
 package dev.mcpecommander.mobultion.entities.endermen.entities;
 
+import dev.mcpecommander.mobultion.entities.endermen.entityGoals.EndermanFindStaringPlayerGoal;
+import dev.mcpecommander.mobultion.entities.endermen.entityGoals.WanderingEndermanLightningAttackGoal;
 import dev.mcpecommander.mobultion.setup.Registration;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
@@ -7,13 +9,17 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.monster.EndermiteEntity;
+import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
@@ -32,7 +38,10 @@ import java.util.Objects;
 @SuppressWarnings("NullableProblems")
 public class WanderingEndermanEntity extends MobultionEndermanEntity {
 
-
+    /**
+     * Is casting the lightning spell.
+     */
+    private static final DataParameter<Boolean> DATA_CASTING = EntityDataManager.defineId(WanderingEndermanEntity.class, DataSerializers.BOOLEAN);
     /**
      * The animation factory, for more information check GeckoLib.
      */
@@ -48,17 +57,26 @@ public class WanderingEndermanEntity extends MobultionEndermanEntity {
         this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
     }
 
+    /**
+     * Whether the entity is hurt by water, whether it is rain, bubble column or in water.
+     * @return true if the entity is damaged by water.
+     */
+    @Override
+    public boolean isSensitiveToWater() {
+        return true;
+    }
+
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SwimGoal(this));
         //this.goalSelector.addGoal(1, new EndermanEntity.StareGoal(this));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, false));
-        this.goalSelector.addGoal(7, new WaterAvoidingRandomWalkingGoal(this, 1.0D, 0.0F));
-        this.goalSelector.addGoal(8, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(8, new LookRandomlyGoal(this));
-        //this.targetSelector.addGoal(1, new EndermanEntity.FindPlayerGoal(this, this::isAngryAt));
+        this.goalSelector.addGoal(2, new WanderingEndermanLightningAttackGoal(this, 60));
+        this.goalSelector.addGoal(3, new WaterAvoidingRandomWalkingGoal(this, 1.0D, 0.0F));
+        this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
+        this.targetSelector.addGoal(1, new EndermanFindStaringPlayerGoal(this));
         this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, EndermiteEntity.class, 10, true, false, (entity) -> entity instanceof EndermiteEntity && ((EndermiteEntity)entity).isPlayerSpawned()));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, CreeperEntity.class, 10, true, false, null));
         this.targetSelector.addGoal(4, new ResetAngerGoal<>(this, false));
     }
 
@@ -68,11 +86,37 @@ public class WanderingEndermanEntity extends MobultionEndermanEntity {
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, 40.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.3F).add(Attributes.ATTACK_DAMAGE, 7.0D)
-                .add(Attributes.FOLLOW_RANGE, 64.0D);
+        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, 30.0D)
+                .add(Attributes.MOVEMENT_SPEED, 0.3F).add(Attributes.FOLLOW_RANGE, 64.0D);
     }
 
+    @Override
+    public boolean fireImmune() {
+        return true;
+    }
+
+    @Override
+    public boolean isInvulnerableTo(DamageSource damageSource) {
+        if(damageSource == DamageSource.LIGHTNING_BOLT) return true;
+        return super.isInvulnerableTo(damageSource);
+    }
+
+    /**
+     * Register/define the default value of the data parameters here.
+     */
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(DATA_CASTING, false);
+    }
+
+    public void setCasting(boolean isCasting){
+        this.entityData.set(DATA_CASTING, isCasting);
+    }
+
+    public boolean isCasting(){
+        return this.entityData.get(DATA_CASTING);
+    }
 
     /**
      * Copied from the PlayerEntity
@@ -152,7 +196,8 @@ public class WanderingEndermanEntity extends MobultionEndermanEntity {
      */
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "controller", 1, this::predicate));
+        data.addAnimationController(new AnimationController<>(this, "controller", 0, this::shouldAnimate));
+        data.addAnimationController(new AnimationController<>(this, "movement", 1, this::shouldMove));
     }
 
     /**
@@ -165,21 +210,38 @@ public class WanderingEndermanEntity extends MobultionEndermanEntity {
     }
 
     /**
-     * The predicate for animation controller
+     * The predicate for the movement animation controller
      * @param event: The animation event that includes the bone animations and animation status
      * @return PlayState.CONTINUE or PlayState.STOP depending on which needed.
      */
-    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
+    private <E extends IAnimatable> PlayState shouldMove(AnimationEvent<E> event)
     {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("attack", true));
         if(event.isMoving()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("move", true));
-            if(Objects.requireNonNull(getAttribute(Attributes.MOVEMENT_SPEED)).hasModifier(MobultionEndermanEntity.SPEED_MODIFIER_ATTACKING)){
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("run", true));
+            if(Objects.requireNonNull(getAttribute(Attributes.MOVEMENT_SPEED)).hasModifier(MobultionEndermanEntity.SPEED_MODIFIER_ATTACKING)) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("running", true));
+            }else {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("move", true));
             }
-        }else{
             return PlayState.CONTINUE;
         }
-        return PlayState.CONTINUE;
+        return PlayState.STOP;
+    }
+
+    /**
+     * The predicate for the animation controller
+     * @param event: The animation event that includes the bone animations and animation status
+     * @return PlayState.CONTINUE or PlayState.STOP depending on which needed.
+     */
+    private <E extends IAnimatable> PlayState shouldAnimate(AnimationEvent<E> event)
+    {
+        if(isCreepy()) {
+            if(isCasting()){
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("attack", false));
+            }else{
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("rage", true));
+            }
+            return PlayState.CONTINUE;
+        }
+        return PlayState.STOP;
     }
 }

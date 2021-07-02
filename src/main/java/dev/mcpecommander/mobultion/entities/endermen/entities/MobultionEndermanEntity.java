@@ -6,7 +6,6 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.monster.EndermanEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -35,15 +34,15 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
     /**
      * Unique speed modifier for this class of entities.
      */
-    public static final AttributeModifier SPEED_MODIFIER_ATTACKING = new AttributeModifier(SPEED_MODIFIER_ATTACKING_UUID, "Attacking speed boost", 0.15F, AttributeModifier.Operation.ADDITION);
+    public static final AttributeModifier SPEED_MODIFIER_ATTACKING = new AttributeModifier(SPEED_MODIFIER_ATTACKING_UUID, "Attacking speed boost", 1.3F, AttributeModifier.Operation.MULTIPLY_BASE);
     /**
      * A synced boolean of whether this entity is angry or not.
      */
-    private static final DataParameter<Boolean> DATA_CREEPY = EntityDataManager.defineId(EndermanEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> DATA_CREEPY = EntityDataManager.defineId(MobultionEndermanEntity.class, DataSerializers.BOOLEAN);
     /**
      * A synced boolean of whether this entity is being stared at or not.
      */
-    private static final DataParameter<Boolean> DATA_STARED_AT = EntityDataManager.defineId(EndermanEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> DATA_STARED_AT = EntityDataManager.defineId(MobultionEndermanEntity.class, DataSerializers.BOOLEAN);
     /**
      * A counter to make sure that the creepy enderman sound is not spammed or overlapped.
      */
@@ -98,6 +97,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
     /**
      * Register/define the default value of the data parameters here.
      */
+    @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_CREEPY, false);
@@ -107,22 +107,27 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
     /**
      * Sets a random amount of ticks between 400 and 780 ticks (20 and 39 seconds) in which the enderman stays angry.
      */
+    @Override
     public void startPersistentAngerTimer() {
         this.setRemainingPersistentAngerTime(PERSISTENT_ANGER_TIME.randomValue(this.random));
     }
 
+    @Override
     public void setRemainingPersistentAngerTime(int remainingTime) {
         this.remainingPersistentAngerTime = remainingTime;
     }
 
+    @Override
     public int getRemainingPersistentAngerTime() {
         return this.remainingPersistentAngerTime;
     }
 
+    @Override
     public void setPersistentAngerTarget(@Nullable UUID targetUUID) {
         this.persistentAngerTarget = targetUUID;
     }
 
+    @Override
     public UUID getPersistentAngerTarget() {
         return this.persistentAngerTarget;
     }
@@ -144,6 +149,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
      * Is called whenever a data parameter is changed and is being synced between the server and client.
      * @param syncedParameter The parameter that is being synced.
      */
+    @Override
     public void onSyncedDataUpdated(DataParameter<?> syncedParameter) {
         if (DATA_CREEPY.equals(syncedParameter) && this.hasBeenStaredAt() && this.level.isClientSide) {
             this.playStareSound();
@@ -155,6 +161,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
      * Writing extra pieces of data to the NBT tag which is persisted
      * @param NBTTag The tag where the additional data will be written to.
      */
+    @Override
     public void addAdditionalSaveData(CompoundNBT NBTTag) {
         super.addAdditionalSaveData(NBTTag);
         //Writes the anger time and the UUID of the target to the NBT tag.
@@ -165,6 +172,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
      * Reads the NBT tag and gets any pieces of saved data and applies it to the entity.
      * @param NBTTag The NBT tag that holds the saved data.
      */
+    @Override
     public void readAdditionalSaveData(CompoundNBT NBTTag) {
         super.readAdditionalSaveData(NBTTag);
         if(!level.isClientSide)
@@ -172,7 +180,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
     }
 
 
-    private boolean isLookingAtMe(PlayerEntity player) {
+    public boolean isLookingAtMe(PlayerEntity player) {
         ItemStack itemstack = player.inventory.armor.get(3);
         if (itemstack.getItem() == Blocks.CARVED_PUMPKIN.asItem()) {
             return false;
@@ -192,6 +200,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
      * @param size mobs with different sizes have different eye height like slime entities.
      * @return a float of how high are the eye from the ground up.
      */
+    @Override
     protected float getStandingEyeHeight(Pose pose, EntitySize size) {
         return 2.55F;
     }
@@ -199,6 +208,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
     /**
      * An update method within the tick method that updates somethings but not others. Not really obvious why it exists.
      */
+    @Override
     public void aiStep() {
         if (this.level.isClientSide) {
             for(int i = 0; i < 2; ++i) {
@@ -215,16 +225,9 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
     }
 
     /**
-     * Whether the entity is hurt by water, whether it is rain, bubble column or in water.
-     * @return true if the entity is damaged by water.
-     */
-    public boolean isSensitiveToWater() {
-        return true;
-    }
-
-    /**
      * Another update method for mobs that only ticks on the server, has multiple uses.
      */
+    @Override
     protected void customServerAiStep() {
         if (this.level.isDay() && this.tickCount >= this.targetChangeTime + 600) {
             float f = this.getBrightness();
@@ -239,9 +242,9 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
 
     /**
      * Not the actual teleport method but a random location chooser.
-     * @return true if the actual teleport method returns true for the choosen location.
+     * @return true if the actual teleport method returns true for the chosen location.
      */
-    protected boolean teleport() {
+    public boolean teleport() {
         if (!this.level.isClientSide() && this.isAlive()) {
             double d0 = this.getX() + (this.random.nextDouble() - 0.5D) * 64.0D;
             double d1 = this.getY() + (double)(this.random.nextInt(64) - 32);
@@ -301,6 +304,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
      * The ambient sound of the creature
      * @return SoundEvent of the ambient sound
      */
+    @Override
     protected SoundEvent getAmbientSound() {
         return this.isCreepy() ? SoundEvents.ENDERMAN_SCREAM : SoundEvents.ENDERMAN_AMBIENT;
     }
@@ -310,6 +314,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
      * @param damageSource: The type of the damage the entity took
      * @return SoundEvent of the damage sound
      */
+    @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
         return SoundEvents.ENDERMAN_HURT;
     }
@@ -318,6 +323,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
      * The sound that entity makes when it dies.
      * @return SoundEvent of the death sound
      */
+    @Override
     protected SoundEvent getDeathSound() {
         return SoundEvents.ENDERMAN_DEATH;
     }
@@ -330,6 +336,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
      * @param amount: How much raw damage the attack did.
      * @return true if the entity should be hurt.
      */
+    @Override
     public boolean hurt(DamageSource damageSource, float amount) {
         if (this.isInvulnerableTo(damageSource)) {
             return false;
