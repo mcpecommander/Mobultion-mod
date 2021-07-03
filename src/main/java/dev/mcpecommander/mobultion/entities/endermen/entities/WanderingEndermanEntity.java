@@ -66,6 +66,9 @@ public class WanderingEndermanEntity extends MobultionEndermanEntity {
         return true;
     }
 
+    /**
+     * Register the AI/goals here. Server side only.
+     */
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SwimGoal(this));
@@ -90,11 +93,20 @@ public class WanderingEndermanEntity extends MobultionEndermanEntity {
                 .add(Attributes.MOVEMENT_SPEED, 0.3F).add(Attributes.FOLLOW_RANGE, 64.0D);
     }
 
+    /**
+     * If the entity is immune to fire.
+     * @return true if it is immune to fire.
+     */
     @Override
     public boolean fireImmune() {
         return true;
     }
 
+    /**
+     * What kind of damage sources this entity is invulnerable to.
+     * @param damageSource that damage source being tested.
+     * @return true if the entity is invulnerable to the given damage source.
+     */
     @Override
     public boolean isInvulnerableTo(DamageSource damageSource) {
         if(damageSource == DamageSource.LIGHTNING_BOLT) return true;
@@ -110,10 +122,18 @@ public class WanderingEndermanEntity extends MobultionEndermanEntity {
         this.entityData.define(DATA_CASTING, false);
     }
 
+    /**
+     * A setter for the casting data parameter
+     * @param isCasting true to set the entity into casting mode and start the animation.
+     */
     public void setCasting(boolean isCasting){
         this.entityData.set(DATA_CASTING, isCasting);
     }
 
+    /**
+     * A getter for the casting data parameter
+     * @return true if the entity is in casting mode.
+     */
     public boolean isCasting(){
         return this.entityData.get(DATA_CASTING);
     }
