@@ -42,6 +42,9 @@ public class MagmaEndermanEntity extends MobultionEndermanEntity{
         return true;
     }
 
+    /**
+     * Register the AI/goals here. Server side only.
+     */
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SwimGoal(this));
