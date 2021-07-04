@@ -1,6 +1,8 @@
 package dev.mcpecommander.mobultion.setup;
 
 import dev.mcpecommander.mobultion.Mobultion;
+import dev.mcpecommander.mobultion.entities.endermen.renderers.GlassEndermanRenderer;
+import dev.mcpecommander.mobultion.entities.endermen.renderers.GlassShotRenderer;
 import dev.mcpecommander.mobultion.entities.endermen.renderers.MagmaEndermanRenderer;
 import dev.mcpecommander.mobultion.entities.endermen.renderers.WanderingEndermanRenderer;
 import dev.mcpecommander.mobultion.entities.skeletons.renderers.JokerSkeletonRenderer;
@@ -37,6 +39,10 @@ public class ClientSetup {
                 WanderingEndermanRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.MAGMAENDERMAN.get(),
                 MagmaEndermanRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(Registration.GLASSENDERMAN.get(),
+                GlassEndermanRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(Registration.GLASSSHOT.get(),
+                GlassShotRenderer::new);
         //Minecraft.getInstance().particleEngine.register(Registration.HEAL_PARTICLE.get(), HealParticle.Factory::new);
     }
 }

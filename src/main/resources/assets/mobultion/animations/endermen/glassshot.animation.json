@@ -1,0 +1,22 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"spin": {
+			"loop": true,
+			"animation_length": 1.04,
+			"bones": {
+				"GlassShot": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.04": {
+							"vector": [720, 0, 720],
+							"easing": "linear"
+						}
+					}
+				}
+			}
+		}
+	}
+}

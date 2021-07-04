@@ -1,6 +1,8 @@
 package dev.mcpecommander.mobultion.setup;
 
 import dev.mcpecommander.mobultion.blocks.TestBlock;
+import dev.mcpecommander.mobultion.entities.endermen.entities.GlassEndermanEntity;
+import dev.mcpecommander.mobultion.entities.endermen.entities.GlassShotEntity;
 import dev.mcpecommander.mobultion.entities.endermen.entities.MagmaEndermanEntity;
 import dev.mcpecommander.mobultion.entities.endermen.entities.WanderingEndermanEntity;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.JokerSkeletonEntity;
@@ -99,5 +101,17 @@ public class Registration {
     public static final RegistryObject<Item> MAGMAENDERMAN_EGG = ITEMS.register("magmaenderman_egg"
             , () -> new SpawnEggItem(MAGMAENDERMAN_TYPE, 0xB40A0A, 0xE7E740,
                     (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
+
+    private static final EntityType<GlassEndermanEntity> GLASSENDERMAN_TYPE = EntityType.Builder.of(GlassEndermanEntity::new, EntityClassification.MONSTER)
+            .sized(0.7F, 2.9F).build("glassenderman");
+    public static final RegistryObject<EntityType<GlassEndermanEntity>> GLASSENDERMAN = ENTITIES.register("glassenderman", () -> GLASSENDERMAN_TYPE);
+    public static final RegistryObject<Item> GLASSENDERMAN_EGG = ITEMS.register("glassenderman_egg"
+            , () -> new SpawnEggItem(GLASSENDERMAN_TYPE, 0x2D2C2F, 0x535056,
+                    (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
+
+    private static final EntityType<GlassShotEntity> GLASSESHOT_TYPE = EntityType.Builder.of((EntityType.IFactory<GlassShotEntity>) GlassShotEntity::new, EntityClassification.MISC)
+            .sized(0.5F, 0.5F).clientTrackingRange(8).build("glassshot");
+    public static final RegistryObject<EntityType<GlassShotEntity>> GLASSSHOT = ENTITIES.register("glassshot", () -> GLASSESHOT_TYPE);
+
 
 }
