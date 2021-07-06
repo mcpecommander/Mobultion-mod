@@ -40,7 +40,13 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
      * The animation factory, for more information check GeckoLib.
      */
     private final AnimationFactory factory = new AnimationFactory(this);
+    /**
+     * The color data parameter to sync the color to the client side.
+     */
     private static final DataParameter<Integer> DATA_COLOR = EntityDataManager.defineId(GlassEndermanEntity.class, DataSerializers.INT);
+    /**
+     * The amount of balls data parameter to sync the amount of balls to the client side.
+     */
     private static final DataParameter<Byte> DATA_BALLS = EntityDataManager.defineId(GlassEndermanEntity.class, DataSerializers.BYTE);
 
     public GlassEndermanEntity(EntityType<? extends MobultionEndermanEntity> type, World world) {
@@ -49,6 +55,9 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
         this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
     }
 
+    /**
+     * Register/define the default value of the data parameter here.
+     */
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
@@ -56,13 +65,22 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
         this.entityData.define(DATA_BALLS, (byte)3);
     }
 
+    /**
+     * Used to finalize the normal spawning of mobs such as from eggs or normal world spawning but not commands.
+     * @param serverWorld The server world instance.
+     * @param difficulty The difficulty of the current world.
+     * @param spawnReason How was this entity was spawned.
+     * @param livingEntityData The entity data attached to it for further use upon spawning.
+     * @param NBTTag The NBT tag that holds persisted data.
+     * @return ILivingEntityData that holds information about the entity spawning.
+     */
     @Nullable
     @Override
-    public ILivingEntityData finalizeSpawn(IServerWorld serverWorld, DifficultyInstance difficultyInstance,
-                                           SpawnReason spawnReason, @Nullable ILivingEntityData entityData,
+    public ILivingEntityData finalizeSpawn(IServerWorld serverWorld, DifficultyInstance difficulty,
+                                           SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityData,
                                            @Nullable CompoundNBT NBTTag) {
         setColor(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat()));
-        return super.finalizeSpawn(serverWorld, difficultyInstance, spawnReason, entityData, NBTTag);
+        return super.finalizeSpawn(serverWorld, difficulty, spawnReason, livingEntityData, NBTTag);
     }
 
     /**
@@ -85,12 +103,8 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
             @Override
             public void start() {
                 super.start();
+                //Sets the target to null to make sure the speed modifier is off.
                 if(getTarget() != null) setTarget(null);
-            }
-
-            @Override
-            public boolean canUse() {
-                return super.canUse();
             }
         });
         this.goalSelector.addGoal(3, new WaterAvoidingRandomWalkingGoal(this, 1.0D, 0.0F));
@@ -101,32 +115,56 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this){
             @Override
             public boolean canUse() {
+                //Makes sure that player is not targeted if the enderman doesn't have balls to shoot.
                 return super.canUse() && getBalls() > 0;
             }
         });
         this.targetSelector.addGoal(4, new ResetAngerGoal<>(this, false));
     }
 
+    /**
+     * Sets the color data parameter and syncs it to the client.
+     * @param color the color that this enderman is rendered by.
+     */
     public void setColor(Color color){
         this.entityData.set(DATA_COLOR, color.getRGB());
     }
 
+    /**
+     * Gets the render color of this enderman (synced on both sides).
+     * @return Color of this enderman.
+     */
     public Color getColor(){
         return new Color(this.entityData.get(DATA_COLOR));
     }
 
+    /**
+     * Sets the balls data parameter and syncs it to the client.
+     * @param amount the amount of balls that this enderman have.
+     */
     public void setBalls(byte amount){
         this.entityData.set(DATA_BALLS, amount);
     }
 
+    /**
+     * Gets the amount of balls this enderman has (synced on both sides).
+     * @return byte ball amount of this enderman.
+     */
     public byte getBalls(){
         return this.entityData.get(DATA_BALLS);
     }
 
+    /**
+     * Decreases the amount of balls by one clamped between 0 and 3.
+     */
     public void useBall(){
         this.entityData.set(DATA_BALLS, (byte) MathHelper.clamp(getBalls() - 1, 0, 3));
     }
 
+    /**
+     * Reads the NBT tag and gets any pieces of saved data and applies it to the entity.
+     * @param NBTTag The NBT tag that holds the saved data.
+     */
     @Override
     public void readAdditionalSaveData(CompoundNBT NBTTag) {
         super.readAdditionalSaveData(NBTTag);
@@ -134,6 +172,10 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
         if(NBTTag.contains("mobultion:balls", Constants.NBT.TAG_BYTE))this.setBalls(NBTTag.getByte("mobultion:balls"));
     }
 
+    /**
+     * Writing extra pieces of data to the NBT tag which is persisted
+     * @param NBTTag The tag where the additional data will be written to.
+     */
     @Override
     public void addAdditionalSaveData(CompoundNBT NBTTag) {
         super.addAdditionalSaveData(NBTTag);
@@ -152,12 +194,19 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
                 .add(Attributes.FOLLOW_RANGE, 64.0D);
     }
 
+    /**
+     * Register the animation controller here and any other particle/sound listeners.
+     * @param data: Animation data that adds animation controllers.
+     */
     @Override
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController<>(this, "controller", 1, this::shouldAnimate));
         data.addAnimationController(new AnimationController<>(this, "movement", 1, this::shouldMove));
     }
 
+    /**
+     * Another update method for mobs that only ticks on the server, has multiple uses.
+     */
     @Override
     protected void customServerAiStep() {
         super.customServerAiStep();
@@ -199,6 +248,10 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
         return PlayState.CONTINUE;
     }
 
+    /**
+     * Getter for the animation factory. Client side only but not null on the server.
+     * @return AnimationFactory
+     */
     @Override
     public AnimationFactory getFactory() {
         return this.factory;

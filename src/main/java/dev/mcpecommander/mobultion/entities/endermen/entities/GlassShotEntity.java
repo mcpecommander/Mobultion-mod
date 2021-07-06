@@ -35,7 +35,13 @@ import java.awt.*;
 /* McpeCommander created on 03/07/2021 inside the package - dev.mcpecommander.mobultion.entities.endermen.entities */
 public class GlassShotEntity extends DamagingProjectileEntity implements IAnimatable {
 
+    /**
+     * The color data parameter to sync the color to the client side.
+     */
     private static final DataParameter<Integer> DATA_COLOR = EntityDataManager.defineId(GlassShotEntity.class, DataSerializers.INT);
+    /**
+     * The animation factory, for more information check GeckoLib.
+     */
     private final AnimationFactory factory = new AnimationFactory(this);
 
     //Don't use
@@ -52,26 +58,45 @@ public class GlassShotEntity extends DamagingProjectileEntity implements IAnimat
         this.setColor(new Color(owner.getColor().getRed(), owner.getColor().getBlue(), owner.getColor().getGreen()));
     }
 
+    /**
+     * Register/define the default value of the data parameter here.
+     */
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_COLOR, Color.WHITE.getRGB());
     }
 
+    /**
+     * Sets the color data parameter and syncs it to the client.
+     * @param color the color that this enderman is rendered by.
+     */
     public void setColor(Color color){
         this.entityData.set(DATA_COLOR, color.getRGB());
     }
 
+    /**
+     * Gets the render color of this enderman (synced on both sides).
+     * @return Color of this enderman.
+     */
     public Color getColor(){
         return new Color(this.entityData.get(DATA_COLOR));
     }
 
+    /**
+     * Writing extra pieces of data to the NBT tag which is persisted
+     * @param NBTTag The tag where the additional data will be written to.
+     */
     @Override
     public void addAdditionalSaveData(CompoundNBT NBTTag) {
         super.addAdditionalSaveData(NBTTag);
         NBTTag.putInt("mobultion:color", getColor().getRGB());
     }
 
+    /**
+     * Reads the NBT tag and gets any pieces of saved data and applies it to the entity.
+     * @param NBTTag The NBT tag that holds the saved data.
+     */
     @Override
     public void readAdditionalSaveData(CompoundNBT NBTTag) {
         super.readAdditionalSaveData(NBTTag);
@@ -80,21 +105,39 @@ public class GlassShotEntity extends DamagingProjectileEntity implements IAnimat
         }
     }
 
+    /**
+     * The particles that will be spawned as the projectile is flying.
+     * @return A particle type (implements IParticleData).
+     */
     @Override
     protected IParticleData getTrailParticle() {
         return new BlockParticleData(ParticleTypes.BLOCK, Blocks.GLASS.defaultBlockState());
     }
 
+    /**
+     * The acceleration scale which the speed is multiplied with each tick.
+     * Values over 1 leads to accelerating particle movement while values between 0 and 1 leads to decelerating particle
+     * movement.
+     * @return the acceleration float value
+     */
     @Override
     protected float getInertia() {
         return 1.05f;
     }
 
+    /**
+     * Whether this entity can burn and show the burning render.
+     * @return true if the entity can burn.
+     */
     @Override
     protected boolean shouldBurn() {
         return false;
     }
 
+    /**
+     * Gets called if the onHit RayTraceResult is instance of EntityRayTraceResult.
+     * @param rayTraceResult has information about which entity got hit.
+     */
     @Override
     protected void onHitEntity(EntityRayTraceResult rayTraceResult) {
         if (!this.level.isClientSide) {
@@ -105,6 +148,10 @@ public class GlassShotEntity extends DamagingProjectileEntity implements IAnimat
         }
     }
 
+    /**
+     * Gets called whenever the particle hits either a block or an entity.
+     * @param result The RayTraceResult which has information about what was hit.
+     */
     @Override
     protected void onHit(RayTraceResult result) {
         super.onHit(result);
@@ -115,31 +162,58 @@ public class GlassShotEntity extends DamagingProjectileEntity implements IAnimat
         remove();
     }
 
+    /**
+     * Whether this projectile can hit the given entity parameter.
+     * @param entity the entity tested.
+     * @return true if the entity can be hit by this projectile.
+     */
     @Override
     protected boolean canHitEntity(Entity entity) {
-        return entity != this && super.canHitEntity(entity);
+        return entity != this.getOwner() && super.canHitEntity(entity);
     }
 
+    /**
+     * Whether this entity is in a water block.
+     * @return true if the entity current position is in a water block.
+     */
     @Override
     public boolean isInWater() {
         return false;
     }
 
+    /**
+     * Register the animation controller here and any other particle/sound listeners.
+     * @param data: Animation data that adds animation controllers.
+     */
     @Override
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController<>(this, "controller", 0, this::shouldAnimate));
     }
 
-    private <T extends IAnimatable> PlayState shouldAnimate(AnimationEvent<T> animationEvent) {
-        animationEvent.getController().setAnimation(new AnimationBuilder().addAnimation("spin", true));
+    /**
+     * The predicate for the animation controller
+     * @param event: The animation event that includes the bone animations and animation status
+     * @return PlayState.CONTINUE or PlayState.STOP depending on which needed.
+     */
+    private <T extends IAnimatable> PlayState shouldAnimate(AnimationEvent<T> event) {
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("spin", true));
         return PlayState.CONTINUE;
     }
 
+    /**
+     * Getter for the animation factory. Client side only but not null on the server.
+     * @return AnimationFactory
+     */
     @Override
     public AnimationFactory getFactory() {
         return this.factory;
     }
 
+    /**
+     * The spawning packet that is send to client side to make it tick and render on the client side.
+     * DO NOT USE the vanilla spawning packet because it doesn't work.
+     * @return The spawning packet to be sent to the client.
+     */
     @Override
     public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
