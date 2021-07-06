@@ -110,7 +110,7 @@ public class Registration {
                     (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
 
     private static final EntityType<GlassShotEntity> GLASSESHOT_TYPE = EntityType.Builder.of((EntityType.IFactory<GlassShotEntity>) GlassShotEntity::new, EntityClassification.MISC)
-            .sized(0.5F, 0.5F).clientTrackingRange(8).build("glassshot");
+            .sized(0.5F, 0.5F).clientTrackingRange(8).setUpdateInterval(1).build("glassshot");
     public static final RegistryObject<EntityType<GlassShotEntity>> GLASSSHOT = ENTITIES.register("glassshot", () -> GLASSESHOT_TYPE);
 
 

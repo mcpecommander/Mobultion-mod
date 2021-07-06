@@ -77,7 +77,7 @@ public class WanderingEndermanEntity extends MobultionEndermanEntity {
         this.goalSelector.addGoal(3, new WaterAvoidingRandomWalkingGoal(this, 1.0D, 0.0F));
         this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
-        this.targetSelector.addGoal(1, new EndermanFindStaringPlayerGoal(this));
+        this.targetSelector.addGoal(1, new EndermanFindStaringPlayerGoal(this, livingEntity -> true));
         this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, CreeperEntity.class, 10, true, false, null));
         this.targetSelector.addGoal(4, new ResetAngerGoal<>(this, false));

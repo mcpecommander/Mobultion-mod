@@ -56,6 +56,57 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
         this.entityData.define(DATA_BALLS, (byte)3);
     }
 
+    @Nullable
+    @Override
+    public ILivingEntityData finalizeSpawn(IServerWorld serverWorld, DifficultyInstance difficultyInstance,
+                                           SpawnReason spawnReason, @Nullable ILivingEntityData entityData,
+                                           @Nullable CompoundNBT NBTTag) {
+        setColor(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat()));
+        return super.finalizeSpawn(serverWorld, difficultyInstance, spawnReason, entityData, NBTTag);
+    }
+
+    /**
+     * Whether the entity is hurt by water, whether it is rain, bubble column or in water.
+     * @return true if the entity is damaged by water.
+     */
+    @Override
+    public boolean isSensitiveToWater() {
+        return true;
+    }
+
+    /**
+     * Register the AI/goals here. Server side only.
+     */
+    @Override
+    protected void registerGoals() {
+        this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.goalSelector.addGoal(1, new GlassEndermanShotsAttackGoal(this));
+        this.goalSelector.addGoal(2, new AvoidEntityGoal<PlayerEntity>(this, PlayerEntity.class, 8.0F, 0.6D, 1.2D, livingEntity -> getBalls() <= 1){
+            @Override
+            public void start() {
+                super.start();
+                if(getTarget() != null) setTarget(null);
+            }
+
+            @Override
+            public boolean canUse() {
+                return super.canUse();
+            }
+        });
+        this.goalSelector.addGoal(3, new WaterAvoidingRandomWalkingGoal(this, 1.0D, 0.0F));
+        this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
+        this.targetSelector.addGoal(1, new EndermanFindStaringPlayerGoal(this, livingEntity -> getBalls() > 0));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, CreeperEntity.class, 10, true, false, livingEntity -> getBalls() > 0));
+        this.targetSelector.addGoal(3, new HurtByTargetGoal(this){
+            @Override
+            public boolean canUse() {
+                return super.canUse() && getBalls() > 0;
+            }
+        });
+        this.targetSelector.addGoal(4, new ResetAngerGoal<>(this, false));
+    }
+
     public void setColor(Color color){
         this.entityData.set(DATA_COLOR, color.getRGB());
     }
@@ -90,41 +141,6 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
         NBTTag.putByte("mobultion:balls", getBalls());
     }
 
-    @Nullable
-    @Override
-    public ILivingEntityData finalizeSpawn(IServerWorld serverWorld, DifficultyInstance difficultyInstance,
-                                           SpawnReason spawnReason, @Nullable ILivingEntityData entityData,
-                                           @Nullable CompoundNBT NBTTag) {
-        setColor(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat()));
-        return super.finalizeSpawn(serverWorld, difficultyInstance, spawnReason, entityData, NBTTag);
-    }
-
-    /**
-     * Whether the entity is hurt by water, whether it is rain, bubble column or in water.
-     * @return true if the entity is damaged by water.
-     */
-    @Override
-    public boolean isSensitiveToWater() {
-        return true;
-    }
-
-    /**
-     * Register the AI/goals here. Server side only.
-     */
-    @Override
-    protected void registerGoals() {
-        this.goalSelector.addGoal(0, new SwimGoal(this));
-        this.goalSelector.addGoal(1, new GlassEndermanShotsAttackGoal(this));
-//        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, false));
-        this.goalSelector.addGoal(3, new WaterAvoidingRandomWalkingGoal(this, 1.0D, 0.0F));
-        this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
-        this.targetSelector.addGoal(1, new EndermanFindStaringPlayerGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, CreeperEntity.class, 10, true, false, null));
-        this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(4, new ResetAngerGoal<>(this, false));
-    }
-
     /**
      * Gets called in the main class to init the attributes.
      * @see dev.mcpecommander.mobultion.Mobultion
@@ -132,7 +148,7 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
      */
     public static AttributeModifierMap.MutableAttribute createAttributes() {
         return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, 28.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.3F).add(Attributes.ATTACK_DAMAGE, 5.0D)
+                .add(Attributes.MOVEMENT_SPEED, 0.3F).add(Attributes.ATTACK_DAMAGE, 8.0D)
                 .add(Attributes.FOLLOW_RANGE, 64.0D);
     }
 
@@ -140,6 +156,14 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController<>(this, "controller", 1, this::shouldAnimate));
         data.addAnimationController(new AnimationController<>(this, "movement", 1, this::shouldMove));
+    }
+
+    @Override
+    protected void customServerAiStep() {
+        super.customServerAiStep();
+        if(this.tickCount % 150 == 0){
+            this.setBalls((byte) MathHelper.clamp(getBalls() + 1, 0, 3));
+        }
     }
 
     /**

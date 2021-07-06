@@ -3,6 +3,7 @@ package dev.mcpecommander.mobultion.entities.endermen.entities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
@@ -267,6 +268,15 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
         double d2 = this.getY() + (double)(this.random.nextInt(16) - 8) - vector3d.y * 16.0D;
         double d3 = this.getZ() + (this.random.nextDouble() - 0.5D) * 8.0D - vector3d.z * 16.0D;
         return this.teleport(d1, d2, d3);
+    }
+
+    public boolean teleportAround(Entity target){
+        Vector3d pos = RandomPositionGenerator.getLandPosTowards(this, 10, 7, target.position());
+        System.out.println(pos);
+        if(pos != null){
+            return this.teleport(pos.x, pos.y, pos.z);
+        }
+        return false;
     }
 
     /**

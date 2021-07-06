@@ -16,7 +16,7 @@ public class GlassShotModel extends AnimatedGeoModel<GlassShotEntity> {
      */
     @Override
     public ResourceLocation getModelLocation(GlassShotEntity entity) {
-        return new ResourceLocation(MODID, "geo/endermen/glassshot.geo.json");
+        return new ResourceLocation(MODID, "geo/endermen/glassshot.json");
     }
 
     /**
