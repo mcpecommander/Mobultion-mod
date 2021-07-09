@@ -3,6 +3,7 @@ package dev.mcpecommander.mobultion.setup;
 import dev.mcpecommander.mobultion.Mobultion;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
@@ -17,6 +18,7 @@ public class ModSetup {
         }
     };
 
+    @SubscribeEvent
     public static void init(final FMLCommonSetupEvent event) {
 
     }

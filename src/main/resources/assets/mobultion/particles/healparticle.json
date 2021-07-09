@@ -1,3 +1,10 @@
 {
-
+  "textures": [
+      "mobultion:heal",
+      "mobultion:heal_0",
+      "mobultion:heal_1",
+      "mobultion:heal_2",
+      "mobultion:heal_3",
+      "mobultion:heal_4"
+  ]
 }

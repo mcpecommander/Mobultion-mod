@@ -1,10 +1,7 @@
 package dev.mcpecommander.mobultion.setup;
 
 import dev.mcpecommander.mobultion.blocks.TestBlock;
-import dev.mcpecommander.mobultion.entities.endermen.entities.GlassEndermanEntity;
-import dev.mcpecommander.mobultion.entities.endermen.entities.GlassShotEntity;
-import dev.mcpecommander.mobultion.entities.endermen.entities.MagmaEndermanEntity;
-import dev.mcpecommander.mobultion.entities.endermen.entities.WanderingEndermanEntity;
+import dev.mcpecommander.mobultion.entities.endermen.entities.*;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.JokerSkeletonEntity;
 import dev.mcpecommander.mobultion.entities.spiders.entities.*;
 import dev.mcpecommander.mobultion.items.ThunderStaffItem;
@@ -112,6 +109,13 @@ public class Registration {
     private static final EntityType<GlassShotEntity> GLASSESHOT_TYPE = EntityType.Builder.of((EntityType.IFactory<GlassShotEntity>) GlassShotEntity::new, EntityClassification.MISC)
             .sized(0.5F, 0.5F).clientTrackingRange(8).setUpdateInterval(1).build("glassshot");
     public static final RegistryObject<EntityType<GlassShotEntity>> GLASSSHOT = ENTITIES.register("glassshot", () -> GLASSESHOT_TYPE);
+
+    private static final EntityType<IceEndermanEntity> ICEENDERMAN_TYPE = EntityType.Builder.of(IceEndermanEntity::new, EntityClassification.MONSTER)
+            .sized(0.7F, 2.9F).build("iceenderman");
+    public static final RegistryObject<EntityType<IceEndermanEntity>> ICEENDERMAN = ENTITIES.register("iceenderman", () -> ICEENDERMAN_TYPE);
+    public static final RegistryObject<Item> ICEENDERMAN_EGG = ITEMS.register("iceenderman_egg"
+            , () -> new SpawnEggItem(ICEENDERMAN_TYPE, 0xC5F9F9, 0x30ABAB,
+                    (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
 
 
 }

@@ -1,14 +1,19 @@
 package dev.mcpecommander.mobultion.entities.endermen.entities;
 
 import dev.mcpecommander.mobultion.entities.endermen.entityGoals.EndermanFindStaringPlayerGoal;
+import dev.mcpecommander.mobultion.particles.PortalParticle;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.EndermiteEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -20,27 +25,26 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import java.util.Objects;
 
-/* McpeCommander created on 26/06/2021 inside the package - dev.mcpecommander.mobultion.entities.endermen.entities */
-public class MagmaEndermanEntity extends MobultionEndermanEntity{
+/* McpeCommander created on 07/07/2021 inside the package - dev.mcpecommander.mobultion.entities.endermen.entities */
+public class IceEndermanEntity extends MobultionEndermanEntity{
 
     /**
      * The animation factory, for more information check GeckoLib.
      */
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    public MagmaEndermanEntity(EntityType<? extends MobultionEndermanEntity> type, World world) {
+    public IceEndermanEntity(EntityType<? extends MobultionEndermanEntity> type, World world) {
         super(type, world);
-        //Set the priority to negative to signal that this entity avoids water at all costs.
-        this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
     }
 
-    /**
-     * Whether the entity is hurt by water, whether it is rain, bubble column or in water.
-     * @return true if the entity is damaged by water.
-     */
-    @Override
-    public boolean isSensitiveToWater() {
-        return true;
+    public boolean doHurtTarget(Entity target) {
+        if (super.doHurtTarget(target)) {
+            if (target instanceof LivingEntity) {
+                ((LivingEntity)target).addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 5 * 20, 0));
+            }
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -49,9 +53,8 @@ public class MagmaEndermanEntity extends MobultionEndermanEntity{
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SwimGoal(this));
-        //this.goalSelector.addGoal(1, new EndermanEntity.StareGoal(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, false));
-        this.goalSelector.addGoal(3, new WaterAvoidingRandomWalkingGoal(this, 1.0D, 0.0F));
+        this.goalSelector.addGoal(3, new RandomWalkingGoal(this, 1.0D, 8));
         this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
         this.targetSelector.addGoal(1, new EndermanFindStaringPlayerGoal(this, livingEntity -> true));
@@ -81,13 +84,28 @@ public class MagmaEndermanEntity extends MobultionEndermanEntity{
         data.addAnimationController(new AnimationController<>(this, "movement", 1, this::shouldMove));
     }
 
-    /**
-     * Getter for the animation factory. Client side only but not null on the server.
-     * @return AnimationFactory
-     */
     @Override
-    public AnimationFactory getFactory() {
-        return this.factory;
+    protected void tickDeath() {
+        ++this.deathTime;
+        if(this.deathTime >= 2 && this.deathTime < 24){
+            for(int i = 0; i < 2; ++i) {
+                double startX = this.getRandomX(5D);
+                double startY = this.getRandomY();
+                double startZ = this.getRandomZ(5D);
+                double finalY = this.getRandomY();//(this.getY() + (this.random.nextFloat() * 0.8f) + this.getBbHeight()/2f);
+                Vector3d speed = new Vector3d(this.getX() - startX,
+                        finalY - startY,
+                        this.getZ() - startZ).normalize();
+                this.level.addParticle(new PortalParticle.PortalParticleData((200f/255f),(66f/255f),(220f/255f),1f
+                        ,(float) this.getX(), (float)finalY, (float) this.getZ()),
+                        startX, startY, startZ,
+                        speed.x/10f, speed.y/10f, speed.z/10f);
+            }
+        }
+        if (this.deathTime == 27) {
+            this.remove();
+        }
+
     }
 
     /**
@@ -97,6 +115,10 @@ public class MagmaEndermanEntity extends MobultionEndermanEntity{
      */
     private <E extends IAnimatable> PlayState shouldMove(AnimationEvent<E> event)
     {
+        if(isDeadOrDying()){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("death", false));
+            return PlayState.CONTINUE;
+        }
         if(event.isMoving()) {
             if(Objects.requireNonNull(getAttribute(Attributes.MOVEMENT_SPEED)).hasModifier(MobultionEndermanEntity.SPEED_MODIFIER_ATTACKING)) {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("running", true));
@@ -115,10 +137,15 @@ public class MagmaEndermanEntity extends MobultionEndermanEntity{
      */
     private <E extends IAnimatable> PlayState shouldAnimate(AnimationEvent<E> event)
     {
-        if(isCreepy()) {
+        if(isCreepy() && !isDeadOrDying()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("rage", true));
             return PlayState.CONTINUE;
         }
         return PlayState.STOP;
+    }
+
+    @Override
+    public AnimationFactory getFactory() {
+        return this.factory;
     }
 }

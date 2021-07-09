@@ -1,15 +1,20 @@
 package dev.mcpecommander.mobultion.setup;
 
+import com.mojang.serialization.Codec;
 import dev.mcpecommander.mobultion.Mobultion;
-import dev.mcpecommander.mobultion.entities.endermen.renderers.GlassEndermanRenderer;
-import dev.mcpecommander.mobultion.entities.endermen.renderers.GlassShotRenderer;
-import dev.mcpecommander.mobultion.entities.endermen.renderers.MagmaEndermanRenderer;
-import dev.mcpecommander.mobultion.entities.endermen.renderers.WanderingEndermanRenderer;
+import dev.mcpecommander.mobultion.entities.endermen.renderers.*;
 import dev.mcpecommander.mobultion.entities.skeletons.renderers.JokerSkeletonRenderer;
 import dev.mcpecommander.mobultion.entities.spiders.renderers.*;
+import dev.mcpecommander.mobultion.particles.HealParticle;
+import dev.mcpecommander.mobultion.particles.PortalParticle;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.particles.ParticleType;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -18,7 +23,35 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 @Mod.EventBusSubscriber(modid = Mobultion.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ClientSetup {
 
+    public static final ParticleType<HealParticle.HealParticleData> HEAL_PARTICLE_TYPE = new ParticleType<HealParticle.HealParticleData>(false, HealParticle.HealParticleData.DESERIALIZER) {
+        @Override
+        public Codec<HealParticle.HealParticleData> codec() {
+            return HealParticle.HealParticleData.CODEC;
+        }
+    };
+
+    public static final ParticleType<PortalParticle.PortalParticleData> PORTAL_PARTICLE_TYPE = new ParticleType<PortalParticle.PortalParticleData>(false, PortalParticle.PortalParticleData.DESERIALIZER) {
+        @Override
+        public Codec<PortalParticle.PortalParticleData> codec() {
+            return PortalParticle.PortalParticleData.CODEC;
+        }
+    };
+
+    //FOR SOME FUCKING FORGE REASON using deferred registry makes the factory load before the sprite is loaded.
+    @SubscribeEvent
+    public static void registerParticles(RegistryEvent.Register<ParticleType<?>> event) {
+        event.getRegistry().register(HEAL_PARTICLE_TYPE.setRegistryName("healparticle"));
+        event.getRegistry().register(PORTAL_PARTICLE_TYPE.setRegistryName("portalparticle"));
+    }
+
+    @SubscribeEvent
+    public static void registerParticleFactories(ParticleFactoryRegisterEvent event){
+        Minecraft.getInstance().particleEngine.register(HEAL_PARTICLE_TYPE, HealParticle.Factory::new);
+        Minecraft.getInstance().particleEngine.register(PORTAL_PARTICLE_TYPE, PortalParticle.Factory::new);
+    }
+
     //Register rendering related stuff here.
+    @SubscribeEvent
     public static void init(final FMLClientSetupEvent event) {
         RenderTypeLookup.setRenderLayer(Registration.TESTBLOCK.get(), RenderType.translucent());
         RenderingRegistry.registerEntityRenderingHandler(Registration.ANGELSPIDER.get(),
@@ -43,6 +76,10 @@ public class ClientSetup {
                 GlassEndermanRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.GLASSSHOT.get(),
                 GlassShotRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(Registration.ICEENDERMAN.get(),
+                IceEndermanRenderer::new);
         //Minecraft.getInstance().particleEngine.register(Registration.HEAL_PARTICLE.get(), HealParticle.Factory::new);
     }
+
+
 }
