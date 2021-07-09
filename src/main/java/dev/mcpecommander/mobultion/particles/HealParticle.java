@@ -5,12 +5,14 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.mcpecommander.mobultion.setup.ClientSetup;
+import dev.mcpecommander.mobultion.utils.MathCalculations;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleType;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -22,24 +24,32 @@ import java.util.Locale;
 public class HealParticle extends SpriteTexturedParticle {
 
     IAnimatedSprite sprite;
+    double finalX, finalY, finalZ;
+    double originalDistance;
 
     protected HealParticle(ClientWorld world, double posX, double posY, double posZ,
-                           double speedX, double speedY, double speedZ, HealParticleData data, IAnimatedSprite sprite) {
-        super(world, posX, posY, posZ, speedX, speedY, speedZ);
+                               double finalX, double finalY, double finalZ, HealParticleData data, IAnimatedSprite sprite) {
+        super(world, posX, posY, posZ, finalX, finalY, finalZ);
         this.x = posX;
         this.y = posY;
         this.z = posZ;
-        this.xd = speedX;
-        this.yd = speedY;
-        this.zd = speedZ;
-        this.quadSize = 0.1f * (this.random.nextFloat() * 2f);
+        originalDistance = new Vector3d(posX, posY, posZ).distanceTo(new Vector3d(finalX, finalY, finalZ));
+        this.finalX = finalX;
+        this.finalY = finalY;
+        this.finalZ = finalZ;
+        Vector3d speed = new Vector3d(finalX - posX, finalY - posY, finalZ - posZ).normalize();
+        this.xd = speed.x / 2f;
+        this.yd = speed.y / 2f;
+        this.zd = speed.z / 2f;
+        this.quadSize = 0.1f + 0.1f * (this.random.nextFloat() * 2f);
         this.rCol = data.getRed();
         this.gCol = data.getGreen();
         this.bCol = data.getBlue();
         //this.alpha = data.getAlpha();
-        this.lifetime = this.random.nextInt(30) + 20;
+        this.lifetime = 50;
         this.sprite = sprite;
         this.setSpriteFromAge(sprite);
+        this.hasPhysics = false;
     }
 
     @Override
@@ -48,16 +58,24 @@ public class HealParticle extends SpriteTexturedParticle {
         this.xo = this.x;
         this.yo = this.y;
         this.zo = this.z;
-        if (this.age++ >= this.lifetime) {
+        if (this.age++ >= this.lifetime || checkReached()) {
             this.remove();
         } else {
             this.move(this.xd, this.yd, this.zd);
         }
     }
 
+    private boolean checkReached(){
+        return (this.x < finalX + 0.2f && this.x > finalX - 0.2f) &&
+                (this.y < finalY + 0.2f && this.y > finalY - 0.2f) &&
+                (this.z < finalZ + 0.2f && this.z > finalZ - 0.2f);
+    }
+
     @Override
     public void setSpriteFromAge(IAnimatedSprite sprite) {
-        this.setSprite(sprite.get(MathHelper.floor(this.age/2f), this.lifetime));
+        double currentDistance = Math.sqrt(new Vector3d(x, y, z).distanceToSqr(finalX, finalY, finalZ));
+        this.setSprite(this.sprite.get((int) MathCalculations.map(currentDistance, 0, originalDistance, 0, lifetime), lifetime));
+        //this.setSprite(this.sprite.get(MathHelper.floor(this.age/2f), this.lifetime));
     }
 
     @Override

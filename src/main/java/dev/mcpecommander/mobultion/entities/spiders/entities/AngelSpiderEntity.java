@@ -2,6 +2,7 @@ package dev.mcpecommander.mobultion.entities.spiders.entities;
 
 import dev.mcpecommander.mobultion.entities.spiders.entityGoals.AngelSpiderHealGoal;
 import dev.mcpecommander.mobultion.entities.spiders.entityGoals.AngelSpiderTargetGoal;
+import dev.mcpecommander.mobultion.particles.HealParticle;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -12,7 +13,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.AnimationState;
@@ -72,11 +72,10 @@ public class AngelSpiderEntity extends MobultionSpiderEntity {
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
     {
         if(this.getTarget() != null){
-            if(level.isClientSide){
-                level.addParticle(ParticleTypes.END_ROD, this.getTarget().getX() + Math.cos(tickCount)/2d
-                        , this.getTarget().getY() + 1.5d + Math.random() * 0.5d - 0.25d
-                        , this.getTarget().getZ() + Math.sin(tickCount)/2d,
-                        0, -0.05d, 0);
+            if(tickCount % 3 == 0){
+                level.addParticle(new HealParticle.HealParticleData(1f, 1f, 1f, 1f),
+                        this.getX(), this.getEyeY(), this.getZ(),
+                        this.getTarget().getX(), this.getTarget().getEyeY(), this.getTarget().getZ());
             }
             if(event.getController().getCurrentAnimation() == null ||
                     (event.getController().getCurrentAnimation() != null &&
