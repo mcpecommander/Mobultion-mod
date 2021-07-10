@@ -32,4 +32,9 @@ public class GlassEndermanRenderer extends GeoEntityRenderer<GlassEndermanEntity
     public Color getRenderColor(GlassEndermanEntity animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn) {
         return animatable.getColor();
     }
+
+    @Override
+    protected float getDeathMaxRotation(GlassEndermanEntity entityLivingBaseIn) {
+        return 0f;
+    }
 }

@@ -93,6 +93,16 @@ public class WanderingEndermanEntity extends MobultionEndermanEntity {
                 .add(Attributes.MOVEMENT_SPEED, 0.3F).add(Attributes.FOLLOW_RANGE, 64.0D);
     }
 
+    @Override
+    protected int maxDeathAge() {
+        return 27;
+    }
+
+    @Override
+    protected void addDeathParticles() {
+
+    }
+
     /**
      * If the entity is immune to fire.
      * @return true if it is immune to fire.
@@ -236,6 +246,10 @@ public class WanderingEndermanEntity extends MobultionEndermanEntity {
      */
     private <E extends IAnimatable> PlayState shouldMove(AnimationEvent<E> event)
     {
+        if(isDeadOrDying()){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("death", false));
+            return PlayState.CONTINUE;
+        }
         if(event.isMoving()) {
             if(Objects.requireNonNull(getAttribute(Attributes.MOVEMENT_SPEED)).hasModifier(MobultionEndermanEntity.SPEED_MODIFIER_ATTACKING)) {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("running", true));
@@ -254,7 +268,7 @@ public class WanderingEndermanEntity extends MobultionEndermanEntity {
      */
     private <E extends IAnimatable> PlayState shouldAnimate(AnimationEvent<E> event)
     {
-        if(isCreepy()) {
+        if(isCreepy() && !isDeadOrDying()) {
             if(isCasting()){
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("attack", false));
             }else{

@@ -8,7 +8,9 @@ import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.EndermiteEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -72,6 +74,35 @@ public class MagmaEndermanEntity extends MobultionEndermanEntity{
     }
 
     /**
+     * The amount of ticks the entity ticks after it gets killed.
+     * @return an integer of total death ticks
+     */
+    @Override
+    protected int maxDeathAge() {
+        return 27;
+    }
+
+    /**
+     * Gets called every tick on the client side after the entity dies until its removed.
+     */
+    @Override
+    protected void addDeathParticles() {
+        if(this.deathTime >= 10 && this.deathTime < 20){
+            for(int i = 0; i < 10; i++) {
+                double finalX = this.getX() + Math.cos(random.nextFloat() * Math.PI * 2) * 2;
+                double finalY = this.getY(1f) + (random.nextFloat() * 2 - 1);
+                double finalZ = this.getZ() + Math.sin(random.nextFloat() * Math.PI * 2) * 2;
+                Vector3d speed = new Vector3d(finalX - this.getX(),
+                        finalY - getY(2f/3f),
+                        finalZ - this.getZ()).normalize();
+                this.level.addParticle(ParticleTypes.FLAME,
+                        this.getX(), getY(2f/3f), this.getZ(),
+                        speed.x/20f, speed.y/10f, speed.z/20f);
+            }
+        }
+    }
+
+    /**
      * Register the animation controller here and any other particle/sound listeners.
      * @param data: Animation data that adds animation controllers.
      */
@@ -97,6 +128,10 @@ public class MagmaEndermanEntity extends MobultionEndermanEntity{
      */
     private <E extends IAnimatable> PlayState shouldMove(AnimationEvent<E> event)
     {
+        if(isDeadOrDying()){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("death", false));
+            return PlayState.CONTINUE;
+        }
         if(event.isMoving()) {
             if(Objects.requireNonNull(getAttribute(Attributes.MOVEMENT_SPEED)).hasModifier(MobultionEndermanEntity.SPEED_MODIFIER_ATTACKING)) {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("running", true));
@@ -115,7 +150,7 @@ public class MagmaEndermanEntity extends MobultionEndermanEntity{
      */
     private <E extends IAnimatable> PlayState shouldAnimate(AnimationEvent<E> event)
     {
-        if(isCreepy()) {
+        if(isCreepy() && !isDeadOrDying()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("rage", true));
             return PlayState.CONTINUE;
         }

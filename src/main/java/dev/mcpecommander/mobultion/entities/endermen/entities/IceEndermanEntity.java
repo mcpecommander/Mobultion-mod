@@ -1,7 +1,7 @@
 package dev.mcpecommander.mobultion.entities.endermen.entities;
 
 import dev.mcpecommander.mobultion.entities.endermen.entityGoals.EndermanFindStaringPlayerGoal;
-import dev.mcpecommander.mobultion.particles.PortalParticle;
+import dev.mcpecommander.mobultion.particles.SnowFlakeParticle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -84,28 +84,33 @@ public class IceEndermanEntity extends MobultionEndermanEntity{
         data.addAnimationController(new AnimationController<>(this, "movement", 1, this::shouldMove));
     }
 
+    /**
+     * Gets called every tick on the client side after the entity dies until its removed.
+     */
     @Override
-    protected void tickDeath() {
-        ++this.deathTime;
-        if(this.deathTime >= 2 && this.deathTime < 24){
-            for(int i = 0; i < 2; ++i) {
-                double startX = this.getRandomX(5D);
-                double startY = this.getRandomY();
-                double startZ = this.getRandomZ(5D);
-                double finalY = this.getRandomY();//(this.getY() + (this.random.nextFloat() * 0.8f) + this.getBbHeight()/2f);
-                Vector3d speed = new Vector3d(this.getX() - startX,
-                        finalY - startY,
-                        this.getZ() - startZ).normalize();
-                this.level.addParticle(new PortalParticle.PortalParticleData((200f/255f),(66f/255f),(220f/255f),1f
-                        ,(float) this.getX(), (float)finalY, (float) this.getZ()),
-                        startX, startY, startZ,
+    protected void addDeathParticles() {
+        if(this.deathTime >= 10 && this.deathTime < 20){
+            for(int i = 0; i < 5; i++) {
+                double finalX = this.getX() + Math.cos(random.nextFloat() * Math.PI * 2) * 2;
+                double finalY = this.getY(1f) + (random.nextFloat() * 2 - 1);
+                double finalZ = this.getZ() + Math.sin(random.nextFloat() * Math.PI * 2) * 2;
+                Vector3d speed = new Vector3d(finalX - this.getX(),
+                        finalY - getY(2f/3f),
+                        finalZ - this.getZ()).normalize();
+                this.level.addParticle(new SnowFlakeParticle.SnowFlakeParticleData(1f, 1f, 1f, 1f),
+                        this.getX(), getY(2f/3f), this.getZ(),
                         speed.x/10f, speed.y/10f, speed.z/10f);
             }
         }
-        if (this.deathTime == 27) {
-            this.remove();
-        }
+    }
 
+    /**
+     * The amount of ticks the entity ticks after it gets killed.
+     * @return an integer of total death ticks
+     */
+    @Override
+    protected int maxDeathAge() {
+        return 27;
     }
 
     /**

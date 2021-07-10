@@ -17,5 +17,8 @@ public class MagmaEndermanRenderer extends GeoEntityRenderer<MagmaEndermanEntity
         this.addLayer(new EndermanMagmaLayer(this));
     }
 
-
+    @Override
+    protected float getDeathMaxRotation(MagmaEndermanEntity entityLivingBaseIn) {
+        return 0f;
+    }
 }

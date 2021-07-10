@@ -84,4 +84,8 @@ public class WanderingEndermanRenderer extends GeoEntityRenderer<WanderingEnderm
         super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
 
+    @Override
+    protected float getDeathMaxRotation(WanderingEndermanEntity entityLivingBaseIn) {
+        return 0f;
+    }
 }

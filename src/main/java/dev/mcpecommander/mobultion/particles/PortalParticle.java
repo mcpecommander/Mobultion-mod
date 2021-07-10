@@ -43,12 +43,15 @@ public class PortalParticle extends SpriteTexturedParticle {
         this.rCol = data.getRed();
         this.gCol = data.getGreen();
         this.bCol = data.getBlue();
-        this.lifetime = this.random.nextInt(30) + 40;
+        this.alpha = data.getAlpha();
+        this.lifetime = this.random.nextInt(30) + 20;
         this.sprite = sprite;
+        this.hasPhysics = false;
     }
 
     @Override
     public void tick() {
+        //System.out.println(this.quadSize + " " + this.checkReached());
         this.pickSprite(sprite);
         this.xo = this.x;
         this.yo = this.y;
@@ -56,8 +59,7 @@ public class PortalParticle extends SpriteTexturedParticle {
         if (this.age++ >= this.lifetime) {
             this.remove();
         } else {
-            //System.out.println(MathCalculations.map(age, 0f, lifetime, 1, 0f));
-            this.quadSize = oSize * MathCalculations.map(age, 0f, lifetime, 1f, 0.3f);
+            this.quadSize = (float) (oSize * MathCalculations.map(age, 0f, lifetime, 1f, 0.3f));
             if(checkReached()) return;
             this.move(this.xd, this.yd, this.zd);
             this.xd *= 1.05F;
@@ -75,7 +77,7 @@ public class PortalParticle extends SpriteTexturedParticle {
 
     @Override
     public IParticleRenderType getRenderType() {
-        return IParticleRenderType.PARTICLE_SHEET_LIT;
+        return alpha != 1.0f ? IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT : IParticleRenderType.PARTICLE_SHEET_LIT;
     }
 
     public static class Factory implements IParticleFactory<PortalParticle.PortalParticleData> {

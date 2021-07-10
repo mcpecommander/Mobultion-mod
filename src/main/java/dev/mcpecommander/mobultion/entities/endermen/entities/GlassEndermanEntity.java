@@ -2,6 +2,7 @@ package dev.mcpecommander.mobultion.entities.endermen.entities;
 
 import dev.mcpecommander.mobultion.entities.endermen.entityGoals.EndermanFindStaringPlayerGoal;
 import dev.mcpecommander.mobultion.entities.endermen.entityGoals.GlassEndermanShotsAttackGoal;
+import dev.mcpecommander.mobultion.particles.PortalParticle;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.SpawnReason;
@@ -17,6 +18,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
@@ -195,16 +197,6 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
     }
 
     /**
-     * Register the animation controller here and any other particle/sound listeners.
-     * @param data: Animation data that adds animation controllers.
-     */
-    @Override
-    public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<>(this, "controller", 1, this::shouldAnimate));
-        data.addAnimationController(new AnimationController<>(this, "movement", 1, this::shouldMove));
-    }
-
-    /**
      * Another update method for mobs that only ticks on the server, has multiple uses.
      */
     @Override
@@ -216,12 +208,57 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
     }
 
     /**
+     * The amount of ticks the entity ticks after it gets killed.
+     * @return an integer of total death ticks
+     */
+    @Override
+    protected int maxDeathAge() {
+        return 30;
+    }
+
+    /**
+     * Gets called every tick on the client side after the entity dies until its removed.
+     */
+    @Override
+    protected void addDeathParticles() {
+        if(this.deathTime == 25){
+            for(int i = 0; i < 40; i++) {
+                double finalX = this.getX() + Math.cos(random.nextFloat() * Math.PI * 2) * 2;
+                double finalY = this.getY(0.5f) + (random.nextFloat() * 2 - 1);
+                double finalZ = this.getZ() + Math.sin(random.nextFloat() * Math.PI * 2) * 2;
+                Vector3d speed = new Vector3d(finalX - this.getX(),
+                        finalY - getY(2f/3f),
+                        finalZ - this.getZ()).normalize();
+                this.level.addParticle(new PortalParticle.PortalParticleData((this.getColor().getRed()/255f),
+                                (this.getColor().getGreen()/255f), (this.getColor().getBlue()/255f),0.5f
+                                ,(float) finalX, (float) finalY, (float) finalZ),
+                        this.getX(), getY(2f/3f), this.getZ(),
+                        speed.x/20f, speed.y/20f, speed.z/20f);
+            }
+        }
+    }
+
+    /**
+     * Register the animation controller here and any other particle/sound listeners.
+     * @param data: Animation data that adds animation controllers.
+     */
+    @Override
+    public void registerControllers(AnimationData data) {
+        data.addAnimationController(new AnimationController<>(this, "controller", 1, this::shouldAnimate));
+        data.addAnimationController(new AnimationController<>(this, "movement", 1, this::shouldMove));
+    }
+
+    /**
      * The predicate for the movement animations.
      * @param event: The animation event that includes the bone animations and animation status
      * @return PlayState.CONTINUE or PlayState.STOP depending on which needed.
      */
     private <E extends IAnimatable> PlayState shouldMove(AnimationEvent<E> event)
     {
+        if(isDeadOrDying()){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("death", false));
+            return PlayState.CONTINUE;
+        }
         if(event.isMoving()) {
             if(Objects.requireNonNull(getAttribute(Attributes.MOVEMENT_SPEED)).hasModifier(MobultionEndermanEntity.SPEED_MODIFIER_ATTACKING)) {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("running", true));
@@ -240,6 +277,7 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
      */
     private <E extends IAnimatable> PlayState shouldAnimate(AnimationEvent<E> event)
     {
+        if(isDeadOrDying()) return PlayState.STOP;
         if(isCreepy()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("rage", true));
         }else{

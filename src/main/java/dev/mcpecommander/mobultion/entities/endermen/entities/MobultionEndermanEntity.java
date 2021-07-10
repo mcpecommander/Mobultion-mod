@@ -147,6 +147,29 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
     }
 
     /**
+     * The amount of ticks the entity ticks after it gets killed.
+     * @return an integer of total death ticks
+     */
+    protected abstract int maxDeathAge();
+
+    /**
+     * Gets called every tick on the client side after the entity dies until its removed.
+     */
+    protected abstract void addDeathParticles();
+
+    /**
+     * Gets called every tick after the entity dies until it's removed.
+     */
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        if(this.level.isClientSide) addDeathParticles();
+        if (this.deathTime == maxDeathAge()) {
+            this.remove();
+        }
+    }
+
+    /**
      * Is called whenever a data parameter is changed and is being synced between the server and client.
      * @param syncedParameter The parameter that is being synced.
      */
