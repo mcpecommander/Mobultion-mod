@@ -84,6 +84,8 @@ public class ClientSetup {
                 GlassShotRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.ICEENDERMAN.get(),
                 IceEndermanRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(Registration.GARDENERENDERMAN.get(),
+                GardenerEndermanRenderer::new);
     }
 
 
