@@ -13,11 +13,13 @@ import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.particles.ParticleType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import static dev.mcpecommander.mobultion.Mobultion.MODID;
 
@@ -25,46 +27,39 @@ import static dev.mcpecommander.mobultion.Mobultion.MODID;
 @Mod.EventBusSubscriber(modid = MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ClientSetup {
 
-    public static final ParticleType<HealParticle.HealParticleData> HEAL_PARTICLE_TYPE = new ParticleType<HealParticle.HealParticleData>(false, HealParticle.HealParticleData.DESERIALIZER) {
+    public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, MODID);
+
+    public static final RegistryObject<ParticleType<HealParticle.HealParticleData>> HEAL_PARTICLE_TYPE = PARTICLE_TYPES.register("healparticle", () -> new ParticleType<HealParticle.HealParticleData>(false, HealParticle.HealParticleData.DESERIALIZER) {
         @Override
         public Codec<HealParticle.HealParticleData> codec() {
             return HealParticle.HealParticleData.CODEC;
         }
-    };
-
-    public static final ParticleType<PortalParticle.PortalParticleData> PORTAL_PARTICLE_TYPE = new ParticleType<PortalParticle.PortalParticleData>(false, PortalParticle.PortalParticleData.DESERIALIZER) {
+    });
+    public static final RegistryObject<ParticleType<PortalParticle.PortalParticleData>> PORTAL_PARTICLE_TYPE = PARTICLE_TYPES.register("portalparticle", () -> new ParticleType<PortalParticle.PortalParticleData>(false, PortalParticle.PortalParticleData.DESERIALIZER) {
         @Override
         public Codec<PortalParticle.PortalParticleData> codec() {
             return PortalParticle.PortalParticleData.CODEC;
         }
-    };
+    });
 
-    public static final ParticleType<SnowFlakeParticle.SnowFlakeParticleData> SNOW_FLAKE_PARTICLE_TYPE = new ParticleType<SnowFlakeParticle.SnowFlakeParticleData>(false, SnowFlakeParticle.SnowFlakeParticleData.DESERIALIZER) {
+    public static final RegistryObject<ParticleType<SnowFlakeParticle.SnowFlakeParticleData>> SNOW_FLAKE_PARTICLE_TYPE = PARTICLE_TYPES.register("snowflakeparticle", () -> new ParticleType<SnowFlakeParticle.SnowFlakeParticleData>(false, SnowFlakeParticle.SnowFlakeParticleData.DESERIALIZER) {
         @Override
         public Codec<SnowFlakeParticle.SnowFlakeParticleData> codec() {
             return SnowFlakeParticle.SnowFlakeParticleData.CODEC;
         }
-    };
-
-    //FOR SOME FUCKING FORGE REASON using deferred registry makes the factory load before the sprite is loaded.
-    @SubscribeEvent
-    public static void registerParticles(RegistryEvent.Register<ParticleType<?>> event) {
-        event.getRegistry().register(HEAL_PARTICLE_TYPE.setRegistryName(MODID, "healparticle"));
-        event.getRegistry().register(PORTAL_PARTICLE_TYPE.setRegistryName(MODID, "portalparticle"));
-        event.getRegistry().register(SNOW_FLAKE_PARTICLE_TYPE.setRegistryName(MODID, "snowflakeparticle"));
-    }
+    });
 
     @SubscribeEvent
     public static void registerParticleFactories(ParticleFactoryRegisterEvent event){
-        Minecraft.getInstance().particleEngine.register(HEAL_PARTICLE_TYPE, HealParticle.Factory::new);
-        Minecraft.getInstance().particleEngine.register(PORTAL_PARTICLE_TYPE, PortalParticle.Factory::new);
-        Minecraft.getInstance().particleEngine.register(SNOW_FLAKE_PARTICLE_TYPE, SnowFlakeParticle.Factory::new);
+        Minecraft.getInstance().particleEngine.register(HEAL_PARTICLE_TYPE.get(), HealParticle.Factory::new);
+        Minecraft.getInstance().particleEngine.register(PORTAL_PARTICLE_TYPE.get(), PortalParticle.Factory::new);
+        Minecraft.getInstance().particleEngine.register(SNOW_FLAKE_PARTICLE_TYPE.get(), SnowFlakeParticle.Factory::new);
     }
 
     //Register rendering related stuff here.
     @SubscribeEvent
     public static void init(final FMLClientSetupEvent event) {
-        RenderTypeLookup.setRenderLayer(Registration.TESTBLOCK.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(Registration.HAYHAT_BLOCK.get(), RenderType.translucent());
         RenderingRegistry.registerEntityRenderingHandler(Registration.ANGELSPIDER.get(),
                 AngelSpiderRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.WITCHSPIDER.get(),

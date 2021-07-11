@@ -164,7 +164,7 @@ public class HealParticle extends SpriteTexturedParticle {
 
         @Override
         public ParticleType<?> getType() {
-            return ClientSetup.HEAL_PARTICLE_TYPE;
+            return ClientSetup.HEAL_PARTICLE_TYPE.get();
         }
 
         @Override

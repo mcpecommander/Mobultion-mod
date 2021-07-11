@@ -145,7 +145,7 @@ public class SnowFlakeParticle extends SpriteTexturedParticle {
 
         @Override
         public ParticleType<?> getType() {
-            return ClientSetup.SNOW_FLAKE_PARTICLE_TYPE;
+            return ClientSetup.SNOW_FLAKE_PARTICLE_TYPE.get();
         }
 
         @Override

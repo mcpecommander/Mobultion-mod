@@ -193,7 +193,7 @@ public class PortalParticle extends SpriteTexturedParticle {
 
         @Override
         public ParticleType<?> getType() {
-            return ClientSetup.PORTAL_PARTICLE_TYPE;
+            return ClientSetup.PORTAL_PARTICLE_TYPE.get();
         }
 
         @Override
