@@ -12,7 +12,10 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.SpawnEggItem;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -20,6 +23,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import static dev.mcpecommander.mobultion.Mobultion.MODID;
 
 /* Created by McpeCommander on 2021/06/18 */
+@Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class Registration {
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
     private static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, MODID);
@@ -32,6 +36,22 @@ public class Registration {
         ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
 
+    }
+
+    @SubscribeEvent
+    public static void registerEntityAttributes(EntityAttributeCreationEvent event) {
+        event.put(Registration.ANGELSPIDER.get(), AngelSpiderEntity.createAttributes().build());
+        event.put(Registration.WITCHSPIDER.get(), WitchSpiderEntity.createAttributes().build());
+        event.put(Registration.HYPNOSPIDER.get(), HypnoSpiderEntity.createAttributes().build());
+        event.put(Registration.MAGMASPIDER.get(), MagmaSpiderEntity.createAttributes().build());
+        event.put(Registration.WITHERSPIDER.get(), WitherSpiderEntity.createAttributes().build());
+        event.put(Registration.WITHERHEADBUG.get(), WitherHeadBugEntity.createAttributes().build());
+        event.put(Registration.JOKERSKELETON.get(), JokerSkeletonEntity.createAttributes().build());
+        event.put(Registration.WANDERINGENDERMAN.get(), WanderingEndermanEntity.createAttributes().build());
+        event.put(Registration.MAGMAENDERMAN.get(), MagmaEndermanEntity.createAttributes().build());
+        event.put(Registration.GLASSENDERMAN.get(), GlassEndermanEntity.createAttributes().build());
+        event.put(Registration.ICEENDERMAN.get(), IceEndermanEntity.createAttributes().build());
+        event.put(Registration.GARDENERENDERMAN.get(), IceEndermanEntity.createAttributes().build());
     }
 
     public static final RegistryObject<HayHatBlock> HAYHAT_BLOCK = BLOCKS.register("hayhatblock", HayHatBlock::new);
@@ -115,6 +135,13 @@ public class Registration {
     public static final RegistryObject<EntityType<IceEndermanEntity>> ICEENDERMAN = ENTITIES.register("iceenderman", () -> ICEENDERMAN_TYPE);
     public static final RegistryObject<Item> ICEENDERMAN_EGG = ITEMS.register("iceenderman_egg"
             , () -> new SpawnEggItem(ICEENDERMAN_TYPE, 0xC5F9F9, 0x30ABAB,
+                    (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
+
+    private static final EntityType<GardenerEndermanEntity> GARDENERENDERMAN_TYPE = EntityType.Builder.of(GardenerEndermanEntity::new, EntityClassification.CREATURE)
+            .sized(0.7F, 2.9F).build("gardenerenderman");
+    public static final RegistryObject<EntityType<GardenerEndermanEntity>> GARDENERENDERMAN = ENTITIES.register("gardenerenderman", () -> GARDENERENDERMAN_TYPE);
+    public static final RegistryObject<Item> GARDENERENDERMAN_EGG = ITEMS.register("gardenerenderman_egg"
+            , () -> new SpawnEggItem(GARDENERENDERMAN_TYPE, 0x1DE11D, 0xF97AD9,
                     (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
 
 

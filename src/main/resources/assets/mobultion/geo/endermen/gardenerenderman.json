@@ -1,0 +1,109 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.gardenerenderman",
+				"texture_width": 64,
+				"texture_height": 32,
+				"visible_bounds_width": 2,
+				"visible_bounds_height": 4.5,
+				"visible_bounds_offset": [0, 1.75, 0]
+			},
+			"bones": [
+				{
+					"name": "All",
+					"pivot": [0, 36, 0],
+					"cubes": [
+						{"origin": [-4, 30, -2], "size": [8, 12, 4], "uv": [32, 16], "mirror": true}
+					]
+				},
+				{
+					"name": "LeftArm",
+					"parent": "All",
+					"pivot": [4, 42, 0],
+					"cubes": [
+						{"origin": [4, 27, -1], "size": [2, 15, 2], "uv": [56, 0]}
+					]
+				},
+				{
+					"name": "LeftArm1",
+					"parent": "LeftArm",
+					"pivot": [5, 27, 0],
+					"cubes": [
+						{"origin": [4, 12, -1], "size": [2, 15, 2], "uv": [56, 15]}
+					]
+				},
+				{
+					"name": "RightArm",
+					"parent": "All",
+					"pivot": [-4, 42, 0],
+					"cubes": [
+						{"origin": [-6, 27, -1], "size": [2, 15, 2], "uv": [56, 0]}
+					]
+				},
+				{
+					"name": "RightArm1",
+					"parent": "RightArm",
+					"pivot": [-5, 27, 0],
+					"cubes": [
+						{"origin": [-6, 12, -1], "size": [2, 15, 2], "uv": [56, 15]}
+					]
+				},
+				{
+					"name": "RightLeg",
+					"parent": "All",
+					"pivot": [-2, 30, 0],
+					"cubes": [
+						{"origin": [-3, 15, -1], "size": [2, 15, 2], "uv": [56, 0]}
+					]
+				},
+				{
+					"name": "RightLeg1",
+					"parent": "RightLeg",
+					"pivot": [-2, 15, 0],
+					"cubes": [
+						{"origin": [-3, 0, -1], "size": [2, 15, 2], "uv": [56, 15]}
+					]
+				},
+				{
+					"name": "LeftLeg",
+					"parent": "All",
+					"pivot": [2, 30, 0],
+					"cubes": [
+						{"origin": [1, 15, -1], "size": [2, 15, 2], "uv": [56, 0]}
+					]
+				},
+				{
+					"name": "LeftLeg1",
+					"parent": "LeftLeg",
+					"pivot": [2, 15, 0],
+					"cubes": [
+						{"origin": [1, 0, -1], "size": [2, 15, 2], "uv": [56, 15]}
+					]
+				},
+				{
+					"name": "Head",
+					"parent": "All",
+					"pivot": [0, 42.1, 0]
+				},
+				{
+					"name": "Jaw",
+					"parent": "Head",
+					"pivot": [0, 43.1, 0],
+					"cubes": [
+						{"origin": [-4, 42.1, -4], "size": [8, 2, 8], "uv": [0, 22], "mirror": true}
+					]
+				},
+				{
+					"name": "UpperHead",
+					"parent": "Head",
+					"pivot": [0, 44.1, 4],
+					"cubes": [
+						{"origin": [-4, 44.1, -4], "size": [8, 6, 8], "uv": [0, 2], "mirror": true}
+					]
+				}
+			]
+		}
+	]
+}
