@@ -101,7 +101,8 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(1, new GlassEndermanShotsAttackGoal(this));
-        this.goalSelector.addGoal(2, new AvoidEntityGoal<PlayerEntity>(this, PlayerEntity.class, 8.0F, 0.6D, 1.2D, livingEntity -> getBalls() <= 1){
+        this.goalSelector.addGoal(2, new AvoidEntityGoal<PlayerEntity>(this, PlayerEntity.class,
+                8.0F, 0.6D, 1.2D, livingEntity -> getBalls() <= 1){
             @Override
             public void start() {
                 super.start();

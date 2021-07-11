@@ -54,7 +54,7 @@ public class IceEndermanEntity extends MobultionEndermanEntity{
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, false));
-        this.goalSelector.addGoal(3, new RandomWalkingGoal(this, 1.0D, 8));
+        this.goalSelector.addGoal(3, new RandomWalkingGoal(this, 1.0D, 80));
         this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
         this.targetSelector.addGoal(1, new EndermanFindStaringPlayerGoal(this, livingEntity -> true));

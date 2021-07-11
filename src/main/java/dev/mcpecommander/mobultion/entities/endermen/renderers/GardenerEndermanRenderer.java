@@ -2,6 +2,7 @@ package dev.mcpecommander.mobultion.entities.endermen.renderers;
 
 import dev.mcpecommander.mobultion.entities.endermen.entities.GardenerEndermanEntity;
 import dev.mcpecommander.mobultion.entities.endermen.layers.EndermanEyesLayer;
+import dev.mcpecommander.mobultion.entities.endermen.layers.GardenerEndermanItemLayer;
 import dev.mcpecommander.mobultion.entities.endermen.models.GardenerEndermanModel;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
@@ -13,6 +14,7 @@ public class GardenerEndermanRenderer extends GeoEntityRenderer<GardenerEnderman
         super(renderManager, new GardenerEndermanModel());
         this.shadowRadius = 0.5F;
         this.addLayer(new EndermanEyesLayer<>(this, "gardenerenderman"));
+        this.addLayer(new GardenerEndermanItemLayer(this));
     }
 
     @Override
