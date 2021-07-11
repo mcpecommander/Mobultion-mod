@@ -14,7 +14,7 @@ public class ModSetup {
     public static final ItemGroup ITEM_GROUP = new ItemGroup("mobultion") {
         @Override
         public ItemStack makeIcon() {
-            return new ItemStack(Registration.TESTBLOCK.get());
+            return new ItemStack(Registration.HAYHAT_BLOCK.get());
         }
     };
 
