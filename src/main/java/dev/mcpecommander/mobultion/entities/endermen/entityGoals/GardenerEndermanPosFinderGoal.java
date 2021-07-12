@@ -2,6 +2,7 @@ package dev.mcpecommander.mobultion.entities.endermen.entityGoals;
 
 import dev.mcpecommander.mobultion.entities.endermen.entities.GardenerEndermanEntity;
 import net.minecraft.entity.ai.RandomPositionGenerator;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
@@ -29,7 +30,7 @@ public class GardenerEndermanPosFinderGoal extends Goal {
     public void start() {
 
         for(int i = 0; i < 10; i++){
-            Vector3d vector = RandomPositionGenerator.getLandPos(owner, 20, 5);
+            Vector3d vector = RandomPositionGenerator.getLandPos(owner, (int) owner.getAttributeValue(Attributes.FOLLOW_RANGE), 5);
             if (vector != null){
                 BlockPos pos = new BlockPos(vector);
                 if(GardenerEndermanEntity.checkPos(owner.level, pos.below()) != GardenerEndermanGardenGoal.GardeningState.NONE){

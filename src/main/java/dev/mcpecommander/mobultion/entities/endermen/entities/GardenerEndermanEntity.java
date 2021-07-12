@@ -19,6 +19,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
@@ -56,11 +57,11 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
         this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, PlayerEntity.class, 8.0F, 0.6D, 1.2D));
         this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, MobultionEndermanEntity.class,
                 8.0F, 0.6D, 1.2D, livingEntity -> !(livingEntity instanceof GardenerEndermanEntity)));
-        this.goalSelector.addGoal(2, new GardenerEndermanGardenGoal(this, 20));
+        this.goalSelector.addGoal(2, new GardenerEndermanGardenGoal(this, 30));
         this.goalSelector.addGoal(3, new RandomWalkingGoal(this, 1.0D, 80));
         this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
-        this.targetSelector.addGoal(0, new GardenerEndermanPosFinderGoal(this, 20));
+        this.targetSelector.addGoal(0, new GardenerEndermanPosFinderGoal(this, 80));
 
     }
 
@@ -68,6 +69,22 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_GARDENING, false);
+    }
+
+    @Override
+    public void onSyncedDataUpdated(DataParameter<?> syncedParameter) {
+        super.onSyncedDataUpdated(syncedParameter);
+        if(syncedParameter.equals(DATA_GARDENING) && this.level.isClientSide){
+            if(isGardening()) {
+                for (int i = 0; i < 5; i++) {
+                    this.level.addParticle(ParticleTypes.HAPPY_VILLAGER,
+                            this.getX() + Math.cos(-yBodyRot) * 2 + (random.nextFloat() * 0.5f - 0.25f),
+                            this.getY() + (random.nextFloat() * 0.5f - 0.25f),
+                            this.getZ() + Math.sin(-yBodyRot) * 2 + (random.nextFloat() * 0.5f - 0.25f),
+                            0, -0.1, 0);
+                }
+            }
+        }
     }
 
     public void setGardening(boolean isGardening){
@@ -165,8 +182,10 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("move", true));
             }
             return PlayState.CONTINUE;
-        }else if(isGardening()){
+        }
+        if(isGardening()){
             event.getController().setAnimation(new AnimationBuilder().addAnimation("bonemeal", false));
+            return PlayState.CONTINUE;
         }
         return PlayState.STOP;
     }

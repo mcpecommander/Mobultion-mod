@@ -295,7 +295,6 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
 
     public boolean teleportAround(Entity target){
         Vector3d pos = RandomPositionGenerator.getLandPosTowards(this, 10, 7, target.position());
-        System.out.println(pos);
         if(pos != null){
             return this.teleport(pos.x, pos.y, pos.z);
         }
@@ -309,7 +308,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
      * @param z The z axis position of where to teleport to.
      * @return true if the entity can teleport to this position.
      */
-    private boolean teleport(double x, double y, double z) {
+    public boolean teleport(double x, double y, double z) {
         BlockPos.Mutable mutablePosition = new BlockPos.Mutable(x, y, z);
 
         while(mutablePosition.getY() > 0 && !this.level.getBlockState(mutablePosition).getMaterial().blocksMotion()) {
