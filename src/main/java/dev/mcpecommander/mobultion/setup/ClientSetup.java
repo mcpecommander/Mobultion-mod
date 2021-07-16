@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import dev.mcpecommander.mobultion.entities.endermen.renderers.*;
 import dev.mcpecommander.mobultion.entities.skeletons.renderers.JokerSkeletonRenderer;
 import dev.mcpecommander.mobultion.entities.spiders.renderers.*;
+import dev.mcpecommander.mobultion.particles.FlowerParticle;
 import dev.mcpecommander.mobultion.particles.HealParticle;
 import dev.mcpecommander.mobultion.particles.PortalParticle;
 import dev.mcpecommander.mobultion.particles.SnowFlakeParticle;
@@ -29,23 +30,38 @@ public class ClientSetup {
 
     public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, MODID);
 
-    public static final RegistryObject<ParticleType<HealParticle.HealParticleData>> HEAL_PARTICLE_TYPE = PARTICLE_TYPES.register("healparticle", () -> new ParticleType<HealParticle.HealParticleData>(false, HealParticle.HealParticleData.DESERIALIZER) {
+    public static final RegistryObject<ParticleType<HealParticle.HealParticleData>> HEAL_PARTICLE_TYPE =
+            PARTICLE_TYPES.register("healparticle", () -> new ParticleType<HealParticle.HealParticleData>(false,
+                    HealParticle.HealParticleData.DESERIALIZER) {
         @Override
         public Codec<HealParticle.HealParticleData> codec() {
             return HealParticle.HealParticleData.CODEC;
         }
     });
-    public static final RegistryObject<ParticleType<PortalParticle.PortalParticleData>> PORTAL_PARTICLE_TYPE = PARTICLE_TYPES.register("portalparticle", () -> new ParticleType<PortalParticle.PortalParticleData>(false, PortalParticle.PortalParticleData.DESERIALIZER) {
+    public static final RegistryObject<ParticleType<PortalParticle.PortalParticleData>> PORTAL_PARTICLE_TYPE =
+            PARTICLE_TYPES.register("portalparticle", () -> new ParticleType<PortalParticle.PortalParticleData>(false,
+                    PortalParticle.PortalParticleData.DESERIALIZER) {
         @Override
         public Codec<PortalParticle.PortalParticleData> codec() {
             return PortalParticle.PortalParticleData.CODEC;
         }
     });
 
-    public static final RegistryObject<ParticleType<SnowFlakeParticle.SnowFlakeParticleData>> SNOW_FLAKE_PARTICLE_TYPE = PARTICLE_TYPES.register("snowflakeparticle", () -> new ParticleType<SnowFlakeParticle.SnowFlakeParticleData>(false, SnowFlakeParticle.SnowFlakeParticleData.DESERIALIZER) {
+    public static final RegistryObject<ParticleType<SnowFlakeParticle.SnowFlakeParticleData>> SNOW_FLAKE_PARTICLE_TYPE =
+            PARTICLE_TYPES.register("snowflakeparticle", () -> new ParticleType<SnowFlakeParticle.SnowFlakeParticleData>(false,
+                    SnowFlakeParticle.SnowFlakeParticleData.DESERIALIZER) {
         @Override
         public Codec<SnowFlakeParticle.SnowFlakeParticleData> codec() {
             return SnowFlakeParticle.SnowFlakeParticleData.CODEC;
+        }
+    });
+
+    public static final RegistryObject<ParticleType<FlowerParticle.FlowerParticleData>> FLOWER_PARTICLE_TYPE =
+            PARTICLE_TYPES.register("flowerparticle", () -> new ParticleType<FlowerParticle.FlowerParticleData>(false,
+                    FlowerParticle.FlowerParticleData.DESERIALIZER) {
+        @Override
+        public Codec<FlowerParticle.FlowerParticleData> codec() {
+            return FlowerParticle.FlowerParticleData.CODEC;
         }
     });
 
@@ -54,6 +70,7 @@ public class ClientSetup {
         Minecraft.getInstance().particleEngine.register(HEAL_PARTICLE_TYPE.get(), HealParticle.Factory::new);
         Minecraft.getInstance().particleEngine.register(PORTAL_PARTICLE_TYPE.get(), PortalParticle.Factory::new);
         Minecraft.getInstance().particleEngine.register(SNOW_FLAKE_PARTICLE_TYPE.get(), SnowFlakeParticle.Factory::new);
+        Minecraft.getInstance().particleEngine.register(FLOWER_PARTICLE_TYPE.get(), FlowerParticle.Factory::new);
     }
 
     //Register rendering related stuff here.
