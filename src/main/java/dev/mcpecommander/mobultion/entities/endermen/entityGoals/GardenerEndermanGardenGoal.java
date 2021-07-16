@@ -1,57 +1,75 @@
 package dev.mcpecommander.mobultion.entities.endermen.entityGoals;
 
 import dev.mcpecommander.mobultion.entities.endermen.entities.GardenerEndermanEntity;
+import dev.mcpecommander.mobultion.entities.endermen.entities.MobultionEndermanEntity;
 import net.minecraft.block.*;
-import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.EnumSet;
+import java.util.Random;
 
 /* McpeCommander created on 11/07/2021 inside the package - dev.mcpecommander.mobultion.entities.endermen.entityGoals */
 public class GardenerEndermanGardenGoal extends Goal {
 
     GardenerEndermanEntity owner;
     World level;
-    BlockPos pos;
-    double smallestDistance, currentDistance;
-    int maxTeleports;
+    BlockPos pos, initialTeleportPos;
+
     GardeningState state;
     int maxDelay, delay;
-    int forgivnessTicks;
+
+    int forgivenessTicks, resetTicks;
+    double smallestDistance, currentDistance;
+
+    Random random;
+    int positionsReset;
 
     public GardenerEndermanGardenGoal(GardenerEndermanEntity owner, int delay){
         this.owner = owner;
         this.level = owner.level;
+        this.random = owner.getRandom();
         this.maxDelay = delay;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
     @Override
     public boolean canUse() {
-        if(owner.getTargetPos() != null && GardenerEndermanEntity.checkPos(level, owner.getTargetPos()) != GardeningState.NONE){
-            return owner.getNavigation().moveTo(getPathToNearbyBlock(owner.getTargetPos()), 1);
+        if(this.owner.getTargetPos() != null){
+            BlockPos pos = getCanTeleportToNearby(this.owner.getTargetPos());
+            if(pos != null){
+                initialTeleportPos = pos;
+                return true;
+            }
+            positionsReset++;
+        }
+        if(positionsReset > 50){
+            this.owner.setTargetPos(null);
+            positionsReset = 0;
         }
         return false;
     }
 
     @Override
     public boolean canContinueToUse() {
-        return this.owner.getNavigation().getPath() != null && owner.getTargetPos() != null && GardenerEndermanEntity.checkPos(level, owner.getTargetPos()) != GardeningState.NONE;
+        return this.owner.getNavigation().getPath() != null && owner.getTargetPos() != null &&
+                GardenerEndermanEntity.checkPos(level, owner.getTargetPos()) != GardeningState.NONE;
     }
 
     @Override
     public void start() {
+        System.out.println(this.owner.teleport(initialTeleportPos));
+        this.owner.getNavigation().moveTo(getPathToNearbyBlock(owner.getTargetPos()), 1);
+        this.owner.setDebugRoad(MobultionEndermanEntity.getPathNodes(owner));
         this.delay = 0;
         this.pos = owner.getTargetPos();
         this.state = GardenerEndermanEntity.checkPos(level, pos);
         this.smallestDistance = Double.MAX_VALUE;
-
+        resetTicks = 0;
     }
 
     @Override
@@ -61,18 +79,17 @@ public class GardenerEndermanGardenGoal extends Goal {
         this.owner.setTargetPos(null);
         this.smallestDistance = Double.MAX_VALUE;
         this.currentDistance = 0;
-        this.forgivnessTicks = 0;
+        this.forgivenessTicks = 0;
     }
 
     @Override
     public void tick() {
         this.owner.getLookControl().setLookAt(pos.getX(), pos.getY(), pos.getZ());
-        Path path = this.owner.getNavigation().getPath();
 
+        Path path = this.owner.getNavigation().getPath();
         if(path != null) {
             currentDistance = Math.sqrt(this.owner.distanceToSqr(this.owner.getNavigation().getTargetPos().getX(),
                     this.owner.getNavigation().getTargetPos().getY(), this.owner.getNavigation().getTargetPos().getZ()));
-
             if (path.isDone()) {
                 this.owner.setGardening(true);
                 if (delay++ > maxDelay) {
@@ -105,35 +122,38 @@ public class GardenerEndermanGardenGoal extends Goal {
                     this.owner.getNavigation().stop();
 
                 }
-            } else if (!path.canReach()) {
-                if(teleportNearby()){
-                    this.owner.getNavigation().moveTo(getPathToNearbyBlock(pos), 1);
-                    maxTeleports++;
-                }
-            }else{
+            } else{
                 checkStuck();
                 smallestDistance = Math.min(currentDistance, smallestDistance);
             }
         }
-        if(maxTeleports > 5){
-            this.owner.getNavigation().stop();
-        }
+
     }
 
-    private boolean teleportNearby(){
-        //this.owner.teleportAround()
-        Vector3d teleport = RandomPositionGenerator.getLandPosTowards(this.owner, 10, 7, new Vector3d(pos.getX(), pos.getY(), pos.getZ()));
-        if(teleport != null){
-            return this.owner.teleport(teleport.x, teleport.y, teleport.z);
-        }
-        return true;
-    }
+//    private boolean teleportNearby(){
+//        //this.owner.teleportAround()
+//        Vector3d teleport = RandomPositionGenerator.getLandPosTowards(this.owner, 10, 7,
+//                new Vector3d(pos.getX(), pos.getY(), pos.getZ()));
+//        if(teleport != null){
+//            return this.owner.teleport(teleport.x, teleport.y, teleport.z);
+//        }
+//        return true;
+//    }
 
     private void checkStuck(){
         if(currentDistance >= smallestDistance){
-            forgivnessTicks++;
+            System.out.println("why");
+            forgivenessTicks++;
+        }else{
+            resetTicks++;
+            if(resetTicks > 50){
+                System.out.println("yes");
+                resetTicks = 0;
+                forgivenessTicks = 0;
+            }
         }
-        if(forgivnessTicks > 50){
+        if(forgivenessTicks > 50){
+            System.out.println("fuck");
             this.owner.getNavigation().stop();
         }
     }
@@ -146,6 +166,26 @@ public class GardenerEndermanGardenGoal extends Goal {
                 if(path != null) return path;
             }
         }
+        return null;
+    }
+
+    private BlockPos getCanTeleportToNearby(BlockPos pos){
+        for(int i = 0; i < 10; i++){
+            BlockPos newPos = pos.offset((random.nextBoolean() ? -1 : 1) * (random.nextInt(7) + 3), 0,
+                    (random.nextBoolean() ? -1 : 1) * (random.nextInt(7) + 3));
+            if(this.owner.canTeleport(newPos.getX(), newPos.getY(), newPos.getZ())){
+                return newPos;
+            }
+        }
+//        for(int i = -8; i < 9; i++){
+//            for(int j = -8; j < 9; j++){
+//                if(i >= -3 && i <= 3 && j >= -3 && j <= 3) continue;
+//                BlockPos newPos = pos.offset(i, 0, j);
+//                if(this.owner.canTeleport(newPos.getX(), newPos.getY(), newPos.getZ())){
+//                    return newPos;
+//                }
+//            }
+//        }
         return null;
     }
 

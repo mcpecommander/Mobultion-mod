@@ -1,7 +1,9 @@
 package dev.mcpecommander.mobultion.entities.endermen.entities;
 
+import dev.mcpecommander.mobultion.Mobultion;
 import dev.mcpecommander.mobultion.entities.endermen.entityGoals.GardenerEndermanGardenGoal;
 import dev.mcpecommander.mobultion.entities.endermen.entityGoals.GardenerEndermanPosFinderGoal;
+import dev.mcpecommander.mobultion.particles.FlowerParticle;
 import dev.mcpecommander.mobultion.setup.Registration;
 import net.minecraft.block.*;
 import net.minecraft.entity.EntityType;
@@ -35,12 +37,15 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /* McpeCommander created on 11/07/2021 inside the package - dev.mcpecommander.mobultion.entities.endermen.entities */
 public class GardenerEndermanEntity extends MobultionEndermanEntity{
 
     private static final DataParameter<Boolean> DATA_GARDENING = EntityDataManager.defineId(GardenerEndermanEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<List<BlockPos>> DATA_DEBUG = EntityDataManager.defineId(GardenerEndermanEntity.class, Registration.BLOCKPOS_LIST);
     private BlockPos targetPos;
     /**
      * The animation factory, for more information check GeckoLib.
@@ -58,7 +63,13 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
         this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, MobultionEndermanEntity.class,
                 8.0F, 0.6D, 1.2D, livingEntity -> !(livingEntity instanceof GardenerEndermanEntity)));
         this.goalSelector.addGoal(2, new GardenerEndermanGardenGoal(this, 30));
-        this.goalSelector.addGoal(3, new RandomWalkingGoal(this, 1.0D, 80));
+        this.goalSelector.addGoal(3, new RandomWalkingGoal(this, 1.0D, 80){
+            @Override
+            public void start() {
+                super.start();
+                setDebugRoad(MobultionEndermanEntity.getPathNodes((MobultionEndermanEntity) this.mob));
+            }
+        });
         this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
         this.targetSelector.addGoal(0, new GardenerEndermanPosFinderGoal(this, 80));
@@ -66,9 +77,25 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
     }
 
     @Override
+    protected void customServerAiStep() {
+        super.customServerAiStep();
+
+    }
+
+    @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_GARDENING, false);
+        this.entityData.define(DATA_DEBUG, new ArrayList<>());
+    }
+
+    public void setDebugRoad(List<BlockPos> positions){
+        if(!Mobultion.DEBUG) return;
+        this.entityData.set(DATA_DEBUG, positions);
+    }
+
+    public List<BlockPos> getDebugRoad(){
+        return this.entityData.get(DATA_DEBUG);
     }
 
     @Override
@@ -144,6 +171,18 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
     @Override
     protected void addDeathParticles() {
 
+    }
+
+    @Override
+    protected void addAmbientParticles() {
+        if(tickCount % 2 == 0) return;
+        this.level.addParticle(new FlowerParticle.FlowerParticleData(1f,1f,1f,1f),
+                this.getRandomX(0.5D),
+                this.getRandomY() - 0.25D,
+                this.getRandomZ(0.5D),
+                this.random.nextDouble() * 0.1 - 0.05,
+                this.random.nextDouble() * 0.1 - 0.05,
+                this.random.nextDouble() * 0.1 - 0.05);
     }
 
     @Nullable

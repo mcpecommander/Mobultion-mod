@@ -24,6 +24,8 @@ import net.minecraft.world.server.ServerWorld;
 import software.bernie.geckolib3.core.IAnimatable;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /* McpeCommander created on 26/06/2021 inside the package - dev.mcpecommander.mobultion.entities.endermen.entities */
@@ -229,15 +231,24 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
         return 2.55F;
     }
 
+    protected void addAmbientParticles(){
+        for(int i = 0; i < 2; ++i) {
+            this.level.addParticle(ParticleTypes.PORTAL, this.getRandomX(0.5D),
+                    this.getRandomY() - 0.25D,
+                    this.getRandomZ(0.5D),
+                    (this.random.nextDouble() - 0.5D) * 2.0D,
+                    -this.random.nextDouble(),
+                    (this.random.nextDouble() - 0.5D) * 2.0D);
+        }
+    }
+
     /**
      * An update method within the tick method that updates somethings but not others. Not really obvious why it exists.
      */
     @Override
     public void aiStep() {
         if (this.level.isClientSide) {
-            for(int i = 0; i < 2; ++i) {
-                this.level.addParticle(ParticleTypes.PORTAL, this.getRandomX(0.5D), this.getRandomY() - 0.25D, this.getRandomZ(0.5D), (this.random.nextDouble() - 0.5D) * 2.0D, -this.random.nextDouble(), (this.random.nextDouble() - 0.5D) * 2.0D);
-            }
+            addAmbientParticles();
         }
 
         this.jumping = false;
@@ -319,9 +330,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
         boolean hasCollider = blockstate.getMaterial().blocksMotion();
         boolean isWater = blockstate.getFluidState().is(FluidTags.WATER);
         if (hasCollider && !isWater) {
-            net.minecraftforge.event.entity.living.EntityTeleportEvent.EnderEntity event = net.minecraftforge.event.ForgeEventFactory.onEnderTeleport(this, x, y, z);
-            if (event.isCanceled()) return false;
-            boolean canTransport = this.randomTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
+            boolean canTransport = this.randomTeleport(x, y, z, true);
             if (canTransport && !this.isSilent()) {
                 this.level.playSound(null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1.0F, 1.0F);
                 this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
@@ -330,6 +339,43 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
             return canTransport;
         }
         return false;
+    }
+
+    public boolean canTeleport(double x, double y, double z){
+        double oX = this.getX();
+        double oY = this.getY();
+        double oZ = this.getZ();
+        double d3 = y;
+        boolean flag = false;
+        BlockPos blockpos = new BlockPos(x, y, z);
+        World world = this.level;
+        if (world.hasChunkAt(blockpos)) {
+            boolean flag1 = false;
+
+            while(!flag1 && blockpos.getY() > 0) {
+                BlockPos blockpos1 = blockpos.below();
+                BlockState blockstate = world.getBlockState(blockpos1);
+                if (blockstate.getMaterial().blocksMotion()) {
+                    flag1 = true;
+                } else {
+                    --d3;
+                    blockpos = blockpos1;
+                }
+            }
+
+            if (flag1) {
+                this.teleportTo(x, d3, z);
+                if (world.noCollision(this) && !world.containsAnyLiquid(this.getBoundingBox())) {
+                    flag = true;
+                }
+            }
+        }
+        this.teleportTo(oX, oY, oZ);
+        return flag;
+    }
+
+    public boolean teleport(BlockPos pos){
+        return this.teleport(pos.getX(), pos.getY(), pos.getZ());
     }
 
     /**
@@ -413,4 +459,13 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
         this.entityData.set(DATA_STARED_AT, true);
     }
 
+    public static List<BlockPos> getPathNodes(MobultionEndermanEntity entity){
+        List<BlockPos> positions = new ArrayList<>();
+        if(entity.getNavigation().getPath() == null) return positions;
+        int size = entity.getNavigation().getPath().getNodeCount();
+        for(int i = 0; i < size; i++){
+            positions.add(entity.getNavigation().getPath().getNodePos(i));
+        }
+        return positions;
+    }
 }

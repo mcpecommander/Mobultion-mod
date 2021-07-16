@@ -12,13 +12,20 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.SpawnEggItem;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.datasync.IDataSerializer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DataSerializerEntry;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static dev.mcpecommander.mobultion.Mobultion.MODID;
 
@@ -28,6 +35,7 @@ public class Registration {
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
     private static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, MODID);
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
+    private static final DeferredRegister<DataSerializerEntry> DATA_SERIALIZER = DeferredRegister.create(ForgeRegistries.DATA_SERIALIZERS, MODID);
 
     public static void init() {
 
@@ -35,6 +43,7 @@ public class Registration {
         BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
         ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        DATA_SERIALIZER.register(FMLJavaModLoadingContext.get().getModEventBus());
 
     }
 
@@ -53,6 +62,33 @@ public class Registration {
         event.put(Registration.ICEENDERMAN.get(), IceEndermanEntity.createAttributes().build());
         event.put(Registration.GARDENERENDERMAN.get(), IceEndermanEntity.createAttributes().build());
     }
+
+    public static final IDataSerializer<List<BlockPos>> BLOCKPOS_LIST = new IDataSerializer<List<BlockPos>>() {
+        @Override
+        public void write(PacketBuffer buffer, List<BlockPos> list) {
+            buffer.writeInt(list.size());
+            for(BlockPos pos : list){
+                buffer.writeBlockPos(pos);
+            }
+        }
+
+        @Override
+        public List<BlockPos> read(PacketBuffer buffer) {
+            int size = buffer.readInt();
+            ArrayList<BlockPos> positions = new ArrayList<>();
+            for(int i = 0; i < size; i++){
+                positions.add(buffer.readBlockPos());
+            }
+            return positions;
+        }
+
+        @Override
+        public List<BlockPos> copy(List<BlockPos> list) {
+            return list;
+        }
+    };
+    private static final RegistryObject<DataSerializerEntry> BLOCKPOS_LIST_REGISTER = DATA_SERIALIZER.register("blocklist",
+            () -> new DataSerializerEntry(BLOCKPOS_LIST));
 
     public static final RegistryObject<HayHatBlock> HAYHAT_BLOCK = BLOCKS.register("hayhatblock", HayHatBlock::new);
     public static final RegistryObject<Item> HAYHATBLOCK_ITEM = ITEMS.register("hayhatblock", () -> new HayHatBlockItem(HAYHAT_BLOCK.get()));
