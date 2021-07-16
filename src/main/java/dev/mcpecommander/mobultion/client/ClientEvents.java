@@ -1,7 +1,7 @@
 package dev.mcpecommander.mobultion.client;
 
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -12,7 +12,7 @@ import static dev.mcpecommander.mobultion.Mobultion.MODID;
 public class ClientEvents {
 
     @SubscribeEvent
-    public static void renderDebug(RenderLivingEvent.Post event){
+    public static void renderDebug(RenderWorldLastEvent event){
 
     }
 

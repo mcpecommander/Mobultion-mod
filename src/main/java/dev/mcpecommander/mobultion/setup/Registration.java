@@ -8,6 +8,7 @@ import dev.mcpecommander.mobultion.items.HayHatBlockItem;
 import dev.mcpecommander.mobultion.items.ThunderStaffItem;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -15,6 +16,7 @@ import net.minecraft.item.SpawnEggItem;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.IDataSerializer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
@@ -60,7 +62,11 @@ public class Registration {
         event.put(Registration.MAGMAENDERMAN.get(), MagmaEndermanEntity.createAttributes().build());
         event.put(Registration.GLASSENDERMAN.get(), GlassEndermanEntity.createAttributes().build());
         event.put(Registration.ICEENDERMAN.get(), IceEndermanEntity.createAttributes().build());
+
         event.put(Registration.GARDENERENDERMAN.get(), IceEndermanEntity.createAttributes().build());
+        EntitySpawnPlacementRegistry.register(Registration.GARDENERENDERMAN.get(),
+                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+                GardenerEndermanEntity::checkMobSpawnRules);
     }
 
     public static final IDataSerializer<List<BlockPos>> BLOCKPOS_LIST = new IDataSerializer<List<BlockPos>>() {
@@ -101,6 +107,7 @@ public class Registration {
     public static final RegistryObject<Item> ANGELSPIDER_EGG = ITEMS.register("angelspider_egg"
             , () -> new SpawnEggItem(ANGELSPIDER_TYPE, 0xFFFFFF, 0xFFFF53,
                     (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
+
 
     private static final EntityType<WitchSpiderEntity> WITCHSPIDER_TYPE = EntityType.Builder.of(WitchSpiderEntity::new, EntityClassification.MONSTER)
             .sized(1.4f, 1f).build("witchspider");
@@ -179,6 +186,7 @@ public class Registration {
     public static final RegistryObject<Item> GARDENERENDERMAN_EGG = ITEMS.register("gardenerenderman_egg"
             , () -> new SpawnEggItem(GARDENERENDERMAN_TYPE, 0x1DE11D, 0xF97AD9,
                     (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
+
 
 
 }

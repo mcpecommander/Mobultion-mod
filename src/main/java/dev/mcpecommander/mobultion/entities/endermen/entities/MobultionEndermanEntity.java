@@ -231,6 +231,9 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
         return 2.55F;
     }
 
+    /**
+     * Gets called on the client side each tick to spawn ambient particles.
+     */
     protected void addAmbientParticles(){
         for(int i = 0; i < 2; ++i) {
             this.level.addParticle(ParticleTypes.PORTAL, this.getRandomX(0.5D),

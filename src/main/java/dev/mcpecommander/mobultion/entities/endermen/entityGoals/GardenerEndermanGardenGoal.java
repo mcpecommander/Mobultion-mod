@@ -20,7 +20,7 @@ public class GardenerEndermanGardenGoal extends Goal {
     World level;
     BlockPos pos, initialTeleportPos;
 
-    GardeningState state;
+    GardenerEndermanEntity.GardeningState state;
     int maxDelay, delay;
 
     int forgivenessTicks, resetTicks;
@@ -28,7 +28,7 @@ public class GardenerEndermanGardenGoal extends Goal {
 
     Random random;
     int positionsReset;
-
+    //TODO: make better
     public GardenerEndermanGardenGoal(GardenerEndermanEntity owner, int delay){
         this.owner = owner;
         this.level = owner.level;
@@ -57,24 +57,24 @@ public class GardenerEndermanGardenGoal extends Goal {
     @Override
     public boolean canContinueToUse() {
         return this.owner.getNavigation().getPath() != null && owner.getTargetPos() != null &&
-                GardenerEndermanEntity.checkPos(level, owner.getTargetPos()) != GardeningState.NONE;
+                GardenerEndermanEntity.checkPos(level, owner.getTargetPos()) != GardenerEndermanEntity.GardeningState.NONE;
     }
 
     @Override
     public void start() {
-        System.out.println(this.owner.teleport(initialTeleportPos));
+        this.owner.teleport(initialTeleportPos);
         this.owner.getNavigation().moveTo(getPathToNearbyBlock(owner.getTargetPos()), 1);
         this.owner.setDebugRoad(MobultionEndermanEntity.getPathNodes(owner));
         this.delay = 0;
         this.pos = owner.getTargetPos();
         this.state = GardenerEndermanEntity.checkPos(level, pos);
         this.smallestDistance = Double.MAX_VALUE;
-        resetTicks = 0;
+        this.resetTicks = 0;
     }
 
     @Override
     public void stop() {
-        this.state = GardeningState.NONE;
+        this.state = GardenerEndermanEntity.GardeningState.NONE;
         this.owner.setGardening(false);
         this.owner.setTargetPos(null);
         this.smallestDistance = Double.MAX_VALUE;
@@ -130,30 +130,17 @@ public class GardenerEndermanGardenGoal extends Goal {
 
     }
 
-//    private boolean teleportNearby(){
-//        //this.owner.teleportAround()
-//        Vector3d teleport = RandomPositionGenerator.getLandPosTowards(this.owner, 10, 7,
-//                new Vector3d(pos.getX(), pos.getY(), pos.getZ()));
-//        if(teleport != null){
-//            return this.owner.teleport(teleport.x, teleport.y, teleport.z);
-//        }
-//        return true;
-//    }
-
     private void checkStuck(){
         if(currentDistance >= smallestDistance){
-            System.out.println("why");
             forgivenessTicks++;
         }else{
             resetTicks++;
             if(resetTicks > 50){
-                System.out.println("yes");
                 resetTicks = 0;
                 forgivenessTicks = 0;
             }
         }
         if(forgivenessTicks > 50){
-            System.out.println("fuck");
             this.owner.getNavigation().stop();
         }
     }
@@ -177,19 +164,7 @@ public class GardenerEndermanGardenGoal extends Goal {
                 return newPos;
             }
         }
-//        for(int i = -8; i < 9; i++){
-//            for(int j = -8; j < 9; j++){
-//                if(i >= -3 && i <= 3 && j >= -3 && j <= 3) continue;
-//                BlockPos newPos = pos.offset(i, 0, j);
-//                if(this.owner.canTeleport(newPos.getX(), newPos.getY(), newPos.getZ())){
-//                    return newPos;
-//                }
-//            }
-//        }
         return null;
     }
 
-    public enum GardeningState{
-        BONEMEAL, WATERING, PLANTING, PICKING, NONE
-    }
 }

@@ -45,9 +45,9 @@ public class GardenerEndermanRenderer extends GeoEntityRenderer<GardenerEnderman
                            int packedOverlayIn, float red, float green, float blue, float partialTicks) {
         if(!Mobultion.DEBUG) return;
         List<BlockPos> positions = animatable.getDebugRoad();
-        //if(animatable.tickCount % 10 == 0)System.out.println(positions);
         stackIn.pushPose();
         IVertexBuilder builder = renderTypeBuffer.getBuffer(RenderType.LINES);
+
         stackIn.mulPose(new Quaternion(0,
                 180 + MathHelper.rotLerp(partialTicks, animatable.yBodyRotO, animatable.yBodyRot),
                 0, true));

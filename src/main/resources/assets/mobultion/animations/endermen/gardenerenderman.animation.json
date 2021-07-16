@@ -636,6 +636,52 @@
 					}
 				}
 			}
+		},
+		"derp": {
+			"loop": true,
+			"animation_length": 1.44,
+			"bones": {
+				"LeftArm": {
+					"rotation": {
+						"vector": ["math.cos(query.anim_time * 250) * 100", "math.sin(query.anim_time * 250) * 50", 0]
+					}
+				},
+				"LeftArm1": {
+					"rotation": {
+						"vector": ["math.sin(query.anim_time * 500) * 50", 0, 0]
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"vector": ["math.sin(-query.anim_time * 250) * 100", "math.sin(query.anim_time * 250) * 50", 0]
+					}
+				},
+				"RightArm1": {
+					"rotation": {
+						"vector": ["math.sin(query.anim_time * 500) * 50", 0, 0]
+					}
+				},
+				"RightLeg": {
+					"rotation": {
+						"vector": ["math.sin(query.anim_time * 750 + 180) * 50", 0, 0]
+					}
+				},
+				"LeftLeg": {
+					"rotation": {
+						"vector": ["math.sin(query.anim_time * 750) * 50", 0, 0]
+					}
+				},
+				"Head": {
+					"rotation": {
+						"vector": ["math.cos(query.anim_time * 750) * 50", "math.cos(query.anim_time * 500) * 10", "math.sin(query.anim_time * 500) * 10"]
+					}
+				},
+				"UpperHead": {
+					"rotation": {
+						"vector": [-47.5, 0, 0]
+					}
+				}
+			}
 		}
 	}
 }

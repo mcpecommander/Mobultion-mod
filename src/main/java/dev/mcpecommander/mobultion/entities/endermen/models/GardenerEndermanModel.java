@@ -56,6 +56,7 @@ public class GardenerEndermanModel extends AnimatedGeoModel<GardenerEndermanEnti
     @Override
     public void setLivingAnimations(GardenerEndermanEntity entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
+        if (entity.isDerping()) return;
         IBone head = this.getAnimationProcessor().getBone("Head");
 
         assert customPredicate != null;

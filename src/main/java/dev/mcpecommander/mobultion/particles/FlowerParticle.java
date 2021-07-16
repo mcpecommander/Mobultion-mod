@@ -31,7 +31,7 @@ public class FlowerParticle extends SpriteTexturedParticle {
         this.xd = speedX;
         this.yd = speedY;
         this.zd = speedZ;
-        this.quadSize = 0.075f * (this.random.nextFloat() * 2f);
+        this.quadSize = 0.075f * (this.random.nextFloat() * 2f) * data.getSize();
         this.rCol = data.getRed();
         this.gCol = data.getGreen();
         this.bCol = data.getBlue();
@@ -92,13 +92,15 @@ public class FlowerParticle extends SpriteTexturedParticle {
                 float blue = (float) reader.readDouble();
                 reader.expect(' ');
                 float alpha = (float) reader.readDouble();
-                return new FlowerParticle.FlowerParticleData(red, green, blue, alpha);
+                reader.expect(' ');
+                float size = (float) reader.readDouble();
+                return new FlowerParticle.FlowerParticleData(red, green, blue, alpha, size);
             }
 
             @Override
             public FlowerParticle.FlowerParticleData fromNetwork(ParticleType<FlowerParticle.FlowerParticleData> particleType, PacketBuffer buffer) {
                 return new FlowerParticle.FlowerParticleData(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(),
-                        buffer.readFloat());
+                        buffer.readFloat(), buffer.readFloat());
             }
         };
 
@@ -106,20 +108,22 @@ public class FlowerParticle extends SpriteTexturedParticle {
                 Codec.FLOAT.fieldOf("red").forGetter(data -> data.red),
                 Codec.FLOAT.fieldOf("green").forGetter(data -> data.green),
                 Codec.FLOAT.fieldOf("blue").forGetter(data -> data.blue),
-                Codec.FLOAT.fieldOf("alpha").forGetter(data -> data.alpha)
+                Codec.FLOAT.fieldOf("alpha").forGetter(data -> data.alpha),
+                Codec.FLOAT.fieldOf("size").forGetter(data -> data.size)
         ).apply(instance, FlowerParticle.FlowerParticleData::new));
 
         private final float red;
         private final float green;
         private final float blue;
         private final float alpha;
+        private final float size;
 
-        public FlowerParticleData(float red, float green, float blue, float alpha) {
+        public FlowerParticleData(float red, float green, float blue, float alpha, float size) {
             this.red = red;
             this.green = green;
             this.blue = blue;
             this.alpha = MathHelper.clamp(alpha, 0.01f, 4.0f);
-
+            this.size = size;
         }
 
         @OnlyIn(Dist.CLIENT)
@@ -142,6 +146,10 @@ public class FlowerParticle extends SpriteTexturedParticle {
             return this.alpha;
         }
 
+        @OnlyIn(Dist.CLIENT)
+        public float getSize() {
+            return this.size;
+        }
 
         @Override
         public ParticleType<?> getType() {
@@ -154,12 +162,13 @@ public class FlowerParticle extends SpriteTexturedParticle {
             buffer.writeFloat(this.green);
             buffer.writeFloat(this.blue);
             buffer.writeFloat(this.alpha);
+            buffer.writeFloat(this.size);
         }
 
         @Override
         public String writeToString() {
-            return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f", Registry.PARTICLE_TYPE.getKey(this.getType()),
-                    this.red, this.green, this.blue, this.alpha);
+            return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f %.2f", Registry.PARTICLE_TYPE.getKey(this.getType()),
+                    this.red, this.green, this.blue, this.alpha, this.size);
         }
     }
 }

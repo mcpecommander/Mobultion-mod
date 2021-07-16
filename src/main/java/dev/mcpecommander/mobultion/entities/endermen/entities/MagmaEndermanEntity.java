@@ -1,7 +1,9 @@
 package dev.mcpecommander.mobultion.entities.endermen.entities;
 
 import dev.mcpecommander.mobultion.entities.endermen.entityGoals.EndermanFindStaringPlayerGoal;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
@@ -100,6 +102,16 @@ public class MagmaEndermanEntity extends MobultionEndermanEntity{
                         speed.x/20f, speed.y/10f, speed.z/20f);
             }
         }
+    }
+
+    public boolean doHurtTarget(Entity target) {
+        if (super.doHurtTarget(target)) {
+            if (target instanceof LivingEntity) {
+                target.setSecondsOnFire(5 * (int) this.level.getCurrentDifficultyAt(this.blockPosition()).getSpecialMultiplier() + 1);
+            }
+            return true;
+        }
+        return false;
     }
 
     /**
