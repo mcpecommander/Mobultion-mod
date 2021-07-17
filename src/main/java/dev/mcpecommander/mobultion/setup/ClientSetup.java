@@ -11,7 +11,9 @@ import dev.mcpecommander.mobultion.particles.SnowFlakeParticle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.particles.ParticleType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -77,6 +79,13 @@ public class ClientSetup {
     @SubscribeEvent
     public static void init(final FMLClientSetupEvent event) {
         RenderTypeLookup.setRenderLayer(Registration.HAYHAT_BLOCK.get(), RenderType.translucent());
+
+        ItemModelsProperties.register(Registration.FORESTBOW.get(), new ResourceLocation(MODID, "pull"),
+                (stack, world, entity) -> entity != null && entity.getUseItem() == stack ?
+                        (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / 20.0F : 0);
+        ItemModelsProperties.register(Registration.FORESTBOW.get(), new ResourceLocation(MODID, "pulling"),
+                (stack, world, entity) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+
         RenderingRegistry.registerEntityRenderingHandler(Registration.ANGELSPIDER.get(),
                 AngelSpiderRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.WITCHSPIDER.get(),

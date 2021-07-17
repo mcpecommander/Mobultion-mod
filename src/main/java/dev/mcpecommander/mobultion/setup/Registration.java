@@ -4,6 +4,7 @@ import dev.mcpecommander.mobultion.blocks.HayHatBlock;
 import dev.mcpecommander.mobultion.entities.endermen.entities.*;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.JokerSkeletonEntity;
 import dev.mcpecommander.mobultion.entities.spiders.entities.*;
+import dev.mcpecommander.mobultion.items.ForestBowItem;
 import dev.mcpecommander.mobultion.items.HayHatBlockItem;
 import dev.mcpecommander.mobultion.items.ThunderStaffItem;
 import net.minecraft.block.Block;
@@ -100,6 +101,7 @@ public class Registration {
     public static final RegistryObject<Item> HAYHATBLOCK_ITEM = ITEMS.register("hayhatblock", () -> new HayHatBlockItem(HAYHAT_BLOCK.get()));
 
     public static final RegistryObject<ThunderStaffItem> THUNDERSTAFF = ITEMS.register("thunderstaffitem", ThunderStaffItem::new);
+    public static final RegistryObject<ForestBowItem> FORESTBOW = ITEMS.register("forestbowitem", ForestBowItem::new);
 
     private static final EntityType<AngelSpiderEntity> ANGELSPIDER_TYPE = EntityType.Builder.of(AngelSpiderEntity::new, EntityClassification.MONSTER)
             .sized(1.4f, 1f).build("angelspider");
