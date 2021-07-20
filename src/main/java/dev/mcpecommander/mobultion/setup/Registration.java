@@ -1,6 +1,7 @@
 package dev.mcpecommander.mobultion.setup;
 
 import dev.mcpecommander.mobultion.blocks.HayHatBlock;
+import dev.mcpecommander.mobultion.effects.JokernessEffect;
 import dev.mcpecommander.mobultion.entities.endermen.entities.*;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.JokerSkeletonEntity;
 import dev.mcpecommander.mobultion.entities.spiders.entities.*;
@@ -16,6 +17,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.IDataSerializer;
+import net.minecraft.potion.Effect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
@@ -35,9 +37,11 @@ import static dev.mcpecommander.mobultion.Mobultion.MODID;
 /* Created by McpeCommander on 2021/06/18 */
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class Registration {
+
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
     private static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, MODID);
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
+    private static final DeferredRegister<Effect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, MODID);
     private static final DeferredRegister<DataSerializerEntry> DATA_SERIALIZER = DeferredRegister.create(ForgeRegistries.DATA_SERIALIZERS, MODID);
 
     public static void init() {
@@ -46,6 +50,7 @@ public class Registration {
         BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
         ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        EFFECTS.register(FMLJavaModLoadingContext.get().getModEventBus());
         DATA_SERIALIZER.register(FMLJavaModLoadingContext.get().getModEventBus());
 
     }
@@ -189,6 +194,7 @@ public class Registration {
             , () -> new SpawnEggItem(GARDENERENDERMAN_TYPE, 0x1DE11D, 0xF97AD9,
                     (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
 
+    public static final RegistryObject<Effect> JOKERNESS_EFFECT = EFFECTS.register("jokernesseffect", JokernessEffect::new);
 
 
 }
