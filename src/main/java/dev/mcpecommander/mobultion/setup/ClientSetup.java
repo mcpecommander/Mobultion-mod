@@ -2,6 +2,7 @@ package dev.mcpecommander.mobultion.setup;
 
 import com.mojang.serialization.Codec;
 import dev.mcpecommander.mobultion.entities.endermen.renderers.*;
+import dev.mcpecommander.mobultion.entities.skeletons.renderers.BaseSkeletonRenderer;
 import dev.mcpecommander.mobultion.entities.skeletons.renderers.JokerSkeletonRenderer;
 import dev.mcpecommander.mobultion.entities.spiders.renderers.*;
 import dev.mcpecommander.mobultion.particles.FlowerParticle;
@@ -100,6 +101,10 @@ public class ClientSetup {
                 WitherHeadBugRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.JOKERSKELETON.get(),
                 JokerSkeletonRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(Registration.CORRUPTEDSKELETON.get(),
+                BaseSkeletonRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(Registration.VAMPIRESKELETON.get(),
+                BaseSkeletonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.WANDERINGENDERMAN.get(),
                 WanderingEndermanRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.MAGMAENDERMAN.get(),

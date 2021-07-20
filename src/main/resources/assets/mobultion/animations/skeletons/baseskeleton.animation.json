@@ -307,14 +307,14 @@
 							"vector": [0, 0, 0]
 						},
 						"1.44": {
-							"vector": [0, -14, 0],
+							"vector": [0, -17, 0],
 							"easing": "easeInCirc"
 						},
 						"1.72": {
-							"vector": [0, -18.7, 12]
+							"vector": [0, -20.7, 12]
 						},
 						"1.92": {
-							"vector": [0, -20, 14],
+							"vector": [0, -20, 13],
 							"easing": "easeInCirc"
 						}
 					}
@@ -329,7 +329,7 @@
 							"easing": "easeInExpo"
 						},
 						"1.24": {
-							"vector": [-112.5, 0, 0],
+							"vector": [-107.5, 0, 0],
 							"easing": "easeInCirc"
 						}
 					},
@@ -338,7 +338,7 @@
 							"vector": [0, 0, 0]
 						},
 						"1.04": {
-							"vector": [0, -6.1, 0],
+							"vector": [0, -8.1, 0],
 							"easing": "easeInCirc"
 						}
 					}
@@ -447,7 +447,7 @@
 							"vector": [0, 0, 0]
 						},
 						"0.8": {
-							"vector": [45, 0, 52.5],
+							"vector": [45, 0, 62.5],
 							"easing": "easeInExpo"
 						}
 					},
@@ -471,9 +471,20 @@
 							"vector": [3.26, -1.31, -3.93]
 						},
 						"0.8": {
-							"vector": [5.7, -6, -8.1],
+							"vector": [5.7, -7, -8.1],
 							"easing": "easeInCirc"
 						}
+					}
+				}
+			}
+		},
+		"test": {
+			"loop": true,
+			"animation_length": 1,
+			"bones": {
+				"Head": {
+					"scale": {
+						"vector": [0, 0, 0]
 					}
 				}
 			}

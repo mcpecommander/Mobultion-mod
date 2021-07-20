@@ -1,6 +1,7 @@
 package dev.mcpecommander.mobultion;
 
-import dev.mcpecommander.mobultion.client.ClientEvents;
+import dev.mcpecommander.mobultion.events.ClientEvents;
+import dev.mcpecommander.mobultion.events.CommonEvents;
 import dev.mcpecommander.mobultion.setup.ClientSetup;
 import dev.mcpecommander.mobultion.setup.ModSetup;
 import dev.mcpecommander.mobultion.setup.Registration;
@@ -34,6 +35,7 @@ public class Mobultion
         FMLJavaModLoadingContext.get().getModEventBus().register(Registration.class);
         if(DEBUG) MinecraftForge.EVENT_BUS.register(ClientEvents.class);
         MinecraftForge.EVENT_BUS.register(SpawnSetup.class);
+        MinecraftForge.EVENT_BUS.register(CommonEvents.class);
 
     }
 
