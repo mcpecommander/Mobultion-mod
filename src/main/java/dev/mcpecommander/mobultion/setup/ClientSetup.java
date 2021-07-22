@@ -105,6 +105,10 @@ public class ClientSetup {
                 BaseSkeletonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.VAMPIRESKELETON.get(),
                 BaseSkeletonRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(Registration.FORESTSKELETON.get(),
+                BaseSkeletonRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(Registration.SHAMANSKELETON.get(),
+                BaseSkeletonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.WANDERINGENDERMAN.get(),
                 WanderingEndermanRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.MAGMAENDERMAN.get(),

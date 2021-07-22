@@ -3,9 +3,7 @@ package dev.mcpecommander.mobultion.setup;
 import dev.mcpecommander.mobultion.blocks.HayHatBlock;
 import dev.mcpecommander.mobultion.effects.JokernessEffect;
 import dev.mcpecommander.mobultion.entities.endermen.entities.*;
-import dev.mcpecommander.mobultion.entities.skeletons.entities.CorruptedSkeletonEntity;
-import dev.mcpecommander.mobultion.entities.skeletons.entities.JokerSkeletonEntity;
-import dev.mcpecommander.mobultion.entities.skeletons.entities.VampireSkeletonEntity;
+import dev.mcpecommander.mobultion.entities.skeletons.entities.*;
 import dev.mcpecommander.mobultion.entities.spiders.entities.*;
 import dev.mcpecommander.mobultion.items.ForestBowItem;
 import dev.mcpecommander.mobultion.items.HayHatBlockItem;
@@ -68,6 +66,8 @@ public class Registration {
         event.put(Registration.JOKERSKELETON.get(), JokerSkeletonEntity.createAttributes().build());
         event.put(Registration.CORRUPTEDSKELETON.get(), CorruptedSkeletonEntity.createAttributes().build());
         event.put(Registration.VAMPIRESKELETON.get(), VampireSkeletonEntity.createAttributes().build());
+        event.put(Registration.FORESTSKELETON.get(), ForestSkeletonEntity.createAttributes().build());
+        event.put(Registration.SHAMANSKELETON.get(), ShamanSkeletonEntity.createAttributes().build());
         event.put(Registration.WANDERINGENDERMAN.get(), WanderingEndermanEntity.createAttributes().build());
         event.put(Registration.MAGMAENDERMAN.get(), MagmaEndermanEntity.createAttributes().build());
         event.put(Registration.GLASSENDERMAN.get(), GlassEndermanEntity.createAttributes().build());
@@ -171,6 +171,20 @@ public class Registration {
     public static final RegistryObject<EntityType<VampireSkeletonEntity>> VAMPIRESKELETON = ENTITIES.register("vampireskeleton", () -> VAMPIRESKELETON_TYPE);
     public static final RegistryObject<Item> VAMPIRESKELETON_EGG = ITEMS.register("vampireskeleton_egg"
             , () -> new SpawnEggItem(VAMPIRESKELETON_TYPE, 0xBB8A8A, 0x540D0D,
+                    (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
+
+    private static final EntityType<ForestSkeletonEntity> FORESTSKELETON_TYPE = EntityType.Builder.of(ForestSkeletonEntity::new, EntityClassification.MONSTER)
+            .sized(0.6F, 1.99F).build("forestskeleton");
+    public static final RegistryObject<EntityType<ForestSkeletonEntity>> FORESTSKELETON = ENTITIES.register("forestskeleton", () -> FORESTSKELETON_TYPE);
+    public static final RegistryObject<Item> FORESTSKELETON_EGG = ITEMS.register("forestskeleton_egg"
+            , () -> new SpawnEggItem(FORESTSKELETON_TYPE, 0x38761D, 0x93C47D,
+                    (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
+
+    private static final EntityType<ShamanSkeletonEntity> SHAMANSKELETON_TYPE = EntityType.Builder.of(ShamanSkeletonEntity::new, EntityClassification.MONSTER)
+            .sized(0.6F, 1.99F).build("shamanskeleton");
+    public static final RegistryObject<EntityType<ShamanSkeletonEntity>> SHAMANSKELETON = ENTITIES.register("shamanskeleton", () -> SHAMANSKELETON_TYPE);
+    public static final RegistryObject<Item> SHAMANSKELETON_EGG = ITEMS.register("shamanskeleton_egg"
+            , () -> new SpawnEggItem(SHAMANSKELETON_TYPE, 0x050572, 0x741B47,
                     (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
 
     private static final EntityType<WanderingEndermanEntity> WANDERINGENDERMAN_TYPE = EntityType.Builder.of(WanderingEndermanEntity::new, EntityClassification.MONSTER)

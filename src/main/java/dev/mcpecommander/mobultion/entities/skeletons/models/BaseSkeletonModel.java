@@ -38,7 +38,7 @@ public class BaseSkeletonModel<T extends MobultionSkeletonEntity> extends Animat
         }else if(entity instanceof VampireSkeletonEntity){
             return new ResourceLocation(MODID, "textures/entity/skeletons/vampireskeleton.png");
         }
-        return new ResourceLocation(MODID, "textures/entity/skeletons/jokerskeleton.png");
+        return new ResourceLocation(MODID, "textures/entity/skeletons/baseskeleton.png");
     }
 
     /**
