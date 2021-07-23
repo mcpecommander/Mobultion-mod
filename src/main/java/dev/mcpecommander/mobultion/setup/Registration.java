@@ -7,6 +7,7 @@ import dev.mcpecommander.mobultion.entities.skeletons.entities.*;
 import dev.mcpecommander.mobultion.entities.spiders.entities.*;
 import dev.mcpecommander.mobultion.items.ForestBowItem;
 import dev.mcpecommander.mobultion.items.HayHatBlockItem;
+import dev.mcpecommander.mobultion.items.HeartArrowItem;
 import dev.mcpecommander.mobultion.items.ThunderStaffItem;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityClassification;
@@ -63,11 +64,14 @@ public class Registration {
         event.put(Registration.MAGMASPIDER.get(), MagmaSpiderEntity.createAttributes().build());
         event.put(Registration.WITHERSPIDER.get(), WitherSpiderEntity.createAttributes().build());
         event.put(Registration.WITHERHEADBUG.get(), WitherHeadBugEntity.createAttributes().build());
+
         event.put(Registration.JOKERSKELETON.get(), JokerSkeletonEntity.createAttributes().build());
         event.put(Registration.CORRUPTEDSKELETON.get(), CorruptedSkeletonEntity.createAttributes().build());
         event.put(Registration.VAMPIRESKELETON.get(), VampireSkeletonEntity.createAttributes().build());
         event.put(Registration.FORESTSKELETON.get(), ForestSkeletonEntity.createAttributes().build());
         event.put(Registration.SHAMANSKELETON.get(), ShamanSkeletonEntity.createAttributes().build());
+        event.put(Registration.MAGMASKELETON.get(), MagmaSkeletonEntity.createAttributes().build());
+
         event.put(Registration.WANDERINGENDERMAN.get(), WanderingEndermanEntity.createAttributes().build());
         event.put(Registration.MAGMAENDERMAN.get(), MagmaEndermanEntity.createAttributes().build());
         event.put(Registration.GLASSENDERMAN.get(), GlassEndermanEntity.createAttributes().build());
@@ -111,6 +115,7 @@ public class Registration {
 
     public static final RegistryObject<ThunderStaffItem> THUNDERSTAFF = ITEMS.register("thunderstaffitem", ThunderStaffItem::new);
     public static final RegistryObject<ForestBowItem> FORESTBOW = ITEMS.register("forestbowitem", ForestBowItem::new);
+    public static final RegistryObject<HeartArrowItem> HEARTARROW_ITEM = ITEMS.register("heartarrowitem", HeartArrowItem::new);
 
     private static final EntityType<AngelSpiderEntity> ANGELSPIDER_TYPE = EntityType.Builder.of(AngelSpiderEntity::new, EntityClassification.MONSTER)
             .sized(1.4f, 1f).build("angelspider");
@@ -148,9 +153,8 @@ public class Registration {
             , () -> new SpawnEggItem(WITHERSPIDER_TYPE, 0x666666, 0x444444,
                     (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
 
-    private static final EntityType<WitherHeadBugEntity> WITHERHEADBUG_TYPE = EntityType.Builder.of(WitherHeadBugEntity::new, EntityClassification.MONSTER)
-            .sized(0.7f, 0.7f).build("witherheadbug");
-    public static final RegistryObject<EntityType<WitherHeadBugEntity>> WITHERHEADBUG = ENTITIES.register("witherheadbug", () -> WITHERHEADBUG_TYPE);
+    public static final RegistryObject<EntityType<WitherHeadBugEntity>> WITHERHEADBUG = ENTITIES.register("witherheadbug", () -> EntityType.Builder.of(WitherHeadBugEntity::new, EntityClassification.MONSTER)
+            .sized(0.7f, 0.7f).build("witherheadbug"));
 
     private static final EntityType<JokerSkeletonEntity> JOKERSKELETON_TYPE = EntityType.Builder.of(JokerSkeletonEntity::new, EntityClassification.MONSTER)
             .sized(0.6F, 1.99F).build("jokerskeleton");
@@ -158,6 +162,9 @@ public class Registration {
     public static final RegistryObject<Item> JOKERSKELETON_EGG = ITEMS.register("jokerskeleton_egg"
             , () -> new SpawnEggItem(JOKERSKELETON_TYPE, 0xFF0000, 0xFFFF00,
                     (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
+    public static final RegistryObject<EntityType<HeartArrowEntity>> HEARTARROW = ENTITIES.register("heartarrow", () -> EntityType.Builder.of(HeartArrowEntity::new, EntityClassification.MISC)
+            .sized(0.5F, 0.5F).build("heartarrow"));
+
 
     private static final EntityType<CorruptedSkeletonEntity> CORRUPTEDSKELETON_TYPE = EntityType.Builder.of(CorruptedSkeletonEntity::new, EntityClassification.MONSTER)
             .sized(0.6F, 1.99F).build("corruptedskeleton");
@@ -187,6 +194,13 @@ public class Registration {
             , () -> new SpawnEggItem(SHAMANSKELETON_TYPE, 0x050572, 0x741B47,
                     (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
 
+    private static final EntityType<MagmaSkeletonEntity> MAGMASKELETON_TYPE = EntityType.Builder.of(MagmaSkeletonEntity::new, EntityClassification.MONSTER)
+            .sized(0.6F, 1.99F).build("magmaskeleton");
+    public static final RegistryObject<EntityType<MagmaSkeletonEntity>> MAGMASKELETON = ENTITIES.register("magmaskeleton", () -> MAGMASKELETON_TYPE);
+    public static final RegistryObject<Item> MAGMASKELETON_EGG = ITEMS.register("magmaskeleton_egg"
+            , () -> new SpawnEggItem(MAGMASKELETON_TYPE, 0x811616, 0xFD1D1D,
+                    (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
+
     private static final EntityType<WanderingEndermanEntity> WANDERINGENDERMAN_TYPE = EntityType.Builder.of(WanderingEndermanEntity::new, EntityClassification.MONSTER)
             .sized(0.7F, 2.9F).build("wanderingenderman");
     public static final RegistryObject<EntityType<WanderingEndermanEntity>> WANDERINGENDERMAN = ENTITIES.register("wanderingenderman", () -> WANDERINGENDERMAN_TYPE);
@@ -208,9 +222,8 @@ public class Registration {
             , () -> new SpawnEggItem(GLASSENDERMAN_TYPE, 0x2D2C2F, 0x535056,
                     (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
 
-    private static final EntityType<GlassShotEntity> GLASSESHOT_TYPE = EntityType.Builder.of((EntityType.IFactory<GlassShotEntity>) GlassShotEntity::new, EntityClassification.MISC)
-            .sized(0.5F, 0.5F).clientTrackingRange(8).setUpdateInterval(1).build("glassshot");
-    public static final RegistryObject<EntityType<GlassShotEntity>> GLASSSHOT = ENTITIES.register("glassshot", () -> GLASSESHOT_TYPE);
+    public static final RegistryObject<EntityType<GlassShotEntity>> GLASSSHOT = ENTITIES.register("glassshot", () -> EntityType.Builder.of((EntityType.IFactory<GlassShotEntity>) GlassShotEntity::new, EntityClassification.MISC)
+            .sized(0.5F, 0.5F).clientTrackingRange(8).setUpdateInterval(1).build("glassshot"));
 
     private static final EntityType<IceEndermanEntity> ICEENDERMAN_TYPE = EntityType.Builder.of(IceEndermanEntity::new, EntityClassification.MONSTER)
             .sized(0.7F, 2.9F).build("iceenderman");

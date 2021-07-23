@@ -477,17 +477,6 @@
 					}
 				}
 			}
-		},
-		"test": {
-			"loop": true,
-			"animation_length": 1,
-			"bones": {
-				"Head": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				}
-			}
 		}
 	}
 }
