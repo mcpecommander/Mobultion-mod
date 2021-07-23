@@ -99,6 +99,7 @@ public class ClientSetup {
                 WitherSpiderRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.WITHERHEADBUG.get(),
                 WitherHeadBugRenderer::new);
+
         RenderingRegistry.registerEntityRenderingHandler(Registration.JOKERSKELETON.get(),
                 JokerSkeletonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.CORRUPTEDSKELETON.get(),
@@ -109,6 +110,9 @@ public class ClientSetup {
                 BaseSkeletonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.SHAMANSKELETON.get(),
                 BaseSkeletonRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(Registration.MAGMASKELETON.get(),
+                BaseSkeletonRenderer::new);
+
         RenderingRegistry.registerEntityRenderingHandler(Registration.WANDERINGENDERMAN.get(),
                 WanderingEndermanRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.MAGMAENDERMAN.get(),

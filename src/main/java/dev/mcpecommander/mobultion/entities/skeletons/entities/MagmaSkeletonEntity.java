@@ -1,0 +1,63 @@
+package dev.mcpecommander.mobultion.entities.skeletons.entities;
+
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.IRangedAttackMob;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifierMap;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
+
+/* McpeCommander created on 22/07/2021 inside the package - dev.mcpecommander.mobultion.entities.skeletons.entities */
+public class MagmaSkeletonEntity extends MobultionSkeletonEntity implements IRangedAttackMob {
+
+    private final AnimationFactory factory = new AnimationFactory(this);
+
+    public MagmaSkeletonEntity(EntityType<? extends MobultionSkeletonEntity> type, World world) {
+        super(type, world);
+    }
+
+    public static AttributeModifierMap.MutableAttribute createAttributes() {
+        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D);
+    }
+
+    @Override
+    protected boolean isSunBurnTick() {
+        return false;
+    }
+
+    @Override
+    public void performRangedAttack(LivingEntity shooter, float power) {
+        ItemStack itemstack = this.getProjectile(this.getItemInHand(Hand.MAIN_HAND));
+        AbstractArrowEntity arrow = this.getArrow(itemstack, power);
+        double d0 = shooter.getX() - this.getX();
+        double d1 = shooter.getY(1d/3d) - arrow.getY();
+        double d2 = shooter.getZ() - this.getZ();
+        //Calculates the horizontal distance to add a bit of lift to the arrow to simulate real life height adjustment
+        //for far away targets.
+        double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
+        //1.6 is the vector scaling factor which in turn translates into speed.
+        //The last parameter is the error scale. 0 = exact shot.
+        arrow.shoot(d0, d1 + d3 * 0.2d, d2, 1.6F,
+                12 - this.level.getCurrentDifficultyAt(blockPosition()).getSpecialMultiplier() * 12);
+        this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        this.level.addFreshEntity(arrow);
+    }
+
+    @Override
+    public void registerControllers(AnimationData data) {
+
+    }
+
+    @Override
+    public AnimationFactory getFactory() {
+        return this.factory;
+    }
+}

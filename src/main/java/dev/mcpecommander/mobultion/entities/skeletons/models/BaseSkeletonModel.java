@@ -1,6 +1,7 @@
 package dev.mcpecommander.mobultion.entities.skeletons.models;
 
 import dev.mcpecommander.mobultion.entities.skeletons.entities.CorruptedSkeletonEntity;
+import dev.mcpecommander.mobultion.entities.skeletons.entities.MagmaSkeletonEntity;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.MobultionSkeletonEntity;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.VampireSkeletonEntity;
 import net.minecraft.util.ResourceLocation;
@@ -37,6 +38,8 @@ public class BaseSkeletonModel<T extends MobultionSkeletonEntity> extends Animat
             return new ResourceLocation(MODID, "textures/entity/skeletons/corruptedskeleton.png");
         }else if(entity instanceof VampireSkeletonEntity){
             return new ResourceLocation(MODID, "textures/entity/skeletons/vampireskeleton.png");
+        }else if(entity instanceof MagmaSkeletonEntity){
+            return new ResourceLocation(MODID, "textures/entity/skeletons/magmaskeleton.png");
         }
         return new ResourceLocation(MODID, "textures/entity/skeletons/baseskeleton.png");
     }
