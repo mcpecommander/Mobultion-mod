@@ -84,7 +84,7 @@ public class ThunderStaffItem extends Item implements IAnimatable, ISyncable {
                 }
 
                 world.addFreshEntity(entity);
-                ((PlayerEntity) holder).getCooldowns().addCooldown(this, 2);
+                ((PlayerEntity) holder).getCooldowns().addCooldown(this, 200);
             }
 
 
