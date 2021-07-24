@@ -116,6 +116,7 @@ public class Registration {
     public static final RegistryObject<ThunderStaffItem> THUNDERSTAFF = ITEMS.register("thunderstaffitem", ThunderStaffItem::new);
     public static final RegistryObject<ForestBowItem> FORESTBOW = ITEMS.register("forestbowitem", ForestBowItem::new);
     public static final RegistryObject<HeartArrowItem> HEARTARROW_ITEM = ITEMS.register("heartarrowitem", HeartArrowItem::new);
+    public static final RegistryObject<Item> CORRUPTEDBONE = ITEMS.register("corruptedboneitem", () -> new Item(new Item.Properties().tab(ModSetup.ITEM_GROUP)));
 
     private static final EntityType<AngelSpiderEntity> ANGELSPIDER_TYPE = EntityType.Builder.of(AngelSpiderEntity::new, EntityClassification.MONSTER)
             .sized(1.4f, 1f).build("angelspider");
@@ -123,7 +124,6 @@ public class Registration {
     public static final RegistryObject<Item> ANGELSPIDER_EGG = ITEMS.register("angelspider_egg"
             , () -> new SpawnEggItem(ANGELSPIDER_TYPE, 0xFFFFFF, 0xFFFF53,
                     (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
-
 
     private static final EntityType<WitchSpiderEntity> WITCHSPIDER_TYPE = EntityType.Builder.of(WitchSpiderEntity::new, EntityClassification.MONSTER)
             .sized(1.4f, 1f).build("witchspider");
@@ -164,7 +164,6 @@ public class Registration {
                     (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
     public static final RegistryObject<EntityType<HeartArrowEntity>> HEARTARROW = ENTITIES.register("heartarrow", () -> EntityType.Builder.of(HeartArrowEntity::new, EntityClassification.MISC)
             .sized(0.5F, 0.5F).build("heartarrow"));
-
 
     private static final EntityType<CorruptedSkeletonEntity> CORRUPTEDSKELETON_TYPE = EntityType.Builder.of(CorruptedSkeletonEntity::new, EntityClassification.MONSTER)
             .sized(0.6F, 1.99F).build("corruptedskeleton");
