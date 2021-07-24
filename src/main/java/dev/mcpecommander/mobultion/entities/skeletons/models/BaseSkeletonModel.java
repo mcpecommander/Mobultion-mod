@@ -70,5 +70,15 @@ public class BaseSkeletonModel<T extends MobultionSkeletonEntity> extends Animat
         head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
         head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
 
+        if(entity instanceof MagmaSkeletonEntity){
+            IBone heart = this.getAnimationProcessor().getBone("Heart");
+            float scale = (float) Math.abs( 0.2f * (4f/Math.PI) * ( Math.sin(Math.PI*entity.tickCount%20) +
+                                (1f/3f * Math.sin(3*Math.PI*entity.tickCount%20)) +
+                                (1f/5f * Math.sin(5*Math.PI*entity.tickCount%20))));
+            heart.setScaleX(1 + scale);
+            heart.setScaleY(1 + scale);
+            heart.setScaleZ(1 + scale);
+        }
+
     }
 }

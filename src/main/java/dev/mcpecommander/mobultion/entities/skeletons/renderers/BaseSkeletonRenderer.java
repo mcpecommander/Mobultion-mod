@@ -3,6 +3,7 @@ package dev.mcpecommander.mobultion.entities.skeletons.renderers;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.MobultionSkeletonEntity;
 import dev.mcpecommander.mobultion.entities.skeletons.layers.ForestCameoLayer;
 import dev.mcpecommander.mobultion.entities.skeletons.layers.ShamanRobeLayer;
+import dev.mcpecommander.mobultion.entities.skeletons.layers.SkeletonMagmaLayer;
 import dev.mcpecommander.mobultion.entities.skeletons.models.BaseSkeletonModel;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
@@ -15,5 +16,6 @@ public class BaseSkeletonRenderer<T extends MobultionSkeletonEntity> extends Geo
         this.shadowRadius = 0.5F;
         this.addLayer(new ForestCameoLayer<>(this));
         this.addLayer(new ShamanRobeLayer<>(this));
+        this.addLayer(new SkeletonMagmaLayer<>(this));
     }
 }
