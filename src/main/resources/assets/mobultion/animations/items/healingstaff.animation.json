@@ -1,0 +1,21 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"rotate": {
+			"loop": true,
+			"animation_length": 10,
+			"bones": {
+				"GemHolder": {
+					"rotation": {
+						"vector": [0, "query.anim_time * 36", 0]
+					}
+				},
+				"Gem": {
+					"rotation": {
+						"vector": ["-35.2644 - query.anim_time * 18", "30 - query.anim_time * 36", 35.26439]
+					}
+				}
+			}
+		}
+	}
+}

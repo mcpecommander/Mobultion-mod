@@ -5,10 +5,7 @@ import dev.mcpecommander.mobultion.effects.JokernessEffect;
 import dev.mcpecommander.mobultion.entities.endermen.entities.*;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.*;
 import dev.mcpecommander.mobultion.entities.spiders.entities.*;
-import dev.mcpecommander.mobultion.items.ForestBowItem;
-import dev.mcpecommander.mobultion.items.HayHatBlockItem;
-import dev.mcpecommander.mobultion.items.HeartArrowItem;
-import dev.mcpecommander.mobultion.items.ThunderStaffItem;
+import dev.mcpecommander.mobultion.items.*;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
@@ -117,6 +114,7 @@ public class Registration {
     public static final RegistryObject<ForestBowItem> FORESTBOW = ITEMS.register("forestbowitem", ForestBowItem::new);
     public static final RegistryObject<HeartArrowItem> HEARTARROW_ITEM = ITEMS.register("heartarrowitem", HeartArrowItem::new);
     public static final RegistryObject<Item> CORRUPTEDBONE = ITEMS.register("corruptedboneitem", () -> new Item(new Item.Properties().tab(ModSetup.ITEM_GROUP)));
+    public static final RegistryObject<HealingStaffItem> HEALINGSTAFF = ITEMS.register("healingstaffitem", HealingStaffItem::new);
 
     private static final EntityType<AngelSpiderEntity> ANGELSPIDER_TYPE = EntityType.Builder.of(AngelSpiderEntity::new, EntityClassification.MONSTER)
             .sized(1.4f, 1f).build("angelspider");
