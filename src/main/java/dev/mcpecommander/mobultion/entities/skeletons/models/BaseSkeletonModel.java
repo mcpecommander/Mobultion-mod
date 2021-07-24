@@ -5,6 +5,8 @@ import dev.mcpecommander.mobultion.entities.skeletons.entities.MagmaSkeletonEnti
 import dev.mcpecommander.mobultion.entities.skeletons.entities.MobultionSkeletonEntity;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.VampireSkeletonEntity;
 import net.minecraft.util.ResourceLocation;
+import software.bernie.geckolib3.core.AnimationState;
+import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
@@ -70,6 +72,19 @@ public class BaseSkeletonModel<T extends MobultionSkeletonEntity> extends Animat
         head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
         head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
 
+        AnimationController controller = entity.getFactory().getOrCreateAnimationData(entity.getId())
+                .getAnimationControllers().get("controller");
+        if(controller.getCurrentAnimation() == null || controller.getAnimationState() == AnimationState.Stopped){
+            IBone rightArm = this.getAnimationProcessor().getBone("RightArm");
+            IBone leftArm = this.getAnimationProcessor().getBone("LeftArm");
+            IBone rightArm1 = this.getAnimationProcessor().getBone("RightArm1");
+            IBone leftArm1 = this.getAnimationProcessor().getBone("LeftArm1");
+            rightArm.setRotationX((float) (Math.sin(entity.tickCount/10F) * 4 * Math.PI / 180F));
+            leftArm.setRotationX((float) (Math.sin(entity.tickCount/10F + Math.PI) * 4 * Math.PI / 180F));
+            rightArm1.setRotationX((float) Math.abs(Math.sin(entity.tickCount/10F) * 6 * Math.PI / 180F));
+            leftArm1.setRotationX((float) Math.abs(Math.sin(entity.tickCount/10F + Math.PI) * 6 * Math.PI / 180F));
+        }
+
         if(entity instanceof MagmaSkeletonEntity){
             IBone heart = this.getAnimationProcessor().getBone("Heart");
             float scale = (float) Math.abs( 0.2f * (4f/Math.PI) * ( Math.sin(Math.PI*entity.tickCount%20) +
@@ -79,6 +94,8 @@ public class BaseSkeletonModel<T extends MobultionSkeletonEntity> extends Animat
             heart.setScaleY(1 + scale);
             heart.setScaleZ(1 + scale);
         }
+
+
 
     }
 }

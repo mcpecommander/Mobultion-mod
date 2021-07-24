@@ -2,6 +2,7 @@ package dev.mcpecommander.mobultion.entities.skeletons.renderers;
 
 import dev.mcpecommander.mobultion.entities.skeletons.entities.MobultionSkeletonEntity;
 import dev.mcpecommander.mobultion.entities.skeletons.layers.ForestCameoLayer;
+import dev.mcpecommander.mobultion.entities.skeletons.layers.BoneHoldingLayer;
 import dev.mcpecommander.mobultion.entities.skeletons.layers.ShamanRobeLayer;
 import dev.mcpecommander.mobultion.entities.skeletons.layers.SkeletonMagmaLayer;
 import dev.mcpecommander.mobultion.entities.skeletons.models.BaseSkeletonModel;
@@ -17,5 +18,7 @@ public class BaseSkeletonRenderer<T extends MobultionSkeletonEntity> extends Geo
         this.addLayer(new ForestCameoLayer<>(this));
         this.addLayer(new ShamanRobeLayer<>(this));
         this.addLayer(new SkeletonMagmaLayer<>(this));
+        this.addLayer(new BoneHoldingLayer<>(this));
+
     }
 }

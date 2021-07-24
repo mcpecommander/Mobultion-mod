@@ -259,6 +259,7 @@
 		},
 		"aim": {
 			"loop": true,
+			"animation_length": 0.04,
 			"bones": {
 				"LeftArm": {
 					"rotation": {
@@ -473,6 +474,68 @@
 						"0.8": {
 							"vector": [5.7, -7, -8.1],
 							"easing": "easeInCirc"
+						}
+					}
+				}
+			}
+		},
+		"melee": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.6,
+			"bones": {
+				"LeftArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.36": {
+							"vector": [5, 0, -5]
+						},
+						"0.6": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"LeftArm1": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.36": {
+							"vector": [0, 0, 10]
+						},
+						"0.6": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.24": {
+							"vector": [-92.5, 62.5, 32.5],
+							"easing": "easeInSine"
+						},
+						"0.6": {
+							"vector": [-80, 12.5, -17.5],
+							"easing": "easeInExpo"
+						}
+					}
+				},
+				"RightArm1": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.24": {
+							"vector": [0, 32.5, -45],
+							"easing": "easeInSine"
+						},
+						"0.6": {
+							"vector": [45, 12.5, -45],
+							"easing": "easeInExpo"
 						}
 					}
 				}

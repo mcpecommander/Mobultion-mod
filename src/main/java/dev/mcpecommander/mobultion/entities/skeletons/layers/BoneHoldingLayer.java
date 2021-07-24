@@ -1,7 +1,8 @@
-package dev.mcpecommander.mobultion.entities.endermen.layers;
+package dev.mcpecommander.mobultion.entities.skeletons.layers;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import dev.mcpecommander.mobultion.entities.endermen.entities.GardenerEndermanEntity;
+import dev.mcpecommander.mobultion.entities.skeletons.entities.CorruptedSkeletonEntity;
+import dev.mcpecommander.mobultion.entities.skeletons.entities.MobultionSkeletonEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
@@ -19,21 +20,22 @@ import software.bernie.geckolib3.util.RenderUtils;
 import static dev.mcpecommander.mobultion.Mobultion.MODID;
 
 /* McpeCommander created on 11/07/2021 inside the package - dev.mcpecommander.mobultion.entities.endermen.layers */
-public class GardenerEndermanItemLayer extends GeoLayerRenderer<GardenerEndermanEntity> {
+public class BoneHoldingLayer<T extends MobultionSkeletonEntity> extends GeoLayerRenderer<T> {
 
-    private static final ResourceLocation GARDENER_MODEL = new ResourceLocation(MODID, "geo/endermen/gardenerenderman.json");
-    private ItemStack mainHand, helmet;
+    private static final ResourceLocation SKELETON_MODEL = new ResourceLocation(MODID, "geo/skeletons/baseskeleton.json");
 
-    public GardenerEndermanItemLayer(IGeoRenderer<GardenerEndermanEntity> entityRendererIn) {
+    private ItemStack mainHand;
+
+    public BoneHoldingLayer(IGeoRenderer<T> entityRendererIn) {
         super(entityRendererIn);
     }
 
     @Override
-    public void render(MatrixStack matrix, IRenderTypeBuffer renderBuffer, int packedLight, GardenerEndermanEntity entity,
+    public void render(MatrixStack matrix, IRenderTypeBuffer renderBuffer, int packedLight, T entity,
                        float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        if(!(entity instanceof CorruptedSkeletonEntity)) return;
         this.mainHand = entity.getItemBySlot(EquipmentSlotType.MAINHAND);
-        this.helmet = entity.getItemBySlot(EquipmentSlotType.HEAD);
-        GeoModel model = this.getEntityModel().getModel(GARDENER_MODEL);
+        GeoModel model = this.getEntityModel().getModel(SKELETON_MODEL);
         for (GeoBone group : model.topLevelBones) {
             renderRecursively(group, matrix, renderBuffer, packedLight, GeoEntityRenderer.getPackedOverlay(entity, 0));
         }
@@ -51,35 +53,23 @@ public class GardenerEndermanItemLayer extends GeoLayerRenderer<GardenerEnderman
         RenderUtils.rotate(bone, stack);
         RenderUtils.scale(bone, stack);
         RenderUtils.moveBackFromPivot(bone, stack);
-        if(bone.getName().equals("Holder")){
+        if(bone.getName().equals("RightArm1")){
             stack.pushPose();
             //You'll need to play around with these to get item to render in the correct orientation
-            stack.mulPose(Vector3f.XP.rotationDegrees(-75));
-            stack.mulPose(Vector3f.YP.rotationDegrees(0));
-            stack.mulPose(Vector3f.ZP.rotationDegrees(0));
+            stack.mulPose(Vector3f.XP.rotationDegrees(90));
+            stack.mulPose(Vector3f.YP.rotationDegrees(-90));
+            stack.mulPose(Vector3f.ZP.rotationDegrees(40));
             //You'll need to play around with this to render the item in the correct spot.
-            stack.translate(0.3D, 0.2D, 0.8D);
+            stack.translate(-0.8D, 0.2D, -0.45D);
             //Sets the scaling of the item.
-            stack.scale(1.0f, 1.0f, 1.0f);
+            stack.scale(1.5f, 1.0f, 1.5f);
             // Change mainHand to predefined Itemstack and TransformType to what transform you would want to use.
             Minecraft.getInstance().getItemRenderer().renderStatic(mainHand, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND,
                     packedLightIn, packedOverlayIn, stack, renderBuffer);
             stack.popPose();
-        }
-        if(bone.getName().equals("UpperHead")){
-            stack.pushPose();
-            //You'll need to play around with these to get item to render in the correct orientation
-            stack.mulPose(Vector3f.XP.rotationDegrees(0));
-            stack.mulPose(Vector3f.YP.rotationDegrees(0));
-            stack.mulPose(Vector3f.ZP.rotationDegrees(0));
-            //You'll need to play around with this to render the item in the correct spot.
-            stack.translate(0D, 2.85D, 0D);
-            //Sets the scaling of the item.
-            stack.scale(0.7f, 0.7f, 0.7f);
-            // Change mainHand to predefined Itemstack and TransformType to what transform you would want to use
-            Minecraft.getInstance().getItemRenderer().renderStatic(helmet, ItemCameraTransforms.TransformType.HEAD,
-                    packedLightIn, packedOverlayIn, stack, renderBuffer);
+            //Stops unnecessary further recursive method calling. Only works if I am rendering one thing per layer.
             stack.popPose();
+            return;
         }
 
         if (!bone.isHidden) {

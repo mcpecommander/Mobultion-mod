@@ -1,16 +1,18 @@
 package dev.mcpecommander.mobultion.entities.skeletons.entities;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.LivingEntity;
+import dev.mcpecommander.mobultion.setup.Registration;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -19,6 +21,8 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+
+import javax.annotation.Nullable;
 
 /* McpeCommander created on 18/07/2021 inside the package - dev.mcpecommander.mobultion.entities.skeletons.entities */
 public class CorruptedSkeletonEntity extends MobultionSkeletonEntity implements IRangedAttackMob {
@@ -31,6 +35,13 @@ public class CorruptedSkeletonEntity extends MobultionSkeletonEntity implements 
 
     public static AttributeModifierMap.MutableAttribute createAttributes() {
         return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D);
+    }
+
+    @Nullable
+    @Override
+    public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance p_213386_2_, SpawnReason p_213386_3_, @Nullable ILivingEntityData p_213386_4_, @Nullable CompoundNBT p_213386_5_) {
+        this.setItemInHand(Hand.MAIN_HAND, new ItemStack(Registration.CORRUPTEDBONE.get()));
+        return super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_, p_213386_5_);
     }
 
     @Override
@@ -54,6 +65,18 @@ public class CorruptedSkeletonEntity extends MobultionSkeletonEntity implements 
     @Override
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController<>(this, "movement", 0, this::movementPredicate));
+        data.addAnimationController(new AnimationController<>(this, "controller", 0, this::controllerPredicate));
+    }
+
+    /**
+     * @param event: The animation event that includes the bone animations and animation status
+     * @return PlayState.CONTINUE or PlayState.STOP depending on which needed.
+     */
+    private <E extends IAnimatable> PlayState controllerPredicate(AnimationEvent<E> event)
+    {
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("melee", true));
+
+        return PlayState.STOP;
     }
 
     /**
