@@ -107,14 +107,16 @@ public class Registration {
     private static final RegistryObject<DataSerializerEntry> BLOCKPOS_LIST_REGISTER = DATA_SERIALIZER.register("blocklist",
             () -> new DataSerializerEntry(BLOCKPOS_LIST));
 
-    public static final RegistryObject<HayHatBlock> HAYHAT_BLOCK = BLOCKS.register("hayhatblock", HayHatBlock::new);
-    public static final RegistryObject<Item> HAYHATBLOCK_ITEM = ITEMS.register("hayhatblock", () -> new HayHatBlockItem(HAYHAT_BLOCK.get()));
+    public static final RegistryObject<HayHatBlock> HAYHAT = BLOCKS.register("hayhatblock", HayHatBlock::new);
+    public static final RegistryObject<Item> HAYHATBLOCK_ITEM = ITEMS.register("hayhatblock", () -> new HayHatBlockItem(HAYHAT.get()));
 
     public static final RegistryObject<ThunderStaffItem> THUNDERSTAFF = ITEMS.register("thunderstaffitem", ThunderStaffItem::new);
     public static final RegistryObject<ForestBowItem> FORESTBOW = ITEMS.register("forestbowitem", ForestBowItem::new);
     public static final RegistryObject<HeartArrowItem> HEARTARROW_ITEM = ITEMS.register("heartarrowitem", HeartArrowItem::new);
     public static final RegistryObject<Item> CORRUPTEDBONE = ITEMS.register("corruptedboneitem", () -> new Item(new Item.Properties().tab(ModSetup.ITEM_GROUP)));
+    public static final RegistryObject<CorruptedBoneMealItem> CORRUPTEDBONEMEAL = ITEMS.register("corruptedbonemealitem", CorruptedBoneMealItem::new);
     public static final RegistryObject<HealingStaffItem> HEALINGSTAFF = ITEMS.register("healingstaffitem", HealingStaffItem::new);
+    public static final RegistryObject<Item> FANG = ITEMS.register("fangitem", () -> new Item(new Item.Properties().tab(ModSetup.ITEM_GROUP)));
 
     private static final EntityType<AngelSpiderEntity> ANGELSPIDER_TYPE = EntityType.Builder.of(AngelSpiderEntity::new, EntityClassification.MONSTER)
             .sized(1.4f, 1f).build("angelspider");
