@@ -56,13 +56,13 @@ public class StaffHoldingLayer<T extends MobultionSkeletonEntity> extends GeoLay
         if(bone.getName().equals("RightArm1")){
             stack.pushPose();
             //You'll need to play around with these to get item to render in the correct orientation
-            stack.mulPose(Vector3f.XP.rotationDegrees(-90));
+            stack.mulPose(Vector3f.XP.rotationDegrees(-75));
             stack.mulPose(Vector3f.YP.rotationDegrees(0));
             stack.mulPose(Vector3f.ZP.rotationDegrees(0));
             //You'll need to play around with this to render the item in the correct spot.
-            stack.translate(-0.8D, 0.2D, -0.45D);
+            stack.translate(0.35D, 0.2D, 0.7D);
             //Sets the scaling of the item.
-            stack.scale(1.0f, 1.0f, 1.0f);
+            stack.scale(0.8f, 0.8f, 0.8f);
             // Change mainHand to predefined Itemstack and TransformType to what transform you would want to use.
             Minecraft.getInstance().getItemRenderer().renderStatic(mainHand, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND,
                     packedLightIn, packedOverlayIn, stack, renderBuffer);
