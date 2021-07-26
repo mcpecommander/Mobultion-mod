@@ -6,10 +6,7 @@ import dev.mcpecommander.mobultion.entities.skeletons.renderers.BaseSkeletonRend
 import dev.mcpecommander.mobultion.entities.skeletons.renderers.HeartArrowRenderer;
 import dev.mcpecommander.mobultion.entities.skeletons.renderers.JokerSkeletonRenderer;
 import dev.mcpecommander.mobultion.entities.spiders.renderers.*;
-import dev.mcpecommander.mobultion.particles.FlowerParticle;
-import dev.mcpecommander.mobultion.particles.HealParticle;
-import dev.mcpecommander.mobultion.particles.PortalParticle;
-import dev.mcpecommander.mobultion.particles.SnowFlakeParticle;
+import dev.mcpecommander.mobultion.particles.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -69,6 +66,7 @@ public class ClientSetup {
         }
     });
 
+
     @SubscribeEvent
     public static void registerParticleFactories(ParticleFactoryRegisterEvent event){
         Minecraft.getInstance().particleEngine.register(HEAL_PARTICLE_TYPE.get(), HealParticle.Factory::new);
@@ -80,7 +78,7 @@ public class ClientSetup {
     //Register rendering related stuff here.
     @SubscribeEvent
     public static void init(final FMLClientSetupEvent event) {
-        RenderTypeLookup.setRenderLayer(Registration.HAYHAT_BLOCK.get(), RenderType.translucent());
+        RenderTypeLookup.setRenderLayer(Registration.HAYHAT.get(), RenderType.translucent());
 
         ItemModelsProperties.register(Registration.FORESTBOW.get(), new ResourceLocation(MODID, "pull"),
                 (stack, world, entity) -> entity != null && entity.getUseItem() == stack ?

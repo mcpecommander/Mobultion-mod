@@ -80,6 +80,7 @@ public class Registration {
                 GardenerEndermanEntity::checkMobSpawnRules);
     }
 
+    //This is not inlined in the deferred register because .get() returns a generic IDataSerializer.
     public static final IDataSerializer<List<BlockPos>> BLOCKPOS_LIST = new IDataSerializer<List<BlockPos>>() {
         @Override
         public void write(PacketBuffer buffer, List<BlockPos> list) {
@@ -153,7 +154,8 @@ public class Registration {
             , () -> new SpawnEggItem(WITHERSPIDER_TYPE, 0x666666, 0x444444,
                     (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
 
-    public static final RegistryObject<EntityType<WitherHeadBugEntity>> WITHERHEADBUG = ENTITIES.register("witherheadbug", () -> EntityType.Builder.of(WitherHeadBugEntity::new, EntityClassification.MONSTER)
+    public static final RegistryObject<EntityType<WitherHeadBugEntity>> WITHERHEADBUG = ENTITIES.register("witherheadbug",
+            () -> EntityType.Builder.of(WitherHeadBugEntity::new, EntityClassification.MONSTER)
             .sized(0.7f, 0.7f).build("witherheadbug"));
 
     private static final EntityType<JokerSkeletonEntity> JOKERSKELETON_TYPE = EntityType.Builder.of(JokerSkeletonEntity::new, EntityClassification.MONSTER)
@@ -162,7 +164,8 @@ public class Registration {
     public static final RegistryObject<Item> JOKERSKELETON_EGG = ITEMS.register("jokerskeleton_egg"
             , () -> new SpawnEggItem(JOKERSKELETON_TYPE, 0xFF0000, 0xFFFF00,
                     (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
-    public static final RegistryObject<EntityType<HeartArrowEntity>> HEARTARROW = ENTITIES.register("heartarrow", () -> EntityType.Builder.of(HeartArrowEntity::new, EntityClassification.MISC)
+    public static final RegistryObject<EntityType<HeartArrowEntity>> HEARTARROW = ENTITIES.register("heartarrow",
+            () -> EntityType.Builder.of(HeartArrowEntity::new, EntityClassification.MISC)
             .sized(0.5F, 0.5F).build("heartarrow"));
 
     private static final EntityType<CorruptedSkeletonEntity> CORRUPTEDSKELETON_TYPE = EntityType.Builder.of(CorruptedSkeletonEntity::new, EntityClassification.MONSTER)
@@ -221,7 +224,8 @@ public class Registration {
             , () -> new SpawnEggItem(GLASSENDERMAN_TYPE, 0x2D2C2F, 0x535056,
                     (new Item.Properties()).tab(ItemGroup.TAB_MISC)));
 
-    public static final RegistryObject<EntityType<GlassShotEntity>> GLASSSHOT = ENTITIES.register("glassshot", () -> EntityType.Builder.of((EntityType.IFactory<GlassShotEntity>) GlassShotEntity::new, EntityClassification.MISC)
+    public static final RegistryObject<EntityType<GlassShotEntity>> GLASSSHOT = ENTITIES.register("glassshot",
+            () -> EntityType.Builder.of((EntityType.IFactory<GlassShotEntity>) GlassShotEntity::new, EntityClassification.MISC)
             .sized(0.5F, 0.5F).clientTrackingRange(8).setUpdateInterval(1).build("glassshot"));
 
     private static final EntityType<IceEndermanEntity> ICEENDERMAN_TYPE = EntityType.Builder.of(IceEndermanEntity::new, EntityClassification.MONSTER)
