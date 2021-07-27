@@ -6,6 +6,7 @@ import dev.mcpecommander.mobultion.entities.skeletons.renderers.BaseSkeletonRend
 import dev.mcpecommander.mobultion.entities.skeletons.renderers.HeartArrowRenderer;
 import dev.mcpecommander.mobultion.entities.skeletons.renderers.JokerSkeletonRenderer;
 import dev.mcpecommander.mobultion.entities.spiders.renderers.*;
+import dev.mcpecommander.mobultion.entities.zombies.renderers.KnightZombieRenderer;
 import dev.mcpecommander.mobultion.particles.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
@@ -126,6 +127,9 @@ public class ClientSetup {
                 IceEndermanRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.GARDENERENDERMAN.get(),
                 GardenerEndermanRenderer::new);
+
+        RenderingRegistry.registerEntityRenderingHandler(Registration.KNIGHTZOMBIE.get(),
+                KnightZombieRenderer::new);
     }
 
 
