@@ -18,6 +18,7 @@ public class IronArmourLayer extends GeoLayerRenderer<KnightZombieEntity> {
         super(entityRendererIn);
     }
 
+    //It is way easier to just make the entity render the whole iron armour instead of making if statements for each part.
     @Override
     public void render(MatrixStack stack, IRenderTypeBuffer buffer, int packedLight,
                        KnightZombieEntity entity, float limbSwing, float limbSwingAmount,

@@ -1,21 +1,20 @@
 package dev.mcpecommander.mobultion.entities.zombies.entities;
 
+import dev.mcpecommander.mobultion.setup.Registration;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.entity.monster.ZombieVillagerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTDynamicOps;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -105,6 +104,18 @@ public class KnightZombieEntity extends MonsterEntity implements IAnimatable {
         }
 
         super.aiStep();
+    }
+
+    @Override
+    protected void pushEntities() {
+        if(isDeadOrDying()) return;
+        super.pushEntities();
+    }
+
+    @Override
+    public void knockback(float strength, double ratioX, double ratioZ) {
+        if(isDeadOrDying()) return;
+        super.knockback(strength, ratioX, ratioZ);
     }
 
     //TODO: check if I want to keep
@@ -202,34 +213,28 @@ public class KnightZombieEntity extends MonsterEntity implements IAnimatable {
 
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
-        super.populateDefaultEquipmentSlots(difficulty);
-        if (this.random.nextFloat() < 0.15F * difficulty.getSpecialMultiplier()) {
-            int i = this.random.nextInt(3);
-            if (i == 0) {
-                this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SWORD));
-            } else {
-                this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SHOVEL));
-            }
+        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.IRON_HELMET));
+        this.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
+        this.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(Items.IRON_LEGGINGS));
+        this.setItemSlot(EquipmentSlotType.FEET, new ItemStack(Items.IRON_BOOTS));
+        int i = this.random.nextInt(10);
+        if (i == 0) {
+            this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_AXE));
+        } else {
+            this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.IRON_SWORD));
         }
 
     }
 
-    //TODO: Check if I want to convert to zombie villager or something else.
     @Override
     public void killed(ServerWorld world, LivingEntity killedEntity) {
-        if (killedEntity instanceof VillagerEntity) {
-
-            VillagerEntity villagerentity = (VillagerEntity)killedEntity;
-            ZombieVillagerEntity zombievillagerentity = villagerentity.convertTo(EntityType.ZOMBIE_VILLAGER, false);
-            zombievillagerentity.finalizeSpawn(world, world.getCurrentDifficultyAt(zombievillagerentity.blockPosition()),
+        if (killedEntity instanceof PlayerEntity) {
+            KnightZombieEntity follower = new KnightZombieEntity(Registration.KNIGHTZOMBIE.get(), world);
+            follower.setPos(killedEntity.position().x(), killedEntity.position().y(), killedEntity.position().z());
+            follower.setRot(killedEntity.yRot, killedEntity.xRot);
+            follower.finalizeSpawn(world, world.getCurrentDifficultyAt(follower.blockPosition()),
                     SpawnReason.CONVERSION, null, null);
-            zombievillagerentity.setVillagerData(villagerentity.getVillagerData());
-            zombievillagerentity.setGossips(villagerentity.getGossips().store(NBTDynamicOps.INSTANCE).getValue());
-            zombievillagerentity.setTradeOffers(villagerentity.getOffers().createTag());
-            zombievillagerentity.setVillagerXp(villagerentity.getVillagerXp());
-            if (!this.isSilent()) {
-                world.levelEvent(null, 1026, this.blockPosition(), 0);
-            }
+            world.addFreshEntity(follower);
         }
     }
 

@@ -26,9 +26,8 @@ public class LootTablesGen extends LootTableProvider {
         super(generator);
     }
 
-    private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> tables = ImmutableList.of(
-            Pair.of(LootTablesGen.EntityTables::new, LootParameterSets.ENTITY)
-    );
+    private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> tables =
+            ImmutableList.of(Pair.of(LootTablesGen.EntityTables::new, LootParameterSets.ENTITY));
 
     @Override
     public List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> getTables() {

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import dev.mcpecommander.mobultion.entities.zombies.entities.KnightZombieEntity;
 import dev.mcpecommander.mobultion.entities.zombies.layers.IronArmourLayer;
+import dev.mcpecommander.mobultion.entities.zombies.layers.ItemHoldingLayer;
 import dev.mcpecommander.mobultion.entities.zombies.models.KnightZombieModel;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
@@ -22,6 +23,7 @@ public class KnightZombieRenderer extends GeoEntityRenderer<KnightZombieEntity> 
         super(renderManager, new KnightZombieModel());
         this.shadowRadius = 0.5f;
         this.addLayer(new IronArmourLayer(this));
+        this.addLayer(new ItemHoldingLayer(this));
     }
 
     @Override
