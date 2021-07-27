@@ -1,13 +1,10 @@
 package dev.mcpecommander.mobultion.entities.zombies.entities;
 
 import dev.mcpecommander.mobultion.setup.Registration;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.monster.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,8 +17,6 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.*;
@@ -38,7 +33,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import javax.annotation.Nullable;
 
 /* McpeCommander created on 26/07/2021 inside the package - dev.mcpecommander.mobultion.entities.zombies.entities */
-public class KnightZombieEntity extends MonsterEntity implements IAnimatable {
+public class KnightZombieEntity extends MobultionZombieEntity {
 
     private static final DataParameter<Boolean> LEADER_DATA = EntityDataManager.defineId(KnightZombieEntity.class, DataSerializers.BOOLEAN);
     private final AnimationFactory factory = new AnimationFactory(this);
@@ -77,45 +72,6 @@ public class KnightZombieEntity extends MonsterEntity implements IAnimatable {
         return MonsterEntity.createMonsterAttributes().add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.23D).add(Attributes.ATTACK_DAMAGE, 3.0D)
                 .add(Attributes.ARMOR, 2.0D).add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 0.75D);
-    }
-
-    @Override
-    public void aiStep() {
-        if (this.isAlive()) {
-            boolean isBurningFromTheSun = this.isSunBurnTick();
-            if (isBurningFromTheSun) {
-                ItemStack itemstack = this.getItemBySlot(EquipmentSlotType.HEAD);
-                if (!itemstack.isEmpty()) {
-                    if (itemstack.isDamageableItem()) {
-                        itemstack.setDamageValue(itemstack.getDamageValue() + this.random.nextInt(2));
-                        if (itemstack.getDamageValue() >= itemstack.getMaxDamage()) {
-                            this.broadcastBreakEvent(EquipmentSlotType.HEAD);
-                            this.setItemSlot(EquipmentSlotType.HEAD, ItemStack.EMPTY);
-                        }
-                    }
-
-                    isBurningFromTheSun = false;
-                }
-
-                if (isBurningFromTheSun) {
-                    this.setSecondsOnFire(8);
-                }
-            }
-        }
-
-        super.aiStep();
-    }
-
-    @Override
-    protected void pushEntities() {
-        if(isDeadOrDying()) return;
-        super.pushEntities();
-    }
-
-    @Override
-    public void knockback(float strength, double ratioX, double ratioZ) {
-        if(isDeadOrDying()) return;
-        super.knockback(strength, ratioX, ratioZ);
     }
 
     //TODO: check if I want to keep
@@ -186,30 +142,6 @@ public class KnightZombieEntity extends MonsterEntity implements IAnimatable {
         return flag;
     }
 
-    @Override
-    protected SoundEvent getAmbientSound() {
-        return SoundEvents.ZOMBIE_AMBIENT;
-    }
-
-    @Override
-    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
-        return SoundEvents.ZOMBIE_HURT;
-    }
-
-    @Override
-    protected SoundEvent getDeathSound() {
-        return SoundEvents.ZOMBIE_DEATH;
-    }
-
-    @Override
-    protected void playStepSound(BlockPos position, BlockState state) {
-        this.playSound(SoundEvents.ZOMBIE_STEP, 0.15F, 1.0F);
-    }
-
-    @Override
-    public CreatureAttribute getMobType() {
-        return CreatureAttribute.UNDEAD;
-    }
 
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
@@ -238,11 +170,6 @@ public class KnightZombieEntity extends MonsterEntity implements IAnimatable {
         }
     }
 
-    @Override
-    protected float getStandingEyeHeight(Pose pose, EntitySize size) {
-        return 1.74F;
-    }
-
     @Nullable
     @Override
     public ILivingEntityData finalizeSpawn(IServerWorld world, DifficultyInstance difficulty, SpawnReason spawnReason,
@@ -262,27 +189,6 @@ public class KnightZombieEntity extends MonsterEntity implements IAnimatable {
         }
 
         return super.finalizeSpawn(world, difficulty, spawnReason, livingEntityData, NBTTag);
-    }
-
-    @Override
-    public double getMyRidingOffset() {
-        return -0.45D;
-    }
-
-    @Override
-    protected void dropCustomDeathLoot(DamageSource damageSource, int lootingLevel, boolean killedByPlayer) {
-        super.dropCustomDeathLoot(damageSource, lootingLevel, killedByPlayer);
-        Entity entity = damageSource.getEntity();
-        if (entity instanceof CreeperEntity) {
-            CreeperEntity creeperentity = (CreeperEntity)entity;
-            if (creeperentity.canDropMobsSkull()) {
-                ItemStack itemstack = new ItemStack(Blocks.ZOMBIE_HEAD);
-                if (!itemstack.isEmpty()) {
-                    creeperentity.increaseDroppedSkulls();
-                    this.spawnAtLocation(itemstack);
-                }
-            }
-        }
     }
 
     @Override
