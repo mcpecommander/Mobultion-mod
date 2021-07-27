@@ -1,10 +1,7 @@
 package dev.mcpecommander.mobultion.entities.skeletons.renderers;
 
 import dev.mcpecommander.mobultion.entities.skeletons.entities.MobultionSkeletonEntity;
-import dev.mcpecommander.mobultion.entities.skeletons.layers.ForestCameoLayer;
-import dev.mcpecommander.mobultion.entities.skeletons.layers.BoneHoldingLayer;
-import dev.mcpecommander.mobultion.entities.skeletons.layers.ShamanRobeLayer;
-import dev.mcpecommander.mobultion.entities.skeletons.layers.SkeletonMagmaLayer;
+import dev.mcpecommander.mobultion.entities.skeletons.layers.*;
 import dev.mcpecommander.mobultion.entities.skeletons.models.BaseSkeletonModel;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
@@ -19,6 +16,7 @@ public class BaseSkeletonRenderer<T extends MobultionSkeletonEntity> extends Geo
         this.addLayer(new ShamanRobeLayer<>(this));
         this.addLayer(new SkeletonMagmaLayer<>(this));
         this.addLayer(new BoneHoldingLayer<>(this));
+        this.addLayer(new StaffHoldingLayer<>(this));
 
     }
 }
