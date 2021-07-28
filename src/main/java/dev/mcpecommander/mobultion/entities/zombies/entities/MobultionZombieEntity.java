@@ -110,4 +110,16 @@ public abstract class MobultionZombieEntity extends MonsterEntity implements IAn
             }
         }
     }
+
+    abstract void deathParticles();
+
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        deathParticles();
+
+        if(this.deathTime == 46){
+            this.remove();
+        }
+    }
 }

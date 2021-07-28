@@ -6,6 +6,7 @@ import dev.mcpecommander.mobultion.entities.endermen.entities.*;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.*;
 import dev.mcpecommander.mobultion.entities.spiders.entities.*;
 import dev.mcpecommander.mobultion.entities.zombies.entities.KnightZombieEntity;
+import dev.mcpecommander.mobultion.entities.zombies.entities.WorkerZombieEntity;
 import dev.mcpecommander.mobultion.items.*;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityClassification;
@@ -79,6 +80,7 @@ public class Registration {
                 GardenerEndermanEntity::checkMobSpawnRules);
 
         event.put(Registration.KNIGHTZOMBIE.get(), KnightZombieEntity.createAttributes().build());
+        event.put(Registration.WORKERZOMBIE.get(), WorkerZombieEntity.createAttributes().build());
     }
 
     //This is not inlined in the deferred register because .get() returns a generic IDataSerializer.
@@ -119,6 +121,8 @@ public class Registration {
     public static final RegistryObject<CorruptedBoneMealItem> CORRUPTEDBONEMEAL = ITEMS.register("corruptedbonemealitem", CorruptedBoneMealItem::new);
     public static final RegistryObject<HealingStaffItem> HEALINGSTAFF = ITEMS.register("healingstaffitem", HealingStaffItem::new);
     public static final RegistryObject<Item> FANG = ITEMS.register("fangitem", () -> new Item(new Item.Properties().tab(ModSetup.ITEM_GROUP)));
+    public static final RegistryObject<HardHatItem> HARDHAT = ITEMS.register("hardhatitem", HardHatItem::new);
+    public static final RegistryObject<HammerItem> HAMMER = ITEMS.register("hammeritem", HammerItem::new);
 
     private static final EntityType<AngelSpiderEntity> ANGELSPIDER_TYPE = EntityType.Builder.of(AngelSpiderEntity::new, EntityClassification.MONSTER)
             .sized(1.4f, 1f).build("angelspider");
@@ -248,6 +252,13 @@ public class Registration {
     public static final RegistryObject<EntityType<KnightZombieEntity>> KNIGHTZOMBIE = ENTITIES.register("knightzombie", () -> KNIGHTZOMBIE_TYPE);
     public static final RegistryObject<Item> KNIGHTZOMBIE_EGG = ITEMS.register("knightzombie_egg"
             , () -> new SpawnEggItem(KNIGHTZOMBIE_TYPE, 0xEEEEEE, 0xD0E0E3,
+                    (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
+
+    private static final EntityType<WorkerZombieEntity> WORKERZOMBIE_TYPE = EntityType.Builder.of(WorkerZombieEntity::new, EntityClassification.MONSTER)
+            .sized(0.7F, 2.0F).build("workerzombie");
+    public static final RegistryObject<EntityType<WorkerZombieEntity>> WORKERZOMBIE = ENTITIES.register("workerzombie", () -> WORKERZOMBIE_TYPE);
+    public static final RegistryObject<Item> WORKERZOMBIE_EGG = ITEMS.register("workerzombie_egg"
+            , () -> new SpawnEggItem(WORKERZOMBIE_TYPE, 0xFFE599, 0xFFFF00,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
     public static final RegistryObject<Effect> JOKERNESS_EFFECT = EFFECTS.register("jokernesseffect", JokernessEffect::new);

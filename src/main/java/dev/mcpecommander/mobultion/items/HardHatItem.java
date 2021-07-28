@@ -1,11 +1,9 @@
 package dev.mcpecommander.mobultion.items;
 
 import dev.mcpecommander.mobultion.setup.ModSetup;
-import net.minecraft.block.Block;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -15,14 +13,16 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/* McpeCommander created on 10/07/2021 inside the package - dev.mcpecommander.mobultion.items */
-public class HayHatBlockItem extends BlockItem {
+/* McpeCommander created on 28/07/2021 inside the package - dev.mcpecommander.mobultion.items */
+public class HardHatItem extends Item {
 
-    public HayHatBlockItem(Block block) {
-        super(block, new Item.Properties().tab(ModSetup.ITEM_GROUP).stacksTo(1).setNoRepair());
+    //TODO: adjust the durability.
+    public HardHatItem() {
+        super(new Properties().tab(ModSetup.ITEM_GROUP).durability(200));
     }
 
     @Nonnull
+    @Override
     public ActionResult<ItemStack> use(@Nonnull World world, PlayerEntity player, @Nonnull Hand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         EquipmentSlotType equipmentslottype = MobEntity.getEquipmentSlotForItem(itemstack);

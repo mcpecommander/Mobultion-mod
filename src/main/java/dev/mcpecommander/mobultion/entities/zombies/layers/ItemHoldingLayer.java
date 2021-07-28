@@ -1,7 +1,7 @@
 package dev.mcpecommander.mobultion.entities.zombies.layers;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import dev.mcpecommander.mobultion.entities.zombies.entities.KnightZombieEntity;
+import dev.mcpecommander.mobultion.entities.zombies.entities.MobultionZombieEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
@@ -19,18 +19,18 @@ import software.bernie.geckolib3.util.RenderUtils;
 import static dev.mcpecommander.mobultion.Mobultion.MODID;
 
 /* McpeCommander created on 27/07/2021 inside the package - dev.mcpecommander.mobultion.entities.zombies.layers */
-public class ItemHoldingLayer extends GeoLayerRenderer<KnightZombieEntity> {
+public class ItemHoldingLayer<T extends MobultionZombieEntity> extends GeoLayerRenderer<T> {
 
     private static final ResourceLocation ZOMBIE_MODEL = new ResourceLocation(MODID, "geo/zombies/advancedbiped.json");
 
     private ItemStack mainHand;
 
-    public ItemHoldingLayer(IGeoRenderer<KnightZombieEntity> entityRendererIn) {
+    public ItemHoldingLayer(IGeoRenderer<T> entityRendererIn) {
         super(entityRendererIn);
     }
 
     @Override
-    public void render(MatrixStack matrix, IRenderTypeBuffer renderBuffer, int packedLight, KnightZombieEntity entity,
+    public void render(MatrixStack matrix, IRenderTypeBuffer renderBuffer, int packedLight, T entity,
                        float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         this.mainHand = entity.getItemBySlot(EquipmentSlotType.MAINHAND);
         GeoModel model = this.getEntityModel().getModel(ZOMBIE_MODEL);

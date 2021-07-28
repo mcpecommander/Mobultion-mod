@@ -7,7 +7,11 @@ import dev.mcpecommander.mobultion.entities.skeletons.renderers.HeartArrowRender
 import dev.mcpecommander.mobultion.entities.skeletons.renderers.JokerSkeletonRenderer;
 import dev.mcpecommander.mobultion.entities.spiders.renderers.*;
 import dev.mcpecommander.mobultion.entities.zombies.renderers.KnightZombieRenderer;
-import dev.mcpecommander.mobultion.particles.*;
+import dev.mcpecommander.mobultion.entities.zombies.renderers.WorkerZombieRenderer;
+import dev.mcpecommander.mobultion.particles.FlowerParticle;
+import dev.mcpecommander.mobultion.particles.HealParticle;
+import dev.mcpecommander.mobultion.particles.PortalParticle;
+import dev.mcpecommander.mobultion.particles.SnowFlakeParticle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -130,6 +134,8 @@ public class ClientSetup {
 
         RenderingRegistry.registerEntityRenderingHandler(Registration.KNIGHTZOMBIE.get(),
                 KnightZombieRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(Registration.WORKERZOMBIE.get(),
+                WorkerZombieRenderer::new);
     }
 
 
