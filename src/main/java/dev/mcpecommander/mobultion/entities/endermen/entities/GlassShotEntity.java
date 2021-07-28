@@ -53,9 +53,7 @@ public class GlassShotEntity extends DamagingProjectileEntity implements IAnimat
                            double targetX, double targetY, double targetZ, World world, GlassEndermanEntity owner) {
         super(projectileType, posX, posY, posZ, targetX, targetY, targetZ, world);
         this.setOwner(owner);
-        //Workaround because of a bug in geckolib projectile renderer.
-        //Check https://github.com/bernie-g/geckolib/issues/152
-        this.setColor(new Color(owner.getColor().getRed(), owner.getColor().getBlue(), owner.getColor().getGreen()));
+        this.setColor(owner.getColor());
     }
 
     /**
