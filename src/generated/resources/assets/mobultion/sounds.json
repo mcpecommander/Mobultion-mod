@@ -1,0 +1,15 @@
+{
+  "healing": {
+    "subtitle": "healthpack.heal",
+    "sounds": [
+      {
+        "name": "mobultion:healing",
+        "volume": 0.5
+      },
+      {
+        "name": "mobultion:healing1",
+        "volume": 0.5
+      }
+    ]
+  }
+}
