@@ -23,7 +23,7 @@ public class KnightZombieRenderer extends GeoEntityRenderer<KnightZombieEntity> 
         super(renderManager, new KnightZombieModel());
         this.shadowRadius = 0.5f;
         this.addLayer(new IronArmourLayer(this));
-        this.addLayer(new ItemHoldingLayer(this));
+        this.addLayer(new ItemHoldingLayer<>(this));
     }
 
     @Override

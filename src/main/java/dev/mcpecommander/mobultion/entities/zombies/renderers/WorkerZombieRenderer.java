@@ -3,6 +3,7 @@ package dev.mcpecommander.mobultion.entities.zombies.renderers;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import dev.mcpecommander.mobultion.entities.zombies.entities.WorkerZombieEntity;
+import dev.mcpecommander.mobultion.entities.zombies.layers.HardHatLayer;
 import dev.mcpecommander.mobultion.entities.zombies.layers.ItemHoldingLayer;
 import dev.mcpecommander.mobultion.entities.zombies.models.WorkerZombieModel;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -21,7 +22,8 @@ public class WorkerZombieRenderer extends GeoEntityRenderer<WorkerZombieEntity> 
     public WorkerZombieRenderer(EntityRendererManager renderManager) {
         super(renderManager, new WorkerZombieModel());
         this.shadowRadius = 0.5f;
-        this.addLayer(new ItemHoldingLayer(this));
+        this.addLayer(new ItemHoldingLayer<>(this));
+        this.addLayer(new HardHatLayer(this));
     }
 
     @Override

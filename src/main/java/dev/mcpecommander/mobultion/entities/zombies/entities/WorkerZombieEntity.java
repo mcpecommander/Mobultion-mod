@@ -12,6 +12,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
@@ -80,7 +81,7 @@ public class WorkerZombieEntity extends MobultionZombieEntity{
                         //Math.cos(i) for the initial circle position on the x axis.
                         //* 0.5d to make the circle half as wide.
                         //(random.nextGaussian() * 0.01d - 0.005d) adds a small -0.01 - 0.01 variation to the diameter.
-                        this.getX() + Math.cos(i) * 0.5d + (random.nextGaussian() * 0.01d - 0.005d),
+                        this.getX() + MathHelper.cos((float) i) * 0.5d + (random.nextGaussian() * 0.01d - 0.005d),
                         //this.blockPosition().getY() to make sure the particles spawn at ground level.
                         //(MathHelper.floor(this.getY()) would work too).
                         //+ random.nextGaussian() * 0.02f adds a small height variation.
@@ -88,7 +89,7 @@ public class WorkerZombieEntity extends MobultionZombieEntity{
                         //Math.sin(i) for the initial circle position on the y axis.
                         //* 0.5d to make the circle half as wide.
                         //(random.nextGaussian() * 0.01d - 0.005d) adds a small -0.01 - 0.01 variation to the diameter.
-                        this.getZ() + Math.sin(i) * 0.5d + (random.nextGaussian() * 0.01d - 0.005d),
+                        this.getZ() + MathHelper.sin((float) i) * 0.5d + (random.nextGaussian() * 0.01d - 0.005d),
                         //Small random speeds on the x and z axis to make it feel alive.
                         this.random.nextGaussian() * 0.002d - 0.001d,
                         //Constant upwards speed.
