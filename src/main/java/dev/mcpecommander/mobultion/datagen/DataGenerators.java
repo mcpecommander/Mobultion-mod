@@ -15,5 +15,8 @@ public class DataGenerators {
         if(event.includeServer()){
             event.getGenerator().addProvider(new LootTablesGen(event.getGenerator()));
         }
+        if(event.includeClient()){
+            event.getGenerator().addProvider(new SoundsGen(event.getGenerator(), event.getExistingFileHelper()));
+        }
     }
 }
