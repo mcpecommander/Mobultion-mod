@@ -6,6 +6,7 @@ import dev.mcpecommander.mobultion.entities.skeletons.renderers.BaseSkeletonRend
 import dev.mcpecommander.mobultion.entities.skeletons.renderers.HeartArrowRenderer;
 import dev.mcpecommander.mobultion.entities.skeletons.renderers.JokerSkeletonRenderer;
 import dev.mcpecommander.mobultion.entities.spiders.renderers.*;
+import dev.mcpecommander.mobultion.entities.zombies.renderers.DoctorZombieRenderer;
 import dev.mcpecommander.mobultion.entities.zombies.renderers.KnightZombieRenderer;
 import dev.mcpecommander.mobultion.entities.zombies.renderers.MagmaZombieRenderer;
 import dev.mcpecommander.mobultion.entities.zombies.renderers.WorkerZombieRenderer;
@@ -29,6 +30,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nonnull;
+
 import static dev.mcpecommander.mobultion.Mobultion.MODID;
 
 /* Created by McpeCommander on 2021/06/18 */
@@ -40,6 +43,7 @@ public class ClientSetup {
     public static final RegistryObject<ParticleType<HealParticle.HealParticleData>> HEAL_PARTICLE_TYPE =
             PARTICLE_TYPES.register("healparticle", () -> new ParticleType<HealParticle.HealParticleData>(false,
                     HealParticle.HealParticleData.DESERIALIZER) {
+        @Nonnull
         @Override
         public Codec<HealParticle.HealParticleData> codec() {
             return HealParticle.HealParticleData.CODEC;
@@ -48,6 +52,7 @@ public class ClientSetup {
     public static final RegistryObject<ParticleType<PortalParticle.PortalParticleData>> PORTAL_PARTICLE_TYPE =
             PARTICLE_TYPES.register("portalparticle", () -> new ParticleType<PortalParticle.PortalParticleData>(false,
                     PortalParticle.PortalParticleData.DESERIALIZER) {
+        @Nonnull
         @Override
         public Codec<PortalParticle.PortalParticleData> codec() {
             return PortalParticle.PortalParticleData.CODEC;
@@ -57,6 +62,7 @@ public class ClientSetup {
     public static final RegistryObject<ParticleType<SnowFlakeParticle.SnowFlakeParticleData>> SNOW_FLAKE_PARTICLE_TYPE =
             PARTICLE_TYPES.register("snowflakeparticle", () -> new ParticleType<SnowFlakeParticle.SnowFlakeParticleData>(false,
                     SnowFlakeParticle.SnowFlakeParticleData.DESERIALIZER) {
+        @Nonnull
         @Override
         public Codec<SnowFlakeParticle.SnowFlakeParticleData> codec() {
             return SnowFlakeParticle.SnowFlakeParticleData.CODEC;
@@ -66,6 +72,7 @@ public class ClientSetup {
     public static final RegistryObject<ParticleType<FlowerParticle.FlowerParticleData>> FLOWER_PARTICLE_TYPE =
             PARTICLE_TYPES.register("flowerparticle", () -> new ParticleType<FlowerParticle.FlowerParticleData>(false,
                     FlowerParticle.FlowerParticleData.DESERIALIZER) {
+        @Nonnull
         @Override
         public Codec<FlowerParticle.FlowerParticleData> codec() {
             return FlowerParticle.FlowerParticleData.CODEC;
@@ -139,6 +146,8 @@ public class ClientSetup {
                 WorkerZombieRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.MAGMAZOMBIE.get(),
                 MagmaZombieRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(Registration.DOCTORZOMBIE.get(),
+                DoctorZombieRenderer::new);
     }
 
 

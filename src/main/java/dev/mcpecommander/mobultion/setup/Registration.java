@@ -5,6 +5,7 @@ import dev.mcpecommander.mobultion.effects.JokernessEffect;
 import dev.mcpecommander.mobultion.entities.endermen.entities.*;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.*;
 import dev.mcpecommander.mobultion.entities.spiders.entities.*;
+import dev.mcpecommander.mobultion.entities.zombies.entities.DoctorZombieEntity;
 import dev.mcpecommander.mobultion.entities.zombies.entities.KnightZombieEntity;
 import dev.mcpecommander.mobultion.entities.zombies.entities.MagmaZombieEntity;
 import dev.mcpecommander.mobultion.entities.zombies.entities.WorkerZombieEntity;
@@ -88,6 +89,7 @@ public class Registration {
         event.put(Registration.KNIGHTZOMBIE.get(), KnightZombieEntity.createAttributes().build());
         event.put(Registration.WORKERZOMBIE.get(), WorkerZombieEntity.createAttributes().build());
         event.put(Registration.MAGMAZOMBIE.get(), MagmaZombieEntity.createAttributes().build());
+        event.put(Registration.DOCTORZOMBIE.get(), DoctorZombieEntity.createAttributes().build());
     }
 
     //This is not inlined in the deferred register because .get() returns a generic IDataSerializer.
@@ -276,6 +278,13 @@ public class Registration {
     public static final RegistryObject<EntityType<MagmaZombieEntity>> MAGMAZOMBIE = ENTITIES.register("magmazombie", () -> MAGMAZOMBIE_TYPE);
     public static final RegistryObject<Item> MAGMAZOMBIE_EGG = ITEMS.register("magmazombie_egg"
             , () -> new SpawnEggItem(MAGMAZOMBIE_TYPE, 0xFFF144, 0xCC0000,
+                    (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
+
+    private static final EntityType<DoctorZombieEntity> DOCTORZOMBIE_TYPE = EntityType.Builder.of(DoctorZombieEntity::new, EntityClassification.MONSTER)
+            .sized(0.7F, 2.0F).build("doctorzombie");
+    public static final RegistryObject<EntityType<DoctorZombieEntity>> DOCTORZOMBIE = ENTITIES.register("doctorzombie", () -> DOCTORZOMBIE_TYPE);
+    public static final RegistryObject<Item> DOCTORZOMBIE_EGG = ITEMS.register("doctorzombie_egg"
+            , () -> new SpawnEggItem(DOCTORZOMBIE_TYPE, 0xFFFFFF, 0xFD1D1D,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
     public static final RegistryObject<Effect> JOKERNESS_EFFECT = EFFECTS.register("jokernesseffect", JokernessEffect::new);
