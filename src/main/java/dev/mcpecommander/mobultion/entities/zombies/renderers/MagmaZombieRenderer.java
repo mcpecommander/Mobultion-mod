@@ -40,6 +40,6 @@ public class MagmaZombieRenderer extends GeoEntityRenderer<MagmaZombieEntity> {
         }
         //Makes it that the entity is only rendered with a red overlay when hurt but not on death.
         renderRecursively(model.topLevelBones.get(0), matrixStackIn, vertexBuilder, packedLightIn, OverlayTexture.
-                pack(OverlayTexture.u(0), OverlayTexture.v(animatable.hurtTime > 0)), red, green, blue, alpha);
+                pack(0, OverlayTexture.v(animatable.hurtTime > 0)), red, green, blue, alpha);
     }
 }
