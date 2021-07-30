@@ -7,6 +7,7 @@ import dev.mcpecommander.mobultion.entities.skeletons.renderers.HeartArrowRender
 import dev.mcpecommander.mobultion.entities.skeletons.renderers.JokerSkeletonRenderer;
 import dev.mcpecommander.mobultion.entities.spiders.renderers.*;
 import dev.mcpecommander.mobultion.entities.zombies.renderers.KnightZombieRenderer;
+import dev.mcpecommander.mobultion.entities.zombies.renderers.MagmaZombieRenderer;
 import dev.mcpecommander.mobultion.entities.zombies.renderers.WorkerZombieRenderer;
 import dev.mcpecommander.mobultion.particles.FlowerParticle;
 import dev.mcpecommander.mobultion.particles.HealParticle;
@@ -136,6 +137,8 @@ public class ClientSetup {
                 KnightZombieRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.WORKERZOMBIE.get(),
                 WorkerZombieRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(Registration.MAGMAZOMBIE.get(),
+                MagmaZombieRenderer::new);
     }
 
 
