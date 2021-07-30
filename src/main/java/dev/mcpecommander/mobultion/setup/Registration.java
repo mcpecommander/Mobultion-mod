@@ -6,6 +6,7 @@ import dev.mcpecommander.mobultion.entities.endermen.entities.*;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.*;
 import dev.mcpecommander.mobultion.entities.spiders.entities.*;
 import dev.mcpecommander.mobultion.entities.zombies.entities.KnightZombieEntity;
+import dev.mcpecommander.mobultion.entities.zombies.entities.MagmaZombieEntity;
 import dev.mcpecommander.mobultion.entities.zombies.entities.WorkerZombieEntity;
 import dev.mcpecommander.mobultion.items.*;
 import net.minecraft.block.Block;
@@ -17,6 +18,8 @@ import net.minecraft.item.SpawnEggItem;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.IDataSerializer;
 import net.minecraft.potion.Effect;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
@@ -28,6 +31,7 @@ import net.minecraftforge.registries.DataSerializerEntry;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +45,7 @@ public class Registration {
     private static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, MODID);
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     private static final DeferredRegister<Effect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, MODID);
+    private static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, MODID);
     private static final DeferredRegister<DataSerializerEntry> DATA_SERIALIZER = DeferredRegister.create(ForgeRegistries.DATA_SERIALIZERS, MODID);
 
     public static void init() {
@@ -50,6 +55,7 @@ public class Registration {
         ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
         EFFECTS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        SOUNDS.register(FMLJavaModLoadingContext.get().getModEventBus());
         DATA_SERIALIZER.register(FMLJavaModLoadingContext.get().getModEventBus());
 
     }
@@ -81,6 +87,7 @@ public class Registration {
 
         event.put(Registration.KNIGHTZOMBIE.get(), KnightZombieEntity.createAttributes().build());
         event.put(Registration.WORKERZOMBIE.get(), WorkerZombieEntity.createAttributes().build());
+        event.put(Registration.MAGMAZOMBIE.get(), MagmaZombieEntity.createAttributes().build());
     }
 
     //This is not inlined in the deferred register because .get() returns a generic IDataSerializer.
@@ -93,6 +100,7 @@ public class Registration {
             }
         }
 
+        @Nonnull
         @Override
         public List<BlockPos> read(PacketBuffer buffer) {
             int size = buffer.readInt();
@@ -103,8 +111,9 @@ public class Registration {
             return positions;
         }
 
+        @Nonnull
         @Override
-        public List<BlockPos> copy(List<BlockPos> list) {
+        public List<BlockPos> copy(@Nonnull List<BlockPos> list) {
             return list;
         }
     };
@@ -123,6 +132,7 @@ public class Registration {
     public static final RegistryObject<Item> FANG = ITEMS.register("fangitem", () -> new Item(new Item.Properties().tab(ModSetup.ITEM_GROUP)));
     public static final RegistryObject<HardHatItem> HARDHAT = ITEMS.register("hardhatitem", HardHatItem::new);
     public static final RegistryObject<HammerItem> HAMMER = ITEMS.register("hammeritem", HammerItem::new);
+    public static final RegistryObject<HealthPackItem> HEALTHPACK = ITEMS.register("healthpackitem", HealthPackItem::new);
 
     private static final EntityType<AngelSpiderEntity> ANGELSPIDER_TYPE = EntityType.Builder.of(AngelSpiderEntity::new, EntityClassification.MONSTER)
             .sized(1.4f, 1f).build("angelspider");
@@ -261,7 +271,17 @@ public class Registration {
             , () -> new SpawnEggItem(WORKERZOMBIE_TYPE, 0xFFE599, 0xFFFF00,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
+    private static final EntityType<MagmaZombieEntity> MAGMAZOMBIE_TYPE = EntityType.Builder.of(MagmaZombieEntity::new, EntityClassification.MONSTER)
+            .sized(0.7F, 2.0F).build("magmazombie");
+    public static final RegistryObject<EntityType<MagmaZombieEntity>> MAGMAZOMBIE = ENTITIES.register("magmazombie", () -> MAGMAZOMBIE_TYPE);
+    public static final RegistryObject<Item> MAGMAZOMBIE_EGG = ITEMS.register("magmazombie_egg"
+            , () -> new SpawnEggItem(MAGMAZOMBIE_TYPE, 0xFFF144, 0xCC0000,
+                    (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
+
     public static final RegistryObject<Effect> JOKERNESS_EFFECT = EFFECTS.register("jokernesseffect", JokernessEffect::new);
+
+    public static final RegistryObject<SoundEvent> HEALING_SOUND = SOUNDS.register("healing", () ->
+            new SoundEvent(new ResourceLocation(MODID, "healing")));
 
 
 }
