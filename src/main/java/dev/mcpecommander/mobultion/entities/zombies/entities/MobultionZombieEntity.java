@@ -113,12 +113,19 @@ public abstract class MobultionZombieEntity extends MonsterEntity implements IAn
 
     abstract void deathParticles();
 
+    abstract int getMaxDeathCount();
+
+    @Override
+    public boolean isOnFire() {
+        return !isDeadOrDying() && super.isOnFire();
+    }
+
     @Override
     protected void tickDeath() {
         ++this.deathTime;
         deathParticles();
 
-        if(this.deathTime == 46){
+        if(this.deathTime == getMaxDeathCount()){
             this.remove();
         }
     }

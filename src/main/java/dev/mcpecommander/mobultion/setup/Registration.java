@@ -5,10 +5,7 @@ import dev.mcpecommander.mobultion.effects.JokernessEffect;
 import dev.mcpecommander.mobultion.entities.endermen.entities.*;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.*;
 import dev.mcpecommander.mobultion.entities.spiders.entities.*;
-import dev.mcpecommander.mobultion.entities.zombies.entities.DoctorZombieEntity;
-import dev.mcpecommander.mobultion.entities.zombies.entities.KnightZombieEntity;
-import dev.mcpecommander.mobultion.entities.zombies.entities.MagmaZombieEntity;
-import dev.mcpecommander.mobultion.entities.zombies.entities.WorkerZombieEntity;
+import dev.mcpecommander.mobultion.entities.zombies.entities.*;
 import dev.mcpecommander.mobultion.items.*;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityClassification;
@@ -90,6 +87,7 @@ public class Registration {
         event.put(Registration.WORKERZOMBIE.get(), WorkerZombieEntity.createAttributes().build());
         event.put(Registration.MAGMAZOMBIE.get(), MagmaZombieEntity.createAttributes().build());
         event.put(Registration.DOCTORZOMBIE.get(), DoctorZombieEntity.createAttributes().build());
+        event.put(Registration.HUNGRYZOMBIE.get(), HungryZombieEntity.createAttributes().build());
     }
 
     //This is not inlined in the deferred register because .get() returns a generic IDataSerializer.
@@ -135,6 +133,9 @@ public class Registration {
     public static final RegistryObject<HardHatItem> HARDHAT = ITEMS.register("hardhatitem", HardHatItem::new);
     public static final RegistryObject<HammerItem> HAMMER = ITEMS.register("hammeritem", HammerItem::new);
     public static final RegistryObject<HealthPackItem> HEALTHPACK = ITEMS.register("healthpackitem", HealthPackItem::new);
+    public static final RegistryObject<Item> KNIFE = ITEMS.register("knifeitem", () -> new Item(new Item.Properties().tab(ModSetup.ITEM_GROUP)));
+    public static final RegistryObject<Item> FORK = ITEMS.register("forkitem", () -> new Item(new Item.Properties().tab(ModSetup.ITEM_GROUP)));
+
 
     private static final EntityType<AngelSpiderEntity> ANGELSPIDER_TYPE = EntityType.Builder.of(AngelSpiderEntity::new, EntityClassification.MONSTER)
             .sized(1.4f, 1f).build("angelspider");
@@ -285,6 +286,13 @@ public class Registration {
     public static final RegistryObject<EntityType<DoctorZombieEntity>> DOCTORZOMBIE = ENTITIES.register("doctorzombie", () -> DOCTORZOMBIE_TYPE);
     public static final RegistryObject<Item> DOCTORZOMBIE_EGG = ITEMS.register("doctorzombie_egg"
             , () -> new SpawnEggItem(DOCTORZOMBIE_TYPE, 0xFFFFFF, 0xFD1D1D,
+                    (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
+
+    private static final EntityType<HungryZombieEntity> HUNGRYZOMBIE_TYPE = EntityType.Builder.of(HungryZombieEntity::new, EntityClassification.MONSTER)
+            .sized(0.7F, 2.0F).build("hungryzombie");
+    public static final RegistryObject<EntityType<HungryZombieEntity>> HUNGRYZOMBIE = ENTITIES.register("hungryzombie", () -> HUNGRYZOMBIE_TYPE);
+    public static final RegistryObject<Item> HUNGRYZOMBIE_EGG = ITEMS.register("hungryzombie_egg"
+            , () -> new SpawnEggItem(HUNGRYZOMBIE_TYPE, 0x6AA84F, 0xD41A1A,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
     public static final RegistryObject<Effect> JOKERNESS_EFFECT = EFFECTS.register("jokernesseffect", JokernessEffect::new);

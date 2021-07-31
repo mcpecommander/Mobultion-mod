@@ -1,12 +1,19 @@
 package dev.mcpecommander.mobultion.entities.zombies.entities;
 
-import net.minecraft.entity.Entity;
+import dev.mcpecommander.mobultion.setup.Registration;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -17,13 +24,14 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-/* McpeCommander created on 29/07/2021 inside the package - dev.mcpecommander.mobultion.entities.zombies.entities */
-public class MagmaZombieEntity extends MobultionZombieEntity{
+/* McpeCommander created on 30/07/2021 inside the package - dev.mcpecommander.mobultion.entities.zombies.entities */
+public class HungryZombieEntity extends MobultionZombieEntity{
 
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    public MagmaZombieEntity(EntityType<? extends MobultionZombieEntity> type, World world) {
+    public HungryZombieEntity(EntityType<? extends MobultionZombieEntity> type, World world) {
         super(type, world);
     }
 
@@ -34,28 +42,31 @@ public class MagmaZombieEntity extends MobultionZombieEntity{
     }
 
     @Override
-    public boolean doHurtTarget(@Nonnull Entity target) {
-        boolean flag = super.doHurtTarget(target);
-        if (flag) {
-            target.setSecondsOnFire(10);
-        }
-        return flag;
+    protected void populateDefaultEquipmentSlots(@Nonnull DifficultyInstance difficulty) {
+        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Registration.KNIFE.get()));
+        this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(Registration.FORK.get()));
     }
 
+    @Nullable
     @Override
-    protected boolean isSunBurnTick() {
-        return false;
+    public ILivingEntityData finalizeSpawn(@Nonnull IServerWorld world, @Nonnull DifficultyInstance difficulty,
+                                           @Nonnull SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityData,
+                                           @Nullable CompoundNBT NBTTag) {
+        this.setCanPickUpLoot(false);
+        this.populateDefaultEquipmentSlots(difficulty);
+
+        return super.finalizeSpawn(world, difficulty, spawnReason, livingEntityData, NBTTag);
     }
 
     @Override
     int getMaxDeathCount() {
-        return 46;
+        return 62;
     }
 
     @Override
     void deathParticles() {
         //Do not spawn too many particles.
-        if (this.deathTime % 4 == 0) {
+        if (this.deathTime % 8 == 0) {
             for(double i = 0; i <= Math.PI*2; i += Math.PI/18d) {
                 this.level.addParticle(ParticleTypes.FLAME,
                         //Math.cos(i) for the initial circle position on the x axis.
@@ -120,6 +131,6 @@ public class MagmaZombieEntity extends MobultionZombieEntity{
 
     @Override
     public AnimationFactory getFactory() {
-        return factory;
+        return this.factory;
     }
 }

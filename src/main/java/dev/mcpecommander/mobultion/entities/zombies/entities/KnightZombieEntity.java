@@ -193,6 +193,11 @@ public class KnightZombieEntity extends MobultionZombieEntity {
     }
 
     @Override
+    int getMaxDeathCount() {
+        return 46;
+    }
+
+    @Override
     void deathParticles() {
         //Do not spawn too many particles.
         if (this.deathTime % 4 == 0) {
