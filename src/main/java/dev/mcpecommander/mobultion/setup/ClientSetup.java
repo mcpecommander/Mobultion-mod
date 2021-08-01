@@ -147,6 +147,8 @@ public class ClientSetup {
                 DoctorZombieRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.HUNGRYZOMBIE.get(),
                 HungryZombieRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(Registration.GOROZOMBIE.get(),
+                GoroZombieRenderer::new);
     }
 
 
