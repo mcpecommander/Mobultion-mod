@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "mobultion:corruptedbonemealitem"
+    ]
+  },
+  "criteria": {
+    "has_corrupted_bonemeal": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "mobultion:corruptedboneitem"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mobultion:corruptedbonemealitem"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_corrupted_bonemeal",
+      "has_the_recipe"
+    ]
+  ]
+}

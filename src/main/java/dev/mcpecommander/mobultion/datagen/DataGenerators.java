@@ -13,6 +13,7 @@ public class DataGenerators {
     @SubscribeEvent
     public static void gatherData(GatherDataEvent event){
         if(event.includeServer()){
+            event.getGenerator().addProvider(new RecipesGen(event.getGenerator()));
             event.getGenerator().addProvider(new LootTablesGen(event.getGenerator()));
         }
         if(event.includeClient()){
