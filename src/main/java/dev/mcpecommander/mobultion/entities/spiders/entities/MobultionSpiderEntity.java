@@ -21,7 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import javax.annotation.Nonnull;
 
 /* Created by McpeCommander on 2021/06/18 */
 public abstract class MobultionSpiderEntity extends MonsterEntity implements IAnimatable{
@@ -30,15 +30,6 @@ public abstract class MobultionSpiderEntity extends MonsterEntity implements IAn
      * A data parameter copied from the minecraft spider that sets the spider climbing.
      */
     private static final DataParameter<Byte> DATA_FLAGS_ID = EntityDataManager.defineId(MobultionSpiderEntity.class, DataSerializers.BYTE);
-    /**
-     * A death timer that replaces {@code net.minecraft.entity.LivingEntity.deathTime} to avoid messing with the
-     * renderer of every mob with a special death animation.
-     */
-    protected int deathTimer = 0;
-    /**
-     * The maximum death tick timer that is changed in every subclass according to how long the death animation is.
-     */
-    protected int maxDeathTimer = 40;
 
     protected MobultionSpiderEntity(EntityType<? extends MobultionSpiderEntity> mob, World world) {
         super(mob, world);
@@ -90,7 +81,7 @@ public abstract class MobultionSpiderEntity extends MonsterEntity implements IAn
      * @return SoundEvent of the damage sound
      */
     @Override
-    protected SoundEvent getHurtSound(@ParametersAreNonnullByDefault DamageSource damageSource) {
+    protected SoundEvent getHurtSound(@Nonnull DamageSource damageSource) {
         return SoundEvents.SPIDER_HURT;
     }
 
@@ -109,7 +100,7 @@ public abstract class MobultionSpiderEntity extends MonsterEntity implements IAn
      * @param blockState
      */
     @Override
-    protected void playStepSound(@ParametersAreNonnullByDefault BlockPos blockPosition, @ParametersAreNonnullByDefault BlockState blockState) {
+    protected void playStepSound(@Nonnull BlockPos blockPosition, @Nonnull BlockState blockState) {
         this.playSound(SoundEvents.SPIDER_STEP, 0.15F, 1.0F);
     }
 
@@ -130,6 +121,7 @@ public abstract class MobultionSpiderEntity extends MonsterEntity implements IAn
      *
      * @return The creature attribute that this entity belongs to.
      */
+    @Nonnull
     @Override
     public CreatureAttribute getMobType() {
         return CreatureAttribute.ARTHROPOD;
@@ -155,8 +147,9 @@ public abstract class MobultionSpiderEntity extends MonsterEntity implements IAn
      * @param world: the world of this entity.
      * @return PathNavigator
      */
+    @Nonnull
     @Override
-    protected PathNavigator createNavigation(World world) {
+    protected PathNavigator createNavigation(@Nonnull World world) {
         return new ClimberPathNavigator(this, world);
     }
 
@@ -165,10 +158,12 @@ public abstract class MobultionSpiderEntity extends MonsterEntity implements IAn
      */
     @Override
     protected void tickDeath() {
-        if(this.deathTimer++ == maxDeathTimer){
+        if(this.deathTime++ == getMaxDeathTick()){
             this.remove();
         }
     }
+
+    protected abstract int getMaxDeathTick();
 
     /**
      * Gets the eye height of the entity allowing to change based on different poses or different sizes like babies or
@@ -179,7 +174,7 @@ public abstract class MobultionSpiderEntity extends MonsterEntity implements IAn
      * @return a float representing the eye height.
      */
     @Override
-    protected float getStandingEyeHeight(Pose pose, EntitySize entitySize) {
+    protected float getStandingEyeHeight(@Nonnull Pose pose, @Nonnull EntitySize entitySize) {
         return 0.65F;
     }
 

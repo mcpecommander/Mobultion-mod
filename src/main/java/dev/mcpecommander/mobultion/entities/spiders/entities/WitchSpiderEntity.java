@@ -91,10 +91,16 @@ public class WitchSpiderEntity extends MobultionSpiderEntity{
      */
     @Override
     public void registerControllers(AnimationData data) {
-        AnimationController controller = new AnimationController<>(this, "controller", 0, this::predicateController);
+        AnimationController<WitchSpiderEntity> controller = new AnimationController<>(this, "controller",
+                0, this::predicateController);
         controller.registerParticleListener(this::particleListener);
         data.addAnimationController(new AnimationController<>(this, "idle", 0, this::predicateIdle));
         data.addAnimationController(controller);
+    }
+
+    @Override
+    protected int getMaxDeathTick() {
+        return 20;
     }
 
     /**

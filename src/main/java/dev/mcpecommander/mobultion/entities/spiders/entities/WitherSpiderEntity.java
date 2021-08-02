@@ -29,13 +29,12 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
      * The animation factory, for more information check GeckoLib.
      */
     private final AnimationFactory factory = new AnimationFactory(this);
-    float prevHealth = 0;
+    float prevHealth;
     int timer = -1;
     boolean isDroppingHead1, isDroppingHead2 = false;
 
     public WitherSpiderEntity(EntityType<WitherSpiderEntity> mob, World world) {
         super(mob, world);
-        this.maxDeathTimer = 35;
         prevHealth = this.getMaxHealth();
     }
 
@@ -143,6 +142,11 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
             timer = 15;
             isDroppingHead2 = true;
         }
+    }
+
+    @Override
+    protected int getMaxDeathTick() {
+        return 35;
     }
 
     /**

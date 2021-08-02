@@ -41,7 +41,6 @@ public class AngelSpiderEntity extends MobultionSpiderEntity {
 
     public AngelSpiderEntity(EntityType<AngelSpiderEntity> mob, World world) {
         super(mob, world);
-        this.maxDeathTimer = 20;
     }
 
     /**
@@ -147,6 +146,11 @@ public class AngelSpiderEntity extends MobultionSpiderEntity {
         } else {
             this.entityData.set(TARGET, -1);
         }
+    }
+
+    @Override
+    protected int getMaxDeathTick() {
+        return 20;
     }
 
     /**

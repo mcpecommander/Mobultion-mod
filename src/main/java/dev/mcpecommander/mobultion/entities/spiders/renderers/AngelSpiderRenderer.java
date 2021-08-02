@@ -13,10 +13,9 @@ public class AngelSpiderRenderer extends GeoEntityRenderer<AngelSpiderEntity> {
     public AngelSpiderRenderer(EntityRendererManager renderManager) {
         super(renderManager, new AngelSpiderModel());
         this.shadowRadius = 0.7F;
-        this.addLayer(new SpiderEyesLayer(this, "angelspider"));
+        this.addLayer(new SpiderEyesLayer<>(this, "angelspider"));
         this.addLayer(new AngelRingLayer(this));
     }
-
 
 
 }

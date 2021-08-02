@@ -25,7 +25,6 @@ public class HypnoSpiderEntity extends MobultionSpiderEntity{
 
     public HypnoSpiderEntity(EntityType<HypnoSpiderEntity> mob, World world) {
         super(mob, world);
-        this.maxDeathTimer = 30;
     }
 
     /**
@@ -106,7 +105,7 @@ public class HypnoSpiderEntity extends MobultionSpiderEntity{
      */
     @Override
     protected void tickDeath() {
-        if(this.deathTimer++ == maxDeathTimer){
+        if(this.deathTime++ == getMaxDeathTick()){
             this.remove();
             for(int i = 0; i < 20; ++i) {
                 double d0 = this.random.nextGaussian() * 0.02D;
@@ -115,6 +114,11 @@ public class HypnoSpiderEntity extends MobultionSpiderEntity{
                 this.level.addParticle(ParticleTypes.POOF, this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
             }
         }
+    }
+
+    @Override
+    protected int getMaxDeathTick() {
+        return 30;
     }
 
     /**

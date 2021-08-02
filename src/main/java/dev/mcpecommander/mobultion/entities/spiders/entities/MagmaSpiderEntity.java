@@ -36,7 +36,6 @@ public class MagmaSpiderEntity extends MobultionSpiderEntity{
 
     public MagmaSpiderEntity(EntityType<MagmaSpiderEntity> mob, World world) {
         super(mob, world);
-        this.maxDeathTimer = 35;
     }
 
     /**
@@ -109,7 +108,8 @@ public class MagmaSpiderEntity extends MobultionSpiderEntity{
      */
     @Override
     public void registerControllers(AnimationData data) {
-        AnimationController controller = new AnimationController<>(this, "controller", 0, this::predicate);
+        AnimationController<MagmaSpiderEntity> controller = new AnimationController<>(this, "controller",
+                0, this::predicate);
         controller.registerParticleListener(this::particleListener);
         data.addAnimationController(controller);
     }
@@ -135,8 +135,8 @@ public class MagmaSpiderEntity extends MobultionSpiderEntity{
                 double d0 = this.random.nextGaussian() * 0.05D;
                 double d1 = this.random.nextGaussian() * 0.05D;
                 double d2 = this.random.nextGaussian() * 0.05D;
-                this.level.addParticle(ParticleTypes.LARGE_SMOKE, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D)
-                        , d0, d1, d2);
+                this.level.addParticle(ParticleTypes.LARGE_SMOKE, this.getRandomX(0.5D), this.getRandomY(),
+                        this.getRandomZ(0.5D), d0, d1, d2);
             }
             flameParticleTick --;
         }
@@ -228,12 +228,17 @@ public class MagmaSpiderEntity extends MobultionSpiderEntity{
         }
     }
 
+    @Override
+    protected int getMaxDeathTick() {
+        return 35;
+    }
+
     /**
      * Ticks on both sides when isDeadOrDying() is true.
      */
     @Override
     protected void tickDeath() {
-        if(this.deathTimer++ == maxDeathTimer){
+        if(this.deathTime++ == getMaxDeathTick()){
             this.remove();
             BlockPos pos = new BlockPos(this.getX(), this.getY(), this.getZ());
             if(AbstractFireBlock.canBePlacedAt(this.level, pos, Direction.UP)){
