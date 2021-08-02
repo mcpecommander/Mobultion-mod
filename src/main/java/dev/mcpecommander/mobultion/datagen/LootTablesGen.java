@@ -34,7 +34,8 @@ public class LootTablesGen extends LootTableProvider {
     }
 
     private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> tables =
-            ImmutableList.of(Pair.of(LootTablesGen.EntityTables::new, LootParameterSets.ENTITY));
+            ImmutableList.of(Pair.of(LootTablesGen.EntityTables::new, LootParameterSets.ENTITY),
+                             Pair.of(LootTablesGen.BlockTables::new, LootParameterSets.BLOCK));
 
     @Nonnull
     @Override
@@ -61,6 +62,8 @@ public class LootTablesGen extends LootTableProvider {
         @Override
         protected Iterable<EntityType<?>> getKnownEntities() {
             return Lists.newArrayList(Registration.VAMPIRESKELETON.get());
+            //TODO finish the rest of the entities loot tables.
+
 //                    ForgeRegistries.ENTITIES.getValues().stream().filter(entityType ->
 //                            entityType.getRegistryName().getNamespace().equals(MODID) &&
 //                                    entityType.getCategory() != EntityClassification.MISC)
