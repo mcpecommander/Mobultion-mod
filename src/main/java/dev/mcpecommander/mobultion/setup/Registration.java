@@ -90,6 +90,7 @@ public class Registration {
         event.put(DOCTORZOMBIE.get(), DoctorZombieEntity.createAttributes().build());
         event.put(HUNGRYZOMBIE.get(), HungryZombieEntity.createAttributes().build());
         event.put(GOROZOMBIE.get(), GoroZombieEntity.createAttributes().build());
+        event.put(GENIEZOMBIE.get(), GenieZombieEntity.createAttributes().build());
     }
 
     //This is not inlined in the deferred register because .get() returns a generic IDataSerializer.
@@ -324,6 +325,14 @@ public class Registration {
             () -> GOROZOMBIE_TYPE);
     public static final RegistryObject<Item> GOROZOMBIE_EGG = ITEMS.register("gorozombie_egg"
             , () -> new SpawnEggItem(GOROZOMBIE_TYPE, 0x95BD84, 0xCEA937,
+                    (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
+
+    private static final EntityType<GenieZombieEntity> GENIEZOMBIE_TYPE = EntityType.Builder.of(GenieZombieEntity::new,
+            EntityClassification.MONSTER).sized(0.7F, 2.0F).build("geniezombie");
+    public static final RegistryObject<EntityType<GenieZombieEntity>> GENIEZOMBIE = ENTITIES.register("geniezombie",
+            () -> GENIEZOMBIE_TYPE);
+    public static final RegistryObject<Item> GENIEZOMBIE_EGG = ITEMS.register("geniezombie_egg"
+            , () -> new SpawnEggItem(GENIEZOMBIE_TYPE, 0xB18D47, 0x463AA5,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
     public static final RegistryObject<Effect> JOKERNESS_EFFECT = EFFECTS.register("jokernesseffect", JokernessEffect::new);
