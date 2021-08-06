@@ -139,6 +139,8 @@ public class Registration {
     public static final RegistryObject<HealthPackItem> HEALTHPACK = ITEMS.register("healthpackitem", HealthPackItem::new);
     public static final RegistryObject<Item> KNIFE = ITEMS.register("knifeitem", () -> new Item(new Item.Properties().tab(ModSetup.ITEM_GROUP)));
     public static final RegistryObject<Item> FORK = ITEMS.register("forkitem", () -> new Item(new Item.Properties().tab(ModSetup.ITEM_GROUP)));
+    public static final RegistryObject<LampItem> LAMP = ITEMS.register("lampitem", LampItem::new);
+
 
     private static final EntityType<AngelSpiderEntity> ANGELSPIDER_TYPE = EntityType.Builder.of(AngelSpiderEntity::new,
                     EntityClassification.MONSTER).sized(1.4f, 1f).build("angelspider");
