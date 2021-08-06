@@ -1,6 +1,9 @@
 {
   "credit": "Made with Blockbench",
   "parent": "builtin/entity",
+  "textures": {
+      "particle": "mobultion:item/lamp"
+  },
   "display": {
     "thirdperson_righthand": {
       "rotation": [
