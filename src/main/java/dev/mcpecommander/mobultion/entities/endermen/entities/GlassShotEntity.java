@@ -208,7 +208,7 @@ public class GlassShotEntity extends DamagingProjectileEntity implements IAnimat
     }
 
     /**
-     * The spawning packet that is send to client side to make it tick and render on the client side.
+     * The spawning packet that is sent to client side to make it tick and render on the client side.
      * DO NOT USE the vanilla spawning packet because it doesn't work.
      * @return The spawning packet to be sent to the client.
      */
