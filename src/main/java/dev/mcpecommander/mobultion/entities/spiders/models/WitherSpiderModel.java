@@ -25,7 +25,7 @@ public class WitherSpiderModel extends AnimatedGeoModel<WitherSpiderEntity> {
      */
     @Override
     public ResourceLocation getModelLocation(WitherSpiderEntity entity) {
-        return new ResourceLocation(MODID, "geo/witherspider.json");
+        return new ResourceLocation(MODID, "geo/spiders/witherspider.json");
     }
 
     /**
@@ -36,7 +36,7 @@ public class WitherSpiderModel extends AnimatedGeoModel<WitherSpiderEntity> {
      */
     @Override
     public ResourceLocation getTextureLocation(WitherSpiderEntity entity) {
-        return new ResourceLocation(MODID, "textures/entity/witherspider.png");
+        return new ResourceLocation(MODID, "textures/entity/spiders/witherspider.png");
     }
 
     /**
@@ -47,7 +47,7 @@ public class WitherSpiderModel extends AnimatedGeoModel<WitherSpiderEntity> {
      */
     @Override
     public ResourceLocation getAnimationFileLocation(WitherSpiderEntity animatable) {
-        return new ResourceLocation(MODID, "animations/witherspider.animation.json");
+        return new ResourceLocation(MODID, "animations/spiders/witherspider.animation.json");
     }
 
     /**

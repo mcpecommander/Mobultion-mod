@@ -22,7 +22,7 @@ public class WitherHeadBugModel extends AnimatedGeoModel<WitherHeadBugEntity> {
      */
     @Override
     public ResourceLocation getModelLocation(WitherHeadBugEntity entity) {
-        return new ResourceLocation(MODID, "geo/witherheadbug.json");
+        return new ResourceLocation(MODID, "geo/spiders/witherheadbug.json");
     }
 
     /**
@@ -33,7 +33,7 @@ public class WitherHeadBugModel extends AnimatedGeoModel<WitherHeadBugEntity> {
      */
     @Override
     public ResourceLocation getTextureLocation(WitherHeadBugEntity entity) {
-        return new ResourceLocation(MODID, "textures/entity/witherheadbug.png");
+        return new ResourceLocation(MODID, "textures/entity/spiders/witherheadbug.png");
     }
 
     /**
@@ -44,7 +44,7 @@ public class WitherHeadBugModel extends AnimatedGeoModel<WitherHeadBugEntity> {
      */
     @Override
     public ResourceLocation getAnimationFileLocation(WitherHeadBugEntity animatable) {
-        return new ResourceLocation(MODID, "animations/witherheadbug.animation.json");
+        return new ResourceLocation(MODID, "animations/spiders/witherheadbug.animation.json");
     }
 
     /**

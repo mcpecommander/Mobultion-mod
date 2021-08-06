@@ -21,7 +21,7 @@ public class WitchSpiderModel extends AnimatedGeoModel<WitchSpiderEntity> {
      */
     @Override
     public ResourceLocation getModelLocation(WitchSpiderEntity entity) {
-        return new ResourceLocation(MODID, "geo/witchspider.json");
+        return new ResourceLocation(MODID, "geo/spiders/witchspider.json");
     }
 
     /**
@@ -31,7 +31,7 @@ public class WitchSpiderModel extends AnimatedGeoModel<WitchSpiderEntity> {
      */
     @Override
     public ResourceLocation getTextureLocation(WitchSpiderEntity entity) {
-        return new ResourceLocation(MODID, "textures/entity/witchspider.png");
+        return new ResourceLocation(MODID, "textures/entity/spiders/witchspider.png");
     }
 
     /**
@@ -41,7 +41,7 @@ public class WitchSpiderModel extends AnimatedGeoModel<WitchSpiderEntity> {
      */
     @Override
     public ResourceLocation getAnimationFileLocation(WitchSpiderEntity animatable) {
-        return new ResourceLocation(MODID, "animations/witchspider.animation.json");
+        return new ResourceLocation(MODID, "animations/spiders/witchspider.animation.json");
     }
 
     /**

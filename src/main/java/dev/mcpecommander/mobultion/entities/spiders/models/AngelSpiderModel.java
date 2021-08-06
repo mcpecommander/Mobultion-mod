@@ -21,7 +21,7 @@ public class AngelSpiderModel extends AnimatedGeoModel<AngelSpiderEntity>{
 	 */
 	@Override
 	public ResourceLocation getModelLocation(AngelSpiderEntity entity) {
-		return new ResourceLocation(MODID, "geo/angelspider.json");
+		return new ResourceLocation(MODID, "geo/spiders/angelspider.json");
 	}
 
 	/**
@@ -31,7 +31,7 @@ public class AngelSpiderModel extends AnimatedGeoModel<AngelSpiderEntity>{
 	 */
 	@Override
 	public ResourceLocation getTextureLocation(AngelSpiderEntity entity) {
-		return new ResourceLocation(MODID, "textures/entity/angelspider.png");
+		return new ResourceLocation(MODID, "textures/entity/spiders/angelspider.png");
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class AngelSpiderModel extends AnimatedGeoModel<AngelSpiderEntity>{
 	 */
 	@Override
 	public ResourceLocation getAnimationFileLocation(AngelSpiderEntity animatable) {
-		return new ResourceLocation(MODID, "animations/angelspider.animation.json");
+		return new ResourceLocation(MODID, "animations/spiders/angelspider.animation.json");
 	}
 
 	/**

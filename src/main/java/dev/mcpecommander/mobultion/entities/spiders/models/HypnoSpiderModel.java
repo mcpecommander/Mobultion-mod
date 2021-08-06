@@ -21,7 +21,7 @@ public class HypnoSpiderModel extends AnimatedGeoModel<HypnoSpiderEntity> {
      */
     @Override
     public ResourceLocation getModelLocation(HypnoSpiderEntity entity) {
-        return new ResourceLocation(MODID, "geo/hypnospider.json");
+        return new ResourceLocation(MODID, "geo/spiders/hypnospider.json");
     }
 
     /**
@@ -31,7 +31,7 @@ public class HypnoSpiderModel extends AnimatedGeoModel<HypnoSpiderEntity> {
      */
     @Override
     public ResourceLocation getTextureLocation(HypnoSpiderEntity entity) {
-        return new ResourceLocation(MODID, "textures/entity/hypnospider.png");
+        return new ResourceLocation(MODID, "textures/entity/spiders/hypnospider.png");
     }
 
     /**
@@ -41,7 +41,7 @@ public class HypnoSpiderModel extends AnimatedGeoModel<HypnoSpiderEntity> {
      */
     @Override
     public ResourceLocation getAnimationFileLocation(HypnoSpiderEntity animatable) {
-        return new ResourceLocation(MODID, "animations/hypnospider.animation.json");
+        return new ResourceLocation(MODID, "animations/spiders/hypnospider.animation.json");
     }
 
     /**

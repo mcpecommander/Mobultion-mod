@@ -18,7 +18,7 @@ public class SpiderEyesLayer<T extends MobultionSpiderEntity> extends GeoLayerRe
      * The resource location for a texture that matches the model texture in size but highlights the parts that will
      * light.
      */
-    private static final ResourceLocation SPIDER_EYES = new ResourceLocation(MODID,"textures/entity/spidereyes.png");
+    private static final ResourceLocation SPIDER_EYES = new ResourceLocation(MODID,"textures/entity/spiders/spidereyes.png");
     /**
      * The resource location for the geckolib model of the entity that has this layer.
      */
@@ -28,7 +28,7 @@ public class SpiderEyesLayer<T extends MobultionSpiderEntity> extends GeoLayerRe
     public SpiderEyesLayer(IGeoRenderer<T> entityRendererIn, String spiderName) {
         super(entityRendererIn);
         this.renderer = entityRendererIn;
-        SPIDER_MODEL = new ResourceLocation(MODID, "geo/" + spiderName + ".json");;
+        SPIDER_MODEL = new ResourceLocation(MODID, "geo/spiders/" + spiderName + ".json");;
     }
 
     @Override

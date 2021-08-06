@@ -21,7 +21,7 @@ public class MagmaSpiderModel extends AnimatedGeoModel<MagmaSpiderEntity> {
      */
     @Override
     public ResourceLocation getModelLocation(MagmaSpiderEntity entity) {
-        return new ResourceLocation(MODID, "geo/magmaspider.json");
+        return new ResourceLocation(MODID, "geo/spiders/magmaspider.json");
     }
 
     /**
@@ -31,7 +31,7 @@ public class MagmaSpiderModel extends AnimatedGeoModel<MagmaSpiderEntity> {
      */
     @Override
     public ResourceLocation getTextureLocation(MagmaSpiderEntity entity) {
-        return new ResourceLocation(MODID, "textures/entity/magmaspider.png");
+        return new ResourceLocation(MODID, "textures/entity/spiders/magmaspider.png");
     }
 
     /**
@@ -41,7 +41,7 @@ public class MagmaSpiderModel extends AnimatedGeoModel<MagmaSpiderEntity> {
      */
     @Override
     public ResourceLocation getAnimationFileLocation(MagmaSpiderEntity animatable) {
-        return new ResourceLocation(MODID, "animations/magmaspider.animation.json");
+        return new ResourceLocation(MODID, "animations/spiders/magmaspider.animation.json");
     }
 
     /**
