@@ -24,10 +24,7 @@
 					"pivot": [0, 8, -3],
 					"cubes": [
 						{"origin": [-5, 4, 3], "size": [10, 8, 2], "uv": [12, 12], "mirror": true}
-					],
-					"locators": {
-						"locator": [0, 9, 3]
-					}
+					]
 				},
 				{
 					"name": "Rear1",

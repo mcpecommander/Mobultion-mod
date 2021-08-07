@@ -27,5 +27,7 @@ public class SoundsGen extends SoundDefinitionsProvider {
         this.add(Registration.HEALING_SOUND.get(), SoundDefinition.definition().subtitle("healthpack.heal")
                 .with(SoundDefinitionsProvider.sound(new ResourceLocation(MODID, "healing")).volume(0.5d))
                 .with(SoundDefinitionsProvider.sound(new ResourceLocation(MODID,"healing1")).volume(0.5)));
+        this.add(Registration.HOLY_SOUND.get(), SoundDefinition.definition().subtitle("halo.revive")
+                .with(SoundDefinitionsProvider.sound(new ResourceLocation(MODID, "holy")).volume(0.5d)));
     }
 }

@@ -1,0 +1,85 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.haloitem",
+				"texture_width": 8,
+				"texture_height": 8,
+				"visible_bounds_width": 2,
+				"visible_bounds_height": 1.5,
+				"visible_bounds_offset": [0, 0.25, 0]
+			},
+			"bones": [
+				{
+					"name": "Rings",
+					"pivot": [0, 0, 0.5]
+				},
+				{
+					"name": "Ring1",
+					"parent": "Rings",
+					"pivot": [0, 0.5, -3.04264],
+					"cubes": [
+						{"origin": [-1.5, 0, -3.54264], "size": [3, 1, 1], "inflate": -0.001, "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "Ring2",
+					"parent": "Rings",
+					"pivot": [2.19497, 0.5, -2.04767],
+					"cubes": [
+						{"origin": [1.29497, 0, -3.04767], "size": [3, 1, 1], "pivot": [1.99497, -0.5, -3.04767], "rotation": [0, -45, 0], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "Ring3",
+					"parent": "Rings",
+					"pivot": [-2.20711, 0.5, -2.12843],
+					"cubes": [
+						{"origin": [-3.70711, 0, -2.62843], "size": [3, 1, 1], "pivot": [-2.20711, -0.5, -2.12843], "rotation": [0, 45, 0], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "Ring4",
+					"parent": "Rings",
+					"pivot": [0, 0.5, 3.2],
+					"cubes": [
+						{"origin": [-1.5, 0, 2.7], "size": [3, 1, 1], "inflate": -0.001, "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "Ring5",
+					"parent": "Rings",
+					"pivot": [2.20711, 0.5, 2.28579],
+					"cubes": [
+						{"origin": [0.70711, 0, 1.78579], "size": [3, 1, 1], "pivot": [2.20711, -0.5, 2.28579], "rotation": [0, 45, 0], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "Ring6",
+					"parent": "Rings",
+					"pivot": [-2.20711, 0.5, 2.28579],
+					"cubes": [
+						{"origin": [-3.70711, 0, 1.78579], "size": [3, 1, 1], "pivot": [-2.20711, -0.5, 2.28579], "rotation": [0, -45, 0], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "Ring7",
+					"parent": "Rings",
+					"pivot": [-3.12132, 0.5, 0.07868],
+					"cubes": [
+						{"origin": [-4.62132, 0, -0.42132], "size": [3, 1, 1], "inflate": -0.001, "pivot": [-3.12132, -0.5, 0.07868], "rotation": [0, -90, 0], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "Ring8",
+					"parent": "Rings",
+					"pivot": [3.12635, 0.5, 0.07365],
+					"cubes": [
+						{"origin": [1.62635, 0, -0.42635], "size": [3, 1, 1], "inflate": -0.001, "pivot": [3.12635, -0.5, 0.07365], "rotation": [0, -90, 0], "uv": [0, 0], "mirror": true}
+					]
+				}
+			]
+		}
+	]
+}

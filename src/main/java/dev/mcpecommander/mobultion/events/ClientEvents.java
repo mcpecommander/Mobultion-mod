@@ -1,5 +1,6 @@
 package dev.mcpecommander.mobultion.events;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.mcpecommander.mobultion.effects.JokernessEffect;
 import dev.mcpecommander.mobultion.effects.PlayingCard;
@@ -7,10 +8,17 @@ import dev.mcpecommander.mobultion.setup.Registration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.model.WolfModel;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Quaternion;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -44,6 +52,22 @@ public class ClientEvents {
             });
             effect.effectFixers = copy;
 
+        }
+    }
+
+    @SubscribeEvent
+    public static void renderEntity(RenderLivingEvent.Post<WolfEntity, WolfModel<WolfEntity>> event){
+        if(event.getEntity() instanceof WolfEntity &&
+                event.getEntity().getItemBySlot(EquipmentSlotType.HEAD).getItem() == Registration.HALO.get()){
+            MatrixStack stack = event.getMatrixStack();
+            stack.pushPose();
+            stack.mulPose(new Quaternion(0,
+                    180 + MathHelper.rotLerp(event.getPartialRenderTick(), -event.getEntity().yBodyRotO,
+                            -event.getEntity().yBodyRot), 0, true));
+            stack.translate(-0.5, 0.5, -1);
+            Registration.HALO.get().getItemStackTileEntityRenderer().renderByItem(event.getEntity().getItemBySlot(EquipmentSlotType.HEAD),
+                    ItemCameraTransforms.TransformType.HEAD, event.getMatrixStack(), event.getBuffers(), event.getLight(), 0);
+            stack.popPose();
         }
     }
 

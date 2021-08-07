@@ -11,5 +11,14 @@
         "volume": 0.5
       }
     ]
+  },
+  "holy": {
+    "subtitle": "halo.revive",
+    "sounds": [
+      {
+        "name": "mobultion:holy",
+        "volume": 0.5
+      }
+    ]
   }
 }

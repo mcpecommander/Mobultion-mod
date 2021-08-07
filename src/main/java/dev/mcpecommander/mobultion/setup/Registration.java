@@ -143,6 +143,7 @@ public class Registration {
     public static final RegistryObject<EnderFlakeItem> ENDERFLAKE = ITEMS.register("enderflakeitem", EnderFlakeItem::new);
     public static final RegistryObject<EnderBlazeItem> ENDERBLAZE = ITEMS.register("enderblazeitem", EnderBlazeItem::new);
     public static final RegistryObject<GlassShotItem> GLASSSHOT_ITEM = ITEMS.register("glassshotitem", GlassShotItem::new);
+    public static final RegistryObject<HaloItem> HALO = ITEMS.register("haloitem", HaloItem::new);
 
     private static final EntityType<AngelSpiderEntity> ANGELSPIDER_TYPE = EntityType.Builder.of(AngelSpiderEntity::new,
                     EntityClassification.MONSTER).sized(1.4f, 1f).build("angelspider");
@@ -343,6 +344,8 @@ public class Registration {
 
     public static final RegistryObject<SoundEvent> HEALING_SOUND = SOUNDS.register("healing", () ->
             new SoundEvent(new ResourceLocation(MODID, "healing")));
+    public static final RegistryObject<SoundEvent> HOLY_SOUND = SOUNDS.register("holy", () ->
+            new SoundEvent(new ResourceLocation(MODID, "holy")));
 
 
 }
