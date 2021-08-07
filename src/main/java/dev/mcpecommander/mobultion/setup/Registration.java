@@ -44,7 +44,8 @@ public class Registration {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     private static final DeferredRegister<Effect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, MODID);
     private static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, MODID);
-    private static final DeferredRegister<DataSerializerEntry> DATA_SERIALIZER = DeferredRegister.create(ForgeRegistries.DATA_SERIALIZERS, MODID);
+    private static final DeferredRegister<DataSerializerEntry> DATA_SERIALIZER = DeferredRegister.
+            create(ForgeRegistries.DATA_SERIALIZERS, MODID);
 
     public static void init() {
 
@@ -131,19 +132,25 @@ public class Registration {
     public static final RegistryObject<HeartArrowItem> HEARTARROW_ITEM = ITEMS.register("heartarrowitem", HeartArrowItem::new);
     public static final RegistryObject<Item> CORRUPTEDBONE = ITEMS.register("corruptedboneitem",
             () -> new Item(new Item.Properties().tab(ModSetup.ITEM_GROUP)));
-    public static final RegistryObject<CorruptedBoneMealItem> CORRUPTEDBONEMEAL = ITEMS.register("corruptedbonemealitem", CorruptedBoneMealItem::new);
+    public static final RegistryObject<CorruptedBoneMealItem> CORRUPTEDBONEMEAL = ITEMS.register("corruptedbonemealitem",
+            CorruptedBoneMealItem::new);
     public static final RegistryObject<HealingStaffItem> HEALINGSTAFF = ITEMS.register("healingstaffitem", HealingStaffItem::new);
-    public static final RegistryObject<Item> FANG = ITEMS.register("fangitem", () -> new Item(new Item.Properties().tab(ModSetup.ITEM_GROUP)));
+    public static final RegistryObject<Item> FANG = ITEMS.register("fangitem", () ->
+            new Item(new Item.Properties().tab(ModSetup.ITEM_GROUP)));
     public static final RegistryObject<HardHatItem> HARDHAT = ITEMS.register("hardhatitem", HardHatItem::new);
     public static final RegistryObject<HammerItem> HAMMER = ITEMS.register("hammeritem", HammerItem::new);
     public static final RegistryObject<HealthPackItem> HEALTHPACK = ITEMS.register("healthpackitem", HealthPackItem::new);
-    public static final RegistryObject<Item> KNIFE = ITEMS.register("knifeitem", () -> new Item(new Item.Properties().tab(ModSetup.ITEM_GROUP)));
-    public static final RegistryObject<Item> FORK = ITEMS.register("forkitem", () -> new Item(new Item.Properties().tab(ModSetup.ITEM_GROUP)));
+    public static final RegistryObject<Item> KNIFE = ITEMS.register("knifeitem", () ->
+            new Item(new Item.Properties().tab(ModSetup.ITEM_GROUP)));
+    public static final RegistryObject<Item> FORK = ITEMS.register("forkitem", () ->
+            new Item(new Item.Properties().tab(ModSetup.ITEM_GROUP)));
     public static final RegistryObject<LampItem> LAMP = ITEMS.register("lampitem", LampItem::new);
     public static final RegistryObject<EnderFlakeItem> ENDERFLAKE = ITEMS.register("enderflakeitem", EnderFlakeItem::new);
     public static final RegistryObject<EnderBlazeItem> ENDERBLAZE = ITEMS.register("enderblazeitem", EnderBlazeItem::new);
     public static final RegistryObject<GlassShotItem> GLASSSHOT_ITEM = ITEMS.register("glassshotitem", GlassShotItem::new);
     public static final RegistryObject<HaloItem> HALO = ITEMS.register("haloitem", HaloItem::new);
+    public static final RegistryObject<Item> FLAMINGLEG = ITEMS.register("flaminglegitem", () ->
+            new Item(new Item.Properties().tab(ModSetup.ITEM_GROUP)));
 
     private static final EntityType<AngelSpiderEntity> ANGELSPIDER_TYPE = EntityType.Builder.of(AngelSpiderEntity::new,
                     EntityClassification.MONSTER).sized(1.4f, 1f).build("angelspider");

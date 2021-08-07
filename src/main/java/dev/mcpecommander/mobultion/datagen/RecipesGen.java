@@ -5,6 +5,7 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.RecipeProvider;
 import net.minecraft.data.ShapelessRecipeBuilder;
+import net.minecraft.item.Items;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
@@ -21,5 +22,10 @@ public class RecipesGen extends RecipeProvider {
         ShapelessRecipeBuilder.shapeless(Registration.CORRUPTEDBONEMEAL.get(), 3)
                 .requires(Registration.CORRUPTEDBONE.get()).unlockedBy("has_corrupted_bonemeal",
                         has(Registration.CORRUPTEDBONE.get())).save(finishedRecipe);
+        ShapelessRecipeBuilder.shapeless(Items.BLAZE_ROD, 1).requires(Registration.FLAMINGLEG.get(), 4)
+                .unlockedBy("has_flaming_leg", has(Registration.FLAMINGLEG.get())).save(finishedRecipe);
+        ShapelessRecipeBuilder.shapeless(Items.BLAZE_POWDER, 1).requires(Registration.FLAMINGLEG.get(), 2)
+                .unlockedBy("has_flaming_leg", has(Registration.FLAMINGLEG.get())).save(finishedRecipe);
+
     }
 }

@@ -56,7 +56,7 @@ public class CommonEvents {
                 wolf.playSound(Registration.HOLY_SOUND.get(), 1f, 1f - wolf.getRandom().nextFloat() * 0.2f);
                 if(event.getSource().getEntity() != null){
                     event.getSource().getEntity().sendMessage(
-                            new TranslationTextComponent("But " +wolf.getName().getString() +
+                            new TranslationTextComponent("But " + wolf.getName().getString() +
                                     " was revived by some mystical holy powers."), Util.NIL_UUID);
                 }
 
