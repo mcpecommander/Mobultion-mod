@@ -1,0 +1,61 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "builtin/entity",
+  "textures": {
+    "particle": "mobultion:entity/glassshot"
+  },
+  "display": {
+    "firstperson_righthand": {
+      "translation": [
+        3,
+        0,
+        0
+      ]
+    },
+    "firstperson_lefthand": {
+      "translation": [
+        3,
+        0,
+        0
+      ]
+    },
+    "ground": {
+      "translation": [
+        0,
+        -4,
+        0
+      ]
+    },
+    "gui": {
+      "translation": [
+        0,
+        -3.25,
+        0
+      ],
+      "scale": [
+        2,
+        2,
+        2
+      ]
+    },
+    "head": {
+      "translation": [
+        0,
+        6.25,
+        0
+      ]
+    },
+    "fixed": {
+      "translation": [
+        0,
+        -3.25,
+        0
+      ],
+      "scale": [
+        2,
+        2,
+        2
+      ]
+    }
+  }
+}

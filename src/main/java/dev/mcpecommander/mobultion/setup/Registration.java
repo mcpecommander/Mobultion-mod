@@ -140,7 +140,9 @@ public class Registration {
     public static final RegistryObject<Item> KNIFE = ITEMS.register("knifeitem", () -> new Item(new Item.Properties().tab(ModSetup.ITEM_GROUP)));
     public static final RegistryObject<Item> FORK = ITEMS.register("forkitem", () -> new Item(new Item.Properties().tab(ModSetup.ITEM_GROUP)));
     public static final RegistryObject<LampItem> LAMP = ITEMS.register("lampitem", LampItem::new);
-
+    public static final RegistryObject<EnderFlakeItem> ENDERFLAKE = ITEMS.register("enderflakeitem", EnderFlakeItem::new);
+    public static final RegistryObject<EnderBlazeItem> ENDERBLAZE = ITEMS.register("enderblazeitem", EnderBlazeItem::new);
+    public static final RegistryObject<GlassShotItem> GLASSSHOT_ITEM = ITEMS.register("glassshotitem", GlassShotItem::new);
 
     private static final EntityType<AngelSpiderEntity> ANGELSPIDER_TYPE = EntityType.Builder.of(AngelSpiderEntity::new,
                     EntityClassification.MONSTER).sized(1.4f, 1f).build("angelspider");

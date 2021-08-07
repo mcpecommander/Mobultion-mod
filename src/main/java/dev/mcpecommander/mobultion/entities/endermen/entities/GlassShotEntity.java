@@ -5,6 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.DamagingProjectileEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
@@ -30,6 +31,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import javax.annotation.Nonnull;
 import java.awt.*;
 
 /* McpeCommander created on 03/07/2021 inside the package - dev.mcpecommander.mobultion.entities.endermen.entities */
@@ -44,7 +46,6 @@ public class GlassShotEntity extends DamagingProjectileEntity implements IAnimat
      */
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    //Don't use
     public GlassShotEntity(EntityType<GlassShotEntity> projectileType, World world){
         super(projectileType, world);
     }
@@ -137,12 +138,13 @@ public class GlassShotEntity extends DamagingProjectileEntity implements IAnimat
      * @param rayTraceResult has information about which entity got hit.
      */
     @Override
-    protected void onHitEntity(EntityRayTraceResult rayTraceResult) {
+    protected void onHitEntity(@Nonnull EntityRayTraceResult rayTraceResult) {
         if (!this.level.isClientSide) {
             Entity entity = rayTraceResult.getEntity();
             if(this.getOwner() == null || !this.getOwner().isAlive()) return;
             entity.hurt(DamageSource.thrown(this, this.getOwner()),
-                    (float) ((LivingEntity) this.getOwner()).getAttributeValue(Attributes.ATTACK_DAMAGE));
+                    this.getOwner() instanceof PlayerEntity ? 5f :
+                            (float) ((LivingEntity) this.getOwner()).getAttributeValue(Attributes.ATTACK_DAMAGE));
         }
     }
 
@@ -166,12 +168,12 @@ public class GlassShotEntity extends DamagingProjectileEntity implements IAnimat
      * @return true if the entity can be hit by this projectile.
      */
     @Override
-    protected boolean canHitEntity(Entity entity) {
+    protected boolean canHitEntity(@Nonnull Entity entity) {
         return entity != this.getOwner() && super.canHitEntity(entity);
     }
 
     /**
-     * Whether this entity is in a water block.
+     * Whether this entity is in a water block. Used for particles and speed adjustments.
      * @return true if the entity current position is in a water block.
      */
     @Override
@@ -212,6 +214,7 @@ public class GlassShotEntity extends DamagingProjectileEntity implements IAnimat
      * DO NOT USE the vanilla spawning packet because it doesn't work.
      * @return The spawning packet to be sent to the client.
      */
+    @Nonnull
     @Override
     public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
