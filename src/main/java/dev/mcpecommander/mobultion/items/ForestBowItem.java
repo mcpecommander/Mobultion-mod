@@ -14,6 +14,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import java.util.function.Predicate;
 
 /* McpeCommander created on 16/07/2021 inside the package - dev.mcpecommander.mobultion.items */
@@ -24,7 +25,7 @@ public class ForestBowItem extends BowItem {
     }
 
     @Override
-    public void releaseUsing(ItemStack bowItemStack, World world, LivingEntity shooter, int remainingUseTicks) {
+    public void releaseUsing(@Nonnull ItemStack bowItemStack, @Nonnull World world, @Nonnull LivingEntity shooter, int remainingUseTicks) {
         if (shooter instanceof PlayerEntity) {
             PlayerEntity playerentity = (PlayerEntity)shooter;
             //instabuild is creative mode for fuck's sake.
@@ -93,8 +94,9 @@ public class ForestBowItem extends BowItem {
         }
     }
 
+    @Nonnull
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity shooter, Hand hand) {
+    public ActionResult<ItemStack> use(@Nonnull World world, PlayerEntity shooter, @Nonnull Hand hand) {
         ItemStack itemstack = shooter.getItemInHand(hand);
         if (!shooter.abilities.instabuild && !shooter.getProjectile(itemstack).isEmpty()) {
             return ActionResult.fail(itemstack);
@@ -111,22 +113,25 @@ public class ForestBowItem extends BowItem {
     }
 
     @Override
-    public int getUseDuration(ItemStack itemStack) {
+    public int getUseDuration(@Nonnull ItemStack itemStack) {
         return 72000;
     }
 
+    @Nonnull
     @Override
-    public UseAction getUseAnimation(ItemStack itemStack) {
+    public UseAction getUseAnimation(@Nonnull ItemStack itemStack) {
         return UseAction.BOW;
     }
 
+    @Nonnull
     @Override
     public Predicate<ItemStack> getAllSupportedProjectiles() {
         return ARROW_ONLY;
     }
 
+    @Nonnull
     @Override
-    public AbstractArrowEntity customArrow(AbstractArrowEntity arrow) {
+    public AbstractArrowEntity customArrow(@Nonnull AbstractArrowEntity arrow) {
         return arrow;
     }
 

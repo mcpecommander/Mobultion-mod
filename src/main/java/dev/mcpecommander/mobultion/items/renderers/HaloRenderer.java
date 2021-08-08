@@ -6,7 +6,6 @@ import dev.mcpecommander.mobultion.items.HaloItem;
 import dev.mcpecommander.mobultion.items.models.HaloModel;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
-import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
@@ -22,21 +21,14 @@ public class HaloRenderer extends GeoItemRenderer<HaloItem>
     }
 
     @Override
-    public void render(GeoModel model, HaloItem animatable, float partialTicks, RenderType type, MatrixStack matrixStackIn, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-        renderEarly(animatable, matrixStackIn, partialTicks, renderTypeBuffer, vertexBuilder, packedLightIn,
+    public void render(GeoModel model, HaloItem animatable, float partialTicks, RenderType type, MatrixStack matrixStackIn,
+                       @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn,
+                       int packedOverlayIn, float red, float green, float blue, float alpha) {
+        super.render(model, animatable, partialTicks, type, matrixStackIn, renderTypeBuffer, vertexBuilder, packedLightIn,
                 packedOverlayIn, red, green, blue, alpha);
-
-        if(renderTypeBuffer == null) return;
-        vertexBuilder = renderTypeBuffer.getBuffer(type);
-        // Render all top level bones
-        for (GeoBone group : model.topLevelBones) {
-            renderRecursively(group, matrixStackIn, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue,
-                    alpha);
-        }
+        if(renderTypeBuffer != null)
         this.renderRecursively(modelProvider.getModel(modelProvider.getModelLocation(animatable)).topLevelBones.get(0), matrixStackIn,
                 renderTypeBuffer.getBuffer(RenderType.eyes(getTextureLocation(animatable))), packedLightIn, packedOverlayIn,
                 red, green, blue, 1f);
     }
-
-
 }
