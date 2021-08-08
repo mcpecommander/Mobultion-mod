@@ -1,0 +1,49 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "mobultion:item/fangnecklace_5"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "mobultion:pulling": 1
+            },
+            "model": "mobultion:item/fangnecklaceitem_5"
+        },
+        {
+            "predicate": {
+                "mobultion:pulling": 1,
+                "mobultion:pull": 0.16
+            },
+            "model": "mobultion:item/fangnecklaceitem_4"
+        },
+        {
+            "predicate": {
+                "mobultion:pulling": 1,
+                "mobultion:pull": 0.33
+            },
+            "model": "mobultion:item/fangnecklaceitem_3"
+        },
+        {
+            "predicate": {
+                "mobultion:pulling": 1,
+                "mobultion:pull": 0.5
+            },
+            "model": "mobultion:item/fangnecklaceitem_2"
+        },
+        {
+            "predicate": {
+                "mobultion:pulling": 1,
+                "mobultion:pull": 0.67
+            },
+            "model": "mobultion:item/fangnecklaceitem_1"
+        },
+        {
+            "predicate": {
+                "mobultion:pulling": 1,
+                "mobultion:pull": 0.83
+            },
+            "model": "mobultion:item/fangnecklaceitem_0"
+        }
+    ]
+}

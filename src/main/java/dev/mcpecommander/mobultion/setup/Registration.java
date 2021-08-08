@@ -1,6 +1,7 @@
 package dev.mcpecommander.mobultion.setup;
 
 import dev.mcpecommander.mobultion.blocks.HayHatBlock;
+import dev.mcpecommander.mobultion.effects.HypnoEffect;
 import dev.mcpecommander.mobultion.effects.JokernessEffect;
 import dev.mcpecommander.mobultion.entities.endermen.entities.*;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.*;
@@ -151,6 +152,7 @@ public class Registration {
     public static final RegistryObject<HaloItem> HALO = ITEMS.register("haloitem", HaloItem::new);
     public static final RegistryObject<Item> FLAMINGLEG = ITEMS.register("flaminglegitem", () ->
             new Item(new Item.Properties().tab(ModSetup.ITEM_GROUP)));
+    public static final RegistryObject<FangNecklaceItem> FANGNECKLACE = ITEMS.register("fangnecklaceitem", FangNecklaceItem::new);
 
     private static final EntityType<AngelSpiderEntity> ANGELSPIDER_TYPE = EntityType.Builder.of(AngelSpiderEntity::new,
                     EntityClassification.MONSTER).sized(1.4f, 1f).build("angelspider");
@@ -348,6 +350,7 @@ public class Registration {
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
     public static final RegistryObject<Effect> JOKERNESS_EFFECT = EFFECTS.register("jokernesseffect", JokernessEffect::new);
+    public static final RegistryObject<Effect> HYPNO_EFFECT = EFFECTS.register("hypnoeffect", HypnoEffect::new);
 
     public static final RegistryObject<SoundEvent> HEALING_SOUND = SOUNDS.register("healing", () ->
             new SoundEvent(new ResourceLocation(MODID, "healing")));

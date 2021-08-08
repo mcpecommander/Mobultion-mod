@@ -96,6 +96,12 @@ public class ClientSetup {
         ItemModelsProperties.register(Registration.FORESTBOW.get(), new ResourceLocation(MODID, "pulling"),
                 (stack, world, entity) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
 
+        ItemModelsProperties.register(Registration.FANGNECKLACE.get(), new ResourceLocation(MODID, "pull"),
+                (stack, world, entity) -> entity != null && entity.getUseItem() == stack ?
+                        (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / 60.0F : 0);
+        ItemModelsProperties.register(Registration.FANGNECKLACE.get(), new ResourceLocation(MODID, "pulling"),
+                (stack, world, entity) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+
         RenderingRegistry.registerEntityRenderingHandler(Registration.ANGELSPIDER.get(),
                 AngelSpiderRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.WITCHSPIDER.get(),
