@@ -33,7 +33,7 @@ public class JokernessEffect extends Effect {
     }
 
     @Override
-    public void applyEffectTick(LivingEntity affectedEntity, int p_76394_2_) {
+    public void applyEffectTick(LivingEntity affectedEntity, int amplifier) {
         if(!affectedEntity.level.isClientSide) return;
         int amount = effectFixers.size();
         for(int i = 0; i < 20 - amount; i++){
