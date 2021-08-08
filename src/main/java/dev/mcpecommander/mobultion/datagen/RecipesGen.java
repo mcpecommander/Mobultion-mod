@@ -6,6 +6,7 @@ import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.data.RecipeProvider;
 import net.minecraft.data.ShapelessRecipeBuilder;
 import net.minecraft.item.Items;
+import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
@@ -26,6 +27,9 @@ public class RecipesGen extends RecipeProvider {
                 .unlockedBy("has_flaming_leg", has(Registration.FLAMINGLEG.get())).save(finishedRecipe);
         ShapelessRecipeBuilder.shapeless(Items.BLAZE_POWDER, 1).requires(Registration.FLAMINGLEG.get(), 2)
                 .unlockedBy("has_flaming_leg", has(Registration.FLAMINGLEG.get())).save(finishedRecipe);
+        ShapelessRecipeBuilder.shapeless(Registration.FANGNECKLACE.get()).requires(Tags.Items.STRING)
+                .requires(Registration.FANG.get(), 5).unlockedBy("has_fang", has(Registration.FANG.get()))
+                .save(finishedRecipe);
 
     }
 }
