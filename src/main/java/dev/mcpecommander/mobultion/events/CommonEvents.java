@@ -11,7 +11,9 @@ import net.minecraft.item.ToolItem;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.Util;
+import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -54,11 +56,9 @@ public class CommonEvents {
                 wolf.addEffect(new EffectInstance(Effects.ABSORPTION, 20 * 5, 1));
                 wolf.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 20 * 40, 0));
                 wolf.playSound(Registration.HOLY_SOUND.get(), 1f, 1f - wolf.getRandom().nextFloat() * 0.2f);
-                if(event.getSource().getEntity() != null){
-                    event.getSource().getEntity().sendMessage(
-                            new TranslationTextComponent("But " + wolf.getName().getString() +
-                                    " was revived by some mystical holy powers."), Util.NIL_UUID);
-                }
+                ((ServerWorld) wolf.level).getServer().getPlayerList().broadcastMessage( new TranslationTextComponent(
+                        "But " + wolf.getName().getString() + " was revived by some mystical holy powers."),
+                        ChatType.CHAT, Util.NIL_UUID);
 
             }
         }
