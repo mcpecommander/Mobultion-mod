@@ -29,5 +29,7 @@ public class SoundsGen extends SoundDefinitionsProvider {
                 .with(SoundDefinitionsProvider.sound(new ResourceLocation(MODID,"healing1")).volume(0.5)));
         this.add(Registration.HOLY_SOUND.get(), SoundDefinition.definition().subtitle("halo.revive")
                 .with(SoundDefinitionsProvider.sound(new ResourceLocation(MODID, "holy")).volume(0.5d)));
+        this.add(Registration.IGNITE_SOUND.get(), SoundDefinition.definition().subtitle("sword.ignite")
+                .with(SoundDefinitionsProvider.sound(new ResourceLocation(MODID, "ignite")).volume(1d)));
     }
 }

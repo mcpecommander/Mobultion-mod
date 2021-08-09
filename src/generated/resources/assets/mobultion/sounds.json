@@ -20,5 +20,14 @@
         "volume": 0.5
       }
     ]
+  },
+  "ignite": {
+    "subtitle": "sword.ignite",
+    "sounds": [
+      {
+        "name": "mobultion:ignite",
+        "volume": 1
+      }
+    ]
   }
 }

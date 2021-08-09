@@ -363,6 +363,8 @@ public class Registration {
             new SoundEvent(new ResourceLocation(MODID, "healing")));
     public static final RegistryObject<SoundEvent> HOLY_SOUND = SOUNDS.register("holy", () ->
             new SoundEvent(new ResourceLocation(MODID, "holy")));
+    public static final RegistryObject<SoundEvent> IGNITE_SOUND = SOUNDS.register("ignite", () ->
+            new SoundEvent(new ResourceLocation(MODID, "ignite")));
 
 
 }
