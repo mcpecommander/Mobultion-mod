@@ -1,0 +1,75 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "builtin/entity",
+  "textures": {
+    "particle": "mobultion:item/hypnoemitter"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        67,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0.5,
+        -2.75
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        67,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0.5,
+        -2.75
+      ]
+    },
+    "firstperson_righthand": {
+      "translation": [
+        2,
+        0,
+        0
+      ]
+    },
+    "firstperson_lefthand": {
+      "translation": [
+        2,
+        0,
+        0
+      ]
+    },
+    "ground": {
+      "translation": [
+        0,
+        -3.75,
+        0
+      ]
+    },
+    "gui": {
+      "translation": [
+        0,
+        -3,
+        0
+      ]
+    },
+    "head": {
+      "translation": [
+        0,
+        6.5,
+        0
+      ]
+    },
+    "fixed": {
+      "translation": [
+        0,
+        -3,
+        0
+      ]
+    }
+  }
+}

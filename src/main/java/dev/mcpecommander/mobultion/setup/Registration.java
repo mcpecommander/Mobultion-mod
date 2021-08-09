@@ -153,6 +153,9 @@ public class Registration {
     public static final RegistryObject<Item> FLAMINGLEG = ITEMS.register("flaminglegitem", () ->
             new Item(new Item.Properties().tab(ModSetup.ITEM_GROUP)));
     public static final RegistryObject<FangNecklaceItem> FANGNECKLACE = ITEMS.register("fangnecklaceitem", FangNecklaceItem::new);
+    public static final RegistryObject<HypnoEmitterItem> HYPNOEMITTER = ITEMS.register("hypnoemitteritem", HypnoEmitterItem::new);
+    public static final RegistryObject<Item> MAGICGOOP = ITEMS.register("magicgoopitem", () -> new Item(new Item.Properties()
+            .tab(ModSetup.ITEM_GROUP).stacksTo(16)));
 
     private static final EntityType<AngelSpiderEntity> ANGELSPIDER_TYPE = EntityType.Builder.of(AngelSpiderEntity::new,
                     EntityClassification.MONSTER).sized(1.4f, 1f).build("angelspider");
@@ -177,6 +180,9 @@ public class Registration {
     public static final RegistryObject<Item> HYPNOSPIDER_EGG = ITEMS.register("hypnospider_egg"
             , () -> new SpawnEggItem(HYPNOSPIDER_TYPE, 0xDD06DD, 0xF736F7,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
+    public static final RegistryObject<EntityType<HypnoWaveEntity>> HYPNOWAVE = ENTITIES.register("hypnowave",
+            () -> EntityType.Builder.of((EntityType.IFactory<HypnoWaveEntity>) HypnoWaveEntity::new, EntityClassification.MISC)
+                    .sized(0.5F, 0.5F).build("hypnowave"));
 
     private static final EntityType<MagmaSpiderEntity> MAGMASPIDER_TYPE = EntityType.Builder.of(MagmaSpiderEntity::new,
                     EntityClassification.MONSTER).sized(1.4f, 1f).build("magmaspider");

@@ -1,0 +1,102 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.hypnowave",
+				"texture_width": 16,
+				"texture_height": 16,
+				"visible_bounds_width": 2,
+				"visible_bounds_height": 1.5,
+				"visible_bounds_offset": [0, 0.25, 0]
+			},
+			"bones": [
+				{
+					"name": "All",
+					"pivot": [0, 0.5, 0]
+				},
+				{
+					"name": "HornB2",
+					"parent": "All",
+					"pivot": [-1.15, 0.5, 1.85],
+					"rotation": [-90, 0, 0],
+					"cubes": [
+						{"origin": [0.15, 0, 1.35], "size": [1, 1, 1], "pivot": [1.15, 0.5, 1.85], "rotation": [0, 0, 135], "uv": [0, 0], "mirror": true}
+					]
+				},
+				{
+					"name": "HornB1",
+					"parent": "All",
+					"pivot": [-1.15, 0.5, 1.85],
+					"rotation": [-90, 0, 0],
+					"cubes": [
+						{"origin": [-2.15, 0, 1.35], "size": [1, 1, 1], "pivot": [-1.15, 0.5, 1.85], "rotation": [0, 0, 45], "uv": [0, 0], "mirror": true}
+					]
+				},
+				{
+					"name": "HornB",
+					"parent": "All",
+					"pivot": [0, 0.5, 5],
+					"rotation": [-90, 0, 0],
+					"cubes": [
+						{"origin": [-1.5, -3, 4.5], "size": [3, 1, 1], "uv": [0, 0], "mirror": true}
+					]
+				},
+				{
+					"name": "HornA2",
+					"parent": "All",
+					"pivot": [0, 0.5, 6.2],
+					"rotation": [-90, 0, 0],
+					"cubes": [
+						{"origin": [-0.85, -6.35, 5.7], "size": [2, 1, 1], "pivot": [1.15, -5.85, 6.2], "rotation": [0, 0, 135], "uv": [0, 0], "mirror": true}
+					]
+				},
+				{
+					"name": "HornA1",
+					"parent": "All",
+					"pivot": [0, 0.5, 6.2],
+					"rotation": [-90, 0, 0],
+					"cubes": [
+						{"origin": [-3.15, -6.35, 5.7], "size": [2, 1, 1], "pivot": [-1.15, -5.85, 6.2], "rotation": [0, 0, 45], "uv": [0, 0], "mirror": true}
+					]
+				},
+				{
+					"name": "HornA",
+					"parent": "All",
+					"pivot": [0, 0.5, 3],
+					"rotation": [-90, 0, 0],
+					"cubes": [
+						{"origin": [-1.5, -3, 2.5], "size": [3, 1, 1], "uv": [0, 0], "mirror": true}
+					]
+				},
+				{
+					"name": "Horn2",
+					"parent": "All",
+					"pivot": [1.15, 0.5, -2.15],
+					"rotation": [-90, 0, 0],
+					"cubes": [
+						{"origin": [-1.85, 0, -2.65], "size": [3, 1, 1], "pivot": [1.15, 0.5, -2.15], "rotation": [0, 0, 135], "uv": [0, 0], "mirror": true}
+					]
+				},
+				{
+					"name": "Horn1",
+					"parent": "All",
+					"pivot": [-1.15, 0.5, -2.15],
+					"rotation": [-90, 0, 0],
+					"cubes": [
+						{"origin": [-4.15, 0, -2.65], "size": [3, 1, 1], "pivot": [-1.15, 0.5, -2.15], "rotation": [0, 0, 45], "uv": [0, 0], "mirror": true}
+					]
+				},
+				{
+					"name": "Horn",
+					"parent": "All",
+					"pivot": [0, 0.5, 1],
+					"rotation": [-90, 0, 0],
+					"cubes": [
+						{"origin": [-1.5, -3, 0.5], "size": [3, 1, 1], "uv": [0, 0], "mirror": true}
+					]
+				}
+			]
+		}
+	]
+}

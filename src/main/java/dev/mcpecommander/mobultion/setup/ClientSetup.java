@@ -108,6 +108,8 @@ public class ClientSetup {
                 WitchSpiderRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.HYPNOSPIDER.get(),
                 HypnoSpiderRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(Registration.HYPNOWAVE.get(),
+                HypnoWaveRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.MAGMASPIDER.get(),
                 MagmaSpiderRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.WITHERSPIDER.get(),

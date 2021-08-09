@@ -87,7 +87,7 @@ public class GlassShotEntity extends DamagingProjectileEntity implements IAnimat
      * @param NBTTag The tag where the additional data will be written to.
      */
     @Override
-    public void addAdditionalSaveData(CompoundNBT NBTTag) {
+    public void addAdditionalSaveData(@Nonnull CompoundNBT NBTTag) {
         super.addAdditionalSaveData(NBTTag);
         NBTTag.putInt("mobultion:color", getColor().getRGB());
     }
@@ -97,7 +97,7 @@ public class GlassShotEntity extends DamagingProjectileEntity implements IAnimat
      * @param NBTTag The NBT tag that holds the saved data.
      */
     @Override
-    public void readAdditionalSaveData(CompoundNBT NBTTag) {
+    public void readAdditionalSaveData(@Nonnull CompoundNBT NBTTag) {
         super.readAdditionalSaveData(NBTTag);
         if(NBTTag.contains("mobultion:color", Constants.NBT.TAG_INT)){
             setColor(new Color(NBTTag.getInt("mobultion:color")));
@@ -108,6 +108,7 @@ public class GlassShotEntity extends DamagingProjectileEntity implements IAnimat
      * The particles that will be spawned as the projectile is flying.
      * @return A particle type (implements IParticleData).
      */
+    @Nonnull
     @Override
     protected IParticleData getTrailParticle() {
         return new BlockParticleData(ParticleTypes.BLOCK, Blocks.GLASS.defaultBlockState());
@@ -153,7 +154,7 @@ public class GlassShotEntity extends DamagingProjectileEntity implements IAnimat
      * @param result The RayTraceResult which has information about what was hit.
      */
     @Override
-    protected void onHit(RayTraceResult result) {
+    protected void onHit(@Nonnull RayTraceResult result) {
         super.onHit(result);
         if(this.level.isClientSide){
             this.level.playLocalSound(result.getLocation().x, result.getLocation().y, result.getLocation().z,

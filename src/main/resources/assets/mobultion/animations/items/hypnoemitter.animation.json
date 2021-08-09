@@ -1,0 +1,52 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"idle": {
+			"loop": true,
+			"animation_length": 2.08,
+			"bones": {
+				"Diamond": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"2.08": {
+							"vector": [0, 360, 0]
+						}
+					}
+				},
+				"FirstRing": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"2.08": {
+							"vector": [0, 0, 360],
+							"easing": "linear"
+						}
+					}
+				},
+				"SecondRing": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"2.08": {
+							"vector": [0, 360, 0]
+						}
+					}
+				},
+				"ThirdRing": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"2.08": {
+							"vector": [360, 0, 0]
+						}
+					}
+				}
+			}
+		}
+	}
+}
