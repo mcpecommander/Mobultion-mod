@@ -156,6 +156,7 @@ public class Registration {
     public static final RegistryObject<HypnoEmitterItem> HYPNOEMITTER = ITEMS.register("hypnoemitteritem", HypnoEmitterItem::new);
     public static final RegistryObject<Item> MAGICGOOP = ITEMS.register("magicgoopitem", () -> new Item(new Item.Properties()
             .tab(ModSetup.ITEM_GROUP).stacksTo(16)));
+    public static final RegistryObject<FireSwordItem> FIRESWORD = ITEMS.register("firesworditem", FireSwordItem::new);
 
     private static final EntityType<AngelSpiderEntity> ANGELSPIDER_TYPE = EntityType.Builder.of(AngelSpiderEntity::new,
                     EntityClassification.MONSTER).sized(1.4f, 1f).build("angelspider");
