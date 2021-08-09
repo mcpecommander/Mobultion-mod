@@ -1,10 +1,7 @@
 package dev.mcpecommander.mobultion.datagen;
 
 import dev.mcpecommander.mobultion.setup.Registration;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.RecipeProvider;
-import net.minecraft.data.ShapelessRecipeBuilder;
+import net.minecraft.data.*;
 import net.minecraft.item.Items;
 import net.minecraftforge.common.Tags;
 
@@ -30,6 +27,10 @@ public class RecipesGen extends RecipeProvider {
         ShapelessRecipeBuilder.shapeless(Registration.FANGNECKLACE.get()).requires(Tags.Items.STRING)
                 .requires(Registration.FANG.get(), 5).unlockedBy("has_fang", has(Registration.FANG.get()))
                 .save(finishedRecipe);
+        ShapedRecipeBuilder.shaped(Registration.HYPNOEMITTER.get()).define('g', Registration.GLASSSHOT_ITEM.get())
+                .define('h', Registration.HALO.get()).define('m', Registration.MAGICGOOP.get())
+                .pattern(" h ").pattern("hgh").pattern(" m ").unlockedBy("has_magic_goop",
+                        has(Registration.MAGICGOOP.get())).save(finishedRecipe);
 
     }
 }

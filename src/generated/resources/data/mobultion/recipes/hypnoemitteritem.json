@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " h ",
+    "hgh",
+    " m "
+  ],
+  "key": {
+    "g": {
+      "item": "mobultion:glassshotitem"
+    },
+    "h": {
+      "item": "mobultion:haloitem"
+    },
+    "m": {
+      "item": "mobultion:magicgoopitem"
+    }
+  },
+  "result": {
+    "item": "mobultion:hypnoemitteritem"
+  }
+}

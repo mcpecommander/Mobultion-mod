@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:string"
+    },
+    {
+      "item": "mobultion:fangitem"
+    },
+    {
+      "item": "mobultion:fangitem"
+    },
+    {
+      "item": "mobultion:fangitem"
+    },
+    {
+      "item": "mobultion:fangitem"
+    },
+    {
+      "item": "mobultion:fangitem"
+    }
+  ],
+  "result": {
+    "item": "mobultion:fangnecklaceitem"
+  }
+}
