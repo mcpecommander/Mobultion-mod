@@ -53,9 +53,8 @@ public class FireSwordItem extends Item {
             ItemStack itemstack = useContext.getItemInHand();
             if (playerentity instanceof ServerPlayerEntity) {
                 CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayerEntity)playerentity, blockpos1, itemstack);
-                itemstack.hurtAndBreak(1, playerentity, (p_219998_1_) -> {
-                    p_219998_1_.broadcastBreakEvent(useContext.getHand());
-                });
+                itemstack.hurtAndBreak(1, playerentity, (p_219998_1_) ->
+                        p_219998_1_.broadcastBreakEvent(useContext.getHand()));
             }
             return ActionResultType.sidedSuccess(world.isClientSide());
         } else {
