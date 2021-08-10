@@ -31,8 +31,8 @@ public abstract class MobultionSpiderEntity extends MonsterEntity implements IAn
      */
     private static final DataParameter<Byte> DATA_FLAGS_ID = EntityDataManager.defineId(MobultionSpiderEntity.class, DataSerializers.BYTE);
 
-    protected MobultionSpiderEntity(EntityType<? extends MobultionSpiderEntity> mob, World world) {
-        super(mob, world);
+    public MobultionSpiderEntity(EntityType<? extends MobultionSpiderEntity> type, World world) {
+        super(type, world);
     }
 
     /**
