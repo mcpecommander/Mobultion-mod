@@ -24,10 +24,7 @@
   "ignite": {
     "subtitle": "sword.ignite",
     "sounds": [
-      {
-        "name": "mobultion:ignite",
-        "volume": 1
-      }
+      "mobultion:ignite"
     ]
   }
 }
