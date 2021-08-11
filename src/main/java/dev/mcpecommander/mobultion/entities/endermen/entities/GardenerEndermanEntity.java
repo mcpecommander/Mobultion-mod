@@ -331,7 +331,7 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
     @Override
     public ILivingEntityData finalizeSpawn(IServerWorld serverWorld, DifficultyInstance difficulty, SpawnReason spawnReason,
                                            @Nullable ILivingEntityData livingEntityData, @Nullable CompoundNBT NBTTag) {
-        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Registration.HAYHATBLOCK_ITEM.get()));
+        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Registration.HAYHAT_ITEM.get()));
         this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BONE_MEAL));
         return super.finalizeSpawn(serverWorld, difficulty, spawnReason, livingEntityData, NBTTag);
     }
