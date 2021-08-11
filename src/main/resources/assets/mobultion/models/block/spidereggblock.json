@@ -1,0 +1,6 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "particle": "mobultion:entity/spiders/spideregg"
+  }
+}

@@ -2,10 +2,9 @@ package dev.mcpecommander.mobultion.entities.spiders.renderers;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import dev.mcpecommander.mobultion.entities.spiders.entities.MagmaSpiderEntity;
+import dev.mcpecommander.mobultion.entities.spiders.entities.MotherSpiderEntity;
 import dev.mcpecommander.mobultion.entities.spiders.layers.SpiderEyesLayer;
-import dev.mcpecommander.mobultion.entities.spiders.layers.SpiderMagmaLayer;
-import dev.mcpecommander.mobultion.entities.spiders.models.MagmaSpiderModel;
+import dev.mcpecommander.mobultion.entities.spiders.models.MotherSpiderModel;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -16,18 +15,17 @@ import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 import javax.annotation.Nullable;
 
-/* Created by McpeCommander on 2021/06/18 */
-public class MagmaSpiderRenderer extends GeoEntityRenderer<MagmaSpiderEntity> {
+/* McpeCommander created on 10/08/2021 inside the package - dev.mcpecommander.mobultion.entities.spiders.renderers */
+public class MotherSpiderRenderer extends GeoEntityRenderer<MotherSpiderEntity> {
 
-    public MagmaSpiderRenderer(EntityRendererManager renderManager) {
-        super(renderManager, new MagmaSpiderModel());
+    public MotherSpiderRenderer(EntityRendererManager renderManager) {
+        super(renderManager, new MotherSpiderModel());
         this.shadowRadius = 0.7F;
-        this.addLayer(new SpiderMagmaLayer(this));
-        this.addLayer(new SpiderEyesLayer<>(this, "magmaspider"));
+        this.addLayer(new SpiderEyesLayer<>(this, "motherspider"));
     }
 
     @Override
-    public void render(GeoModel model, MagmaSpiderEntity animatable, float partialTicks, RenderType type, MatrixStack matrixStackIn, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void render(GeoModel model, MotherSpiderEntity animatable, float partialTicks, RenderType type, MatrixStack matrixStackIn, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         renderEarly(animatable, matrixStackIn, partialTicks, renderTypeBuffer, vertexBuilder, packedLightIn,
                 packedOverlayIn, red, green, blue, alpha);
 
@@ -37,12 +35,12 @@ public class MagmaSpiderRenderer extends GeoEntityRenderer<MagmaSpiderEntity> {
         // Render all top level bones
         for (GeoBone group : model.topLevelBones) {
             renderRecursively(group, matrixStackIn, vertexBuilder, packedLightIn, OverlayTexture.pack(0,
-                            OverlayTexture.v(animatable.hurtTime > 0)), red, green, blue, alpha);
+                    OverlayTexture.v(animatable.hurtTime > 0)), red, green, blue, alpha);
         }
     }
 
     @Override
-    protected float getDeathMaxRotation(MagmaSpiderEntity entityLivingBaseIn) {
+    protected float getDeathMaxRotation(MotherSpiderEntity entityLivingBaseIn) {
         return 0;
     }
 }

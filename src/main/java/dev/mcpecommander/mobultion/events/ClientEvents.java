@@ -2,6 +2,7 @@ package dev.mcpecommander.mobultion.events;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import dev.mcpecommander.mobultion.Mobultion;
 import dev.mcpecommander.mobultion.effects.JokernessEffect;
 import dev.mcpecommander.mobultion.effects.PlayingCard;
 import dev.mcpecommander.mobultion.setup.Registration;
@@ -36,6 +37,7 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void renderDebug(RenderGameOverlayEvent.Post event){
+        if(Mobultion.DEBUG) return;
         if(Minecraft.getInstance().player == null) return;
         if(Minecraft.getInstance().player.hasEffect(Registration.JOKERNESS_EFFECT.get()) &&
                 event.getType() == RenderGameOverlayEvent.ElementType.ALL){

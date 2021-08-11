@@ -1,6 +1,8 @@
 package dev.mcpecommander.mobultion.setup;
 
 import dev.mcpecommander.mobultion.blocks.HayHatBlock;
+import dev.mcpecommander.mobultion.blocks.SpiderEggBlock;
+import dev.mcpecommander.mobultion.blocks.tile.SpiderEggTile;
 import dev.mcpecommander.mobultion.effects.HypnoEffect;
 import dev.mcpecommander.mobultion.effects.JokernessEffect;
 import dev.mcpecommander.mobultion.entities.endermen.entities.*;
@@ -12,11 +14,13 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.IDataSerializer;
 import net.minecraft.potion.Effect;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -41,6 +45,7 @@ import static dev.mcpecommander.mobultion.Mobultion.MODID;
 public class Registration {
 
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
+    private static final DeferredRegister<TileEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, MODID);
     private static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, MODID);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     private static final DeferredRegister<Effect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, MODID);
@@ -52,6 +57,7 @@ public class Registration {
 
         ClientSetup.PARTICLE_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
         BLOCKS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        TILE_ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
         ENTITIES.register(FMLJavaModLoadingContext.get().getModEventBus());
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
         EFFECTS.register(FMLJavaModLoadingContext.get().getModEventBus());
@@ -67,6 +73,8 @@ public class Registration {
         event.put(WITCHSPIDER.get(), WitchSpiderEntity.createAttributes().build());
         event.put(HYPNOSPIDER.get(), HypnoSpiderEntity.createAttributes().build());
         event.put(MAGMASPIDER.get(), MagmaSpiderEntity.createAttributes().build());
+        event.put(MOTHERSPIDER.get(), MotherSpiderEntity.createAttributes().build());
+        event.put(MINISPIDER.get(), MiniSpiderEntity.createAttributes().build());
         event.put(WITHERSPIDER.get(), WitherSpiderEntity.createAttributes().build());
         event.put(WITHERHEADBUG.get(), WitherHeadBugEntity.createAttributes().build());
 
@@ -81,7 +89,7 @@ public class Registration {
         event.put(MAGMAENDERMAN.get(), MagmaEndermanEntity.createAttributes().build());
         event.put(GLASSENDERMAN.get(), GlassEndermanEntity.createAttributes().build());
         event.put(ICEENDERMAN.get(), IceEndermanEntity.createAttributes().build());
-        event.put(GARDENERENDERMAN.get(), IceEndermanEntity.createAttributes().build());
+        event.put(GARDENERENDERMAN.get(), GardenerEndermanEntity.createAttributes().build());
         EntitySpawnPlacementRegistry.register(GARDENERENDERMAN.get(),
                 EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
                 GardenerEndermanEntity::checkMobSpawnRules);
@@ -126,7 +134,12 @@ public class Registration {
             () -> new DataSerializerEntry(BLOCKPOS_LIST));
 
     public static final RegistryObject<HayHatBlock> HAYHAT = BLOCKS.register("hayhatblock", HayHatBlock::new);
-    public static final RegistryObject<Item> HAYHATBLOCK_ITEM = ITEMS.register("hayhatblock", () -> new HayHatBlockItem(HAYHAT.get()));
+    public static final RegistryObject<Item> HAYHAT_ITEM = ITEMS.register("hayhatblock", () -> new HayHatBlockItem(HAYHAT.get()));
+    public static final RegistryObject<SpiderEggBlock> SPIDEREGG = BLOCKS.register("spidereggblock", SpiderEggBlock::new);
+    public static final RegistryObject<Item> SPIDEREGG_ITEM = ITEMS.register("spidereggblock", () -> new BlockItem(SPIDEREGG.get(),
+            new Item.Properties().tab(ModSetup.ITEM_GROUP)));
+    public static final RegistryObject<TileEntityType<SpiderEggTile>> SPIDEREGG_TILE = TILE_ENTITIES.register("spidereggtile",
+            () -> TileEntityType.Builder.of(SpiderEggTile::new, SPIDEREGG.get()).build(null));
 
     public static final RegistryObject<ThunderStaffItem> THUNDERSTAFF = ITEMS.register("thunderstaffitem", ThunderStaffItem::new);
     public static final RegistryObject<ForestBowItem> FORESTBOW = ITEMS.register("forestbowitem", ForestBowItem::new);
@@ -193,6 +206,22 @@ public class Registration {
             , () -> new SpawnEggItem(MAGMASPIDER_TYPE, 0x230E0E, 0xF01414,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
+    private static final EntityType<MotherSpiderEntity> MOTHERSPIDER_TYPE = EntityType.Builder.of(MotherSpiderEntity::new,
+            EntityClassification.MONSTER).sized(1.4f, 1f).build("motherspider");
+    public static final RegistryObject<EntityType<MotherSpiderEntity>> MOTHERSPIDER = ENTITIES.register("motherspider",
+            () -> MOTHERSPIDER_TYPE);
+    public static final RegistryObject<Item> MOTHERSPIDER_EGG = ITEMS.register("motherspider_egg"
+            , () -> new SpawnEggItem(MOTHERSPIDER_TYPE, 0x444444, 0x9D8888,
+                    (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
+
+    private static final EntityType<MiniSpiderEntity> MINISPIDER_TYPE = EntityType.Builder.of(MiniSpiderEntity::new,
+            EntityClassification.MONSTER).sized(0.8f, 0.6f).build("minispider");
+    public static final RegistryObject<EntityType<MiniSpiderEntity>> MINISPIDER = ENTITIES.register("minispider",
+            () -> MINISPIDER_TYPE);
+    public static final RegistryObject<Item> MINISPIDER_EGG = ITEMS.register("minispider_egg"
+            , () -> new SpawnEggItem(MINISPIDER_TYPE, 0xFFFFFF, 0xAAAAAA,
+                    (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
+
     private static final EntityType<WitherSpiderEntity> WITHERSPIDER_TYPE = EntityType.Builder.of(WitherSpiderEntity::new,
                     EntityClassification.MONSTER).sized(1.4f, 1f).build("witherspider");
     public static final RegistryObject<EntityType<WitherSpiderEntity>> WITHERSPIDER = ENTITIES.register("witherspider",
@@ -200,7 +229,6 @@ public class Registration {
     public static final RegistryObject<Item> WITHERSPIDER_EGG = ITEMS.register("witherspider_egg"
             , () -> new SpawnEggItem(WITHERSPIDER_TYPE, 0x666666, 0x444444,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
-
     public static final RegistryObject<EntityType<WitherHeadBugEntity>> WITHERHEADBUG = ENTITIES.register("witherheadbug",
             () -> EntityType.Builder.of(WitherHeadBugEntity::new, EntityClassification.MONSTER)
                     .sized(0.7f, 0.7f).build("witherheadbug"));

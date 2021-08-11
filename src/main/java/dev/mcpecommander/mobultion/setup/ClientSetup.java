@@ -1,6 +1,7 @@
 package dev.mcpecommander.mobultion.setup;
 
 import com.mojang.serialization.Codec;
+import dev.mcpecommander.mobultion.blocks.renderer.SpiderEggRenderer;
 import dev.mcpecommander.mobultion.entities.endermen.renderers.*;
 import dev.mcpecommander.mobultion.entities.skeletons.renderers.BaseSkeletonRenderer;
 import dev.mcpecommander.mobultion.entities.skeletons.renderers.HeartArrowRenderer;
@@ -21,6 +22,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -90,6 +92,8 @@ public class ClientSetup {
     public static void init(final FMLClientSetupEvent event) {
         RenderTypeLookup.setRenderLayer(Registration.HAYHAT.get(), RenderType.translucent());
 
+        ClientRegistry.bindTileEntityRenderer(Registration.SPIDEREGG_TILE.get(), SpiderEggRenderer::new);
+
         ItemModelsProperties.register(Registration.FORESTBOW.get(), new ResourceLocation(MODID, "pull"),
                 (stack, world, entity) -> entity != null && entity.getUseItem() == stack ?
                         (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / 20.0F : 0);
@@ -112,6 +116,10 @@ public class ClientSetup {
                 HypnoWaveRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.MAGMASPIDER.get(),
                 MagmaSpiderRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(Registration.MOTHERSPIDER.get(),
+                MotherSpiderRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(Registration.MINISPIDER.get(),
+                MiniSpiderRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.WITHERSPIDER.get(),
                 WitherSpiderRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.WITHERHEADBUG.get(),

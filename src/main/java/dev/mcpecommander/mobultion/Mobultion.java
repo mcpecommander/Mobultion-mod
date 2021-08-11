@@ -33,7 +33,7 @@ public class Mobultion
         FMLJavaModLoadingContext.get().getModEventBus().register(ModSetup.class);
         FMLJavaModLoadingContext.get().getModEventBus().register(ClientSetup.class);
         FMLJavaModLoadingContext.get().getModEventBus().register(Registration.class);
-        if(DEBUG) MinecraftForge.EVENT_BUS.register(ClientEvents.class);
+        MinecraftForge.EVENT_BUS.register(ClientEvents.class);
         MinecraftForge.EVENT_BUS.register(SpawnSetup.class);
         MinecraftForge.EVENT_BUS.register(CommonEvents.class);
 
