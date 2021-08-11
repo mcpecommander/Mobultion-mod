@@ -10,7 +10,6 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.state.properties.DoubleBlockHalf;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.ActionResultType;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -48,8 +47,6 @@ public class CorruptedBoneMealItem extends Item {
     private boolean applyBonemeal(ItemStack itemStack, World world, BlockPos applicablePos, PlayerEntity player) {
         BlockState blockstate = world.getBlockState(applicablePos);
         if(performCorruption(world, applicablePos, blockstate.getBlock())){
-            SoundType type = blockstate.getSoundType(world, applicablePos, player);
-            world.playSound(player, applicablePos, type.getBreakSound(), SoundCategory.BLOCKS, type.volume, type.pitch);
             itemStack.shrink(1);
             return true;
         }
@@ -70,17 +67,17 @@ public class CorruptedBoneMealItem extends Item {
             }
             return true;
         }else if(block instanceof TallGrassBlock) {
-            world.setBlock(applicablePos, Blocks.AIR.defaultBlockState(), Constants.BlockFlags.DEFAULT_AND_RERENDER);
+            if(!world.isClientSide) world.destroyBlock(applicablePos, false);
             return true;
         }else if(block instanceof DoublePlantBlock) {
             if (world.getBlockState(applicablePos).getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER) {
-                world.setBlock(applicablePos.below(), Blocks.AIR.defaultBlockState(), Constants.BlockFlags.DEFAULT_AND_RERENDER);
+                if(!world.isClientSide) world.destroyBlock(applicablePos.below(), false);
             } else {
-                world.setBlock(applicablePos, Blocks.AIR.defaultBlockState(), Constants.BlockFlags.DEFAULT_AND_RERENDER);
+                if(!world.isClientSide) world.destroyBlock(applicablePos, false);
             }
             return true;
         }else if(block instanceof FlowerBlock){
-            world.setBlock(applicablePos, Blocks.AIR.defaultBlockState(), Constants.BlockFlags.DEFAULT_AND_RERENDER);
+            if(!world.isClientSide) world.destroyBlock(applicablePos, false);
             return true;
         }else if(block instanceof BambooBlock){
             if(world.getBlockState(applicablePos.below()).is(Tags.Blocks.DIRT)){
@@ -106,10 +103,10 @@ public class CorruptedBoneMealItem extends Item {
                     || world.getBlockState(pos.above()).is(Blocks.WEEPING_VINES_PLANT)){
                 pos = pos.above();
             }
-            world.setBlock(pos, Blocks.AIR.defaultBlockState(), Constants.BlockFlags.DEFAULT_AND_RERENDER);
+            if(!world.isClientSide) world.destroyBlock(pos, false);
             return true;
         }else if(isNetherVegetation(world.getBlockState(applicablePos))){
-            world.setBlock(applicablePos, Blocks.AIR.defaultBlockState(), Constants.BlockFlags.DEFAULT_AND_RERENDER);
+            if(!world.isClientSide) world.destroyBlock(applicablePos, false);
             return true;
         }
 
