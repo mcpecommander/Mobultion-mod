@@ -100,7 +100,7 @@ public class WitchSpiderEntity extends MobultionSpiderEntity{
 
     @Override
     protected int getMaxDeathTick() {
-        return 20;
+        return 30;
     }
 
     /**

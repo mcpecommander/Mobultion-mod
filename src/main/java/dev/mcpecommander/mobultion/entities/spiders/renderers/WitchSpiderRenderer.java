@@ -3,6 +3,7 @@ package dev.mcpecommander.mobultion.entities.spiders.renderers;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import dev.mcpecommander.mobultion.entities.spiders.entities.WitchSpiderEntity;
+import dev.mcpecommander.mobultion.entities.spiders.layers.SpiderEyesLayer;
 import dev.mcpecommander.mobultion.entities.spiders.models.WitchSpiderModel;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
@@ -19,6 +20,7 @@ public class WitchSpiderRenderer extends GeoEntityRenderer<WitchSpiderEntity> {
 
     public WitchSpiderRenderer(EntityRendererManager renderManager) {
         super(renderManager, new WitchSpiderModel());
+        this.addLayer(new SpiderEyesLayer<>(this, "witchspider"));
         this.shadowRadius = 0.7F;
     }
 

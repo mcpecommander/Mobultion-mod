@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
+import software.bernie.geckolib3.util.AnimationUtils;
 
 import static dev.mcpecommander.mobultion.Mobultion.MODID;
 
@@ -18,23 +19,26 @@ public class SpiderEyesLayer<T extends MobultionSpiderEntity> extends GeoLayerRe
      * The resource location for a texture that matches the model texture in size but highlights the parts that will
      * light.
      */
-    private static final ResourceLocation SPIDER_EYES = new ResourceLocation(MODID,"textures/entity/spiders/spidereyes.png");
+    private final ResourceLocation SPIDER_EYES;
     /**
      * The resource location for the geckolib model of the entity that has this layer.
      */
     private final ResourceLocation SPIDER_MODEL;
-    IGeoRenderer<T> renderer;
 
     public SpiderEyesLayer(IGeoRenderer<T> entityRendererIn, String spiderName) {
         super(entityRendererIn);
-        this.renderer = entityRendererIn;
+        SPIDER_EYES = spiderName.equals("witchspider") ? new ResourceLocation(MODID,"textures/entity/spiders/witchspidereyes.png")
+                : new ResourceLocation(MODID,"textures/entity/spiders/spidereyes.png");
         SPIDER_MODEL = new ResourceLocation(MODID, "geo/spiders/" + spiderName + ".json");;
     }
 
     @Override
-    public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        RenderType eyes =  RenderType.eyes(SPIDER_EYES);
-        this.renderer.render(this.getEntityModel().getModel(SPIDER_MODEL), entitylivingbaseIn, partialTicks, eyes, matrixStackIn, bufferIn, bufferIn.getBuffer(eyes), packedLightIn, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, 1f);
+    public void render(MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLightIn, T entity, float limbSwing,
+                       float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        IGeoRenderer<T> renderer = (IGeoRenderer<T>) AnimationUtils.getRenderer(entity);
+        renderer.render(getEntityModel().getModel(SPIDER_MODEL), entity, partialTicks, RenderType.eyes(SPIDER_EYES),matrixStack,
+                buffer, buffer.getBuffer(RenderType.eyes(SPIDER_EYES)), packedLightIn, OverlayTexture.pack(0,
+                        OverlayTexture.v(entity.hurtTime > 0)), 1f, 1f, 1f, 1f);
     }
 
 }
