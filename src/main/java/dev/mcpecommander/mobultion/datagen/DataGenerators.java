@@ -18,6 +18,7 @@ public class DataGenerators {
         }
         if(event.includeClient()){
             event.getGenerator().addProvider(new SoundsGen(event.getGenerator(), event.getExistingFileHelper()));
+            event.getGenerator().addProvider(new LanguageGenEN(event.getGenerator()));
         }
     }
 }
