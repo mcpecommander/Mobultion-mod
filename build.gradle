@@ -121,7 +121,7 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.2'
-    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.43')
+    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.16.5:3.0.45')
     // compile against the JEI API but do not include it at runtime
     compileOnly fg.deobf("mezz.jei:jei-1.16.5:7.7.1.118:api")
     // at runtime, use the full JEI jar

@@ -47,7 +47,7 @@ public class HypnoEmitterItem extends Item implements IAnimatable, ISyncable {
 
         if (!player.abilities.instabuild) {
             player.getItemInHand(hand).hurtAndBreak(1, player,
-                    (livingEntity) -> livingEntity.broadcastBreakEvent(player.getUsedItemHand()));;
+                    (livingEntity) -> livingEntity.broadcastBreakEvent(player.getUsedItemHand()));
         }
         return ActionResult.sidedSuccess(player.getItemInHand(hand), world.isClientSide);
     }

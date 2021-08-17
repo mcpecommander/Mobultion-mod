@@ -11,7 +11,6 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
-
 import java.util.Objects;
 
 import static dev.mcpecommander.mobultion.Mobultion.MODID;
@@ -29,11 +28,10 @@ public class JEIIntegration implements IModPlugin {
     @Override
     public void registerRecipes(@Nonnull IRecipeRegistration registration) {
         for(Item item : ForgeRegistries.ITEMS.getValues()){
-            if(!Objects.requireNonNull(item.getRegistryName()).getNamespace().equals(MODID)) return;
+            if(!Objects.requireNonNull(item.getRegistryName()).getNamespace().equals(MODID)) continue;
             registration.addIngredientInfo(new ItemStack(item), VanillaTypes.ITEM,
-                    new TranslationTextComponent(item.getDescriptionId().concat(".info")));
+                    new TranslationTextComponent(item.getRegistryName().toString().concat(".info")));
         }
-
     }
 
 }

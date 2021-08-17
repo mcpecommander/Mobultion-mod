@@ -14,7 +14,6 @@ import net.minecraft.loot.*;
 import net.minecraft.loot.functions.LootingEnchantBonus;
 import net.minecraft.loot.functions.SetCount;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -22,9 +21,6 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
-
-import static dev.mcpecommander.mobultion.Mobultion.MODID;
 
 /* McpeCommander created on 26/07/2021 inside the package - dev.mcpecommander.mobultion.datagen */
 public class LootTablesGen extends LootTableProvider {
@@ -81,9 +77,7 @@ public class LootTablesGen extends LootTableProvider {
         @Nonnull
         @Override
         protected Iterable<Block> getKnownBlocks() {
-            return ForgeRegistries.BLOCKS.getValues().stream().filter(blocks ->
-                            blocks.getRegistryName().getNamespace().equals(MODID))
-                            .collect(Collectors.toList());
+            return Lists.newArrayList(Registration.HAYHAT.get());
         }
     }
 }
