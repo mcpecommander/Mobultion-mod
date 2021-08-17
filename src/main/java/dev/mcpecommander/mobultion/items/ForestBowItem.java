@@ -98,7 +98,7 @@ public class ForestBowItem extends BowItem {
     @Override
     public ActionResult<ItemStack> use(@Nonnull World world, PlayerEntity shooter, @Nonnull Hand hand) {
         ItemStack itemstack = shooter.getItemInHand(hand);
-        if (!shooter.abilities.instabuild && !shooter.getProjectile(itemstack).isEmpty()) {
+        if (!shooter.abilities.instabuild && shooter.getProjectile(itemstack).isEmpty()) {
             return ActionResult.fail(itemstack);
         } else {
             shooter.startUsingItem(hand);

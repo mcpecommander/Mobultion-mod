@@ -6,8 +6,10 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
@@ -60,6 +62,15 @@ public class CorruptedSkeletonEntity extends MobultionSkeletonEntity implements 
                 12 - this.level.getCurrentDifficultyAt(blockPosition()).getSpecialMultiplier() * 12);
         this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.level.addFreshEntity(arrow);
+    }
+
+    @Override
+    protected AbstractArrowEntity getArrow(ItemStack bow, float power) {
+        AbstractArrowEntity arrowEntity = super.getArrow(bow, power);
+        if(arrowEntity instanceof ArrowEntity){
+            ((ArrowEntity) arrowEntity).addEffect(new EffectInstance(Registration.CORRUPTION_EFFECT.get(), 6000));
+        }
+        return arrowEntity;
     }
 
     @Override

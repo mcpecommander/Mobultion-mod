@@ -25,7 +25,6 @@ import static dev.mcpecommander.mobultion.Mobultion.MODID;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, modid = MODID)
 public class CommonEvents {
 
-    @SubscribeEvent
     public static void onUseEvent(LivingEntityUseItemEvent.Finish event){
         ItemStack itemStack = event.getResultStack().copy();
         if(itemStack.isEmpty() || itemStack.getDamageValue() <= 0) return;

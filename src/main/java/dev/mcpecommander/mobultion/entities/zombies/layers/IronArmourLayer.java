@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import dev.mcpecommander.mobultion.entities.zombies.entities.KnightZombieEntity;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.util.ResourceLocation;
+import software.bernie.geckolib3.model.provider.GeoModelProvider;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
@@ -25,7 +26,7 @@ public class IronArmourLayer extends GeoLayerRenderer<KnightZombieEntity> {
                        float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         stack.pushPose();
         stack.scale(1.1f, 1.01f, 1.1f);
-        renderCopyModel(this.getEntityModel(), IRON_ARMOUR, stack, buffer, packedLight, entity, partialTicks, 1f, 1f,1f);
+        renderCopyModel((GeoModelProvider<KnightZombieEntity>) this.getEntityModel(), IRON_ARMOUR, stack, buffer, packedLight, entity, partialTicks, 1f, 1f,1f);
         stack.popPose();
     }
 }

@@ -124,6 +124,7 @@ public class LanguageGenEN extends LanguageProvider {
         //Mob effects
         this.add(Registration.JOKERNESS_EFFECT.get(), "Jokerness");
         this.add(Registration.HYPNO_EFFECT.get(), "Hypnosis");
+        this.add(Registration.CORRUPTION_EFFECT.get(), "Corruption");
 
         //Item group
         this.add("itemGroup.mobultion", "Mobultion Tab");

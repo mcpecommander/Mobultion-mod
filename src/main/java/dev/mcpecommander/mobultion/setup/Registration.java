@@ -3,6 +3,7 @@ package dev.mcpecommander.mobultion.setup;
 import dev.mcpecommander.mobultion.blocks.HayHatBlock;
 import dev.mcpecommander.mobultion.blocks.SpiderEggBlock;
 import dev.mcpecommander.mobultion.blocks.tile.SpiderEggTile;
+import dev.mcpecommander.mobultion.effects.CorruptionEffect;
 import dev.mcpecommander.mobultion.effects.HypnoEffect;
 import dev.mcpecommander.mobultion.effects.JokernessEffect;
 import dev.mcpecommander.mobultion.entities.endermen.entities.*;
@@ -307,7 +308,6 @@ public class Registration {
     public static final RegistryObject<Item> GLASSENDERMAN_EGG = ITEMS.register("glassenderman_egg"
             , () -> new SpawnEggItem(GLASSENDERMAN_TYPE, 0x2D2C2F, 0x535056,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
-
     public static final RegistryObject<EntityType<GlassShotEntity>> GLASSSHOT = ENTITIES.register("glassshot",
             () -> EntityType.Builder.of((EntityType.IFactory<GlassShotEntity>) GlassShotEntity::new, EntityClassification.MISC)
             .sized(0.5F, 0.5F).clientTrackingRange(8).setUpdateInterval(1).build("glassshot"));
@@ -386,6 +386,7 @@ public class Registration {
 
     public static final RegistryObject<Effect> JOKERNESS_EFFECT = EFFECTS.register("jokernesseffect", JokernessEffect::new);
     public static final RegistryObject<Effect> HYPNO_EFFECT = EFFECTS.register("hypnoeffect", HypnoEffect::new);
+    public static final RegistryObject<Effect> CORRUPTION_EFFECT = EFFECTS.register("corruptioneffect", CorruptionEffect::new);
 
     public static final RegistryObject<SoundEvent> HEALING_SOUND = SOUNDS.register("healing", () ->
             new SoundEvent(new ResourceLocation(MODID, "healing")));
