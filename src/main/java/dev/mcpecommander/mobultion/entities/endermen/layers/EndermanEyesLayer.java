@@ -26,11 +26,9 @@ public class EndermanEyesLayer<T extends MobultionEndermanEntity> extends GeoLay
      * The resource location for the geckolib model of the entity that has this layer.
      */
     private final ResourceLocation ENDERMAN_MODEL;
-    IGeoRenderer<T> renderer;
 
     public EndermanEyesLayer(IGeoRenderer<T> entityRendererIn, String endermanName) {
         super(entityRendererIn);
-        this.renderer = entityRendererIn;
         ENDERMAN_MODEL = new ResourceLocation(MODID, "geo/endermen/"+ endermanName +".json");
         String eyes = endermanName.equals("wanderingenderman") ? "wanderingenderman" : "enderman";
         ENDERMAN_EYES = new ResourceLocation(MODID, "textures/entity/endermen/" + eyes + "eyes.png");
@@ -55,7 +53,7 @@ public class EndermanEyesLayer<T extends MobultionEndermanEntity> extends GeoLay
             //Makes sure that only the head main group is being rendered since that the only part that lights in the
             //eye layer.
             if(!childBone.getName().equals("Head")) continue;
-            this.renderer.renderRecursively(childBone, stack, ivertexbuilder, packedLightIn,
+            this.getRenderer().renderRecursively(childBone, stack, ivertexbuilder, packedLightIn,
                     LivingRenderer.getOverlayCoords(entitylivingbaseIn, 0.0F), 1f, 1f, 1f, 1f);
         }
         stack.popPose();

@@ -34,7 +34,7 @@ public class SkeletonMagmaLayer<T extends MobultionSkeletonEntity> extends GeoLa
                        float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if(entity instanceof MagmaSkeletonEntity){
             RenderType cameo =  RenderType.eyes(MAGMA);
-            ((IGeoRenderer<T>) AnimationUtils.getRenderer(entity)).render(this.getEntityModel().getModel(MODEL), entity, partialTicks,
+            this.getRenderer().render(this.getEntityModel().getModel(MODEL), entity, partialTicks,
                     cameo, matrix, bufferIn, bufferIn.getBuffer(cameo), packedLightIn, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, 1f);
         }
     }

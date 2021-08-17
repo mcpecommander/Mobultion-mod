@@ -35,10 +35,9 @@ public class SpiderEyesLayer<T extends MobultionSpiderEntity> extends GeoLayerRe
     @Override
     public void render(MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLightIn, T entity, float limbSwing,
                        float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        IGeoRenderer<T> renderer = (IGeoRenderer<T>) AnimationUtils.getRenderer(entity);
-        renderer.render(getEntityModel().getModel(SPIDER_MODEL), entity, partialTicks, RenderType.eyes(SPIDER_EYES),matrixStack,
-                buffer, buffer.getBuffer(RenderType.eyes(SPIDER_EYES)), packedLightIn, OverlayTexture.pack(0,
-                        OverlayTexture.v(entity.hurtTime > 0)), 1f, 1f, 1f, 1f);
+        this.getRenderer().render(getEntityModel().getModel(SPIDER_MODEL), entity, partialTicks, RenderType.eyes(SPIDER_EYES),
+                matrixStack, buffer, buffer.getBuffer(RenderType.eyes(SPIDER_EYES)), packedLightIn, OverlayTexture.pack(
+                        0, OverlayTexture.v(entity.hurtTime > 0)), 1f, 1f, 1f, 1f);
     }
 
 }

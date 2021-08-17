@@ -32,7 +32,7 @@ public class ZombieMagmaLayer extends GeoLayerRenderer<MagmaZombieEntity> {
     public void render(MatrixStack matrix, IRenderTypeBuffer bufferIn, int packedLightIn, MagmaZombieEntity entity, float limbSwing,
                        float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         RenderType cameo =  RenderType.eyes(MAGMA);
-        ((IGeoRenderer<MagmaZombieEntity>) AnimationUtils.getRenderer(entity)).render(this.getEntityModel().getModel(MODEL), entity, partialTicks,
-                cameo, matrix, bufferIn, bufferIn.getBuffer(cameo), packedLightIn, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, 1f);
+        this.getRenderer().render(this.getEntityModel().getModel(MODEL), entity, partialTicks, cameo, matrix, bufferIn,
+                bufferIn.getBuffer(cameo), packedLightIn, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, 1f);
     }
 }

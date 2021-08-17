@@ -23,16 +23,14 @@ public class EndermanMagmaLayer extends GeoLayerRenderer<MagmaEndermanEntity> {
      * The resource location for the geckolib model of the entity that has this layer.
      */
     private final ResourceLocation ENDERMAN_MODEL = new ResourceLocation(MODID, "geo/endermen/magmaenderman.json");
-    IGeoRenderer<MagmaEndermanEntity> renderer;
 
     public EndermanMagmaLayer(IGeoRenderer<MagmaEndermanEntity> entityRendererIn) {
         super(entityRendererIn);
-        this.renderer = entityRendererIn;
     }
 
     @Override
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, MagmaEndermanEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         RenderType eyes = RenderType.eyes(ENDERMAN_MAGMA);
-        this.renderer.render(this.getEntityModel().getModel(ENDERMAN_MODEL), entitylivingbaseIn, partialTicks, eyes, matrixStackIn, bufferIn, bufferIn.getBuffer(eyes), packedLightIn, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, 1f);
+        this.getRenderer().render(this.getEntityModel().getModel(ENDERMAN_MODEL), entitylivingbaseIn, partialTicks, eyes, matrixStackIn, bufferIn, bufferIn.getBuffer(eyes), packedLightIn, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, 1f);
     }
 }

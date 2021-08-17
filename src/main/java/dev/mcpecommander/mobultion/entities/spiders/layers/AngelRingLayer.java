@@ -24,16 +24,14 @@ public class AngelRingLayer extends GeoLayerRenderer<AngelSpiderEntity> {
      * The resource location for the geckolib model of the entity that has this layer.
      */
     private static final ResourceLocation ANGEL_SPIDER = new ResourceLocation(MODID, "geo/spiders/angelspider.json");
-    AngelSpiderRenderer renderer;
 
     public AngelRingLayer(IGeoRenderer<AngelSpiderEntity> entityRendererIn) {
         super(entityRendererIn);
-        this.renderer = (AngelSpiderRenderer) entityRendererIn;
     }
 
     @Override
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, AngelSpiderEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         RenderType ring = RenderType.eyes(SPIDER_RING);
-        this.renderer.render(this.getEntityModel().getModel(ANGEL_SPIDER), entitylivingbaseIn, partialTicks, ring, matrixStackIn, bufferIn, bufferIn.getBuffer(ring), packedLightIn, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, 1f);
+        this.getRenderer().render(this.getEntityModel().getModel(ANGEL_SPIDER), entitylivingbaseIn, partialTicks, ring, matrixStackIn, bufferIn, bufferIn.getBuffer(ring), packedLightIn, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, 1f);
     }
 }

@@ -45,7 +45,7 @@ public class ForestCameoLayer<T extends MobultionSkeletonEntity> extends GeoLaye
             matrix.pushPose();
             matrix.scale(1.05f, 1.01f, 1.05f);
             RenderType cameo =  RenderType.entityTranslucent(CAMEO);
-            ((IGeoRenderer<T>) AnimationUtils.getRenderer(entity)).render(this.getEntityModel().getModel(MODEL), entity, partialTicks,
+            this.getRenderer().render(this.getEntityModel().getModel(MODEL), entity, partialTicks,
                     cameo, matrix, bufferIn, bufferIn.getBuffer(cameo), packedLightIn, OverlayTexture.NO_OVERLAY, r, g, b, 1f);
             matrix.popPose();
         }
