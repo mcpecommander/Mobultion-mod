@@ -1,21 +1,24 @@
 package dev.mcpecommander.mobultion.entities.skeletons.entities;
 
 import dev.mcpecommander.mobultion.setup.Registration;
-import net.minecraft.entity.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ILivingEntityData;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
+import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -24,53 +27,58 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /* McpeCommander created on 18/07/2021 inside the package - dev.mcpecommander.mobultion.entities.skeletons.entities */
-public class CorruptedSkeletonEntity extends MobultionSkeletonEntity implements IRangedAttackMob {
+public class CorruptedSkeletonEntity extends MobultionSkeletonEntity {
 
+    //TODO: Make it throw the bone and melee attack with it.
     private final AnimationFactory factory = new AnimationFactory(this);
 
     public CorruptedSkeletonEntity(EntityType<? extends MobultionSkeletonEntity> type, World world) {
         super(type, world);
     }
 
+    @Override
+    protected void registerGoals() {
+        this.goalSelector.addGoal(2, new RestrictSunGoal(this));
+        this.goalSelector.addGoal(3, new FleeSunGoal(this, 1.0D));
+        this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, WolfEntity.class, 6.0F, 1.0D, 1.2D));
+        this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.2D, false));
+        this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
+        this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.addGoal(6, new LookRandomlyGoal(this));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
+    }
+
     public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D);
+        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.ATTACK_DAMAGE, 2D);
     }
 
     @Nullable
     @Override
-    public ILivingEntityData finalizeSpawn(IServerWorld p_213386_1_, DifficultyInstance p_213386_2_, SpawnReason p_213386_3_, @Nullable ILivingEntityData p_213386_4_, @Nullable CompoundNBT p_213386_5_) {
+    public ILivingEntityData finalizeSpawn(@Nonnull IServerWorld serverWorld, @Nonnull DifficultyInstance difficulty,
+                                           @Nonnull SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityData,
+                                           @Nullable CompoundNBT NBTTag) {
         this.setItemInHand(Hand.MAIN_HAND, new ItemStack(Registration.CORRUPTEDBONE.get()));
-        return super.finalizeSpawn(p_213386_1_, p_213386_2_, p_213386_3_, p_213386_4_, p_213386_5_);
+        return super.finalizeSpawn(serverWorld, difficulty, spawnReason, livingEntityData, NBTTag);
     }
 
     @Override
-    public void performRangedAttack(LivingEntity shooter, float power) {
-        ItemStack itemstack = this.getProjectile(this.getItemInHand(Hand.MAIN_HAND));
-        AbstractArrowEntity arrow = this.getArrow(itemstack, power);
-        double d0 = shooter.getX() - this.getX();
-        double d1 = shooter.getY(0.3333333333333333D) - arrow.getY();
-        double d2 = shooter.getZ() - this.getZ();
-        //Calculates the horizontal distance to add a bit of lift to the arrow to simulate real life height adjustment
-        //for far away targets.
-        double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
-        //1.6 is the vector scaling factor which in turn translates into speed.
-        //The last parameter is the error scale. 0 = exact shot.
-        arrow.shoot(d0, d1 + d3 * 0.2d, d2, 1.6F,
-                12 - this.level.getCurrentDifficultyAt(blockPosition()).getSpecialMultiplier() * 12);
-        this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
-        this.level.addFreshEntity(arrow);
-    }
-
-    @Override
-    protected AbstractArrowEntity getArrow(ItemStack bow, float power) {
-        AbstractArrowEntity arrowEntity = super.getArrow(bow, power);
-        if(arrowEntity instanceof ArrowEntity){
-            ((ArrowEntity) arrowEntity).addEffect(new EffectInstance(Registration.CORRUPTION_EFFECT.get(), 6000));
+    public boolean doHurtTarget(@Nonnull Entity hurtEntity) {
+        boolean flag = super.doHurtTarget(hurtEntity);
+        if(flag && hurtEntity instanceof PlayerEntity){
+            ((PlayerEntity) hurtEntity).addEffect(new EffectInstance(Registration.CORRUPTION_EFFECT.get(),
+                    20 * 30, Math.max(this.level.getDifficulty().getId() - 1, 0)));
         }
-        return arrowEntity;
+        return flag;
+    }
+
+    @Override
+    protected int getMaxDeathTime() {
+        return 20;
     }
 
     @Override
@@ -85,7 +93,11 @@ public class CorruptedSkeletonEntity extends MobultionSkeletonEntity implements 
      */
     private <E extends IAnimatable> PlayState controllerPredicate(AnimationEvent<E> event)
     {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("melee", true));
+
+        if(this.swinging || event.getController().getAnimationState() == AnimationState.Running){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("melee", false));
+            return PlayState.CONTINUE;
+        }
 
         return PlayState.STOP;
     }
@@ -97,11 +109,11 @@ public class CorruptedSkeletonEntity extends MobultionSkeletonEntity implements 
     private <E extends IAnimatable> PlayState movementPredicate(AnimationEvent<E> event)
     {
         if(event.isMoving()){
-            if(this.animationSpeed > 0.6){
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("running", true));
-            }else{
+//            if(this.animationSpeed > 0.6){
+//                event.getController().setAnimation(new AnimationBuilder().addAnimation("running", true));
+//            }else{
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("move", true));
-            }
+//            }
         }else{
             return PlayState.STOP;
         }

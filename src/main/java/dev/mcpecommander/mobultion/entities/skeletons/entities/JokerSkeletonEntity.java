@@ -1,5 +1,6 @@
 package dev.mcpecommander.mobultion.entities.skeletons.entities;
 
+import dev.mcpecommander.mobultion.setup.Registration;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -15,8 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
@@ -29,11 +29,13 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /* McpeCommander created on 21/06/2021 inside the package - dev.mcpecommander.mobultion.entities.skeletons.entities */
 public class JokerSkeletonEntity extends MobultionSkeletonEntity implements IRangedAttackMob {
 
+    //TODO: Should dance when it kills something or at least whistle and laugh.
     /**
      * The animation factory, for more information check GeckoLib.
      */
@@ -47,6 +49,7 @@ public class JokerSkeletonEntity extends MobultionSkeletonEntity implements IRan
         this.goalSelector.addGoal(2, new RestrictSunGoal(this));
         this.goalSelector.addGoal(3, new FleeSunGoal(this, 1.0D));
         this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, WolfEntity.class, 6.0F, 1.0D, 1.2D));
+        this.goalSelector.addGoal(4, new RangedBowAttackGoal<>(this, 1.0D, 10, 15.0F));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.goalSelector.addGoal(6, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(6, new LookRandomlyGoal(this));
@@ -56,31 +59,31 @@ public class JokerSkeletonEntity extends MobultionSkeletonEntity implements IRan
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, TurtleEntity.class, 10, true, false, TurtleEntity.BABY_ON_LAND_SELECTOR));
     }
 
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return Registration.JOKER_SOUND.get();
+    }
+
+    @Override
+    public int getAmbientSoundInterval() {
+        return 150;
+    }
+
     public static AttributeModifierMap.MutableAttribute createAttributes() {
         return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D);
     }
 
-    public ItemStack getItemBySlot(EquipmentSlotType slot) {
-        switch(slot.getType()) {
-            case HAND:
-                return ((NonNullList<ItemStack>) this.getHandSlots()).get(slot.getIndex());
-            case ARMOR:
-                //TODO: Change obsidian to the joker hat item.
-                if(slot == EquipmentSlotType.HEAD) return new ItemStack(Items.OBSIDIAN);
-                return ((NonNullList<ItemStack>) this.getArmorSlots()).get(slot.getIndex());
-            default:
-                return ItemStack.EMPTY;
-        }
-    }
-
-    protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
+    protected void populateDefaultEquipmentSlots(@Nonnull DifficultyInstance difficulty) {
         super.populateDefaultEquipmentSlots(difficulty);
         this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW));
+        this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(Registration.HEARTARROW_ITEM.get()));
+        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Registration.JOKERHAT.get()));
     }
 
     @Nullable
-    public ILivingEntityData finalizeSpawn(IServerWorld world, DifficultyInstance difficulty, SpawnReason spawnReason,
-                                           @Nullable ILivingEntityData livingEntityData, @Nullable CompoundNBT NBTTag) {
+    public ILivingEntityData finalizeSpawn(@Nonnull IServerWorld world, @Nonnull DifficultyInstance difficulty,
+                                           @Nonnull SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityData,
+                                           @Nullable CompoundNBT NBTTag) {
         this.populateDefaultEquipmentSlots(difficulty);
         this.setCanPickUpLoot(false);
         return super.finalizeSpawn(world, difficulty, spawnReason, livingEntityData, NBTTag);
@@ -89,6 +92,7 @@ public class JokerSkeletonEntity extends MobultionSkeletonEntity implements IRan
     public void performRangedAttack(LivingEntity shooter, float power) {
         ItemStack itemstack = this.getProjectile(this.getItemInHand(Hand.MAIN_HAND));
         AbstractArrowEntity arrow = this.getArrow(itemstack, power);
+        arrow.setBaseDamage(0.5d);
         double d0 = shooter.getX() - this.getX();
         double d1 = shooter.getY(0.3333333333333333D) - arrow.getY();
         double d2 = shooter.getZ() - this.getZ();
@@ -97,10 +101,15 @@ public class JokerSkeletonEntity extends MobultionSkeletonEntity implements IRan
         double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
         //1.6 is the vector scaling factor which in turn translates into speed.
         //The last parameter is the error scale. 0 = exact shot.
-        arrow.shoot(d0, d1 + d3 * 0.2d, d2, 1.6F,
-                12 - this.level.getCurrentDifficultyAt(blockPosition()).getSpecialMultiplier() * 12);
-        this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        arrow.shoot(d0, d1 + d3 * 0.3d, d2, 1.1F,
+                18 - this.level.getCurrentDifficultyAt(blockPosition()).getSpecialMultiplier() * 12);
+        this.playSound(Registration.HARP_SOUND.get(), 1.0F, this.getRandom().nextFloat() * 0.4F + 0.8F);
         this.level.addFreshEntity(arrow);
+    }
+
+    @Override
+    protected int getMaxDeathTime() {
+        return 50;
     }
 
     @Override
@@ -116,6 +125,8 @@ public class JokerSkeletonEntity extends MobultionSkeletonEntity implements IRan
      */
     private <E extends IAnimatable> PlayState movementPredicate(AnimationEvent<E> event)
     {
+        if(isDeadOrDying()) return PlayState.STOP;
+
         if(event.isMoving()){
             if(this.animationSpeed > 0.6){
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("running", true));
@@ -135,8 +146,15 @@ public class JokerSkeletonEntity extends MobultionSkeletonEntity implements IRan
      */
     private <E extends IAnimatable> PlayState attackPredicate(AnimationEvent<E> event)
     {
-        //event.getController().setAnimation(new AnimationBuilder().addAnimation("aim", true));
-        return PlayState.CONTINUE;
+        if(this.isDeadOrDying()){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("death", true));
+            return PlayState.CONTINUE;
+        }
+        if(this.getTarget() != null){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("aim", true));
+            return PlayState.CONTINUE;
+        }
+        return PlayState.STOP;
     }
 
     @Override

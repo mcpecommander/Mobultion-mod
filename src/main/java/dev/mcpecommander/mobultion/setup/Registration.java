@@ -171,6 +171,7 @@ public class Registration {
     public static final RegistryObject<Item> MAGICGOOP = ITEMS.register("magicgoopitem", () -> new Item(new Item.Properties()
             .tab(ModSetup.ITEM_GROUP).stacksTo(16)));
     public static final RegistryObject<FireSwordItem> FIRESWORD = ITEMS.register("firesworditem", FireSwordItem::new);
+    public static final RegistryObject<JokerHatItem> JOKERHAT = ITEMS.register("jokerhatitem", JokerHatItem::new);
 
     private static final EntityType<AngelSpiderEntity> ANGELSPIDER_TYPE = EntityType.Builder.of(AngelSpiderEntity::new,
                     EntityClassification.MONSTER).sized(1.4f, 1f).build("angelspider");
@@ -394,6 +395,12 @@ public class Registration {
             new SoundEvent(new ResourceLocation(MODID, "holy")));
     public static final RegistryObject<SoundEvent> IGNITE_SOUND = SOUNDS.register("ignite", () ->
             new SoundEvent(new ResourceLocation(MODID, "ignite")));
+    public static final RegistryObject<SoundEvent> JOKER_SOUND = SOUNDS.register("joker", () ->
+            new SoundEvent(new ResourceLocation(MODID, "joker")));
+    public static final RegistryObject<SoundEvent> BELLS_SOUND = SOUNDS.register("bells", () ->
+            new SoundEvent(new ResourceLocation(MODID, "bells")));
+    public static final RegistryObject<SoundEvent> HARP_SOUND = SOUNDS.register("harp", () ->
+            new SoundEvent(new ResourceLocation(MODID, "harp")));
 
 
 }

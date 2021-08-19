@@ -31,5 +31,12 @@ public class SoundsGen extends SoundDefinitionsProvider {
                 .with(SoundDefinitionsProvider.sound(new ResourceLocation(MODID, "holy")).volume(0.5d)));
         this.add(Registration.IGNITE_SOUND.get(), SoundDefinition.definition().subtitle("sword.ignite")
                 .with(SoundDefinitionsProvider.sound(new ResourceLocation(MODID, "ignite")).volume(1d)));
+        this.add(Registration.JOKER_SOUND.get(), SoundDefinition.definition().subtitle("joker.ambient")
+                .with(SoundDefinitionsProvider.sound(new ResourceLocation(MODID, "joker")).volume(1d)));
+        this.add(Registration.BELLS_SOUND.get(), SoundDefinition.definition().subtitle("bells.ringing")
+                .with(SoundDefinitionsProvider.sound(new ResourceLocation(MODID, "bells")).volume(1d)));
+        this.add(Registration.HARP_SOUND.get(), SoundDefinition.definition().subtitle("harp.shooting")
+                .with(SoundDefinitionsProvider.sound(new ResourceLocation(MODID, "harp")).volume(0.5d))
+                .with(SoundDefinitionsProvider.sound(new ResourceLocation(MODID, "harp1")).volume(0.5)));
     }
 }

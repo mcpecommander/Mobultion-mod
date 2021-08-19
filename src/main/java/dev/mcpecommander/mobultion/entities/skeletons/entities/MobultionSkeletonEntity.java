@@ -3,11 +3,15 @@ package dev.mcpecommander.mobultion.entities.skeletons.entities;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -15,11 +19,43 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Optional;
+import java.util.UUID;
+
 /* McpeCommander created on 17/07/2021 inside the package - dev.mcpecommander.mobultion.entities.skeletons.entities */
 public abstract class MobultionSkeletonEntity extends MonsterEntity implements IAnimatable {
 
+    private static final DataParameter<Optional<UUID>> TARGET = EntityDataManager.defineId(MobultionSkeletonEntity.class, DataSerializers.OPTIONAL_UUID);
+
     protected MobultionSkeletonEntity(EntityType<? extends MobultionSkeletonEntity> type, World world) {
         super(type, world);
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(TARGET, Optional.empty());
+    }
+
+    @Override
+    public void setTarget(@Nullable LivingEntity target) {
+        super.setTarget(target);
+        if(target != null){
+            this.entityData.set(TARGET, Optional.of(target.getUUID()));
+        }else{
+            this.entityData.set(TARGET, Optional.empty());
+        }
+    }
+
+    @Nullable
+    @Override
+    public LivingEntity getTarget() {
+        if(!this.level.isClientSide){
+            return super.getTarget();
+        }
+        return this.level.getPlayerByUUID(this.entityData.get(TARGET).orElse(UUID.randomUUID()));
     }
 
     @Override
@@ -46,6 +82,21 @@ public abstract class MobultionSkeletonEntity extends MonsterEntity implements I
         super.aiStep();
     }
 
+    protected abstract int getMaxDeathTime();
+
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.deathTime == getMaxDeathTime()) {
+            remove();
+        }
+    }
+
+    @Override
+    public boolean isOnFire() {
+        return !isDeadOrDying() && super.isOnFire();
+    }
+
     protected AbstractArrowEntity getArrow(ItemStack bow, float power) {
         return ProjectileHelper.getMobArrow(this, bow, power);
     }
@@ -56,7 +107,7 @@ public abstract class MobultionSkeletonEntity extends MonsterEntity implements I
     }
 
     @Override
-    protected SoundEvent getHurtSound(DamageSource damageSource) {
+    protected SoundEvent getHurtSound(@Nonnull DamageSource damageSource) {
         return SoundEvents.SKELETON_HURT;
     }
 
@@ -66,10 +117,11 @@ public abstract class MobultionSkeletonEntity extends MonsterEntity implements I
     }
 
     @Override
-    protected void playStepSound(BlockPos p_180429_1_, BlockState p_180429_2_) {
+    protected void playStepSound(@Nonnull BlockPos blockPos, @Nonnull BlockState state) {
         this.playSound(SoundEvents.SKELETON_STEP, 0.15F, 1.0F);
     }
 
+    @Nonnull
     @Override
     public CreatureAttribute getMobType() {
         return CreatureAttribute.UNDEAD;

@@ -1,0 +1,91 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"shake": {
+			"loop": true,
+			"animation_length": 5.08,
+			"bones": {
+				"RightHorn1": {
+					"rotation": {
+						"vector": [0, 0, "math.abs(math.sin(query.anim_time * 500) * math.exp(-0.5 * query.anim_time)) * 2"]
+					}
+				},
+				"LeftHorn1": {
+					"rotation": {
+						"vector": [0, 0, "math.abs(math.sin(query.anim_time * 500) * math.exp(-0.5 * query.anim_time)) * 2"]
+					}
+				},
+				"LeftHorn2": {
+					"rotation": {
+						"vector": [0, 0, "math.abs(math.sin(query.anim_time * 500) * math.exp(-0.5 * query.anim_time)) * 5"]
+					}
+				},
+				"LeftHorn3": {
+					"rotation": {
+						"vector": [0, 0, "math.abs(math.sin(query.anim_time * 500) * math.exp(-0.5 * query.anim_time)) * 7"]
+					}
+				},
+				"LeftHorn4": {
+					"rotation": {
+						"vector": [0, 0, "math.abs(math.sin(query.anim_time * 500) * math.exp(-0.5 * query.anim_time)) * 10"]
+					}
+				},
+				"LeftHorn5": {
+					"rotation": {
+						"vector": [0, 0, "math.abs(math.sin(query.anim_time * 700) * math.exp(-0.5 * query.anim_time)) * 12"]
+					}
+				},
+				"LeftHorn7": {
+					"rotation": {
+						"vector": ["(math.sin(query.anim_time * 500) * math.exp(-0.5 * query.anim_time)) * 20", 0, 0]
+					}
+				},
+				"RightHorn2": {
+					"rotation": {
+						"vector": [0, 0, "math.abs(math.sin(query.anim_time * 500) * math.exp(-0.5 * query.anim_time)) * 5"]
+					}
+				},
+				"RightHorn3": {
+					"rotation": {
+						"vector": [0, 0, "math.abs(math.sin(query.anim_time * 500) * math.exp(-0.5 * query.anim_time)) * 7"]
+					}
+				},
+				"RightHorn4": {
+					"rotation": {
+						"vector": [0, 0, "math.abs(math.sin(query.anim_time * 500) * math.exp(-0.5 * query.anim_time)) * 10"]
+					}
+				},
+				"RightHorn7": {
+					"rotation": {
+						"vector": ["(math.sin(query.anim_time * 500) * math.exp(-0.5 * query.anim_time)) * 20", 0, 0]
+					}
+				},
+				"MiddleHorn3": {
+					"rotation": {
+						"vector": ["math.abs(math.sin(query.anim_time * 500) * math.exp(-0.5 * query.anim_time)) * 2", 0, "math.abs(math.sin(query.anim_time * 500) * math.exp(-0.5 * query.anim_time)) * 2"]
+					}
+				},
+				"MiddleHorn4": {
+					"rotation": {
+						"vector": ["math.abs(math.sin(query.anim_time * 500) * math.exp(-0.5 * query.anim_time)) * 5", 0, "math.abs(math.sin(query.anim_time * 500) * math.exp(-0.5 * query.anim_time)) * 5"]
+					}
+				},
+				"MiddleHorn5": {
+					"rotation": {
+						"vector": ["math.abs(math.sin(query.anim_time * 500) * math.exp(-0.5 * query.anim_time)) * 7", 0, "math.abs(math.sin(query.anim_time * 500) * math.exp(-0.5 * query.anim_time)) * 7"]
+					}
+				},
+				"MiddleHorn6": {
+					"rotation": {
+						"vector": ["math.abs(math.sin(query.anim_time * 800) * math.exp(-0.5 * query.anim_time)) * 10", 0, "math.abs(math.sin(query.anim_time * 500) * math.exp(-0.5 * query.anim_time)) * 10"]
+					}
+				},
+				"MiddleHorn7": {
+					"rotation": {
+						"vector": ["(math.sin(query.anim_time * 500) * math.exp(-0.2 * query.anim_time)) * 20", 0, "(math.sin(query.anim_time * 500) * math.exp(-0.5 * query.anim_time)) * 20"]
+					}
+				}
+			}
+		}
+	}
+}

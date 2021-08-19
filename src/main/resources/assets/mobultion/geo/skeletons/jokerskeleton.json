@@ -396,14 +396,6 @@
 					]
 				},
 				{
-					"name": "Holder",
-					"parent": "RightArm1",
-					"pivot": [-5.5, 13, -0.5],
-					"cubes": [
-						{"origin": [-6, 12.5, -1], "size": [1, 1, 1], "uv": [0, 0]}
-					]
-				},
-				{
 					"name": "LeftLeg",
 					"parent": "All",
 					"pivot": [2, 12, 0],

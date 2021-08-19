@@ -120,6 +120,8 @@ public class LanguageGenEN extends LanguageProvider {
         this.add("healthpack.heal", "Healing with Health pack");
         this.add("halo.revive", "Halo reviving");
         this.add("sword.ignite", "Fire sword igniting");
+        this.add("joker.ambient", "Joker skeleton laughing");
+        this.add("bells.ringing", "Hat bells ringing");
 
         //Mob effects
         this.add(Registration.JOKERNESS_EFFECT.get(), "Jokerness");

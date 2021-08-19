@@ -45,6 +45,11 @@ public class ShamanSkeletonEntity extends MobultionSkeletonEntity{
     }
 
     @Override
+    protected int getMaxDeathTime() {
+        return 20;
+    }
+
+    @Override
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController<>(this, "movement", 0, this::movementPredicate));
         data.addAnimationController(new AnimationController<>(this, "controller", 0, this::controllerPredicate));

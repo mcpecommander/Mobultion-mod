@@ -47,7 +47,6 @@ public class HealingStaffItem extends Item implements IAnimatable, ISyncable {
                 GeckoLibNetwork.syncAnimation(target, this, id, 1);
                 itemStack.getOrCreateTag().putBoolean("Started", false);
             }
-
         }
     }
 

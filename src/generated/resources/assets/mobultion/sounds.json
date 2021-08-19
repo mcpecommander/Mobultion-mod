@@ -26,5 +26,30 @@
     "sounds": [
       "mobultion:ignite"
     ]
+  },
+  "joker": {
+    "subtitle": "joker.ambient",
+    "sounds": [
+      "mobultion:joker"
+    ]
+  },
+  "bells": {
+    "subtitle": "bells.ringing",
+    "sounds": [
+      "mobultion:bells"
+    ]
+  },
+  "harp": {
+    "subtitle": "harp.shooting",
+    "sounds": [
+      {
+        "name": "mobultion:harp",
+        "volume": 0.5
+      },
+      {
+        "name": "mobultion:harp1",
+        "volume": 0.5
+      }
+    ]
   }
 }

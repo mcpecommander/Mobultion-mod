@@ -53,6 +53,7 @@ public class JokerSkeletonModel extends AnimatedGeoModel<JokerSkeletonEntity> {
     @Override
     public void setLivingAnimations(JokerSkeletonEntity entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
+        if(entity.isDeadOrDying()) return;
         IBone head = this.getAnimationProcessor().getBone("Head");
 
         assert customPredicate != null;

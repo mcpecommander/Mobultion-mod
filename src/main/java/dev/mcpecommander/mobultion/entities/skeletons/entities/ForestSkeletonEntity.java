@@ -37,18 +37,23 @@ public class ForestSkeletonEntity extends MobultionSkeletonEntity implements IRa
     public void performRangedAttack(LivingEntity shooter, float power) {
         ItemStack itemstack = this.getProjectile(this.getItemInHand(Hand.MAIN_HAND));
         AbstractArrowEntity arrow = this.getArrow(itemstack, power);
-        double d0 = shooter.getX() - this.getX();
-        double d1 = shooter.getY(0.3333333333333333D) - arrow.getY();
-        double d2 = shooter.getZ() - this.getZ();
+        double motionX = shooter.getX() - this.getX();
+        double motionY = shooter.getY(0.3333333333333333D) - arrow.getY();
+        double motionZ = shooter.getZ() - this.getZ();
         //Calculates the horizontal distance to add a bit of lift to the arrow to simulate real life height adjustment
         //for far away targets.
-        double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
+        double horizontalDistance = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
         //1.6 is the vector scaling factor which in turn translates into speed.
         //The last parameter is the error scale. 0 = exact shot.
-        arrow.shoot(d0, d1 + d3 * 0.2d, d2, 1.6F,
+        arrow.shoot(motionX, motionY + horizontalDistance * 0.2d, motionZ, 2F,
                 12 - this.level.getCurrentDifficultyAt(blockPosition()).getSpecialMultiplier() * 12);
         this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.level.addFreshEntity(arrow);
+    }
+
+    @Override
+    protected int getMaxDeathTime() {
+        return 20;
     }
 
     @Override

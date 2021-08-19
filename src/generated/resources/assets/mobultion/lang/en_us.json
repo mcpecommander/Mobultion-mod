@@ -1,6 +1,8 @@
 {
+  "bells.ringing": "Hat bells ringing",
   "block.mobultion.hayhatblock": "Hay Hat",
   "block.mobultion.spidereggblock": "Spider Egg",
+  "effect.mobultion.corruptioneffect": "Corruption",
   "effect.mobultion.hypnoeffect": "Hypnosis",
   "effect.mobultion.jokernesseffect": "Jokerness",
   "entity.mobultion.angelspider": "Angel Spider",
@@ -82,7 +84,8 @@
   "item.mobultion.witherspider_egg": "Wither Spider Spawn Egg",
   "item.mobultion.workerzombie_egg": "Zombie Worker Spawn Egg",
   "itemGroup.mobultion": "Mobultion Tab",
-  "mobultion:angelspider_egg.info": "A Healer that heals hurt spiders by firing healing particles. Can rarely drop the angelic halo to be used by the player",
-  "mobultion:witchspider.info": "",
+  "joker.ambient": "Joker skeleton laughing",
+  "mobultion:angelspider_egg.info": "A Healer that heals hurt spiders by firing healing particles.\nWhen killed, it has a really small chance to drop the angelic halo to be used by the player",
+  "mobultion:witchspider_egg.info": "",
   "sword.ignite": "Fire sword igniting"
 }

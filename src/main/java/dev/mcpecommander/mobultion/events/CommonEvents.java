@@ -13,11 +13,16 @@ import net.minecraft.potion.Effects;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.network.PacketDistributor;
+import software.bernie.geckolib3.network.GeckoLibNetwork;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import static dev.mcpecommander.mobultion.Mobultion.MODID;
 
@@ -39,6 +44,25 @@ public class CommonEvents {
 
     private static boolean checkTool(Item item){
         return item instanceof SwordItem || item instanceof ToolItem;
+    }
+
+    @SubscribeEvent
+    public static void onJumpEvent(LivingEvent.LivingJumpEvent event){
+        World level = event.getEntityLiving().level;
+        if(event.getEntityLiving() instanceof PlayerEntity){
+            PlayerEntity player = (PlayerEntity) event.getEntityLiving();
+            ItemStack head = player.getItemBySlot(EquipmentSlotType.HEAD);
+            if(!head.isEmpty() && head.getItem() == Registration.JOKERHAT.get()){
+                if(!level.isClientSide){
+                    final int id = GeckoLibUtil.guaranteeIDForStack(head, (ServerWorld) level);
+                    final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF
+                            .with(() -> player);
+                    GeckoLibNetwork.syncAnimation(target, Registration.JOKERHAT.get(), id, 0);
+                }else{
+                    player.playSound(Registration.BELLS_SOUND.get(), 0.5f, 1f);
+                }
+            }
+        }
     }
 
     @SubscribeEvent

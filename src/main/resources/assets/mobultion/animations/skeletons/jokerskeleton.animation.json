@@ -906,7 +906,7 @@
 		},
 		"death": {
 			"loop": "hold_on_last_frame",
-			"animation_length": 2.36,
+			"animation_length": 3.04,
 			"bones": {
 				"Head": {
 					"rotation": {

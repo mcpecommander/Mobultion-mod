@@ -32,6 +32,11 @@ public class VampireSkeletonEntity extends MobultionSkeletonEntity{
         data.addAnimationController(new AnimationController<>(this, "controller", 0, this::controllerPredicate));
     }
 
+    @Override
+    protected int getMaxDeathTime() {
+        return 20;
+    }
+
     /**
      * @param event: The animation event that includes the bone animations and animation status
      * @return PlayState.CONTINUE or PlayState.STOP depending on which needed.

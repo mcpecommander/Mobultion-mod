@@ -13,6 +13,8 @@ import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import javax.annotation.Nonnull;
+
 /* McpeCommander created on 23/07/2021 inside the package - dev.mcpecommander.mobultion.entities.skeletons.entities */
 public class HeartArrowEntity extends AbstractArrowEntity implements IAnimatable {
 
@@ -22,12 +24,13 @@ public class HeartArrowEntity extends AbstractArrowEntity implements IAnimatable
         super(type, world);
     }
 
+    @Nonnull
     @Override
     protected ItemStack getPickupItem() {
         return new ItemStack(Registration.HEARTARROW_ITEM.get());
     }
 
-    protected void doPostHurtEffects(LivingEntity attackedEntity) {
+    protected void doPostHurtEffects(@Nonnull LivingEntity attackedEntity) {
         super.doPostHurtEffects(attackedEntity);
         EffectInstance effectinstance = new EffectInstance(Registration.JOKERNESS_EFFECT.get(), 10 * 20, 0);
         attackedEntity.addEffect(effectinstance);
@@ -44,10 +47,11 @@ public class HeartArrowEntity extends AbstractArrowEntity implements IAnimatable
     }
 
     /**
-     * The spawning packet that is send to client side to make it tick and render on the client side.
+     * The spawning packet that is sent to client side to make it tick and render on the client side.
      * DO NOT USE the vanilla spawning packet because it doesn't work.
      * @return The spawning packet to be sent to the client.
      */
+    @Nonnull
     @Override
     public IPacket<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);

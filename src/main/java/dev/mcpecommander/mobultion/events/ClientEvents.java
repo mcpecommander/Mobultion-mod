@@ -2,7 +2,6 @@ package dev.mcpecommander.mobultion.events;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import dev.mcpecommander.mobultion.Mobultion;
 import dev.mcpecommander.mobultion.effects.JokernessEffect;
 import dev.mcpecommander.mobultion.effects.PlayingCard;
 import dev.mcpecommander.mobultion.setup.Registration;
@@ -36,12 +35,12 @@ public class ClientEvents {
     private static final ResourceLocation TEXTURE = new ResourceLocation(MODID, "textures/mob_effect/jokernessscreen.png");
 
     @SubscribeEvent
-    public static void renderDebug(RenderGameOverlayEvent.Post event){
-        if(Mobultion.DEBUG) return;
+    public static void renderEffect(RenderGameOverlayEvent.Post event){
         if(Minecraft.getInstance().player == null) return;
         if(Minecraft.getInstance().player.hasEffect(Registration.JOKERNESS_EFFECT.get()) &&
                 event.getType() == RenderGameOverlayEvent.ElementType.ALL){
-            JokernessEffect effect = (JokernessEffect) Minecraft.getInstance().player.getEffect(Registration.JOKERNESS_EFFECT.get()).getEffect();
+            JokernessEffect effect = (JokernessEffect) Minecraft.getInstance().player
+                    .getEffect(Registration.JOKERNESS_EFFECT.get()).getEffect();
             Set<PlayingCard> copy = new HashSet<>(effect.effectFixers);
             effect.effectFixers.forEach(playingCard -> {
                 renderTextured(playingCard.getPosX(), playingCard.getPosY(), playingCard.getUv(), playingCard.getColor());
