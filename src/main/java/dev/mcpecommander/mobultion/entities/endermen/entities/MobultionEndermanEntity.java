@@ -23,6 +23,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import software.bernie.geckolib3.core.IAnimatable;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
@@ -115,6 +116,8 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
         this.setRemainingPersistentAngerTime(PERSISTENT_ANGER_TIME.randomValue(this.random));
     }
 
+    //These 4 methods under this comment are harder to grasp, but I copied them from the vanilla enderman, and they work
+    //so that is that.
     @Override
     public void setRemainingPersistentAngerTime(int remainingTime) {
         this.remainingPersistentAngerTime = remainingTime;
@@ -176,7 +179,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
      * @param syncedParameter The parameter that is being synced.
      */
     @Override
-    public void onSyncedDataUpdated(DataParameter<?> syncedParameter) {
+    public void onSyncedDataUpdated(@Nonnull DataParameter<?> syncedParameter) {
         if (DATA_CREEPY.equals(syncedParameter) && this.hasBeenStaredAt() && this.level.isClientSide) {
             this.playStareSound();
         }
@@ -188,7 +191,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
      * @param NBTTag The tag where the additional data will be written to.
      */
     @Override
-    public void addAdditionalSaveData(CompoundNBT NBTTag) {
+    public void addAdditionalSaveData(@Nonnull CompoundNBT NBTTag) {
         super.addAdditionalSaveData(NBTTag);
         //Writes the anger time and the UUID of the target to the NBT tag.
         this.addPersistentAngerSaveData(NBTTag);
@@ -199,13 +202,17 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
      * @param NBTTag The NBT tag that holds the saved data.
      */
     @Override
-    public void readAdditionalSaveData(CompoundNBT NBTTag) {
+    public void readAdditionalSaveData(@Nonnull CompoundNBT NBTTag) {
         super.readAdditionalSaveData(NBTTag);
         if(!level.isClientSide)
             this.readPersistentAngerSaveData((ServerWorld)this.level, NBTTag);
     }
 
-
+    /**
+     * Detects if the player is looking at this enderman using vector calculations.
+     * @param player The player that is being tested.
+     * @return true if the looking vector of the player is pointing at the enderman head.
+     */
     public boolean isLookingAtMe(PlayerEntity player) {
         ItemStack itemstack = player.inventory.armor.get(3);
         if (itemstack.getItem() == Blocks.CARVED_PUMPKIN.asItem()) {
@@ -227,7 +234,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
      * @return a float of how high are the eye from the ground up.
      */
     @Override
-    protected float getStandingEyeHeight(Pose pose, EntitySize size) {
+    protected float getStandingEyeHeight(@Nonnull Pose pose, @Nonnull EntitySize size) {
         return 2.55F;
     }
 
@@ -307,6 +314,11 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
         return this.teleport(d1, d2, d3);
     }
 
+    /**
+     * A helper method to teleport the enderman somewhere close to the given entity.
+     * @param target The entity that this enderman is trying to get closer to.
+     * @return true if the teleportation is successful.
+     */
     public boolean teleportAround(Entity target){
         Vector3d pos = RandomPositionGenerator.getLandPosTowards(this, 10, 7, target.position());
         if(pos != null){
@@ -344,6 +356,14 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
         return false;
     }
 
+    /**
+     * A teleportation check method that checks if the teleportation is possible by teleporting the entity to the location
+     * and doing checks then return it back to the old location.
+     * @param x the x coords
+     * @param y the y coords
+     * @param z the z coords
+     * @return true if the teleportation is possible.
+     */
     public boolean canTeleport(double x, double y, double z){
         double oX = this.getX();
         double oY = this.getY();
@@ -375,10 +395,6 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
         }
         this.teleportTo(oX, oY, oZ);
         return flag;
-    }
-
-    public boolean teleport(BlockPos pos){
-        return this.teleport(pos.getX(), pos.getY(), pos.getZ());
     }
 
     /**
@@ -462,6 +478,11 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
         this.entityData.set(DATA_STARED_AT, true);
     }
 
+    /**
+     * Used for debug reasons
+     * @param entity the entity to get the path nodes for.
+     * @return The list of the blockpos in each node in the path.
+     */
     public static List<BlockPos> getPathNodes(MobultionEndermanEntity entity){
         List<BlockPos> positions = new ArrayList<>();
         if(entity.getNavigation().getPath() == null) return positions;

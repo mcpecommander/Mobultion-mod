@@ -9,6 +9,7 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -72,7 +73,6 @@ public class WanderingEndermanEntity extends MobultionEndermanEntity {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SwimGoal(this));
-        //this.goalSelector.addGoal(1, new EndermanEntity.StareGoal(this));
         this.goalSelector.addGoal(2, new WanderingEndermanLightningAttackGoal(this, 60));
         this.goalSelector.addGoal(3, new WaterAvoidingRandomWalkingGoal(this, 1.0D, 0.0F));
         this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, 8.0F));
@@ -93,14 +93,33 @@ public class WanderingEndermanEntity extends MobultionEndermanEntity {
                 .add(Attributes.MOVEMENT_SPEED, 0.3F).add(Attributes.FOLLOW_RANGE, 64.0D);
     }
 
+    /**
+     * The amount of ticks the entity ticks after it gets killed.
+     * @return an integer of total death ticks
+     */
     @Override
     protected int maxDeathAge() {
         return 27;
     }
 
+    /**
+     * Gets called every tick on the client side after the entity dies until its removed.
+     */
     @Override
-    protected void addDeathParticles() {
+    protected void addDeathParticles() {}
 
+    /**
+     * Gets called every tick after the entity dies until it's removed.
+     */
+    @Override
+    protected void tickDeath() {
+        super.tickDeath();
+        if (this.deathTime == 25 && !level.isClientSide) {
+            LightningBoltEntity entity = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, level);
+            entity.setPos(this.getX(), this.getY(), this.getZ());
+            entity.setVisualOnly(true);
+            level.addFreshEntity(entity);
+        }
     }
 
     /**

@@ -22,23 +22,19 @@ public class IceEndermanRenderer extends GeoEntityRenderer<IceEndermanEntity> {
         this.addLayer(new EndermanEyesLayer<>(this, "iceenderman"));
     }
 
-    @Override
-    public void render(IceEndermanEntity entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        if(entity.isDeadOrDying()){
-            this.shadowRadius = 0f;
-        }else{
-            this.shadowRadius = 0.5F;
-        }
-        super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
-    }
-
+    //Return translucent to make the entity translucent. Default is cutout.
     @Override
     public RenderType getRenderType(IceEndermanEntity animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
         return RenderType.entityTranslucent(getTextureLocation(animatable));
     }
 
+    /**
+     * How much the entity rotates when it dies. The default is 90 degrees like lying on the ground dead.
+     * @param entity The entity that is dying.
+     * @return a float of the degrees that this entity rotates on death.
+     */
     @Override
-    protected float getDeathMaxRotation(IceEndermanEntity entityLivingBaseIn) {
+    protected float getDeathMaxRotation(IceEndermanEntity entity) {
         return 0f;
     }
 }

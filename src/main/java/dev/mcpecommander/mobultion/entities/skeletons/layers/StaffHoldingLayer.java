@@ -6,13 +6,13 @@ import dev.mcpecommander.mobultion.entities.skeletons.entities.ShamanSkeletonEnt
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
-import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import software.bernie.geckolib3.util.RenderUtils;
@@ -37,7 +37,8 @@ public class StaffHoldingLayer<T extends MobultionSkeletonEntity> extends GeoLay
         this.mainHand = entity.getItemBySlot(EquipmentSlotType.MAINHAND);
         GeoModel model = this.getEntityModel().getModel(SKELETON_MODEL);
         for (GeoBone group : model.topLevelBones) {
-            renderRecursively(group, matrix, renderBuffer, packedLight, GeoEntityRenderer.getPackedOverlay(entity, 0));
+            renderRecursively(group, matrix, renderBuffer, packedLight, OverlayTexture.pack(OverlayTexture.u(0),
+                    OverlayTexture.v(entity.hurtTime > 0)));
         }
     }
 

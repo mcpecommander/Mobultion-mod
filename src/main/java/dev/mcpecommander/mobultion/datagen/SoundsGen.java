@@ -14,7 +14,6 @@ public class SoundsGen extends SoundDefinitionsProvider {
 
     /**
      * Creates a new instance of this data provider.
-     *
      * @param generator The data generator instance provided by the event you are initializing this provider in.
      * @param helper    The existing file helper provided by the event you are initializing this provider in.
      */
@@ -22,6 +21,9 @@ public class SoundsGen extends SoundDefinitionsProvider {
         super(generator, MODID, helper);
     }
 
+    /**
+     * Add your sound events here to generate the sounds.json file for them.
+     */
     @Override
     public void registerSounds() {
         this.add(Registration.HEALING_SOUND.get(), SoundDefinition.definition().subtitle("healthpack.heal")

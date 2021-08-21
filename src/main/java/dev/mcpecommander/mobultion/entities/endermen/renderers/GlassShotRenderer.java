@@ -21,13 +21,28 @@ public class GlassShotRenderer extends GeoProjectilesRenderer<GlassShotEntity> {
         this.shadowRadius = 0.5F;
     }
 
+    //Return translucent to make the entity translucent. Default is cutout.
     @Override
-    public RenderType getRenderType(GlassShotEntity animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
+    public RenderType getRenderType(GlassShotEntity animatable, float partialTicks, MatrixStack stack,
+                                    @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder,
+                                    int packedLightIn, ResourceLocation textureLocation) {
         return RenderType.entityTranslucent(getTextureLocation(animatable));
     }
 
+    /**
+     * The render color for this entity.
+     * @param animatable The entity being colored.
+     * @param partialTicks The partial ticks for smoothing the 20 ticks rendering into any frame rate wanted.
+     * @param stack The matrix stack used for pose rotation and translation.
+     * @param renderTypeBuffer The render buffer instance.
+     * @param vertexBuilder The vertex builder instance.
+     * @param packedLightIn The light level vanilla magic numbers.
+     * @return The color that should be used to render the entity.
+     */
     @Override
-    public Color getRenderColor(GlassShotEntity animatable, float partialTicks, MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn) {
+    public Color getRenderColor(GlassShotEntity animatable, float partialTicks, MatrixStack stack,
+                                @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder,
+                                int packedLightIn) {
         return animatable.getColor();
     }
 }

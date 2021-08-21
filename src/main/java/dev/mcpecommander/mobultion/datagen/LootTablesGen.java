@@ -29,16 +29,31 @@ public class LootTablesGen extends LootTableProvider {
         super(generator);
     }
 
+    /**
+     * The most complicated list of a pair of a loot parameter set and supplier of consumer of biconsumer of resource
+     * location and loot table builder.
+     * Just copy it and change according to the names of your inner loot table classes.
+     */
     private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> tables =
             ImmutableList.of(Pair.of(LootTablesGen.EntityTables::new, LootParameterSets.ENTITY),
                              Pair.of(LootTablesGen.BlockTables::new, LootParameterSets.BLOCK));
 
+    /**
+     * Takes that complicated monstrosity up here to know what classes to run the loot table gen for.
+     * @return That thing up there.
+     */
     @Nonnull
     @Override
     public List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> getTables() {
         return tables;
     }
 
+    /**
+     * Validates that the loot tables are correct I assume. The validate method only exists for the loot table gen for
+     * some reason.
+     * @param map The map of loot tables that got generated.
+     * @param validationtracker The validation tracker that can validate loot tables.
+     */
     @Override
     protected void validate(Map<ResourceLocation, LootTable> map, @Nonnull ValidationTracker validationtracker) {
         map.forEach((resourceLocation, lootTable) -> LootTableManager.validate(validationtracker, resourceLocation, lootTable));
@@ -46,6 +61,10 @@ public class LootTablesGen extends LootTableProvider {
 
     public static class EntityTables extends EntityLootTables{
 
+        /**
+         * Add loot tables for living entities here. Trying to add a loot table to an entity that doesn't extend living
+         * entity will cause a crash.
+         */
         @Override
         protected void addTables() {
             this.add(Registration.VAMPIRESKELETON.get(), LootTable.lootTable().withPool(LootPool.lootPool().name("pool1")
@@ -54,6 +73,11 @@ public class LootTablesGen extends LootTableProvider {
                             .apply(LootingEnchantBonus.lootingMultiplier(RandomValueRange.between(0.0F, 1.0F))))));
         }
 
+        /**
+         * The list of entities that this data generator is trying to generate loot tables for. If an entity is missing or
+         * doesn't have a table in the addTables, it will crash the data gen.
+         * @return An iterable of the all entities that should have loot tables generated for.
+         */
         @Nonnull
         @Override
         protected Iterable<EntityType<?>> getKnownEntities() {
@@ -69,11 +93,19 @@ public class LootTablesGen extends LootTableProvider {
 
     public static class BlockTables extends BlockLootTables{
 
+        /**
+         * Add loot tables for blocks here.
+         */
         @Override
         protected void addTables() {
             dropSelf(Registration.HAYHAT.get());
         }
 
+        /**
+         * The list of blocks that this data generator is trying to generate loot tables for. If a block is missing or
+         * doesn't have a table in the addTables, it will crash the data gen.
+         * @return An iterable of the all blocks that should have loot tables generated for.
+         */
         @Nonnull
         @Override
         protected Iterable<Block> getKnownBlocks() {

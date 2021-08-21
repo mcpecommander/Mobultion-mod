@@ -21,11 +21,19 @@ public class GardenerEndermanPosFinderGoal extends Goal {
         this.searchDistance = distance;
     }
 
+    /**
+     * If the goal/AI can start when the conditions are met.
+     * @return true if the goal can start and then start() is called.
+     */
     @Override
     public boolean canUse() {
         return !owner.isGardening() && owner.getTargetPos() == null && owner.getRandom().nextInt(probability) == 0;
     }
 
+    /**
+     * Gets called once after the canUse() is true.
+     * Used to set some variables or timers for the goal/AI.
+     */
     @Override
     public void start() {
 

@@ -31,6 +31,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.Objects;
@@ -78,8 +79,8 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
      */
     @Nullable
     @Override
-    public ILivingEntityData finalizeSpawn(IServerWorld serverWorld, DifficultyInstance difficulty,
-                                           SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityData,
+    public ILivingEntityData finalizeSpawn(@Nonnull IServerWorld serverWorld, @Nonnull DifficultyInstance difficulty,
+                                           @Nonnull SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityData,
                                            @Nullable CompoundNBT NBTTag) {
         setColor(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat()));
         return super.finalizeSpawn(serverWorld, difficulty, spawnReason, livingEntityData, NBTTag);
@@ -169,7 +170,7 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
      * @param NBTTag The NBT tag that holds the saved data.
      */
     @Override
-    public void readAdditionalSaveData(CompoundNBT NBTTag) {
+    public void readAdditionalSaveData(@Nonnull CompoundNBT NBTTag) {
         super.readAdditionalSaveData(NBTTag);
         if(NBTTag.contains("mobultion:color", Constants.NBT.TAG_INT))this.setColor(new Color(NBTTag.getInt("mobultion:color")));
         if(NBTTag.contains("mobultion:balls", Constants.NBT.TAG_BYTE))this.setBalls(NBTTag.getByte("mobultion:balls"));
@@ -180,7 +181,7 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
      * @param NBTTag The tag where the additional data will be written to.
      */
     @Override
-    public void addAdditionalSaveData(CompoundNBT NBTTag) {
+    public void addAdditionalSaveData(@Nonnull CompoundNBT NBTTag) {
         super.addAdditionalSaveData(NBTTag);
         NBTTag.putInt("mobultion:color", getColor().getRGB());
         NBTTag.putByte("mobultion:balls", getBalls());

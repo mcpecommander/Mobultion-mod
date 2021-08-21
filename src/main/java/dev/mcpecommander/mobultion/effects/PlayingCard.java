@@ -4,6 +4,7 @@ import java.awt.*;
 
 /* McpeCommander created on 19/07/2021 inside the package - dev.mcpecommander.mobultion.effects */
 public class PlayingCard {
+    //This class is used to have a reference to each play card symbol being displayed.
 
     final int posX, posY;
     Color color;

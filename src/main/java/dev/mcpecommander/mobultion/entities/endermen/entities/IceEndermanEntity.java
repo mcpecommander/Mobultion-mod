@@ -23,6 +23,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import javax.annotation.Nonnull;
 import java.util.Objects;
 
 /* McpeCommander created on 07/07/2021 inside the package - dev.mcpecommander.mobultion.entities.endermen.entities */
@@ -37,7 +38,12 @@ public class IceEndermanEntity extends MobultionEndermanEntity{
         super(type, world);
     }
 
-    public boolean doHurtTarget(Entity target) {
+    /**
+     * Gets called when an entity is hit by this enderman.
+     * @param target The entity that this enderman hit.
+     * @return true if the attack was successful which is in turn determined from hurt method.
+     */
+    public boolean doHurtTarget(@Nonnull Entity target) {
         if (super.doHurtTarget(target)) {
             if (target instanceof LivingEntity) {
                 ((LivingEntity)target).addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 5 * 20, 0));
@@ -149,6 +155,10 @@ public class IceEndermanEntity extends MobultionEndermanEntity{
         return PlayState.STOP;
     }
 
+    /**
+     * Getter for the animation factory. Client side only but not null on the server.
+     * @return AnimationFactory
+     */
     @Override
     public AnimationFactory getFactory() {
         return this.factory;

@@ -14,6 +14,10 @@ public class LanguageGenEN extends LanguageProvider {
         super(gen, MODID, "en_us");
     }
 
+    /**
+     * Add the different translations in this method. I am using different classes for different locale while it should be
+     * possible to have multiple inner classes multiple locales.
+     */
     @Override
     protected void addTranslations() {
         //Blocks
@@ -133,6 +137,11 @@ public class LanguageGenEN extends LanguageProvider {
 
     }
 
+    /**
+     * Helper method to add spawn egg localisations a bit faster.
+     * @param spawnEgg The spawn egg item.
+     * @param name The translation in american english locale
+     */
     private void addSpawnEgg(Item spawnEgg, String name){
         this.add(spawnEgg, name.concat(" Spawn Egg"));
     }

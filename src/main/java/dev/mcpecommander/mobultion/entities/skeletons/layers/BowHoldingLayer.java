@@ -1,17 +1,20 @@
 package dev.mcpecommander.mobultion.entities.skeletons.layers;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import dev.mcpecommander.mobultion.entities.skeletons.entities.ForestSkeletonEntity;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.JokerSkeletonEntity;
+import dev.mcpecommander.mobultion.entities.skeletons.entities.MagmaSkeletonEntity;
+import dev.mcpecommander.mobultion.entities.skeletons.entities.MobultionSkeletonEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
-import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import software.bernie.geckolib3.util.RenderUtils;
@@ -19,22 +22,31 @@ import software.bernie.geckolib3.util.RenderUtils;
 import static dev.mcpecommander.mobultion.Mobultion.MODID;
 
 /* McpeCommander created on 19/08/2021 inside the package - dev.mcpecommander.mobultion.entities.skeletons.layers */
-public class BowHoldingLayer extends GeoLayerRenderer<JokerSkeletonEntity> {
+public class BowHoldingLayer<T extends MobultionSkeletonEntity> extends GeoLayerRenderer<T> {
 
-    private static final ResourceLocation SKELETON_MODEL = new ResourceLocation(MODID, "geo/skeletons/jokerskeleton.json");
+    private static final ResourceLocation JOKER_MODEL = new ResourceLocation(MODID, "geo/skeletons/jokerskeleton.json");
+    private static final ResourceLocation SKELETON_MODEL = new ResourceLocation(MODID, "geo/skeletons/baseskeleton.json");
 
     private ItemStack mainHand;
 
-    public BowHoldingLayer(IGeoRenderer<JokerSkeletonEntity> entityRendererIn) {
+    public BowHoldingLayer(IGeoRenderer<T> entityRendererIn) {
         super(entityRendererIn);
     }
 
     @Override
-    public void render(MatrixStack matrix, IRenderTypeBuffer renderBuffer, int packedLight, JokerSkeletonEntity entity,
+    public void render(MatrixStack matrix, IRenderTypeBuffer renderBuffer, int packedLight, T entity,
                        float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         this.mainHand = entity.getItemBySlot(EquipmentSlotType.MAINHAND);
-        GeoModel model = this.getEntityModel().getModel(SKELETON_MODEL);
-        renderRecursively(model.topLevelBones.get(0), matrix, renderBuffer, packedLight, GeoEntityRenderer.getPackedOverlay(entity, 0));
+        GeoModel model;
+        if(entity instanceof JokerSkeletonEntity){
+            model = this.getEntityModel().getModel(JOKER_MODEL);
+        }else if(entity instanceof ForestSkeletonEntity || entity instanceof MagmaSkeletonEntity){
+            model = this.getEntityModel().getModel(SKELETON_MODEL);
+        }else{
+            return;
+        }
+        renderRecursively(model.topLevelBones.get(0), matrix, renderBuffer, packedLight, OverlayTexture.pack(OverlayTexture.u(0),
+                OverlayTexture.v(entity.hurtTime > 0)));
     }
 
     //Copied from IGeoRenderer but removed the actual rendering of cubes and only render items to prevent overriding
@@ -57,7 +69,7 @@ public class BowHoldingLayer extends GeoLayerRenderer<JokerSkeletonEntity> {
             stack.mulPose(Vector3f.YP.rotationDegrees(0));
             stack.mulPose(Vector3f.ZP.rotationDegrees(0));
             //You'll need to play around with this to render the item in the correct spot.
-            stack.translate(0.35D, 0.3D, 0.7D);
+            stack.translate(0.4D, 0.3D, 0.7D);
             //Sets the scaling of the item.
             stack.scale(0.8f, 0.8f, 0.8f);
             // Change mainHand to predefined Itemstack and TransformType to what transform you would want to use.

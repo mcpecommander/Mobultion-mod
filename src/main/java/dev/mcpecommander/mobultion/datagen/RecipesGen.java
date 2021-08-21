@@ -15,6 +15,10 @@ public class RecipesGen extends RecipeProvider {
         super(datagen);
     }
 
+    /**
+     * Add the recipes in this method and don't call super.
+     * @param finishedRecipe Used in the .save(); when finishing building a recipe.
+     */
     @Override
     protected void buildShapelessRecipes(@Nonnull Consumer<IFinishedRecipe> finishedRecipe) {
         ShapelessRecipeBuilder.shapeless(Registration.CORRUPTEDBONEMEAL.get(), 3)

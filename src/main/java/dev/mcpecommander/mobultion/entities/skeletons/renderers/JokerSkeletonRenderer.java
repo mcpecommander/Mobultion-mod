@@ -22,7 +22,7 @@ public class JokerSkeletonRenderer extends GeoEntityRenderer<JokerSkeletonEntity
     public JokerSkeletonRenderer(EntityRendererManager renderManager) {
         super(renderManager, new JokerSkeletonModel());
         this.shadowRadius = 0.5F;
-        this.addLayer(new BowHoldingLayer(this));
+        this.addLayer(new BowHoldingLayer<>(this));
 
     }
 

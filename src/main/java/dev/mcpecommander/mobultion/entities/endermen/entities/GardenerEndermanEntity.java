@@ -37,6 +37,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
@@ -166,7 +167,7 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
      * @param syncedParameter The parameter that is being synced.
      */
     @Override
-    public void onSyncedDataUpdated(DataParameter<?> syncedParameter) {
+    public void onSyncedDataUpdated(@Nonnull DataParameter<?> syncedParameter) {
         super.onSyncedDataUpdated(syncedParameter);
         if(syncedParameter.equals(DATA_GARDENING) && this.level.isClientSide){
             if(isGardening()) {
@@ -233,10 +234,10 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
      * @param NBTTag The tag where the additional data will be written to.
      */
     @Override
-    public void addAdditionalSaveData(CompoundNBT NBTTag) {
+    public void addAdditionalSaveData(@Nonnull CompoundNBT NBTTag) {
         super.addAdditionalSaveData(NBTTag);
-        if(targetPos != null) NBTTag.putIntArray("mobultion:targetpos", new int[]{getTargetPos().getX(),
-                getTargetPos().getY(), getTargetPos().getZ()});
+        if(targetPos != null) NBTTag.putIntArray("mobultion:targetpos", new int[]{targetPos.getX(),
+                targetPos.getY(), targetPos.getZ()});
     }
 
     /**
@@ -244,7 +245,7 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
      * @param NBTTag The NBT tag that holds the saved data.
      */
     @Override
-    public void readAdditionalSaveData(CompoundNBT NBTTag) {
+    public void readAdditionalSaveData(@Nonnull CompoundNBT NBTTag) {
         super.readAdditionalSaveData(NBTTag);
         if(NBTTag.contains("mobultion:targetpos", Constants.NBT.TAG_INT_ARRAY)){
             setTargetPos(new BlockPos(NBTTag.getIntArray("mobultion:targetpos")[0],
@@ -260,7 +261,7 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
      * @return A float value where higher is better and anything under 0.0f (not 0.0f) blocks natural spawning.
      */
     @Override
-    public float getWalkTargetValue(BlockPos pos, IWorldReader world) {
+    public float getWalkTargetValue(@Nonnull BlockPos pos, IWorldReader world) {
         return world.getBlockState(pos).is(Tags.Blocks.DIRT) ? 15f : (15f - world.getBrightness(pos));
     }
 
@@ -329,8 +330,9 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
      */
     @Nullable
     @Override
-    public ILivingEntityData finalizeSpawn(IServerWorld serverWorld, DifficultyInstance difficulty, SpawnReason spawnReason,
-                                           @Nullable ILivingEntityData livingEntityData, @Nullable CompoundNBT NBTTag) {
+    public ILivingEntityData finalizeSpawn(@Nonnull IServerWorld serverWorld, @Nonnull DifficultyInstance difficulty,
+                                           @Nonnull SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityData,
+                                           @Nullable CompoundNBT NBTTag) {
         this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Registration.HAYHAT_ITEM.get()));
         this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BONE_MEAL));
         return super.finalizeSpawn(serverWorld, difficulty, spawnReason, livingEntityData, NBTTag);
@@ -388,7 +390,7 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
      * @return true if the farmland was trampled and returned to its dirt state.
      */
     @Override
-    public boolean canTrample(BlockState state, BlockPos pos, float fallDistance) {
+    public boolean canTrample(@Nonnull BlockState state, @Nonnull BlockPos pos, float fallDistance) {
         return false;
     }
 
@@ -416,7 +418,9 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
         return GardeningState.NONE;
     }
 
-
+    /**
+     * The gardening state that this enderman can have for its target goal.
+     */
     public enum GardeningState{
         BONEMEAL, WATERING, PLANTING, PICKING, NONE
     }

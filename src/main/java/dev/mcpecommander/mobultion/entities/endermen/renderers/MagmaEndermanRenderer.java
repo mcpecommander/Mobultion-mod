@@ -17,8 +17,13 @@ public class MagmaEndermanRenderer extends GeoEntityRenderer<MagmaEndermanEntity
         this.addLayer(new EndermanMagmaLayer(this));
     }
 
+    /**
+     * How much the entity rotates when it dies. The default is 90 degrees like lying on the ground dead.
+     * @param entity The entity that is dying.
+     * @return a float of the degrees that this entity rotates on death.
+     */
     @Override
-    protected float getDeathMaxRotation(MagmaEndermanEntity entityLivingBaseIn) {
+    protected float getDeathMaxRotation(MagmaEndermanEntity entity) {
         return 0f;
     }
 }

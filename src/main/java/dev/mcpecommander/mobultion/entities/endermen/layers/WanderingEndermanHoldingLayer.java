@@ -1,44 +1,41 @@
-package dev.mcpecommander.mobultion.entities.skeletons.layers;
+package dev.mcpecommander.mobultion.entities.endermen.layers;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import dev.mcpecommander.mobultion.entities.skeletons.entities.CorruptedSkeletonEntity;
-import dev.mcpecommander.mobultion.entities.skeletons.entities.MobultionSkeletonEntity;
+import dev.mcpecommander.mobultion.entities.endermen.entities.WanderingEndermanEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
+import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import software.bernie.geckolib3.util.RenderUtils;
 
 import static dev.mcpecommander.mobultion.Mobultion.MODID;
 
-/* McpeCommander created on 11/07/2021 inside the package - dev.mcpecommander.mobultion.entities.endermen.layers */
-public class BoneHoldingLayer<T extends MobultionSkeletonEntity> extends GeoLayerRenderer<T> {
+/* McpeCommander created on 21/08/2021 inside the package - dev.mcpecommander.mobultion.entities.endermen.layers */
+public class WanderingEndermanHoldingLayer extends GeoLayerRenderer<WanderingEndermanEntity> {
 
     private static final ResourceLocation SKELETON_MODEL = new ResourceLocation(MODID, "geo/skeletons/baseskeleton.json");
 
     private ItemStack mainHand;
 
-    public BoneHoldingLayer(IGeoRenderer<T> entityRendererIn) {
+    public WanderingEndermanHoldingLayer(IGeoRenderer<WanderingEndermanEntity> entityRendererIn) {
         super(entityRendererIn);
     }
 
     @Override
-    public void render(MatrixStack matrix, IRenderTypeBuffer renderBuffer, int packedLight, T entity,
+    public void render(MatrixStack matrix, IRenderTypeBuffer renderBuffer, int packedLight, WanderingEndermanEntity entity,
                        float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if(!(entity instanceof CorruptedSkeletonEntity)) return;
         this.mainHand = entity.getItemBySlot(EquipmentSlotType.MAINHAND);
         GeoModel model = this.getEntityModel().getModel(SKELETON_MODEL);
         for (GeoBone group : model.topLevelBones) {
-            renderRecursively(group, matrix, renderBuffer, packedLight, OverlayTexture.pack(OverlayTexture.u(0),
-                    OverlayTexture.v(entity.hurtTime > 0)));
+            renderRecursively(group, matrix, renderBuffer, packedLight, GeoEntityRenderer.getPackedOverlay(entity, 0));
         }
     }
 
@@ -57,13 +54,13 @@ public class BoneHoldingLayer<T extends MobultionSkeletonEntity> extends GeoLaye
         if(bone.getName().equals("RightArm1")){
             stack.pushPose();
             //You'll need to play around with these to get item to render in the correct orientation
-            stack.mulPose(Vector3f.XP.rotationDegrees(90));
-            stack.mulPose(Vector3f.YP.rotationDegrees(-90));
-            stack.mulPose(Vector3f.ZP.rotationDegrees(40));
+            stack.mulPose(Vector3f.XP.rotationDegrees(-75));
+            stack.mulPose(Vector3f.YP.rotationDegrees(0));
+            stack.mulPose(Vector3f.ZP.rotationDegrees(0));
             //You'll need to play around with this to render the item in the correct spot.
-            stack.translate(-0.8D, 0.2D, -0.45D);
+            stack.translate(0.3D, 0.2D, 0.8D);
             //Sets the scaling of the item.
-            stack.scale(1.5f, 1.0f, 1.5f);
+            stack.scale(0.8f, 0.8f, 0.8f);
             // Change mainHand to predefined Itemstack and TransformType to what transform you would want to use.
             Minecraft.getInstance().getItemRenderer().renderStatic(mainHand, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND,
                     packedLightIn, packedOverlayIn, stack, renderBuffer);

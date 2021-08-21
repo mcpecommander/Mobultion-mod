@@ -1,16 +1,24 @@
 package dev.mcpecommander.mobultion.entities.skeletons.entities;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.passive.IronGolemEntity;
+import net.minecraft.entity.passive.TurtleEntity;
+import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -19,6 +27,9 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /* McpeCommander created on 22/07/2021 inside the package - dev.mcpecommander.mobultion.entities.skeletons.entities */
 public class MagmaSkeletonEntity extends MobultionSkeletonEntity implements IRangedAttackMob {
@@ -29,6 +40,20 @@ public class MagmaSkeletonEntity extends MobultionSkeletonEntity implements IRan
         super(type, world);
     }
 
+    @Override
+    protected void registerGoals() {
+        this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, WolfEntity.class, 6.0F, 1.0D, 1.2D));
+        this.goalSelector.addGoal(2, new RangedBowAttackGoal<>(this, 1.0D, 10, 15.0F));
+        this.goalSelector.addGoal(3, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
+        this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, TurtleEntity.class, 10, true, false, TurtleEntity.BABY_ON_LAND_SELECTOR));
+    }
+
     public static AttributeModifierMap.MutableAttribute createAttributes() {
         return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D);
     }
@@ -36,6 +61,22 @@ public class MagmaSkeletonEntity extends MobultionSkeletonEntity implements IRan
     @Override
     protected boolean isSunBurnTick() {
         return false;
+    }
+
+    @Nullable
+    @Override
+    public ILivingEntityData finalizeSpawn(@Nonnull IServerWorld serverWorld, @Nonnull DifficultyInstance difficulty,
+                                           @Nonnull SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityData,
+                                           @Nullable CompoundNBT NBTTag) {
+        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW));
+        return super.finalizeSpawn(serverWorld, difficulty, spawnReason, livingEntityData, NBTTag);
+    }
+
+    @Override
+    protected AbstractArrowEntity getArrow(ItemStack bow, float power) {
+        AbstractArrowEntity arrowEntity = super.getArrow(bow, power);
+        arrowEntity.setSecondsOnFire(50);
+        return arrowEntity;
     }
 
     @Override
@@ -58,7 +99,7 @@ public class MagmaSkeletonEntity extends MobultionSkeletonEntity implements IRan
 
     @Override
     protected int getMaxDeathTime() {
-        return 20;
+        return 50;
     }
 
     @Override
@@ -73,8 +114,14 @@ public class MagmaSkeletonEntity extends MobultionSkeletonEntity implements IRan
      */
     private <E extends IAnimatable> PlayState controllerPredicate(AnimationEvent<E> event)
     {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("melee", true));
-
+        if(isDeadOrDying()){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("death", false));
+            return PlayState.CONTINUE;
+        }
+        if(this.getTarget() != null){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("aim", true));
+            return PlayState.CONTINUE;
+        }
         return PlayState.STOP;
     }
 
@@ -84,6 +131,7 @@ public class MagmaSkeletonEntity extends MobultionSkeletonEntity implements IRan
      */
     private <E extends IAnimatable> PlayState movementPredicate(AnimationEvent<E> event)
     {
+        if(isDeadOrDying()) return PlayState.STOP;
         if(event.isMoving()){
             if(this.animationSpeed > 0.6){
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("running", true));

@@ -21,6 +21,10 @@ public class GlassEndermanShotsAttackGoal extends Goal {
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
+    /**
+     * If the goal/AI can start when the conditions are met.
+     * @return true if the goal can start and then start() is called.
+     */
     @Override
     public boolean canUse() {
         if(endermanEntity.getBalls() == 0) return false;
@@ -28,22 +32,38 @@ public class GlassEndermanShotsAttackGoal extends Goal {
         return target != null && target.isAlive() && endermanEntity.canAttack(target);
     }
 
+    /**
+     * Gets called after every tick to make sure the goal/AI can continue.
+     * @return true if the goal/AI can continue to tick. Calls tick() if true or stop() if false.
+     */
     @Override
     public boolean canContinueToUse() {
-        return super.canContinueToUse() && endermanEntity.getBalls() > 0;
+        return canUse() && endermanEntity.getBalls() > 0;
     }
 
+    /**
+     * Gets called once after the canUse() is true.
+     * Used to set some variables or timers for the goal/AI.
+     */
     @Override
     public void start() {
         timer = 30;
         teleportCooldown = 0;
     }
 
+    /**
+     * Gets called when the canContinueToUse() returns false and allows for final adjustments of the variables before
+     * the goal is finished.
+     */
     @Override
     public void stop() {
         endermanEntity.setTarget(null);
     }
 
+    /**
+     * Gets called every server tick as long as canContinueToUse() return true but is guaranteed to get called at least
+     * once after the initial start()
+     */
     @Override
     public void tick() {
         timer --;

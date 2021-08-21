@@ -4,64 +4,61 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import dev.mcpecommander.mobultion.entities.endermen.entities.WanderingEndermanEntity;
 import dev.mcpecommander.mobultion.entities.endermen.layers.EndermanEyesLayer;
+import dev.mcpecommander.mobultion.entities.endermen.layers.WanderingEndermanHoldingLayer;
 import dev.mcpecommander.mobultion.entities.endermen.models.WanderingEndermanModel;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
+import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
+
+import javax.annotation.Nullable;
 
 /* McpeCommander created on 25/06/2021 inside the package - dev.mcpecommander.mobultion.entities.endermen.renderers */
 public class WanderingEndermanRenderer extends GeoEntityRenderer<WanderingEndermanEntity> {
 
-    WanderingEndermanEntity entity;
-    float partialTicks;
-
     public WanderingEndermanRenderer(EntityRendererManager renderManager){
-        super(renderManager,new WanderingEndermanModel());
+        super(renderManager, new WanderingEndermanModel());
         this.shadowRadius=0.5F;
         this.addLayer(new EndermanEyesLayer<>(this, "wanderingenderman"));
+        this.addLayer(new WanderingEndermanHoldingLayer(this));
     }
 
     @Override
-    public void render(WanderingEndermanEntity entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
-        super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
-        this.entity = entity;
-        this.partialTicks = partialTicks;
-    }
+    public void render(GeoModel model, WanderingEndermanEntity animatable, float partialTicks, RenderType type,
+                       MatrixStack stack, @Nullable IRenderTypeBuffer renderTypeBuffer,
+                       @Nullable IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn,
+                       float red, float green, float blue, float alpha) {
+        renderEarly(animatable, stack, partialTicks, renderTypeBuffer, vertexBuilder, packedLightIn,
+                packedOverlayIn, red, green, blue, alpha);
 
-    @Override
-    public void renderRecursively(GeoBone bone, MatrixStack stack, IVertexBuilder bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-
-        if (entity == null) return;
-        if(bone.getName().equals("Test")){
-            stack.pushPose();
-            //You'll need to play around with these to get item to render in the correct orientation
-            stack.mulPose(Vector3f.XP.rotationDegrees(-75));
-            stack.mulPose(Vector3f.YP.rotationDegrees(0));
-            stack.mulPose(Vector3f.ZP.rotationDegrees(0));
-            //You'll need to play around with this to render the item in the correct spot.
-            stack.translate(0.3D, 0.5D, 0.8D);
-            //Sets the scaling of the item.
-            stack.scale(1.0f, 2f, 1.0f);
-            // Change mainHand to predefined Itemstack and TransformType to what transform you would want to use.
-            Minecraft.getInstance().getItemRenderer().renderStatic(mainHand, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, packedLightIn, packedOverlayIn, stack, this.rtb);
-            stack.popPose();
-            //TODO: change to a layer to make sure it doesn't break every other layer.
-            bufferIn = rtb.getBuffer(RenderType.entityTranslucent(whTexture));
+        if (renderTypeBuffer != null) {
+            vertexBuilder = renderTypeBuffer.getBuffer(type);
         }
 
+        // Render all top level bones
+        for (GeoBone group : model.topLevelBones) {
+            renderRecursively(group, animatable, partialTicks, stack, vertexBuilder, packedLightIn, packedOverlayIn, red,
+                    green, blue, alpha);
+        }
+    }
+
+    public void renderRecursively(GeoBone bone, WanderingEndermanEntity animatable, float partialTicks, MatrixStack stack,
+                                  IVertexBuilder bufferIn, int packedLightIn,
+                                  int packedOverlayIn, float red, float green, float blue, float alpha) {
         //Copied from the vanilla cape rendering and modified a bit.
         if(bone.getName().equals("Cape")){
             stack.translate(0.0D, 3.35D, -0.1D);
-            double d0 = MathHelper.lerp(partialTicks, entity.xCloakO, entity.xCloak) - MathHelper.lerp(partialTicks, entity.xo, entity.getX());
-            double d1 = MathHelper.lerp(partialTicks, entity.yCloakO, entity.yCloak) - MathHelper.lerp(partialTicks, entity.yo, entity.getY());
-            double d2 = MathHelper.lerp(partialTicks, entity.zCloakO, entity.zCloak) - MathHelper.lerp(partialTicks, entity.zo, entity.getZ());
-            float f = entity.yBodyRotO + (entity.yBodyRot - entity.yBodyRotO);
+            double d0 = MathHelper.lerp(partialTicks, animatable.xCloakO, animatable.xCloak) - MathHelper.lerp(partialTicks,
+                    animatable.xo, animatable.getX());
+            double d1 = MathHelper.lerp(partialTicks, animatable.yCloakO, animatable.yCloak) - MathHelper.lerp(partialTicks,
+                    animatable.yo, animatable.getY());
+            double d2 = MathHelper.lerp(partialTicks, animatable.zCloakO, animatable.zCloak) - MathHelper.lerp(partialTicks,
+                    animatable.zo, animatable.getZ());
+            float f = animatable.yBodyRotO + (animatable.yBodyRot - animatable.yBodyRotO);
             double d3 = MathHelper.sin(f * ((float)Math.PI / 180F));
             double d4 = -MathHelper.cos(f * ((float)Math.PI / 180F));
             float f1 = (float)d1 * 10.0F;
@@ -80,12 +77,16 @@ public class WanderingEndermanRenderer extends GeoEntityRenderer<WanderingEnderm
             stack.translate(0.0D, +1d, -0.1);
             stack.mulPose(Vector3f.XP.rotationDegrees(-180f));
         }
-
         super.renderRecursively(bone, stack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha);
     }
 
+    /**
+     * How much the entity rotates when it dies. The default is 90 degrees like lying on the ground dead.
+     * @param entity The entity that is dying.
+     * @return a float of the degrees that this entity rotates on death.
+     */
     @Override
-    protected float getDeathMaxRotation(WanderingEndermanEntity entityLivingBaseIn) {
+    protected float getDeathMaxRotation(WanderingEndermanEntity entity) {
         return 0f;
     }
 }

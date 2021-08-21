@@ -34,7 +34,7 @@ public class VampireSkeletonEntity extends MobultionSkeletonEntity{
 
     @Override
     protected int getMaxDeathTime() {
-        return 20;
+        return 50;
     }
 
     /**
@@ -43,6 +43,10 @@ public class VampireSkeletonEntity extends MobultionSkeletonEntity{
      */
     private <E extends IAnimatable> PlayState controllerPredicate(AnimationEvent<E> event)
     {
+        if(isDeadOrDying()){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("death", true));
+            return PlayState.CONTINUE;
+        }
         event.getController().setAnimation(new AnimationBuilder().addAnimation("melee", true));
 
         return PlayState.STOP;
@@ -54,6 +58,7 @@ public class VampireSkeletonEntity extends MobultionSkeletonEntity{
      */
     private <E extends IAnimatable> PlayState movementPredicate(AnimationEvent<E> event)
     {
+        if(isDeadOrDying()) return PlayState.STOP;
         if(event.isMoving()){
             if(this.animationSpeed > 0.6){
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("running", true));

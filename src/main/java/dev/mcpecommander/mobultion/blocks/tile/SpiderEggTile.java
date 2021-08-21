@@ -13,13 +13,14 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 /* McpeCommander created on 10/08/2021 inside the package - dev.mcpecommander.mobultion.blocks */
 public class SpiderEggTile extends TileEntity implements IAnimatable {
 
+    /**
+     * The animation factory, for more information check GeckoLib.
+     */
     private final AnimationFactory factory = new AnimationFactory(this);
 
     public SpiderEggTile() {
         super(Registration.SPIDEREGG_TILE.get());
     }
-
-    
 
     /**
      * The predicate for the animation controller
@@ -41,6 +42,10 @@ public class SpiderEggTile extends TileEntity implements IAnimatable {
         data.addAnimationController(new AnimationController<>(this, "controller", 0, this::shouldAnimate));
     }
 
+    /**
+     * Getter for the animation factory. Client side only but not null on the server.
+     * @return AnimationFactory
+     */
     @Override
     public AnimationFactory getFactory() {
         return this.factory;

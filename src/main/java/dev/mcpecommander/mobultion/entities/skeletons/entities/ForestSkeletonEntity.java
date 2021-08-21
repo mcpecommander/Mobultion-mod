@@ -1,16 +1,18 @@
 package dev.mcpecommander.mobultion.entities.skeletons.entities;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.LivingEntity;
+import dev.mcpecommander.mobultion.setup.Registration;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -19,6 +21,9 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /* McpeCommander created on 21/07/2021 inside the package - dev.mcpecommander.mobultion.entities.skeletons.entities */
 public class ForestSkeletonEntity extends MobultionSkeletonEntity implements IRangedAttackMob {
@@ -31,6 +36,15 @@ public class ForestSkeletonEntity extends MobultionSkeletonEntity implements IRa
 
     public static AttributeModifierMap.MutableAttribute createAttributes() {
         return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D);
+    }
+
+    @Nullable
+    @Override
+    public ILivingEntityData finalizeSpawn(@Nonnull IServerWorld serverWorld, @Nonnull DifficultyInstance difficulty,
+                                           @Nonnull SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityData,
+                                           @Nullable CompoundNBT NBTTag) {
+        this.setItemInHand(Hand.MAIN_HAND, new ItemStack(Registration.FORESTBOW.get()));
+        return super.finalizeSpawn(serverWorld, difficulty, spawnReason, livingEntityData, NBTTag);
     }
 
     @Override
@@ -53,7 +67,7 @@ public class ForestSkeletonEntity extends MobultionSkeletonEntity implements IRa
 
     @Override
     protected int getMaxDeathTime() {
-        return 20;
+        return 50;
     }
 
     @Override
@@ -68,6 +82,10 @@ public class ForestSkeletonEntity extends MobultionSkeletonEntity implements IRa
      */
     private <E extends IAnimatable> PlayState controllerPredicate(AnimationEvent<E> event)
     {
+        if(isDeadOrDying()){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("death", true));
+            return PlayState.CONTINUE;
+        }
         event.getController().setAnimation(new AnimationBuilder().addAnimation("melee", true));
 
         return PlayState.STOP;
@@ -79,6 +97,7 @@ public class ForestSkeletonEntity extends MobultionSkeletonEntity implements IRa
      */
     private <E extends IAnimatable> PlayState movementPredicate(AnimationEvent<E> event)
     {
+        if(isDeadOrDying()) return PlayState.STOP;
         if(event.isMoving()){
             if(this.animationSpeed > 0.6){
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("running", true));

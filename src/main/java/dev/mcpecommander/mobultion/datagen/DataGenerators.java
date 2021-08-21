@@ -10,6 +10,9 @@ import static dev.mcpecommander.mobultion.Mobultion.MODID;
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class DataGenerators {
 
+    //This method gets called from runData and the includeServer and includeClient are kind of useless since I have --All
+    //argument in the build gradle.
+    //Here is where to add different data generators to be called when generating data.
     @SubscribeEvent
     public static void gatherData(GatherDataEvent event){
         if(event.includeServer()){

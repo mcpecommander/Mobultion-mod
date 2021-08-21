@@ -30,7 +30,7 @@ public class JokerHatItem extends Item implements IAnimatable, ISyncable {
     private final AnimationFactory factory = new AnimationFactory(this);
 
     public JokerHatItem() {
-        super(new Properties().tab(ModSetup.ITEM_GROUP).setISTER(() -> JokerHatRenderer::new));
+        super(new Properties().tab(ModSetup.ITEM_GROUP).stacksTo(1).setISTER(() -> JokerHatRenderer::new));
         GeckoLibNetwork.registerSyncable(this);
     }
 

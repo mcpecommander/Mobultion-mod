@@ -78,7 +78,7 @@ public class CorruptedSkeletonEntity extends MobultionSkeletonEntity {
 
     @Override
     protected int getMaxDeathTime() {
-        return 20;
+        return 50;
     }
 
     @Override
@@ -93,7 +93,10 @@ public class CorruptedSkeletonEntity extends MobultionSkeletonEntity {
      */
     private <E extends IAnimatable> PlayState controllerPredicate(AnimationEvent<E> event)
     {
-
+        if(isDeadOrDying()){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("death", false));
+            return PlayState.CONTINUE;
+        }
         if(this.swinging || event.getController().getAnimationState() == AnimationState.Running){
             event.getController().setAnimation(new AnimationBuilder().addAnimation("melee", false));
             return PlayState.CONTINUE;
@@ -108,6 +111,7 @@ public class CorruptedSkeletonEntity extends MobultionSkeletonEntity {
      */
     private <E extends IAnimatable> PlayState movementPredicate(AnimationEvent<E> event)
     {
+        if(isDeadOrDying()) return PlayState.STOP;
         if(event.isMoving()){
 //            if(this.animationSpeed > 0.6){
 //                event.getController().setAnimation(new AnimationBuilder().addAnimation("running", true));

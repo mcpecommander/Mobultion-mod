@@ -31,6 +31,10 @@ public class WanderingEndermanLightningAttackGoal extends Goal {
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
+    /**
+     * If the goal/AI can start when the conditions are met.
+     * @return true if the goal can start and then start() is called.
+     */
     @Override
     public boolean canUse() {
         if(this.owner.isAlive() && this.owner.getTarget() != null){
@@ -39,12 +43,20 @@ public class WanderingEndermanLightningAttackGoal extends Goal {
         return false;
     }
 
+    /**
+     * Gets called once after the canUse() is true.
+     * Used to set some variables or timers for the goal/AI.
+     */
     @Override
     public void start() {
         this.target = this.owner.getTarget();
         this.cooldown = this.maxCooldown;
     }
 
+    /**
+     * Gets called when the canContinueToUse() returns false and allows for final adjustments of the variables before
+     * the goal is finished.
+     */
     @Override
     public void stop() {
         this.target = null;
@@ -55,11 +67,19 @@ public class WanderingEndermanLightningAttackGoal extends Goal {
         this.owner.setCasting(false);
     }
 
+    /**
+     * Gets called after every tick to make sure the goal/AI can continue.
+     * @return true if the goal/AI can continue to tick. Calls tick() if true or stop() if false.
+     */
     @Override
     public boolean canContinueToUse() {
         return this.owner.isAlive() && this.target.isAlive() && this.isWandInHand();
     }
 
+    /**
+     * Gets called every server tick as long as canContinueToUse() return true but is guaranteed to get called at least
+     * once after the initial start()
+     */
     @Override
     public void tick() {
         double distance = this.owner.distanceToSqr(this.target);

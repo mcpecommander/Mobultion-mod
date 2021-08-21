@@ -65,6 +65,7 @@ public class BaseSkeletonModel<T extends MobultionSkeletonEntity> extends Animat
     @Override
     public void setLivingAnimations(T entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
+        if(entity.isDeadOrDying()) return;
         IBone head = this.getAnimationProcessor().getBone("Head");
 
         assert customPredicate != null;

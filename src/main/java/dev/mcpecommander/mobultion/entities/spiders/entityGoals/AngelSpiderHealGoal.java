@@ -28,7 +28,7 @@ public class AngelSpiderHealGoal extends Goal {
     }
 
     /**
-     * Can the goal/AI start when the conditions are met.
+     * If the goal/AI can start when the conditions are met.
      * @return true if the goal can start and then start() is called.
      */
     @Override
@@ -73,7 +73,7 @@ public class AngelSpiderHealGoal extends Goal {
     }
 
     /**
-     * Gets called every server tick as long as canContinueToUse() return true but is guaranteed to get called at leaste
+     * Gets called every server tick as long as canContinueToUse() return true but is guaranteed to get called at least
      * once after the initial start()
      */
     @Override
@@ -85,13 +85,6 @@ public class AngelSpiderHealGoal extends Goal {
             if (this.healCoolDown < 10) {
                 entity.heal(4f);
                 //TODO: entity.heal(SpidersConfig.spiders.angel.healAmount);
-                    //TODO: redo the attribute system
-
-//                    IAttributeInstance iattributeinstance = entity.getAttributes()
-//                            .getAttributeInstanceByName("generic.blessed");
-//                    if (!iattributeinstance.hasModifier(BLESSED) && iattributeinstance.getAttributeValue() == 0.0D) {
-//                        iattributeinstance.applyModifier(BLESSED);
-//                    }
                 this.healCoolDown = 0;
             }
         }
@@ -104,6 +97,5 @@ public class AngelSpiderHealGoal extends Goal {
     @Override
     public void stop() {
         this.mob.setTarget(null);
-
     }
 }

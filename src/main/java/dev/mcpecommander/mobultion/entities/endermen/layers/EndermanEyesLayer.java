@@ -35,13 +35,14 @@ public class EndermanEyesLayer<T extends MobultionEndermanEntity> extends GeoLay
     }
 
     @Override
-    public void render(MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn, T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn, T entity, float limbSwing,
+                       float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 
         stack.pushPose();
         //Copied from GeoLayerRenderer.
         IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.eyes(ENDERMAN_EYES));
         //The main group of my model is "all"
-        //This section is from renderRecursively but I am doing the first step here to stop anything other than the
+        //This section is from renderRecursively, but I am doing the first step here to stop anything other than the
         //head from rendering which guarantees that the render type is not changed when rendering items.
         GeoBone all = getEntityModel().getModel(ENDERMAN_MODEL).topLevelBones.get(0);
         RenderUtils.translate(all, stack);
@@ -54,7 +55,7 @@ public class EndermanEyesLayer<T extends MobultionEndermanEntity> extends GeoLay
             //eye layer.
             if(!childBone.getName().equals("Head")) continue;
             this.getRenderer().renderRecursively(childBone, stack, ivertexbuilder, packedLightIn,
-                    LivingRenderer.getOverlayCoords(entitylivingbaseIn, 0.0F), 1f, 1f, 1f, 1f);
+                    LivingRenderer.getOverlayCoords(entity, 0.0F), 1f, 1f, 1f, 1f);
         }
         stack.popPose();
     }

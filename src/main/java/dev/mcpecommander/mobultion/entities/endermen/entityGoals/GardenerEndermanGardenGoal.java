@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
 
+import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.Random;
 
@@ -28,6 +29,7 @@ public class GardenerEndermanGardenGoal extends Goal {
 
     Random random;
     int positionsReset;
+
     //TODO: make better
     public GardenerEndermanGardenGoal(GardenerEndermanEntity owner, int delay){
         this.owner = owner;
@@ -37,6 +39,10 @@ public class GardenerEndermanGardenGoal extends Goal {
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
+    /**
+     * If the goal/AI can start when the conditions are met.
+     * @return true if the goal can start and then start() is called.
+     */
     @Override
     public boolean canUse() {
         if(this.owner.getTargetPos() != null){
@@ -54,16 +60,26 @@ public class GardenerEndermanGardenGoal extends Goal {
         return false;
     }
 
+    /**
+     * Gets called after every tick to make sure the goal/AI can continue.
+     * @return true if the goal/AI can continue to tick. Calls tick() if true or stop() if false.
+     */
     @Override
     public boolean canContinueToUse() {
         return this.owner.getNavigation().getPath() != null && owner.getTargetPos() != null &&
                 GardenerEndermanEntity.checkPos(level, owner.getTargetPos()) != GardenerEndermanEntity.GardeningState.NONE;
     }
 
+    /**
+     * Gets called once after the canUse() is true.
+     * Used to set some variables or timers for the goal/AI.
+     */
     @Override
     public void start() {
-        this.owner.teleport(initialTeleportPos);
+        //Teleports the enderman to a closer location to the target if the target is far enough.
+        this.owner.teleport(initialTeleportPos.getX(), initialTeleportPos.getY(), initialTeleportPos.getZ());
         this.owner.getNavigation().moveTo(getPathToNearbyBlock(owner.getTargetPos()), 1);
+        //Debug only
         this.owner.setDebugRoad(MobultionEndermanEntity.getPathNodes(owner));
         this.delay = 0;
         this.pos = owner.getTargetPos();
@@ -72,6 +88,10 @@ public class GardenerEndermanGardenGoal extends Goal {
         this.resetTicks = 0;
     }
 
+    /**
+     * Gets called when the canContinueToUse() returns false and allows for final adjustments of the variables before
+     * the goal is finished.
+     */
     @Override
     public void stop() {
         this.state = GardenerEndermanEntity.GardeningState.NONE;
@@ -82,6 +102,10 @@ public class GardenerEndermanGardenGoal extends Goal {
         this.forgivenessTicks = 0;
     }
 
+    /**
+     * Gets called every server tick as long as canContinueToUse() return true but is guaranteed to get called at least
+     * once after the initial start()
+     */
     @Override
     public void tick() {
         this.owner.getLookControl().setLookAt(pos.getX(), pos.getY(), pos.getZ());
@@ -130,6 +154,9 @@ public class GardenerEndermanGardenGoal extends Goal {
 
     }
 
+    //TODO: Fix this shitty check or delete all together.
+
+    //Shittier version of the stuck check in the path navigator because somehow mine works better for this usecase.
     private void checkStuck(){
         if(currentDistance >= smallestDistance){
             forgivenessTicks++;
@@ -145,6 +172,12 @@ public class GardenerEndermanGardenGoal extends Goal {
         }
     }
 
+    /**
+     * Used to get a path to a block near the target because the enderman is going to kneel towards the target so it makes
+     * more sense to make it kneel beside it and not on it.
+     * @param pos The target block position
+     * @return A path to the block beside the target
+     */
     private Path getPathToNearbyBlock(BlockPos pos){
         for(int i = -1; i < 2; i++){
             for(int j = -1; j < 2; j++){
@@ -156,6 +189,12 @@ public class GardenerEndermanGardenGoal extends Goal {
         return null;
     }
 
+    /**
+     * Random check for a position close to the given position that this entity can teleport to.
+     * @param pos The block position to test for nearby position.
+     * @return A block position that this enderman can teleport to or null if there is none possible.
+     */
+    @Nullable
     private BlockPos getCanTeleportToNearby(BlockPos pos){
         for(int i = 0; i < 10; i++){
             BlockPos newPos = pos.offset((random.nextBoolean() ? -1 : 1) * (random.nextInt(7) + 3), 0,

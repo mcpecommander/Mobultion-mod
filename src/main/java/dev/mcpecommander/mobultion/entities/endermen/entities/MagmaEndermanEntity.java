@@ -53,7 +53,6 @@ public class MagmaEndermanEntity extends MobultionEndermanEntity{
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SwimGoal(this));
-        //this.goalSelector.addGoal(1, new EndermanEntity.StareGoal(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, false));
         this.goalSelector.addGoal(3, new WaterAvoidingRandomWalkingGoal(this, 1.0D, 0.0F));
         this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, 8.0F));
@@ -104,6 +103,11 @@ public class MagmaEndermanEntity extends MobultionEndermanEntity{
         }
     }
 
+    /**
+     * Gets called when an entity is hit by this enderman.
+     * @param target The entity that this enderman hit.
+     * @return true if the attack was successful which is in turn determined from hurt method.
+     */
     public boolean doHurtTarget(Entity target) {
         if (super.doHurtTarget(target)) {
             if (target instanceof LivingEntity) {

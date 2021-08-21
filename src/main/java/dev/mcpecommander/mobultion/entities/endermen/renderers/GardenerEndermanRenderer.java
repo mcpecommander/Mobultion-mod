@@ -16,6 +16,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Quaternion;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 /* McpeCommander created on 26/06/2021 inside the package - dev.mcpecommander.mobultion.entities.endermen.renderers */
@@ -28,29 +29,49 @@ public class GardenerEndermanRenderer extends GeoEntityRenderer<GardenerEnderman
         this.addLayer(new GardenerEndermanItemLayer(this));
     }
 
+    /**
+     * Whether this entity should be rendered or not. Usually it calculates frustum and position stuff to make sure
+     * Minecraft is only rendering entities within view.
+     * @param entity The entity in question.
+     * @param clippingHelper A helper class for frustum calculations and more.
+     * @param x The x position of the camera.
+     * @param y The y position of the camera.
+     * @param z The z position of the camera.
+     * @return true if the entity should be rendered.
+     */
     @Override
-    public boolean shouldRender(GardenerEndermanEntity entity, ClippingHelper clippingHelper,
+    public boolean shouldRender(@Nonnull GardenerEndermanEntity entity, @Nonnull ClippingHelper clippingHelper,
                                 double x, double y, double z) {
         return Mobultion.DEBUG || super.shouldRender(entity, clippingHelper, x, y, z);
     }
 
+    /**
+     * How much the entity rotates when it dies. The default is 90 degrees like lying on the ground dead.
+     * @param entity The entity that is dying.
+     * @return a float of the degrees that this entity rotates on death.
+     */
     @Override
-    protected float getDeathMaxRotation(GardenerEndermanEntity entityLivingBaseIn) {
+    protected float getDeathMaxRotation(GardenerEndermanEntity entity) {
         return 0f;
     }
 
+    //An awful way to debug navigation paths, but it works.
+    //DO NOT REPEAT OR COPY AT ALL COSTS.
     @Override
     public void renderLate(GardenerEndermanEntity animatable, MatrixStack stackIn, float ticks,
                            IRenderTypeBuffer renderTypeBuffer, IVertexBuilder bufferIn, int packedLightIn,
                            int packedOverlayIn, float red, float green, float blue, float partialTicks) {
+        //Render debug path
         if(!Mobultion.DEBUG) return;
         List<BlockPos> positions = animatable.getDebugRoad();
         stackIn.pushPose();
         IVertexBuilder builder = renderTypeBuffer.getBuffer(RenderType.LINES);
 
+        //Rotate the lines to be in the right direction
         stackIn.mulPose(new Quaternion(0,
                 180 + MathHelper.rotLerp(partialTicks, animatable.yBodyRotO, animatable.yBodyRot),
                 0, true));
+        //Translate to the entity position
         stackIn.translate(-animatable.position().x, -animatable.position().y, -animatable.position().z);
         for(int i = 0; i < positions.size() -1; i++){
             builder.vertex(stackIn.last().pose(), positions.get(i).getX() + 0.5f,
