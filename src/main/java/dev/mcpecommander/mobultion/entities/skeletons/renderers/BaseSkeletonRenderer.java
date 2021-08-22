@@ -47,8 +47,13 @@ public class BaseSkeletonRenderer<T extends MobultionSkeletonEntity> extends Geo
         }
     }
 
+    /**
+     * How much the entity rotates when it dies. The default is 90 degrees like lying on the ground dead.
+     * @param entity The entity that is dying.
+     * @return a float of the degrees that this entity rotates on death.
+     */
     @Override
-    protected float getDeathMaxRotation(T entityLivingBaseIn) {
+    protected float getDeathMaxRotation(T entity) {
         return 0f;
     }
 

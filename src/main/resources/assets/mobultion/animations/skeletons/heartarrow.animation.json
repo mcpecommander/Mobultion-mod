@@ -1,8 +1,61 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"empty": {
-			"loop": true
+		"screw": {
+			"loop": true,
+			"animation_length": 1.8,
+			"bones": {
+				"Heart1": {
+					"rotation": {
+						"vector": [0, "query.anim_time * 200", 0]
+					}
+				},
+				"Heart2": {
+					"rotation": {
+						"vector": [0, "query.anim_time * 200 + 10", 0]
+					}
+				},
+				"Heart3": {
+					"rotation": {
+						"vector": [0, "query.anim_time * 200 + 20", 0]
+					}
+				},
+				"Heart4": {
+					"rotation": {
+						"vector": [0, "query.anim_time * 200 + 30", 0]
+					}
+				},
+				"Heart5": {
+					"rotation": {
+						"vector": [0, "query.anim_time * 200 + 40", 0]
+					}
+				},
+				"Heart6": {
+					"rotation": {
+						"vector": [0, "query.anim_time * 200 + 50", 0]
+					}
+				},
+				"Heart7": {
+					"rotation": {
+						"vector": [0, "query.anim_time * 200 + 60", 0]
+					}
+				},
+				"Heart8": {
+					"rotation": {
+						"vector": [0, "query.anim_time * 200 + 60", 0]
+					}
+				},
+				"Heart9": {
+					"rotation": {
+						"vector": [0, "query.anim_time * 200 + 70", 0]
+					}
+				},
+				"Heart10": {
+					"rotation": {
+						"vector": [0, "query.anim_time * 200 + 70", 0]
+					}
+				}
+			}
 		}
 	}
 }

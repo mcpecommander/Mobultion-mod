@@ -34,12 +34,18 @@ import javax.annotation.Nullable;
 /* McpeCommander created on 22/07/2021 inside the package - dev.mcpecommander.mobultion.entities.skeletons.entities */
 public class MagmaSkeletonEntity extends MobultionSkeletonEntity implements IRangedAttackMob {
 
+    /**
+     * The animation factory, for more information check GeckoLib.
+     */
     private final AnimationFactory factory = new AnimationFactory(this);
 
     public MagmaSkeletonEntity(EntityType<? extends MobultionSkeletonEntity> type, World world) {
         super(type, world);
     }
 
+    /**
+     * Register the AI/goals here. Server side only.
+     */
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SwimGoal(this));
@@ -54,15 +60,33 @@ public class MagmaSkeletonEntity extends MobultionSkeletonEntity implements IRan
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, TurtleEntity.class, 10, true, false, TurtleEntity.BABY_ON_LAND_SELECTOR));
     }
 
+    /**
+     * Gets called in the main class to init the attributes.
+     * @see dev.mcpecommander.mobultion.Mobultion
+     * @return AttributeModifierMap.MutableAttribute
+     */
     public static AttributeModifierMap.MutableAttribute createAttributes() {
         return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D);
     }
 
+    /**
+     * Whether this entity should be burning from the sun when exposed to it.
+     * @return true if the entity should be burning now.
+     */
     @Override
     protected boolean isSunBurnTick() {
         return false;
     }
 
+    /**
+     * Used to finalize the normal spawning of mobs such as from eggs or normal world spawning but not commands.
+     * @param serverWorld The server world instance.
+     * @param difficulty The difficulty of the current world.
+     * @param spawnReason How was this entity was spawned.
+     * @param livingEntityData The entity data attached to it for further use upon spawning.
+     * @param NBTTag The NBT tag that holds persisted data.
+     * @return ILivingEntityData that holds information about the entity spawning.
+     */
     @Nullable
     @Override
     public ILivingEntityData finalizeSpawn(@Nonnull IServerWorld serverWorld, @Nonnull DifficultyInstance difficulty,
@@ -72,6 +96,12 @@ public class MagmaSkeletonEntity extends MobultionSkeletonEntity implements IRan
         return super.finalizeSpawn(serverWorld, difficulty, spawnReason, livingEntityData, NBTTag);
     }
 
+    /**
+     * Used to create an instance of the arrow entity for when this entity fires or shoots an arrow.
+     * @param bow The bow item being used by this entity right now.
+     * @param power The power of the bow usually given in the attack goal or AI.
+     * @return An arrow entity instance
+     */
     @Override
     protected AbstractArrowEntity getArrow(ItemStack bow, float power) {
         AbstractArrowEntity arrowEntity = super.getArrow(bow, power);
@@ -79,13 +109,18 @@ public class MagmaSkeletonEntity extends MobultionSkeletonEntity implements IRan
         return arrowEntity;
     }
 
+    /**
+     * Gets called from ranged attack goals/AI. The projectile entity and its parameters get initiated here.
+     * @param target The entity being targeted.
+     * @param power The power of the arrow, usually defined from the goal itself for each mob.
+     */
     @Override
-    public void performRangedAttack(LivingEntity shooter, float power) {
+    public void performRangedAttack(LivingEntity target, float power) {
         ItemStack itemstack = this.getProjectile(this.getItemInHand(Hand.MAIN_HAND));
         AbstractArrowEntity arrow = this.getArrow(itemstack, power);
-        double d0 = shooter.getX() - this.getX();
-        double d1 = shooter.getY(1d/3d) - arrow.getY();
-        double d2 = shooter.getZ() - this.getZ();
+        double d0 = target.getX() - this.getX();
+        double d1 = target.getY(1d/3d) - arrow.getY();
+        double d2 = target.getZ() - this.getZ();
         //Calculates the horizontal distance to add a bit of lift to the arrow to simulate real life height adjustment
         //for far away targets.
         double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
@@ -97,11 +132,19 @@ public class MagmaSkeletonEntity extends MobultionSkeletonEntity implements IRan
         this.level.addFreshEntity(arrow);
     }
 
+    /**
+     * The amount of ticks the entity ticks after it gets killed.
+     * @return an integer of total death ticks
+     */
     @Override
     protected int getMaxDeathTime() {
         return 50;
     }
 
+    /**
+     * Register the animation controller here and any other particle/sound listeners.
+     * @param data: Animation data that adds animation controllers.
+     */
     @Override
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController<>(this, "movement", 0, this::movementPredicate));
@@ -144,6 +187,10 @@ public class MagmaSkeletonEntity extends MobultionSkeletonEntity implements IRan
         return PlayState.CONTINUE;
     }
 
+    /**
+     * Getter for the animation factory. Client side only but not null on the server.
+     * @return AnimationFactory
+     */
     @Override
     public AnimationFactory getFactory() {
         return this.factory;

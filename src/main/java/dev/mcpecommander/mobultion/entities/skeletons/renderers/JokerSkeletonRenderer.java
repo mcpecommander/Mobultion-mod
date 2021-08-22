@@ -43,8 +43,13 @@ public class JokerSkeletonRenderer extends GeoEntityRenderer<JokerSkeletonEntity
 
     }
 
+    /**
+     * How much the entity rotates when it dies. The default is 90 degrees like lying on the ground dead.
+     * @param entity The entity that is dying.
+     * @return a float of the degrees that this entity rotates on death.
+     */
     @Override
-    protected float getDeathMaxRotation(JokerSkeletonEntity entityLivingBaseIn) {
+    protected float getDeathMaxRotation(JokerSkeletonEntity entity) {
         return 0f;
     }
 

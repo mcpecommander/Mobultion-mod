@@ -16,22 +16,38 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 /* McpeCommander created on 20/07/2021 inside the package - dev.mcpecommander.mobultion.entities.skeletons.entities */
 public class VampireSkeletonEntity extends MobultionSkeletonEntity{
 
+    /**
+     * The animation factory, for more information check GeckoLib.
+     */
     private final AnimationFactory factory = new AnimationFactory(this);
 
     public VampireSkeletonEntity(EntityType<VampireSkeletonEntity> type, World world) {
         super(type, world);
     }
 
+    /**
+     * Gets called in the main class to init the attributes.
+     * @see dev.mcpecommander.mobultion.Mobultion
+     * @return AttributeModifierMap.MutableAttribute
+     */
     public static AttributeModifierMap.MutableAttribute createAttributes() {
         return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D);
     }
 
+    /**
+     * Register the animation controller here and any other particle/sound listeners.
+     * @param data: Animation data that adds animation controllers.
+     */
     @Override
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController<>(this, "movement", 0, this::movementPredicate));
         data.addAnimationController(new AnimationController<>(this, "controller", 0, this::controllerPredicate));
     }
 
+    /**
+     * The amount of ticks the entity ticks after it gets killed.
+     * @return an integer of total death ticks
+     */
     @Override
     protected int getMaxDeathTime() {
         return 50;
@@ -71,6 +87,10 @@ public class VampireSkeletonEntity extends MobultionSkeletonEntity{
         return PlayState.CONTINUE;
     }
 
+    /**
+     * Getter for the animation factory. Client side only but not null on the server.
+     * @return AnimationFactory
+     */
     @Override
     public AnimationFactory getFactory() {
         return this.factory;

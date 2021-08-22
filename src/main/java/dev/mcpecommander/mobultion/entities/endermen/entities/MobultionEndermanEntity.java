@@ -253,7 +253,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
     }
 
     /**
-     * An update method within the tick method that updates somethings but not others. Not really obvious why it exists.
+     * An update method within the tick method that updates some stuff but not others. Not really obvious why it exists.
      */
     @Override
     public void aiStep() {
@@ -412,7 +412,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
      * @return SoundEvent of the damage sound
      */
     @Override
-    protected SoundEvent getHurtSound(DamageSource damageSource) {
+    protected SoundEvent getHurtSound(@Nonnull DamageSource damageSource) {
         return SoundEvents.ENDERMAN_HURT;
     }
 
@@ -434,7 +434,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
      * @return true if the entity should be hurt.
      */
     @Override
-    public boolean hurt(DamageSource damageSource, float amount) {
+    public boolean hurt(@Nonnull DamageSource damageSource, float amount) {
         if (this.isInvulnerableTo(damageSource)) {
             return false;
         } else if (damageSource instanceof IndirectEntityDamageSource) {
