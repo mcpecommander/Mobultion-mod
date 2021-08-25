@@ -192,7 +192,7 @@ public class JokerSkeletonEntity extends MobultionSkeletonEntity implements IRan
             event.getController().setAnimation(new AnimationBuilder().addAnimation("death", true));
             return PlayState.CONTINUE;
         }
-        if(this.getTarget() != null){
+        if(isAggressive()){
             event.getController().setAnimation(new AnimationBuilder().addAnimation("aim", true));
             return PlayState.CONTINUE;
         }

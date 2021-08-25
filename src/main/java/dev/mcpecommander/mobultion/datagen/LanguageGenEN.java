@@ -118,6 +118,7 @@ public class LanguageGenEN extends LanguageProvider {
         //Projectiles
         this.add(Registration.HYPNOWAVE.get(), "Hypnosis Wave");
         this.add(Registration.HEARTARROW.get(), "Heart Arrow");
+        this.add(Registration.CROSSARROW.get(), "Cross Arrow");
         this.add(Registration.GLASSSHOT.get(), "Glass Shot");
 
         //Sounds
@@ -126,6 +127,9 @@ public class LanguageGenEN extends LanguageProvider {
         this.add("sword.ignite", "Fire sword igniting");
         this.add("joker.ambient", "Joker skeleton laughing");
         this.add("bells.ringing", "Hat bells ringing");
+        this.add("harp.shooting", "Joker Skeleton shooting");
+        this.add("cross.splitting", "Cross arrow splitting");
+        this.add("cross.shooting", "Forest bow shooting");
 
         //Mob effects
         this.add(Registration.JOKERNESS_EFFECT.get(), "Jokerness");

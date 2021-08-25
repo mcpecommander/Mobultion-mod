@@ -201,7 +201,7 @@ public class Registration {
                     .sized(0.5F, 0.5F).build("hypnowave"));
 
     private static final EntityType<MagmaSpiderEntity> MAGMASPIDER_TYPE = EntityType.Builder.of(MagmaSpiderEntity::new,
-                    EntityClassification.MONSTER).sized(1.4f, 1f).build("magmaspider");
+                    EntityClassification.MONSTER).sized(1.4f, 1f).fireImmune().build("magmaspider");
     public static final RegistryObject<EntityType<MagmaSpiderEntity>> MAGMASPIDER = ENTITIES.register("magmsspider",
             () -> MAGMASPIDER_TYPE);
     public static final RegistryObject<Item> MAGMASPIDER_EGG = ITEMS.register("magmaspider_egg"
@@ -269,6 +269,9 @@ public class Registration {
     public static final RegistryObject<Item> FORESTSKELETON_EGG = ITEMS.register("forestskeleton_egg"
             , () -> new SpawnEggItem(FORESTSKELETON_TYPE, 0x38761D, 0x93C47D,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
+    public static final RegistryObject<EntityType<CrossArrowEntity>> CROSSARROW = ENTITIES.register("crossarrow",
+            () -> EntityType.Builder.of(CrossArrowEntity::new, EntityClassification.MISC)
+                    .sized(0.5F, 0.5F).build("crossarrow"));
 
     private static final EntityType<ShamanSkeletonEntity> SHAMANSKELETON_TYPE = EntityType.Builder.of(ShamanSkeletonEntity::new,
                     EntityClassification.MONSTER).sized(0.6F, 1.99F).build("shamanskeleton");
@@ -279,7 +282,7 @@ public class Registration {
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
     private static final EntityType<MagmaSkeletonEntity> MAGMASKELETON_TYPE = EntityType.Builder.of(MagmaSkeletonEntity::new,
-                    EntityClassification.MONSTER).sized(0.6F, 1.99F).build("magmaskeleton");
+                    EntityClassification.MONSTER).sized(0.6F, 1.99F).fireImmune().build("magmaskeleton");
     public static final RegistryObject<EntityType<MagmaSkeletonEntity>> MAGMASKELETON = ENTITIES.register("magmaskeleton",
             () -> MAGMASKELETON_TYPE);
     public static final RegistryObject<Item> MAGMASKELETON_EGG = ITEMS.register("magmaskeleton_egg"
@@ -295,7 +298,7 @@ public class Registration {
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
     private static final EntityType<MagmaEndermanEntity> MAGMAENDERMAN_TYPE = EntityType.Builder.of(MagmaEndermanEntity::new,
-                    EntityClassification.MONSTER).sized(0.7F, 2.9F).build("magmaenderman");
+                    EntityClassification.MONSTER).sized(0.7F, 2.9F).fireImmune().build("magmaenderman");
     public static final RegistryObject<EntityType<MagmaEndermanEntity>> MAGMAENDERMAN = ENTITIES.register("magmaenderman",
             () -> MAGMAENDERMAN_TYPE);
     public static final RegistryObject<Item> MAGMAENDERMAN_EGG = ITEMS.register("magmaenderman_egg"
@@ -346,7 +349,7 @@ public class Registration {
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
     private static final EntityType<MagmaZombieEntity> MAGMAZOMBIE_TYPE = EntityType.Builder.of(MagmaZombieEntity::new,
-                    EntityClassification.MONSTER).sized(0.7F, 2.0F).build("magmazombie");
+                    EntityClassification.MONSTER).sized(0.7F, 2.0F).fireImmune().build("magmazombie");
     public static final RegistryObject<EntityType<MagmaZombieEntity>> MAGMAZOMBIE = ENTITIES.register("magmazombie",
             () -> MAGMAZOMBIE_TYPE);
     public static final RegistryObject<Item> MAGMAZOMBIE_EGG = ITEMS.register("magmazombie_egg"
@@ -401,6 +404,10 @@ public class Registration {
             new SoundEvent(new ResourceLocation(MODID, "bells")));
     public static final RegistryObject<SoundEvent> HARP_SOUND = SOUNDS.register("harp", () ->
             new SoundEvent(new ResourceLocation(MODID, "harp")));
+    public static final RegistryObject<SoundEvent> SPLIT_SOUND = SOUNDS.register("split", () ->
+            new SoundEvent(new ResourceLocation(MODID, "split")));
+    public static final RegistryObject<SoundEvent> SLASH_SOUND = SOUNDS.register("slash", () ->
+            new SoundEvent(new ResourceLocation(MODID, "slash")));
 
 
 }

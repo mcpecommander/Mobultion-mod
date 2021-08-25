@@ -73,6 +73,7 @@ public class BaseSkeletonModel<T extends MobultionSkeletonEntity> extends Animat
         head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
         head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
 
+        //The natural flailing arms to make the entity feel alive when idling.
         AnimationController controller = entity.getFactory().getOrCreateAnimationData(entity.getId())
                 .getAnimationControllers().get("controller");
         if(controller.getCurrentAnimation() == null || controller.getAnimationState() == AnimationState.Stopped){
@@ -86,6 +87,7 @@ public class BaseSkeletonModel<T extends MobultionSkeletonEntity> extends Animat
             leftArm1.setRotationX((float) Math.abs(Math.sin(entity.tickCount/10F + Math.PI) * 6 * Math.PI / 180F));
         }
 
+        //Square sine wave to simulate the shittiest beating heart animation possible.
         if(entity instanceof MagmaSkeletonEntity){
             IBone heart = this.getAnimationProcessor().getBone("Heart");
             float scale = (float) Math.abs( 0.2f * (4f/Math.PI) * ( Math.sin(Math.PI*entity.tickCount%20) +
@@ -95,8 +97,5 @@ public class BaseSkeletonModel<T extends MobultionSkeletonEntity> extends Animat
             heart.setScaleY(1 + scale);
             heart.setScaleZ(1 + scale);
         }
-
-
-
     }
 }

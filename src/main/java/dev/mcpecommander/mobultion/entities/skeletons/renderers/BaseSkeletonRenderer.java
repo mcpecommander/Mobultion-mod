@@ -22,6 +22,8 @@ public class BaseSkeletonRenderer<T extends MobultionSkeletonEntity> extends Geo
     public BaseSkeletonRenderer(EntityRendererManager renderManager) {
         super(renderManager, new BaseSkeletonModel<>());
         this.shadowRadius = 0.5F;
+        //This was a test to see if I can get to reuse the same renderer class for all skeletons, but it is not worth it.
+        //Reuse models but not renderers as a rule of thumb.
         this.addLayer(new ForestCameoLayer<>(this));
         this.addLayer(new ShamanRobeLayer<>(this));
         this.addLayer(new SkeletonMagmaLayer<>(this));

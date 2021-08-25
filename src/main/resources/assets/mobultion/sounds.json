@@ -51,5 +51,17 @@
         "volume": 0.5
       }
     ]
+  },
+  "split": {
+    "subtitle": "cross.splitting",
+    "sounds": [
+      "mobultion:split"
+    ]
+  },
+  "slash": {
+    "subtitle": "cross.shooting",
+    "sounds": [
+      "mobultion:slash"
+    ]
   }
 }

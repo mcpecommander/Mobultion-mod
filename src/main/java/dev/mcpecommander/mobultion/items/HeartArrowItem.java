@@ -10,6 +10,8 @@ import net.minecraft.item.ArrowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
+
 /* McpeCommander created on 23/07/2021 inside the package - dev.mcpecommander.mobultion.items */
 public class HeartArrowItem extends ArrowItem {
 
@@ -19,12 +21,13 @@ public class HeartArrowItem extends ArrowItem {
     }
 
     @Override
-    public boolean isInfinite(ItemStack stack, ItemStack bow, PlayerEntity player) {
+    public boolean isInfinite(@Nonnull ItemStack stack, @Nonnull ItemStack bow, @Nonnull PlayerEntity player) {
         return false;
     }
 
+    @Nonnull
     @Override
-    public AbstractArrowEntity createArrow(World world, ItemStack arrowStack, LivingEntity shooter) {
+    public AbstractArrowEntity createArrow(@Nonnull World world, @Nonnull ItemStack arrowStack, LivingEntity shooter) {
         HeartArrowEntity arrow = new HeartArrowEntity(Registration.HEARTARROW.get(), world);
         arrow.setPos(shooter.getX(), shooter.getEyeY() - 0.1f, shooter.getZ());
         arrow.setOwner(shooter);

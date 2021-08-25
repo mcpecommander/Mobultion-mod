@@ -2,6 +2,8 @@ package dev.mcpecommander.mobultion.entities.skeletons.models;
 
 import dev.mcpecommander.mobultion.entities.skeletons.entities.JokerSkeletonEntity;
 import net.minecraft.util.ResourceLocation;
+import software.bernie.geckolib3.core.AnimationState;
+import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
@@ -60,6 +62,20 @@ public class JokerSkeletonModel extends AnimatedGeoModel<JokerSkeletonEntity> {
         EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
         head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
         head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
+
+        //The natural flailing arms to make the entity feel alive when idling.
+        AnimationController controller = entity.getFactory().getOrCreateAnimationData(entity.getId())
+                .getAnimationControllers().get("controller");
+        if(controller.getCurrentAnimation() == null || controller.getAnimationState() == AnimationState.Stopped){
+            IBone rightArm = this.getAnimationProcessor().getBone("RightArm");
+            IBone leftArm = this.getAnimationProcessor().getBone("LeftArm");
+            IBone rightArm1 = this.getAnimationProcessor().getBone("RightArm1");
+            IBone leftArm1 = this.getAnimationProcessor().getBone("LeftArm1");
+            rightArm.setRotationX((float) (Math.sin(entity.tickCount/10F) * 4 * Math.PI / 180F));
+            leftArm.setRotationX((float) (Math.sin(entity.tickCount/10F + Math.PI) * 4 * Math.PI / 180F));
+            rightArm1.setRotationX((float) Math.abs(Math.sin(entity.tickCount/10F) * 6 * Math.PI / 180F));
+            leftArm1.setRotationX((float) Math.abs(Math.sin(entity.tickCount/10F + Math.PI) * 6 * Math.PI / 180F));
+        }
 
     }
 }

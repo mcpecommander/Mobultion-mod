@@ -3,15 +3,11 @@ package dev.mcpecommander.mobultion.entities.skeletons.entities;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -20,56 +16,12 @@ import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /* McpeCommander created on 17/07/2021 inside the package - dev.mcpecommander.mobultion.entities.skeletons.entities */
 public abstract class MobultionSkeletonEntity extends MonsterEntity implements IAnimatable {
 
-    /**
-     * A data parameter used to sync the target ID to the client for animation purposes.
-     */
-    private static final DataParameter<Integer> TARGET = EntityDataManager.defineId(MobultionSkeletonEntity.class, DataSerializers.INT);
-
     protected MobultionSkeletonEntity(EntityType<? extends MobultionSkeletonEntity> type, World world) {
         super(type, world);
-    }
-
-    /**
-     * Register/define the default value of the data parameter here.
-     */
-    @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(TARGET, 0);
-    }
-
-    /**
-     * Set the target of mob to be used in AI/goals.
-     * Modified here to also sync it to the client to run animations too.
-     * @param target The entity being targeted.
-     */
-    @Override
-    public void setTarget(@Nullable LivingEntity target) {
-        super.setTarget(target);
-        if(target != null){
-            this.entityData.set(TARGET, target.getId());
-        }else{
-            this.entityData.set(TARGET, 0);
-        }
-    }
-
-    /**
-     * Gets the target entity. The client side gets null usually but has been modified here to get the entity by ID to
-     * get aim animations to start.
-     * @return A living entity instance since only living entities can be targeted.
-     */
-    @Nullable
-    @Override
-    public LivingEntity getTarget() {
-        if(!this.level.isClientSide){
-            return super.getTarget();
-        }
-        return (LivingEntity) this.level.getEntity(entityData.get(TARGET));
     }
 
     /**

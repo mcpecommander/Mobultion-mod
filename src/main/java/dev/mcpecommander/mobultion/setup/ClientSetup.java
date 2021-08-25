@@ -3,6 +3,7 @@ package dev.mcpecommander.mobultion.setup;
 import com.mojang.serialization.Codec;
 import dev.mcpecommander.mobultion.blocks.renderer.SpiderEggRenderer;
 import dev.mcpecommander.mobultion.entities.endermen.renderers.*;
+import dev.mcpecommander.mobultion.entities.skeletons.entities.CrossArrowEntity;
 import dev.mcpecommander.mobultion.entities.skeletons.renderers.BaseSkeletonRenderer;
 import dev.mcpecommander.mobultion.entities.skeletons.renderers.HeartArrowRenderer;
 import dev.mcpecommander.mobultion.entities.skeletons.renderers.JokerSkeletonRenderer;
@@ -15,6 +16,7 @@ import dev.mcpecommander.mobultion.particles.SnowFlakeParticle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.entity.ArrowRenderer;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.particles.ParticleType;
 import net.minecraft.util.ResourceLocation;
@@ -135,6 +137,16 @@ public class ClientSetup {
                 BaseSkeletonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.FORESTSKELETON.get(),
                 BaseSkeletonRenderer::new);
+        //Use the same renderer as the vanilla arrow for now.
+        //TODO: Decide if I want an animated model or just a texture.
+        RenderingRegistry.registerEntityRenderingHandler(Registration.CROSSARROW.get(),
+                manager -> new ArrowRenderer<CrossArrowEntity>(manager) {
+                    @Nonnull
+                    @Override
+                    public ResourceLocation getTextureLocation(@Nonnull CrossArrowEntity arrow) {
+                        return new ResourceLocation("textures/entity/projectiles/arrow.png");
+                    }
+                });
         RenderingRegistry.registerEntityRenderingHandler(Registration.SHAMANSKELETON.get(),
                 BaseSkeletonRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.MAGMASKELETON.get(),

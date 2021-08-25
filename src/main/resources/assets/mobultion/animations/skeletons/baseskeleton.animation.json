@@ -283,6 +283,32 @@
 				}
 			}
 		},
+		"aim2": {
+			"loop": true,
+			"animation_length": 0.04,
+			"bones": {
+				"LeftArm": {
+					"rotation": {
+						"vector": [-132.5, -7.5, 0]
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"vector": [-132.5, -15, 0]
+					}
+				},
+				"RightArm1": {
+					"rotation": {
+						"vector": [0, 0, -22.5]
+					}
+				},
+				"LeftArm1": {
+					"rotation": {
+						"vector": [5, 0, 97.5]
+					}
+				}
+			}
+		},
 		"death": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 3,

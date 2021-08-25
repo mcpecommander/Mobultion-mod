@@ -15,6 +15,8 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import javax.annotation.Nonnull;
+
 /* Created by McpeCommander on 2021/06/18 */
 public class HypnoSpiderEntity extends MobultionSpiderEntity{
 
@@ -127,7 +129,7 @@ public class HypnoSpiderEntity extends MobultionSpiderEntity{
      * @return true if the mob can be affected.
      */
     @Override
-    public boolean canBeAffected(EffectInstance effect) {
+    public boolean canBeAffected(@Nonnull EffectInstance effect) {
         return true;
     }
 }

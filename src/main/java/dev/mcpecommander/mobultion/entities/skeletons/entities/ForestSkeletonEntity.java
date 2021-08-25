@@ -1,16 +1,19 @@
 package dev.mcpecommander.mobultion.entities.skeletons.entities;
 
+import dev.mcpecommander.mobultion.entities.skeletons.entityGoals.AerialAttackGoal;
 import dev.mcpecommander.mobultion.setup.Registration;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
+import net.minecraft.entity.passive.IronGolemEntity;
+import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
@@ -35,6 +38,22 @@ public class ForestSkeletonEntity extends MobultionSkeletonEntity implements IRa
 
     public ForestSkeletonEntity(EntityType<? extends MobultionSkeletonEntity> type, World world) {
         super(type, world);
+    }
+
+    /**
+     * Register the AI/goals here. Server side only.
+     */
+    @Override
+    protected void registerGoals() {
+        this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, WolfEntity.class, 6.0F, 1.0D, 1.2D));
+        this.goalSelector.addGoal(2, new AerialAttackGoal(this, 0.9D, 30, 25.0F));
+        this.goalSelector.addGoal(3, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
+        this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
     }
 
     /**
@@ -71,19 +90,25 @@ public class ForestSkeletonEntity extends MobultionSkeletonEntity implements IRa
      */
     @Override
     public void performRangedAttack(LivingEntity target, float power) {
-        ItemStack itemstack = this.getProjectile(this.getItemInHand(Hand.MAIN_HAND));
-        AbstractArrowEntity arrow = this.getArrow(itemstack, power);
-        double motionX = target.getX() - this.getX();
-        double motionY = target.getY(0.3333333333333333D) - arrow.getY();
-        double motionZ = target.getZ() - this.getZ();
-        //Calculates the horizontal distance to add a bit of lift to the arrow to simulate real life height adjustment
-        //for far away targets.
-        double horizontalDistance = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
+        CrossArrowEntity arrow = new CrossArrowEntity(Registration.CROSSARROW.get(), this.level);
+        arrow.setPos(this.getX(), this.getEyeY() - 0.1d, this.getZ());
+        arrow.setOwner(this);
+        arrow.setNoGravity(true);
+
+        double targetX = (target.getX() - this.getX()) / 2 + this.getX();
+        double targetY = this.getY() + 15;
+        double targetZ = (target.getZ() - this.getZ()) / 2 + this.getZ();
+        arrow.setTarget(new Vector3d(targetX, targetY, targetZ));
+
+        double motionX = targetX - this.getX();
+        double motionY = targetY - arrow.getY();
+        double motionZ = targetZ - this.getZ();
+
         //2 is the vector scaling factor which in turn translates into speed.
         //The last parameter is the error scale. 0 = exact shot.
-        arrow.shoot(motionX, motionY + horizontalDistance * 0.2d, motionZ, 2F,
+        arrow.shoot(motionX, motionY, motionZ, 1.6F,
                 12 - this.level.getCurrentDifficultyAt(blockPosition()).getSpecialMultiplier() * 12);
-        this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        this.playSound(Registration.SLASH_SOUND.get(), 1.0F, 0.4f);
         this.level.addFreshEntity(arrow);
     }
 
@@ -116,7 +141,11 @@ public class ForestSkeletonEntity extends MobultionSkeletonEntity implements IRa
             event.getController().setAnimation(new AnimationBuilder().addAnimation("death", true));
             return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("melee", true));
+
+        if(isAggressive()){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("aim2", true));
+            return PlayState.CONTINUE;
+        }
 
         return PlayState.STOP;
     }

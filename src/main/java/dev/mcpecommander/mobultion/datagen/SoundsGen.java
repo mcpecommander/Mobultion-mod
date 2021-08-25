@@ -40,5 +40,9 @@ public class SoundsGen extends SoundDefinitionsProvider {
         this.add(Registration.HARP_SOUND.get(), SoundDefinition.definition().subtitle("harp.shooting")
                 .with(SoundDefinitionsProvider.sound(new ResourceLocation(MODID, "harp")).volume(0.5d))
                 .with(SoundDefinitionsProvider.sound(new ResourceLocation(MODID, "harp1")).volume(0.5)));
+        this.add(Registration.SPLIT_SOUND.get(), SoundDefinition.definition().subtitle("cross.splitting")
+                .with(SoundDefinitionsProvider.sound(new ResourceLocation(MODID, "split")).volume(1d)));
+        this.add(Registration.SLASH_SOUND.get(), SoundDefinition.definition().subtitle("cross.shooting")
+                .with(SoundDefinitionsProvider.sound(new ResourceLocation(MODID, "slash")).volume(1d)));
     }
 }
