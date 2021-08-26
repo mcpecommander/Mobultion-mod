@@ -31,6 +31,8 @@ import software.bernie.geckolib3.network.GeckoLibNetwork;
 import software.bernie.geckolib3.network.ISyncable;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
+import javax.annotation.Nonnull;
+
 /* McpeCommander created on 23/06/2021 inside the package - dev.mcpecommander.mobultion.items */
 public class ThunderStaffItem extends Item implements IAnimatable, ISyncable {
 
@@ -43,21 +45,22 @@ public class ThunderStaffItem extends Item implements IAnimatable, ISyncable {
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController(this, "controller", 1, this::predicate));
+        data.addAnimationController(new AnimationController<>(this, "controller", 1, this::predicate));
     }
 
+    @Nonnull
     @Override
-    public UseAction getUseAnimation(ItemStack itemStack) {
+    public UseAction getUseAnimation(@Nonnull ItemStack itemStack) {
         return UseAction.BOW;
     }
 
     @Override
-    public int getUseDuration(ItemStack itemStack) {
+    public int getUseDuration(@Nonnull ItemStack itemStack) {
         return 200;
     }
 
     @Override
-    public void releaseUsing(ItemStack itemStack, World world, LivingEntity holder, int charge) {
+    public void releaseUsing(@Nonnull ItemStack itemStack, @Nonnull World world, @Nonnull LivingEntity holder, int charge) {
         if(getUseDuration(itemStack) - charge < 40 && !world.isClientSide){
             final int id = GeckoLibUtil.guaranteeIDForStack(itemStack, (ServerWorld) world);
             final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF
@@ -67,11 +70,11 @@ public class ThunderStaffItem extends Item implements IAnimatable, ISyncable {
     }
 
     @Override
-    public void onUseTick(World world, LivingEntity holder, ItemStack itemStack, int charge) {
+    public void onUseTick(@Nonnull World world, @Nonnull LivingEntity holder, @Nonnull ItemStack itemStack, int charge) {
         if(getUseDuration(itemStack) - charge > 35 && holder instanceof PlayerEntity){
             if(!world.isClientSide){
                 holder.stopUsingItem();
-                RayTraceResult result = getPOVHitResult(world, (PlayerEntity) holder, RayTraceContext.FluidMode.ANY);
+                RayTraceResult result = getPOVHitResult(world, (PlayerEntity) holder);
                 if(result.getType() == RayTraceResult.Type.MISS) return;
                 LightningBoltEntity entity = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, world);
                 if(result instanceof BlockRayTraceResult){
@@ -96,10 +99,9 @@ public class ThunderStaffItem extends Item implements IAnimatable, ISyncable {
      * block hits.
      * @param world: the world which the player is in.
      * @param player: the player that ray tracing begins from.
-     * @param fluidMode: what liquids to collide with.
      * @return BlockRayTraceResult that has a non-null block pos and the type of collision.
      */
-    private static RayTraceResult getPOVHitResult(World world, PlayerEntity player, RayTraceContext.FluidMode fluidMode) {
+    private static RayTraceResult getPOVHitResult(World world, PlayerEntity player) {
         Vector3d from = player.getEyePosition(1.0F);
         Vector3d temp = player.getViewVector(1.0f);
         Vector3d to = from.add(temp.x * 60d, temp.y * 60d, temp.z * 60d);
@@ -107,7 +109,8 @@ public class ThunderStaffItem extends Item implements IAnimatable, ISyncable {
                 player.getBoundingBox().expandTowards(temp.x * 60, temp.y * 60, temp.z * 60)
                         .inflate( 2,  2,  2),
                 entity -> entity != null && !entity.isSpectator());
-        BlockRayTraceResult blockRayTraceResult = world.clip(new RayTraceContext(from, to, RayTraceContext.BlockMode.OUTLINE, fluidMode, player));
+        BlockRayTraceResult blockRayTraceResult = world.clip(new RayTraceContext(from, to, RayTraceContext.BlockMode.OUTLINE,
+                RayTraceContext.FluidMode.NONE, player));
         if(entityRayTraceResult == null) {
             return blockRayTraceResult;
         }else if (player.distanceToSqr(blockRayTraceResult.getBlockPos().getX(),
@@ -118,8 +121,9 @@ public class ThunderStaffItem extends Item implements IAnimatable, ISyncable {
         return entityRayTraceResult;
     }
 
+    @Nonnull
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+    public ActionResult<ItemStack> use(@Nonnull World world, PlayerEntity player, @Nonnull Hand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         if(hand == Hand.OFF_HAND) return ActionResult.fail(itemstack);
         player.startUsingItem(hand);
