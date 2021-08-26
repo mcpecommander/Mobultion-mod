@@ -143,7 +143,11 @@ public class ForestSkeletonEntity extends MobultionSkeletonEntity implements IRa
         }
 
         if(isAggressive()){
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("aim2", true));
+            if(isUsingItem()){
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("aim2", true));
+            }else{
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("aim", true));
+            }
             return PlayState.CONTINUE;
         }
 

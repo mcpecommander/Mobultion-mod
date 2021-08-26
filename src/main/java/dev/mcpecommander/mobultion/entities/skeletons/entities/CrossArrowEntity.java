@@ -67,17 +67,19 @@ public class CrossArrowEntity extends AbstractArrowEntity {
     @Override
     public void tick() {
         super.tick();
-        if(this.distanceToSqr(explosionPoint) <= explosionPoint.distanceToSqr(xOld, yOld, zOld)){
-            closerTime++;
-        }else{
-            closerTime--;
-        }
-        if(closerTime < -100) remove();
-        if(this.distanceToSqr(explosionPoint) < 1 || closerTime < oCloserTime - 1){
-            this.explode();
-        }
+        if(!this.level.isClientSide) {
+            if (this.distanceToSqr(explosionPoint) <= explosionPoint.distanceToSqr(xOld, yOld, zOld)) {
+                closerTime++;
+            } else {
+                closerTime--;
+            }
+            if (closerTime < -100) remove();
+            if (this.distanceToSqr(explosionPoint) < 1 || closerTime < oCloserTime - 2) {
+                this.explode();
+            }
 
-        oCloserTime = Math.max(closerTime, oCloserTime);
+            oCloserTime = Math.max(closerTime, oCloserTime);
+        }
     }
 
     private void explode(){
