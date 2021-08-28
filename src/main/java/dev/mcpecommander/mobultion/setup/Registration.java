@@ -280,6 +280,9 @@ public class Registration {
     public static final RegistryObject<Item> SHAMANSKELETON_EGG = ITEMS.register("shamanskeleton_egg"
             , () -> new SpawnEggItem(SHAMANSKELETON_TYPE, 0x050572, 0x741B47,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
+    public static final RegistryObject<EntityType<MiniLightningEntity>> MINILIGHTNING = ENTITIES.register("minilightning",
+            () -> EntityType.Builder.of(MiniLightningEntity::new, EntityClassification.MISC)
+                    .noSave().sized(0.0F, 0.0F).clientTrackingRange(16).updateInterval(Integer.MAX_VALUE).build("minilightning"));
 
     private static final EntityType<MagmaSkeletonEntity> MAGMASKELETON_TYPE = EntityType.Builder.of(MagmaSkeletonEntity::new,
                     EntityClassification.MONSTER).sized(0.6F, 1.99F).fireImmune().build("magmaskeleton");

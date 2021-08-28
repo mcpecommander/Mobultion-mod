@@ -7,6 +7,7 @@ import dev.mcpecommander.mobultion.entities.skeletons.entities.CrossArrowEntity;
 import dev.mcpecommander.mobultion.entities.skeletons.renderers.BaseSkeletonRenderer;
 import dev.mcpecommander.mobultion.entities.skeletons.renderers.HeartArrowRenderer;
 import dev.mcpecommander.mobultion.entities.skeletons.renderers.JokerSkeletonRenderer;
+import dev.mcpecommander.mobultion.entities.skeletons.renderers.MiniLightningRenderer;
 import dev.mcpecommander.mobultion.entities.spiders.renderers.*;
 import dev.mcpecommander.mobultion.entities.zombies.renderers.*;
 import dev.mcpecommander.mobultion.particles.FlowerParticle;
@@ -149,6 +150,8 @@ public class ClientSetup {
                 });
         RenderingRegistry.registerEntityRenderingHandler(Registration.SHAMANSKELETON.get(),
                 BaseSkeletonRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(Registration.MINILIGHTNING.get(),
+                MiniLightningRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(Registration.MAGMASKELETON.get(),
                 BaseSkeletonRenderer::new);
 

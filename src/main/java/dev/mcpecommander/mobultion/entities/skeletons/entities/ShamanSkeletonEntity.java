@@ -6,7 +6,6 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -64,9 +63,9 @@ public class ShamanSkeletonEntity extends MobultionSkeletonEntity implements IRa
      * @param power The power of the arrow, usually defined from the goal itself for each mob.
      */
     public void performRangedAttack(@Nonnull LivingEntity target, float power) {
-        LightningBoltEntity boltEntity = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, this.level);
+        MiniLightningEntity boltEntity = new MiniLightningEntity(Registration.MINILIGHTNING.get(), this.level);
         boltEntity.setPos(target.getX(), target.getY(), target.getZ());
-        boltEntity.setVisualOnly(true);
+        boltEntity.setTarget(target.getId());
         this.level.addFreshEntity(boltEntity);
         target.heal(power);
     }
