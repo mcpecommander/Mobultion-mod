@@ -2,7 +2,6 @@ package dev.mcpecommander.mobultion.items;
 
 import dev.mcpecommander.mobultion.setup.ModSetup;
 import net.minecraft.block.*;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
@@ -16,6 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.util.Constants;
 
+import javax.annotation.Nonnull;
 import java.util.Random;
 
 /* McpeCommander created on 24/07/2021 inside the package - dev.mcpecommander.mobultion.items */
@@ -25,11 +25,12 @@ public class CorruptedBoneMealItem extends Item {
         super(new Properties().tab(ModSetup.ITEM_GROUP));
     }
 
+    @Nonnull
     @Override
     public ActionResultType useOn(ItemUseContext useContext) {
         World world = useContext.getLevel();
         BlockPos clickedBlock = useContext.getClickedPos();
-        if (applyBonemeal(useContext.getItemInHand(), world, clickedBlock, useContext.getPlayer())) {
+        if (applyBonemeal(useContext.getItemInHand(), world, clickedBlock)) {
             if (world.isClientSide) {
                 if(world.getBlockState(clickedBlock).isCollisionShapeFullBlock(world, clickedBlock)) clickedBlock = clickedBlock.above();
                 for(int i = 0; i < 20; i++){
@@ -44,7 +45,7 @@ public class CorruptedBoneMealItem extends Item {
         return ActionResultType.PASS;
     }
 
-    private boolean applyBonemeal(ItemStack itemStack, World world, BlockPos applicablePos, PlayerEntity player) {
+    private boolean applyBonemeal(ItemStack itemStack, World world, BlockPos applicablePos) {
         BlockState blockstate = world.getBlockState(applicablePos);
         if(performCorruption(world, applicablePos, blockstate.getBlock())){
             itemStack.shrink(1);

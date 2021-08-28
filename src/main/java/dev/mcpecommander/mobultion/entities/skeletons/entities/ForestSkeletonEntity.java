@@ -45,7 +45,8 @@ public class ForestSkeletonEntity extends MobultionSkeletonEntity implements IRa
      */
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.goalSelector.addGoal(0, new RestrictSunGoal(this));
+        this.goalSelector.addGoal(1, new FleeSunGoal(this, 1.0D));
         this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, WolfEntity.class, 6.0F, 1.0D, 1.2D));
         this.goalSelector.addGoal(2, new AerialAttackGoal(this, 0.9D, 30, 25.0F));
         this.goalSelector.addGoal(3, new WaterAvoidingRandomWalkingGoal(this, 1.0D));

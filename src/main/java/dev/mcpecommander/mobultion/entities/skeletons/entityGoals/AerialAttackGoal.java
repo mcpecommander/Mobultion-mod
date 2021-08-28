@@ -75,7 +75,7 @@ public class AerialAttackGoal extends Goal{
                 if (canSee != hasSeen) {
                     this.seeTime = 0;
                 }
-                //If the skeleton can see the target and is under direct sky, increase the seeTime otherwise decrease it.
+                //If the skeleton can see the target, increase the seeTime otherwise decrease it.
                 if (canSee) {
                     ++this.seeTime;
                 } else {
