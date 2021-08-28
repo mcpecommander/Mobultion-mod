@@ -566,6 +566,67 @@
 					}
 				}
 			}
+		},
+		"cast": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1.44,
+			"bones": {
+				"LeftArm": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.72": {
+							"vector": [0, 0, -37.5],
+							"easing": "easeInOutCubic"
+						},
+						"1.44": {
+							"vector": [0, 0, 0],
+							"easing": "easeInCubic"
+						}
+					}
+				},
+				"LeftArm1": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.72": {
+							"vector": [0, 0, 25],
+							"easing": "easeInOutCubic"
+						},
+						"1.44": {
+							"vector": [0, 0, 0],
+							"easing": "easeInCubic"
+						}
+					}
+				},
+				"RightArm": {
+					"rotation": {
+						"vector": ["-37.5 + math.cos(query.anim_time * 500) * 10", 15, "math.sin(query.anim_time * 500) * 10"]
+					}
+				},
+				"RightArm1": {
+					"rotation": {
+						"vector": ["-50 + math.cos(query.anim_time * 500) * 20", 0, "math.sin(query.anim_time * 500) * 25"]
+					}
+				}
+			}
+		},
+		"castHold": {
+			"loop": "hold_on_last_frame",
+			"bones": {
+				"RightArm": {
+					"rotation": {
+						"vector": [-37.5, 15, 0]
+					}
+				},
+				"RightArm1": {
+					"rotation": {
+						"vector": [-50, 0, 0]
+					}
+				}
+			}
 		}
 	}
 }

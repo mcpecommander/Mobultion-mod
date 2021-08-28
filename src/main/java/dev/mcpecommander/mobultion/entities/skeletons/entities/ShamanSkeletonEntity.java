@@ -1,13 +1,18 @@
 package dev.mcpecommander.mobultion.entities.skeletons.entities;
 
+import dev.mcpecommander.mobultion.entities.skeletons.entityGoals.ShamanHealGoal;
 import dev.mcpecommander.mobultion.setup.Registration;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.effect.LightningBoltEntity;
 import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.world.DifficultyInstance;
@@ -25,7 +30,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /* McpeCommander created on 21/07/2021 inside the package - dev.mcpecommander.mobultion.entities.skeletons.entities */
-public class ShamanSkeletonEntity extends MobultionSkeletonEntity{
+public class ShamanSkeletonEntity extends MobultionSkeletonEntity implements IRangedAttackMob {
 
     /**
      * The animation factory, for more information check GeckoLib.
@@ -34,6 +39,36 @@ public class ShamanSkeletonEntity extends MobultionSkeletonEntity{
 
     public ShamanSkeletonEntity(EntityType<? extends MobultionSkeletonEntity> type, World world) {
         super(type, world);
+    }
+
+    /**
+     * Register the AI/goals here. Server side only.
+     */
+    @Override
+    protected void registerGoals() {
+        this.goalSelector.addGoal(0, new RestrictSunGoal(this));
+        this.goalSelector.addGoal(1, new FleeSunGoal(this, 1.0D));
+        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, WolfEntity.class, 6.0F, 1.0D, 1.2D));
+        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, PlayerEntity.class, 6.0F, 1.0D, 1.2D));
+        this.goalSelector.addGoal(2, new ShamanHealGoal(this, 1D, 30, 25.0F));
+        this.goalSelector.addGoal(3, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
+        this.goalSelector.addGoal(4, new LookAtGoal(this, MobultionSkeletonEntity.class, 8.0F));
+        this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, MobultionSkeletonEntity.class, 10, false,
+                false, skeleton -> skeleton.getHealth() < skeleton.getMaxHealth() && !skeleton.isUsingItem()));
+    }
+
+    /**
+     * Gets called from ranged attack goals/AI.
+     * @param target The entity being targeted.
+     * @param power The power of the arrow, usually defined from the goal itself for each mob.
+     */
+    public void performRangedAttack(@Nonnull LivingEntity target, float power) {
+        LightningBoltEntity boltEntity = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, this.level);
+        boltEntity.setPos(target.getX(), target.getY(), target.getZ());
+        boltEntity.setVisualOnly(true);
+        this.level.addFreshEntity(boltEntity);
+        target.heal(power);
     }
 
     /**
@@ -60,6 +95,7 @@ public class ShamanSkeletonEntity extends MobultionSkeletonEntity{
                                            @Nonnull SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityData,
                                            @Nullable CompoundNBT NBTTag) {
         this.setItemInHand(Hand.MAIN_HAND, new ItemStack(Registration.HEALINGSTAFF.get()));
+        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.OBSIDIAN));
         return super.finalizeSpawn(serverWorld, difficulty, spawnReason, livingEntityData, NBTTag);
     }
 
@@ -92,7 +128,14 @@ public class ShamanSkeletonEntity extends MobultionSkeletonEntity{
             event.getController().setAnimation(new AnimationBuilder().addAnimation("death", false));
             return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("melee", true));
+        if(isAggressive()){
+            if(isUsingItem()){
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("cast", true));
+            }else{
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("castHold", true));
+            }
+            return PlayState.CONTINUE;
+        }
 
         return PlayState.STOP;
     }
@@ -124,4 +167,6 @@ public class ShamanSkeletonEntity extends MobultionSkeletonEntity{
     public AnimationFactory getFactory() {
         return this.factory;
     }
+
+
 }

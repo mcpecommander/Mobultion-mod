@@ -50,6 +50,11 @@ public class HealingStaffItem extends Item implements IAnimatable, ISyncable {
         }
     }
 
+    @Override
+    public int getUseDuration(@Nonnull ItemStack itemStack) {
+        return 80;
+    }
+
     private <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event)
     {
         return PlayState.CONTINUE;

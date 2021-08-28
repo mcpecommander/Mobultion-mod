@@ -1,6 +1,5 @@
 package dev.mcpecommander.mobultion.setup;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.serialization.Codec;
 import dev.mcpecommander.mobultion.blocks.renderer.SpiderEggRenderer;
 import dev.mcpecommander.mobultion.entities.endermen.renderers.*;
@@ -15,10 +14,8 @@ import dev.mcpecommander.mobultion.particles.HealParticle;
 import dev.mcpecommander.mobultion.particles.PortalParticle;
 import dev.mcpecommander.mobultion.particles.SnowFlakeParticle;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.culling.ClippingHelper;
 import net.minecraft.client.renderer.entity.ArrowRenderer;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.particles.ParticleType;
@@ -144,19 +141,6 @@ public class ClientSetup {
         //TODO: Decide if I want an animated model or just a texture.
         RenderingRegistry.registerEntityRenderingHandler(Registration.CROSSARROW.get(),
                 manager -> new ArrowRenderer<CrossArrowEntity>(manager) {
-
-                    @Override
-                    public boolean shouldRender(CrossArrowEntity p_225626_1_, ClippingHelper p_225626_2_, double p_225626_3_, double p_225626_5_, double p_225626_7_) {
-                        //System.out.println(super.shouldRender(p_225626_1_, p_225626_2_, p_225626_3_, p_225626_5_, p_225626_7_));
-                        return super.shouldRender(p_225626_1_, p_225626_2_, p_225626_3_, p_225626_5_, p_225626_7_);
-                    }
-
-                    @Override
-                    public void render(CrossArrowEntity p_225623_1_, float p_225623_2_, float p_225623_3_, MatrixStack p_225623_4_, IRenderTypeBuffer p_225623_5_, int p_225623_6_) {
-                        super.render(p_225623_1_, p_225623_2_, p_225623_3_, p_225623_4_, p_225623_5_, p_225623_6_);
-                        //System.out.println("hello");
-                    }
-
                     @Nonnull
                     @Override
                     public ResourceLocation getTextureLocation(@Nonnull CrossArrowEntity arrow) {
