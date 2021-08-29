@@ -1,5 +1,6 @@
 package dev.mcpecommander.mobultion.entities.skeletons.entityGoals;
 
+import dev.mcpecommander.mobultion.entities.skeletons.SkeletonsConfig;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.ShamanSkeletonEntity;
 import dev.mcpecommander.mobultion.setup.Registration;
 import net.minecraft.entity.LivingEntity;
@@ -88,7 +89,7 @@ public class ShamanHealGoal extends Goal{
                     int i = this.mob.getTicksUsingItem();
                     if (i >= 70) {
                         this.mob.stopUsingItem();
-                        this.mob.performRangedAttack(target, 4);
+                        this.mob.performRangedAttack(target, new Float(SkeletonsConfig.SHAMAN_HEALING.get()));
                         this.healingTime = this.healingIntervalMin;
                     }
                 }

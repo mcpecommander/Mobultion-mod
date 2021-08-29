@@ -96,6 +96,7 @@ public class CrossArrowEntity extends AbstractArrowEntity {
                         //This check gives me the X pattern.
                         if ((i == 0 || j == 0) && i != j) continue;
                         ArrowEntity arrow = new ArrowEntity(EntityType.ARROW, level);
+                        arrow.setBaseDamage(this.getBaseDamage());
                         arrow.setOwner(this.getOwner());
                         arrow.setPos(this.getX(), this.getY(), this.getZ());
                         double motionX = target.getX() + i - this.getX();
@@ -104,7 +105,7 @@ public class CrossArrowEntity extends AbstractArrowEntity {
                         //Calculates the horizontal distance to add a bit of lift to the arrow to simulate real life height adjustment
                         //for far away targets.
                         double horizontalDistance = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
-                        //2 is the vector scaling factor which in turn translates into speed.
+                        //1.6 is the vector scaling factor which in turn translates into speed.
                         //The last parameter is the error scale. 0 = exact shot.
                         arrow.shoot(motionX, motionY + horizontalDistance * 0.2d, motionZ, 1.6F, 0);
                         this.level.addFreshEntity(arrow);

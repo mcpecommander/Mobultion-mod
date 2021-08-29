@@ -1,5 +1,6 @@
 package dev.mcpecommander.mobultion.entities.endermen.entities;
 
+import dev.mcpecommander.mobultion.entities.endermen.EndermenConfig;
 import dev.mcpecommander.mobultion.entities.endermen.entityGoals.EndermanFindStaringPlayerGoal;
 import dev.mcpecommander.mobultion.entities.endermen.entityGoals.GlassEndermanShotsAttackGoal;
 import dev.mcpecommander.mobultion.particles.PortalParticle;
@@ -115,7 +116,8 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
         this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
         this.targetSelector.addGoal(1, new EndermanFindStaringPlayerGoal(this, livingEntity -> getBalls() > 0));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, CreeperEntity.class, 10, true, false, livingEntity -> getBalls() > 0));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, CreeperEntity.class, 10, true, false,
+                livingEntity -> getBalls() > 0));
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this){
             @Override
             public boolean canUse() {
@@ -193,9 +195,10 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, 28.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.3F).add(Attributes.ATTACK_DAMAGE, 8.0D)
-                .add(Attributes.FOLLOW_RANGE, 64.0D);
+        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, EndermenConfig.GLASS_HEALTH.get())
+                .add(Attributes.MOVEMENT_SPEED, EndermenConfig.GLASS_SPEED.get())
+                .add(Attributes.ATTACK_DAMAGE, EndermenConfig.GLASS_DAMAGE.get())
+                .add(Attributes.FOLLOW_RANGE, EndermenConfig.GLASS_RADIUS.get());
     }
 
     /**
@@ -262,7 +265,8 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
             return PlayState.CONTINUE;
         }
         if(event.isMoving()) {
-            if(Objects.requireNonNull(getAttribute(Attributes.MOVEMENT_SPEED)).hasModifier(MobultionEndermanEntity.SPEED_MODIFIER_ATTACKING)) {
+            if(Objects.requireNonNull(getAttribute(Attributes.MOVEMENT_SPEED))
+                    .hasModifier(MobultionEndermanEntity.SPEED_MODIFIER_ATTACKING)) {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("running", true));
             }else {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("move", true));

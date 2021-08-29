@@ -63,7 +63,10 @@ public class ForestSkeletonEntity extends MobultionSkeletonEntity implements IRa
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D);
+        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, 16d)
+                .add(Attributes.MOVEMENT_SPEED, 0.25D)
+                .add(Attributes.FOLLOW_RANGE, 36)
+                .add(Registration.RANGED_DAMAGE.get(), 3d);
     }
 
     /**
@@ -95,6 +98,7 @@ public class ForestSkeletonEntity extends MobultionSkeletonEntity implements IRa
         arrow.setPos(this.getX(), this.getEyeY() - 0.1d, this.getZ());
         arrow.setOwner(this);
         arrow.setNoGravity(true);
+        arrow.setBaseDamage(this.getAttributeValue(Registration.RANGED_DAMAGE.get()));
 
         double targetX = (target.getX() - this.getX()) / 2 + this.getX();
         double targetY = this.getY() + 15;
@@ -105,10 +109,9 @@ public class ForestSkeletonEntity extends MobultionSkeletonEntity implements IRa
         double motionY = targetY - arrow.getY();
         double motionZ = targetZ - this.getZ();
 
-        //2 is the vector scaling factor which in turn translates into speed.
+        //1.6 is the vector scaling factor which in turn translates into speed.
         //The last parameter is the error scale. 0 = exact shot.
-        arrow.shoot(motionX, motionY, motionZ, 1.6F,
-                12 - this.level.getCurrentDifficultyAt(blockPosition()).getSpecialMultiplier() * 12);
+        arrow.shoot(motionX, motionY, motionZ, 1.6F, 0);
         this.playSound(Registration.SLASH_SOUND.get(), 1.0F, 0.4f);
         this.level.addFreshEntity(arrow);
     }

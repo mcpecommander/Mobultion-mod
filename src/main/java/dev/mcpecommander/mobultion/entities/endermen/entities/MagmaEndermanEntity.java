@@ -1,5 +1,6 @@
 package dev.mcpecommander.mobultion.entities.endermen.entities;
 
+import dev.mcpecommander.mobultion.entities.endermen.EndermenConfig;
 import dev.mcpecommander.mobultion.entities.endermen.entityGoals.EndermanFindStaringPlayerGoal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -22,6 +23,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import javax.annotation.Nonnull;
 import java.util.Objects;
 
 /* McpeCommander created on 26/06/2021 inside the package - dev.mcpecommander.mobultion.entities.endermen.entities */
@@ -69,9 +71,10 @@ public class MagmaEndermanEntity extends MobultionEndermanEntity{
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, 40.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.3F).add(Attributes.ATTACK_DAMAGE, 7.0D)
-                .add(Attributes.FOLLOW_RANGE, 64.0D);
+        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, EndermenConfig.MAGMA_HEALTH.get())
+                .add(Attributes.MOVEMENT_SPEED, EndermenConfig.MAGMA_SPEED.get())
+                .add(Attributes.ATTACK_DAMAGE, EndermenConfig.MAGMA_DAMAGE.get())
+                .add(Attributes.FOLLOW_RANGE, EndermenConfig.MAGMA_RADIUS.get());
     }
 
     /**
@@ -108,10 +111,10 @@ public class MagmaEndermanEntity extends MobultionEndermanEntity{
      * @param target The entity that this enderman hit.
      * @return true if the attack was successful which is in turn determined from hurt method.
      */
-    public boolean doHurtTarget(Entity target) {
+    public boolean doHurtTarget(@Nonnull Entity target) {
         if (super.doHurtTarget(target)) {
             if (target instanceof LivingEntity) {
-                target.setSecondsOnFire(5 * (int) this.level.getCurrentDifficultyAt(this.blockPosition()).getSpecialMultiplier() + 1);
+                target.setSecondsOnFire(EndermenConfig.MAGMA_FIRE.get());
             }
             return true;
         }

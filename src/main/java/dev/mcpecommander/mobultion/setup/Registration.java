@@ -15,6 +15,8 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.SpawnEggItem;
@@ -53,6 +55,7 @@ public class Registration {
     private static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, MODID);
     private static final DeferredRegister<DataSerializerEntry> DATA_SERIALIZER = DeferredRegister.
             create(ForgeRegistries.DATA_SERIALIZERS, MODID);
+    private static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, MODID);
 
     public static void init() {
 
@@ -64,6 +67,7 @@ public class Registration {
         EFFECTS.register(FMLJavaModLoadingContext.get().getModEventBus());
         SOUNDS.register(FMLJavaModLoadingContext.get().getModEventBus());
         DATA_SERIALIZER.register(FMLJavaModLoadingContext.get().getModEventBus());
+        ATTRIBUTES.register(FMLJavaModLoadingContext.get().getModEventBus());
 
     }
 
@@ -411,6 +415,9 @@ public class Registration {
             new SoundEvent(new ResourceLocation(MODID, "split")));
     public static final RegistryObject<SoundEvent> SLASH_SOUND = SOUNDS.register("slash", () ->
             new SoundEvent(new ResourceLocation(MODID, "slash")));
+
+    public static final RegistryObject<Attribute> RANGED_DAMAGE = ATTRIBUTES.register("ranged_damage", () ->
+            new RangedAttribute("mobultion.rangedDamage", 5d, 1d, 1024d));
 
 
 }

@@ -23,7 +23,6 @@ public class MiniLightningEntity extends Entity {
 
     public MiniLightningEntity(EntityType<?> entityType, World world) {
         super(entityType, world);
-        this.noCulling = true;
 
     }
 

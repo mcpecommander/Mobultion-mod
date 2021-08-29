@@ -1,5 +1,6 @@
 package dev.mcpecommander.mobultion.entities.skeletons.entities;
 
+import dev.mcpecommander.mobultion.setup.Registration;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -66,7 +67,10 @@ public class MagmaSkeletonEntity extends MobultionSkeletonEntity implements IRan
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D);
+        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, 24)
+                .add(Attributes.MOVEMENT_SPEED, 0.4D)
+                .add(Attributes.FOLLOW_RANGE, 16)
+                .add(Registration.RANGED_DAMAGE.get(), 1.5D);
     }
 
     /**
@@ -126,8 +130,7 @@ public class MagmaSkeletonEntity extends MobultionSkeletonEntity implements IRan
         double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
         //1.6 is the vector scaling factor which in turn translates into speed.
         //The last parameter is the error scale. 0 = exact shot.
-        arrow.shoot(d0, d1 + d3 * 0.2d, d2, 1.6F,
-                12 - this.level.getCurrentDifficultyAt(blockPosition()).getSpecialMultiplier() * 12);
+        arrow.shoot(d0, d1 + d3 * 0.2d, d2, 1.6F, 3);
         this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.level.addFreshEntity(arrow);
     }

@@ -1,5 +1,6 @@
 package dev.mcpecommander.mobultion.entities.endermen.entities;
 
+import dev.mcpecommander.mobultion.entities.endermen.EndermenConfig;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -144,7 +145,7 @@ public class GlassShotEntity extends DamagingProjectileEntity implements IAnimat
             Entity entity = rayTraceResult.getEntity();
             if(this.getOwner() == null || !this.getOwner().isAlive()) return;
             entity.hurt(DamageSource.thrown(this, this.getOwner()),
-                    this.getOwner() instanceof PlayerEntity ? 5f :
+                    this.getOwner() instanceof PlayerEntity ? new Float(EndermenConfig.SHOT_DAMAGE.get()) :
                             (float) ((LivingEntity) this.getOwner()).getAttributeValue(Attributes.ATTACK_DAMAGE));
         }
     }

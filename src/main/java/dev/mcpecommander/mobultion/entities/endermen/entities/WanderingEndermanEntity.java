@@ -1,5 +1,6 @@
 package dev.mcpecommander.mobultion.entities.endermen.entities;
 
+import dev.mcpecommander.mobultion.entities.endermen.EndermenConfig;
 import dev.mcpecommander.mobultion.entities.endermen.entityGoals.EndermanFindStaringPlayerGoal;
 import dev.mcpecommander.mobultion.entities.endermen.entityGoals.WanderingEndermanLightningAttackGoal;
 import dev.mcpecommander.mobultion.setup.Registration;
@@ -89,8 +90,10 @@ public class WanderingEndermanEntity extends MobultionEndermanEntity {
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, 30.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.3F).add(Attributes.FOLLOW_RANGE, 64.0D);
+        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, EndermenConfig.WANDERING_HEALTH.get())
+                .add(Attributes.ATTACK_DAMAGE, EndermenConfig.WANDERING_DAMAGE.get())
+                .add(Attributes.MOVEMENT_SPEED, EndermenConfig.WANDERING_SPEED.get())
+                .add(Attributes.FOLLOW_RANGE, EndermenConfig.WANDERING_RADIUS.get());
     }
 
     /**

@@ -65,7 +65,10 @@ public class CorruptedSkeletonEntity extends MobultionSkeletonEntity {
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.ATTACK_DAMAGE, 2D);
+        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, 35)
+                .add(Attributes.MOVEMENT_SPEED, 0.4D)
+                .add(Attributes.FOLLOW_RANGE, 20)
+                .add(Attributes.ATTACK_DAMAGE, 6D);
     }
 
     /**

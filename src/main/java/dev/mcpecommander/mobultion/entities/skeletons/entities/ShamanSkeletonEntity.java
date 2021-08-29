@@ -9,9 +9,7 @@ import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.world.DifficultyInstance;
@@ -76,7 +74,9 @@ public class ShamanSkeletonEntity extends MobultionSkeletonEntity implements IRa
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D);
+        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, 18)
+                .add(Attributes.MOVEMENT_SPEED, 0.3D)
+                .add(Attributes.FOLLOW_RANGE, 64);
     }
 
     /**
@@ -94,7 +94,6 @@ public class ShamanSkeletonEntity extends MobultionSkeletonEntity implements IRa
                                            @Nonnull SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityData,
                                            @Nullable CompoundNBT NBTTag) {
         this.setItemInHand(Hand.MAIN_HAND, new ItemStack(Registration.HEALINGSTAFF.get()));
-        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Items.OBSIDIAN));
         return super.finalizeSpawn(serverWorld, difficulty, spawnReason, livingEntityData, NBTTag);
     }
 

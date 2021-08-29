@@ -1,9 +1,16 @@
 package dev.mcpecommander.mobultion.entities.skeletons.entities;
 
+import dev.mcpecommander.mobultion.setup.Registration;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.monster.MonsterEntity;
+import net.minecraft.entity.passive.BatEntity;
+import net.minecraft.entity.passive.SheepEntity;
+import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -12,6 +19,8 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+
+import javax.annotation.Nonnull;
 
 /* McpeCommander created on 20/07/2021 inside the package - dev.mcpecommander.mobultion.entities.skeletons.entities */
 public class VampireSkeletonEntity extends MobultionSkeletonEntity{
@@ -26,12 +35,66 @@ public class VampireSkeletonEntity extends MobultionSkeletonEntity{
     }
 
     /**
+     * Register the AI/goals here. Server side only.
+     */
+    @Override
+    protected void registerGoals() {
+        this.goalSelector.addGoal(0, new RestrictSunGoal(this));
+        this.goalSelector.addGoal(1, new FleeSunGoal(this, 1.0D));
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2D, false));
+        this.goalSelector.addGoal(3, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
+        this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, 8.0F));
+        this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, WolfEntity.class, true));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, SheepEntity.class, true));
+    }
+
+    /**
+     * Updates everything that needs to be updated when an entity is hurt but the health and damage calculations happen
+     * in the actuallyHurt method instead.
+     * @param damageSource: The damage source of the attack.
+     * @param amount: How much raw damage the attack did.
+     * @return true if the entity should be hurt.
+     */
+    @Override
+    public boolean hurt(@Nonnull DamageSource damageSource, float amount) {
+        boolean flag = super.hurt(damageSource, amount);
+        if(flag && damageSource.getEntity() instanceof PlayerEntity && !damageSource.isCreativePlayer()
+                && random.nextFloat() < 0.1f){
+            BatEntity bat = new BatEntity(EntityType.BAT, this.level){
+                //Make the bat remorph into a vampire skeleton after some random time
+                @Override
+                public void tick() {
+                    super.tick();
+                    if(this.tickCount > 150 + random.nextInt(100) && !this.level.isClientSide){
+                        VampireSkeletonEntity skeletonEntity = new VampireSkeletonEntity(Registration.VAMPIRESKELETON.get(),
+                                this.level);
+                        skeletonEntity.setHealth(skeletonEntity.getMaxHealth() - random.nextInt(5));
+                        skeletonEntity.setPos(this.getX(), this.getY(), this.getZ());
+                        this.level.addFreshEntity(skeletonEntity);
+                        this.remove();
+                    }
+                }
+            };
+            bat.setPos(this.getX(), this.getY(), this.getZ());
+            this.level.addFreshEntity(bat);
+            this.remove();
+        }
+        return flag;
+    }
+
+    /**
      * Gets called in the main class to init the attributes.
      * @see dev.mcpecommander.mobultion.Mobultion
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D);
+        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, 30)
+                .add(Attributes.MOVEMENT_SPEED, 0.5D)
+                .add(Attributes.FOLLOW_RANGE, 26)
+                .add(Attributes.ATTACK_DAMAGE, 6D);
     }
 
     /**

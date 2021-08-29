@@ -1,5 +1,6 @@
 package dev.mcpecommander.mobultion.entities.endermen.entities;
 
+import dev.mcpecommander.mobultion.entities.endermen.EndermenConfig;
 import dev.mcpecommander.mobultion.entities.endermen.entityGoals.EndermanFindStaringPlayerGoal;
 import dev.mcpecommander.mobultion.particles.SnowFlakeParticle;
 import net.minecraft.entity.Entity;
@@ -75,9 +76,10 @@ public class IceEndermanEntity extends MobultionEndermanEntity{
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, 40.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.3F).add(Attributes.ATTACK_DAMAGE, 7.0D)
-                .add(Attributes.FOLLOW_RANGE, 64.0D);
+        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, EndermenConfig.ICE_HEALTH.get())
+                .add(Attributes.MOVEMENT_SPEED, EndermenConfig.ICE_SPEED.get())
+                .add(Attributes.ATTACK_DAMAGE, EndermenConfig.ICE_DAMAGE.get())
+                .add(Attributes.FOLLOW_RANGE, EndermenConfig.ICE_RADIUS.get());
     }
 
     /**

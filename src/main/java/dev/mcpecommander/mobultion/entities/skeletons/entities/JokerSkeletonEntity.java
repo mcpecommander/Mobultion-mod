@@ -86,7 +86,10 @@ public class JokerSkeletonEntity extends MobultionSkeletonEntity implements IRan
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D);
+        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, 12)
+                .add(Attributes.MOVEMENT_SPEED, 0.6D)
+                .add(Attributes.FOLLOW_RANGE, 50)
+                .add(Registration.RANGED_DAMAGE.get(), 0.5D);
     }
 
     /**
@@ -135,8 +138,7 @@ public class JokerSkeletonEntity extends MobultionSkeletonEntity implements IRan
         double horizontalDistance = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
         //1.1 is the vector scaling factor which in turn translates into speed.
         //The last parameter is the error scale. 0 = exact shot.
-        arrow.shoot(motionX, motionY + horizontalDistance * 0.3d, motionZ, 1.1F,
-                18 - this.level.getCurrentDifficultyAt(blockPosition()).getSpecialMultiplier() * 12);
+        arrow.shoot(motionX, motionY + horizontalDistance * 0.3d, motionZ, 1.1F, 6);
         this.playSound(Registration.HARP_SOUND.get(), 1.0F, this.getRandom().nextFloat() * 0.4F + 0.8F);
         this.level.addFreshEntity(arrow);
     }

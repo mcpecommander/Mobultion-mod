@@ -95,6 +95,7 @@ public class WanderingEndermanLightningAttackGoal extends Goal {
                 if(this.cooldown-- == 0){
                     LightningBoltEntity bolt = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, world);
                     bolt.setPos(lightningTarget.getX(), lightningTarget.getY(), lightningTarget.getZ());
+                    bolt.setDamage((float) this.owner.getAttributeValue(Attributes.ATTACK_DAMAGE));
                     this.world.addFreshEntity(bolt);
                     this.cooldown = maxCooldown;
                     lightningTarget = null;

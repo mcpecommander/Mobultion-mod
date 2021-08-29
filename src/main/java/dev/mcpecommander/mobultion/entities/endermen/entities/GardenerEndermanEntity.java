@@ -1,6 +1,7 @@
 package dev.mcpecommander.mobultion.entities.endermen.entities;
 
 import dev.mcpecommander.mobultion.Mobultion;
+import dev.mcpecommander.mobultion.entities.endermen.EndermenConfig;
 import dev.mcpecommander.mobultion.entities.endermen.entityGoals.GardenerEndermanGardenGoal;
 import dev.mcpecommander.mobultion.entities.endermen.entityGoals.GardenerEndermanPosFinderGoal;
 import dev.mcpecommander.mobultion.particles.FlowerParticle;
@@ -116,7 +117,7 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
         });
         this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, 8.0F));
         this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
-        this.targetSelector.addGoal(0, new GardenerEndermanPosFinderGoal(this, 150, 32));
+        this.targetSelector.addGoal(0, new GardenerEndermanPosFinderGoal(this, 150, EndermenConfig.GARDENER_RADIUS.get()));
 
     }
 
@@ -271,8 +272,8 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, 20.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.4F);
+        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, EndermenConfig.GARDENER_HEALTH.get())
+                .add(Attributes.MOVEMENT_SPEED, EndermenConfig.GARDENER_SPEED.get());
     }
 
     /**
