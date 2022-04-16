@@ -22,7 +22,7 @@ import static dev.mcpecommander.mobultion.Mobultion.MODID;
 /* McpeCommander created on 21/08/2021 inside the package - dev.mcpecommander.mobultion.entities.endermen.layers */
 public class WanderingEndermanHoldingLayer extends GeoLayerRenderer<WanderingEndermanEntity> {
 
-    private static final ResourceLocation SKELETON_MODEL = new ResourceLocation(MODID, "geo/skeletons/baseskeleton.json");
+    private static final ResourceLocation WANDERING_MODEL = new ResourceLocation(MODID, "geo/endermen/wanderingenderman.json");
 
     private ItemStack mainHand;
 
@@ -34,7 +34,7 @@ public class WanderingEndermanHoldingLayer extends GeoLayerRenderer<WanderingEnd
     public void render(PoseStack matrix, MultiBufferSource renderBuffer, int packedLight, WanderingEndermanEntity entity,
                        float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         this.mainHand = entity.getItemBySlot(EquipmentSlot.MAINHAND);
-        GeoModel model = this.getEntityModel().getModel(SKELETON_MODEL);
+        GeoModel model = this.getEntityModel().getModel(WANDERING_MODEL);
         for (GeoBone group : model.topLevelBones) {
             renderRecursively(entity, group, matrix, renderBuffer, packedLight, GeoEntityRenderer.getPackedOverlay(entity, 0));
         }

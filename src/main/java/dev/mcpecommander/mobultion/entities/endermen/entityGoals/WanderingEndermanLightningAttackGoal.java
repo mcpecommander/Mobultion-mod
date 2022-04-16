@@ -101,7 +101,7 @@ public class WanderingEndermanLightningAttackGoal extends Goal {
                     lightningTarget = null;
                     this.owner.setCasting(false);
                 }
-                if(this.cooldown == 36) this.owner.setCasting(true);
+                if(this.cooldown == 25) this.owner.setCasting(true);
             }
         }else if(distance < 200d){
             this.owner.getNavigation().stop();
