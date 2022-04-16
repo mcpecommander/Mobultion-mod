@@ -4,19 +4,16 @@ import dev.mcpecommander.mobultion.items.renderers.HaloRenderer;
 import dev.mcpecommander.mobultion.setup.ModSetup;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.IItemRenderProperties;
 import org.jetbrains.annotations.NotNull;
-import software.bernie.example.client.renderer.item.JackInTheBoxRenderer;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
-
-import net.minecraft.world.item.Item.Properties;
 
 import java.util.function.Consumer;
 
@@ -44,8 +41,7 @@ public class HaloItem extends Item implements IAnimatable {
 
     @Override
     public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
-        if(entity instanceof Wolf){
-            Wolf wolf = (Wolf) entity;
+        if(entity instanceof Wolf wolf){
             if(wolf.isTame() && wolf.getOwnerUUID() != null && wolf.getOwnerUUID().equals(player.getUUID()) &&
                 wolf.getItemBySlot(EquipmentSlot.HEAD).isEmpty()){
                 if(!player.level.isClientSide) {

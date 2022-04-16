@@ -49,8 +49,7 @@ public class CommonEvents {
     @SubscribeEvent
     public static void onJumpEvent(LivingEvent.LivingJumpEvent event){
         Level level = event.getEntityLiving().level;
-        if(event.getEntityLiving() instanceof Player){
-            Player player = (Player) event.getEntityLiving();
+        if(event.getEntityLiving() instanceof Player player){
             ItemStack head = player.getItemBySlot(EquipmentSlot.HEAD);
             if(!head.isEmpty() && head.getItem() == Registration.JOKERHAT.get()){
                 if(!level.isClientSide){
@@ -67,8 +66,7 @@ public class CommonEvents {
 
     @SubscribeEvent
     public static void onEntityDeath(LivingDeathEvent event){
-        if(event.getEntityLiving() instanceof Wolf && !event.getSource().isBypassInvul()){
-            Wolf wolf = (Wolf) event.getEntityLiving();
+        if(event.getEntityLiving() instanceof Wolf wolf && !event.getSource().isBypassInvul()){
             if(wolf.getItemBySlot(EquipmentSlot.HEAD).getItem() == Registration.HALO.get()){
                 event.setCanceled(true);
                 wolf.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
