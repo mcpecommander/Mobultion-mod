@@ -80,7 +80,7 @@ public class ShamanSkeletonEntity extends MobultionSkeletonEntity implements Ran
      */
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 18)
-                .add(Attributes.MOVEMENT_SPEED, 0.3D)
+                .add(Attributes.MOVEMENT_SPEED, 0.28D)
                 .add(Attributes.FOLLOW_RANGE, 64);
     }
 

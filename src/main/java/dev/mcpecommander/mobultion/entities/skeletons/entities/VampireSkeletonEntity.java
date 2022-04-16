@@ -94,7 +94,7 @@ public class VampireSkeletonEntity extends MobultionSkeletonEntity{
      */
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 30)
-                .add(Attributes.MOVEMENT_SPEED, 0.5D)
+                .add(Attributes.MOVEMENT_SPEED, 0.25D)
                 .add(Attributes.FOLLOW_RANGE, 26)
                 .add(Attributes.ATTACK_DAMAGE, 6D);
     }

@@ -88,7 +88,7 @@ public class JokerSkeletonEntity extends MobultionSkeletonEntity implements Rang
      */
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 12)
-                .add(Attributes.MOVEMENT_SPEED, 0.6D)
+                .add(Attributes.MOVEMENT_SPEED, 0.3D)
                 .add(Attributes.FOLLOW_RANGE, 50)
                 .add(Registration.RANGED_DAMAGE.get(), 0.5D);
     }

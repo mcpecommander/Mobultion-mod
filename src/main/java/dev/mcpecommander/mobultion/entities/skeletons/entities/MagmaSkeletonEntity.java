@@ -69,7 +69,7 @@ public class MagmaSkeletonEntity extends MobultionSkeletonEntity implements Rang
      */
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 24)
-                .add(Attributes.MOVEMENT_SPEED, 0.4D)
+                .add(Attributes.MOVEMENT_SPEED, 0.25D)
                 .add(Attributes.FOLLOW_RANGE, 16)
                 .add(Registration.RANGED_DAMAGE.get(), 1.5D);
     }
