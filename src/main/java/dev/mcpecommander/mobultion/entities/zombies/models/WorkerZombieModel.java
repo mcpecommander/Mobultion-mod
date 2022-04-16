@@ -63,9 +63,9 @@ public class WorkerZombieModel extends AnimatedGeoModel<WorkerZombieEntity> {
         head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
         head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
 
-        AnimationController controller = entity.getFactory().getOrCreateAnimationData(entity.getId())
+        AnimationController controller = entity.getFactory().getOrCreateAnimationData(uniqueID)
                 .getAnimationControllers().get("controller");
-        AnimationController movement = entity.getFactory().getOrCreateAnimationData(entity.getId())
+        AnimationController movement = entity.getFactory().getOrCreateAnimationData(uniqueID)
                 .getAnimationControllers().get("movement");
         if((controller.getCurrentAnimation() == null || controller.getAnimationState() == AnimationState.Stopped)
                 && (movement.getCurrentAnimation() == null || movement.getAnimationState() == AnimationState.Stopped)){

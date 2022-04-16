@@ -57,9 +57,9 @@ public class HungryZombieModel extends AnimatedGeoModel<HungryZombieEntity> {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
         if(entity.isDeadOrDying()) return;
 
-        AnimationController controller = entity.getFactory().getOrCreateAnimationData(entity.getId())
+        AnimationController controller = entity.getFactory().getOrCreateAnimationData(uniqueID)
                 .getAnimationControllers().get("controller");
-        AnimationController movement = entity.getFactory().getOrCreateAnimationData(entity.getId())
+        AnimationController movement = entity.getFactory().getOrCreateAnimationData(uniqueID)
                 .getAnimationControllers().get("movement");
 
         if(!(movement.getCurrentAnimation() != null && movement.getCurrentAnimation().animationName.equals("eat") &&

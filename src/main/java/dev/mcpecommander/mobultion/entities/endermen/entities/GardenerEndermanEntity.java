@@ -34,6 +34,7 @@ import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.FlowerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -82,8 +83,8 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new AvoidEntityGoal<Player>(this, Player.class,
-                8.0F, 1.3D, 1.5D){
+        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, Player.class,
+                8.0F, 1.3D, 1.5D) {
             @Override
             public void start() {
                 super.start();
@@ -96,8 +97,8 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
                 setDerp(false);
             }
         });
-        this.goalSelector.addGoal(1, new AvoidEntityGoal<MobultionEndermanEntity>(this, MobultionEndermanEntity.class,
-                8.0F, 1.3D, 1.5D, livingEntity -> !(livingEntity instanceof GardenerEndermanEntity)){
+        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, MobultionEndermanEntity.class,
+                8.0F, 1.3D, 1.5D, livingEntity -> !(livingEntity instanceof GardenerEndermanEntity)) {
             @Override
             public void start() {
                 super.start();
@@ -125,19 +126,12 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
 
     }
 
-    /**
-     * The check for entity spawning naturally.
-     * @param type The entity type that is being spawned.
-     * @param world The world in which the entity is being spawned.
-     * @param reason The spawning reason which can an egg, generation, mob spawner and so on.
-     * @param pos The position where the entity is being spawned.
-     * @param random The random instance.
-     * @return true if the entity can be spawned on this location and world.
-     */
-    public static boolean checkMobSpawnRules(EntityType<? extends Mob> type, LevelAccessor world,
-                                             MobSpawnType reason, BlockPos pos, Random random) {
-        return world.getBlockState(pos.below()).isFaceSturdy(world, pos.below(), Direction.UP) && random.nextInt(10) == 0;
+    @Override
+    public boolean checkSpawnRules(@NotNull LevelAccessor world, @NotNull MobSpawnType spawningMethod) {
+
+        return true;
     }
+    //world.getBlockState(pos.below()).isFaceSturdy(world, pos.below(), Direction.UP) && random.nextInt(10) == 0;
 
     /**
      * Register/define the default value of the data parameter here.

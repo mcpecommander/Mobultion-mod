@@ -64,7 +64,7 @@ public class JokerSkeletonModel extends AnimatedGeoModel<JokerSkeletonEntity> {
         head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
 
         //The natural flailing arms to make the entity feel alive when idling.
-        AnimationController controller = entity.getFactory().getOrCreateAnimationData(entity.getId())
+        AnimationController controller = entity.getFactory().getOrCreateAnimationData(uniqueID)
                 .getAnimationControllers().get("controller");
         if(controller.getCurrentAnimation() == null || controller.getAnimationState() == AnimationState.Stopped){
             IBone rightArm = this.getAnimationProcessor().getBone("RightArm");

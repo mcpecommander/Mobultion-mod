@@ -1,24 +1,15 @@
 package dev.mcpecommander.mobultion.entities.endermen.renderers;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.mcpecommander.mobultion.Mobultion;
 import dev.mcpecommander.mobultion.entities.endermen.entities.GardenerEndermanEntity;
 import dev.mcpecommander.mobultion.entities.endermen.layers.EndermanEyesLayer;
 import dev.mcpecommander.mobultion.entities.endermen.layers.GardenerEndermanItemLayer;
 import dev.mcpecommander.mobultion.entities.endermen.models.GardenerEndermanModel;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.culling.Frustum;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
-import com.mojang.math.Quaternion;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 
 /* McpeCommander created on 26/06/2021 inside the package - dev.mcpecommander.mobultion.entities.endermen.renderers */
 public class GardenerEndermanRenderer extends GeoEntityRenderer<GardenerEndermanEntity> {
@@ -58,33 +49,33 @@ public class GardenerEndermanRenderer extends GeoEntityRenderer<GardenerEnderman
 
     //An awful way to debug navigation paths, but it works.
     //DO NOT REPEAT OR COPY AT ALL COSTS.
-    @Override
-    public void renderLate(GardenerEndermanEntity animatable, PoseStack stackIn, float ticks,
-                           MultiBufferSource renderTypeBuffer, VertexConsumer bufferIn, int packedLightIn,
-                           int packedOverlayIn, float red, float green, float blue, float partialTicks) {
-        //Render debug path
-        if(!Mobultion.DEBUG) return;
-        List<BlockPos> positions = animatable.getDebugRoad();
-        stackIn.pushPose();
-        VertexConsumer builder = renderTypeBuffer.getBuffer(RenderType.LINES);
-
-        //Rotate the lines to be in the right direction
-        stackIn.mulPose(new Quaternion(0,
-                180 + Mth.rotLerp(partialTicks, animatable.yBodyRotO, animatable.yBodyRot),
-                0, true));
-        //Translate to the entity position
-        stackIn.translate(-animatable.position().x, -animatable.position().y, -animatable.position().z);
-        for(int i = 0; i < positions.size() -1; i++){
-            builder.vertex(stackIn.last().pose(), positions.get(i).getX() + 0.5f,
-                    positions.get(i).getY() + 0.1f,
-                    positions.get(i).getZ() + 0.5f).
-                    color(255, 255, 255, 255).endVertex();
-            builder.vertex(stackIn.last().pose(), positions.get(i+1).getX() + 0.5f,
-                    positions.get(i+1).getY() + 0.1f,
-                    positions.get(i+1).getZ() + 0.5f).
-                    color(255, 255, 255, 255).endVertex();
-        }
-        stackIn.popPose();
-        renderTypeBuffer.getBuffer(RenderType.entityCutout(getTextureLocation(animatable)));
-    }
+//    @Override
+//    public void renderLate(GardenerEndermanEntity animatable, PoseStack stackIn, float ticks,
+//                           MultiBufferSource renderTypeBuffer, VertexConsumer bufferIn, int packedLightIn,
+//                           int packedOverlayIn, float red, float green, float blue, float partialTicks) {
+//        //Render debug path
+//        if(!Mobultion.DEBUG) return;
+//        List<BlockPos> positions = animatable.getDebugRoad();
+//        stackIn.pushPose();
+//        VertexConsumer builder = renderTypeBuffer.getBuffer(RenderType.LINES);
+//
+//        //Rotate the lines to be in the right direction
+//        stackIn.mulPose(new Quaternion(0,
+//                180 + Mth.rotLerp(partialTicks, animatable.yBodyRotO, animatable.yBodyRot),
+//                0, true));
+//        //Translate to the entity position
+//        stackIn.translate(-animatable.position().x, -animatable.position().y, -animatable.position().z);
+//        for(int i = 0; i < positions.size() -1; i++){
+//            builder.vertex(stackIn.last().pose(), positions.get(i).getX() + 0.5f,
+//                    positions.get(i).getY() + 0.1f,
+//                    positions.get(i).getZ() + 0.5f).
+//                    color(255, 255, 255, 255).endVertex();
+//            builder.vertex(stackIn.last().pose(), positions.get(i+1).getX() + 0.5f,
+//                    positions.get(i+1).getY() + 0.1f,
+//                    positions.get(i+1).getZ() + 0.5f).
+//                    color(255, 255, 255, 255).endVertex();
+//        }
+//        stackIn.popPose();
+//        renderTypeBuffer.getBuffer(RenderType.entityCutout(getTextureLocation(animatable)));
+//    }
 }
