@@ -1,19 +1,23 @@
 package dev.mcpecommander.mobultion.items;
 
 import dev.mcpecommander.mobultion.setup.ModSetup;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.EnderPearlEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.*;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ThrownEnderpearl;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 
 import javax.annotation.Nonnull;
 
@@ -26,19 +30,19 @@ public class EnderBlazeItem extends Item {
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity player, @Nonnull Hand hand) {
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, @Nonnull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENDER_PEARL_THROW,
-                SoundCategory.NEUTRAL, 0.5F, 0.4F / (random.nextFloat() * 0.4F + 0.8F));
+                SoundSource.NEUTRAL, 0.5F, 0.4F / (world.random.nextFloat() * 0.4F + 0.8F));
         player.getCooldowns().addCooldown(this, 10);
         if (!world.isClientSide) {
-            EnderPearlEntity pearlEntity = new EnderPearlEntity(world, player){
+            ThrownEnderpearl pearlEntity = new ThrownEnderpearl(world, player){
                 @Override
-                protected void onHit(@Nonnull RayTraceResult result) {
-                    if(result.getType() == RayTraceResult.Type.ENTITY){
-                        if(((EntityRayTraceResult)result).getEntity() instanceof LivingEntity){
-                            ((EntityRayTraceResult)result).getEntity().setSecondsOnFire(10);
-                            this.remove();
+                protected void onHit(@Nonnull HitResult result) {
+                    if(result.getType() == HitResult.Type.ENTITY){
+                        if(((EntityHitResult)result).getEntity() instanceof LivingEntity){
+                            ((EntityHitResult)result).getEntity().setSecondsOnFire(10);
+                            this.discard();
                             return;
                         }
                     }
@@ -50,8 +54,7 @@ public class EnderBlazeItem extends Item {
                     }
 
                     if (!this.level.isClientSide && this.isAlive()) {
-                        if (entity instanceof ServerPlayerEntity) {
-                            ServerPlayerEntity serverplayerentity = (ServerPlayerEntity)entity;
+                        if (entity instanceof ServerPlayer serverplayerentity) {
                             if (serverplayerentity.connection.getConnection().isConnected()
                                     && serverplayerentity.level == this.level && !serverplayerentity.isSleeping()) {
                                 if (entity.isPassenger()) {
@@ -68,21 +71,21 @@ public class EnderBlazeItem extends Item {
                             entity.fallDistance = 0.0F;
                         }
 
-                        this.remove();
+                        this.discard();
                     }
 
                 }
             };
             pearlEntity.setItem(itemstack);
-            pearlEntity.shootFromRotation(player, player.xRot, player.yRot, random.nextInt(4) - 2, 2F, 3F);
+            pearlEntity.shootFromRotation(player, player.getXRot(), player.getYRot(), world.random.nextInt(4) - 2, 2F, 3F);
             world.addFreshEntity(pearlEntity);
         }
 
         player.awardStat(Stats.ITEM_USED.get(this));
-        if (!player.abilities.instabuild) {
+        if (!player.getAbilities().instabuild) {
             itemstack.shrink(1);
         }
 
-        return ActionResult.sidedSuccess(itemstack, world.isClientSide());
+        return InteractionResultHolder.sidedSuccess(itemstack, world.isClientSide());
     }
 }

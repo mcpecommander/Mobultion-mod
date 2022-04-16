@@ -1,14 +1,14 @@
 package dev.mcpecommander.mobultion.entities.skeletons.entities;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -19,9 +19,9 @@ public class MiniLightningEntity extends Entity {
     /**
      * A data parameter to sync the healed entity id to the client to get the effect centered around it.
      */
-    private static final DataParameter<Integer> DATA_TARGET = EntityDataManager.defineId(MiniLightningEntity.class, DataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DATA_TARGET = SynchedEntityData.defineId(MiniLightningEntity.class, EntityDataSerializers.INT);
 
-    public MiniLightningEntity(EntityType<?> entityType, World world) {
+    public MiniLightningEntity(EntityType<?> entityType, Level world) {
         super(entityType, world);
 
     }
@@ -39,7 +39,7 @@ public class MiniLightningEntity extends Entity {
         }
         //Lives for only 20 ticks.
         if(tickCount > 20){
-            remove();
+            discard();
         }
     }
 
@@ -73,7 +73,7 @@ public class MiniLightningEntity extends Entity {
      * @param NBTTag The NBT tag that holds the saved data.
      */
     @Override
-    protected void readAdditionalSaveData(@Nonnull CompoundNBT NBTTag) {
+    protected void readAdditionalSaveData(@Nonnull CompoundTag NBTTag) {
 
     }
 
@@ -82,7 +82,7 @@ public class MiniLightningEntity extends Entity {
      * @param NBTTag The tag where the additional data will be written to.
      */
     @Override
-    protected void addAdditionalSaveData(@Nonnull CompoundNBT NBTTag) {
+    protected void addAdditionalSaveData(@Nonnull CompoundTag NBTTag) {
 
     }
 
@@ -93,7 +93,7 @@ public class MiniLightningEntity extends Entity {
      */
     @Nonnull
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

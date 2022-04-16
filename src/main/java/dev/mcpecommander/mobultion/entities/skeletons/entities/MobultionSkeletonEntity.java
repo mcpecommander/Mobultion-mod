@@ -1,26 +1,26 @@
 package dev.mcpecommander.mobultion.entities.skeletons.entities;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import software.bernie.geckolib3.core.IAnimatable;
 
 import javax.annotation.Nonnull;
 
 /* McpeCommander created on 17/07/2021 inside the package - dev.mcpecommander.mobultion.entities.skeletons.entities */
-public abstract class MobultionSkeletonEntity extends MonsterEntity implements IAnimatable {
+public abstract class MobultionSkeletonEntity extends Monster implements IAnimatable {
 
-    protected MobultionSkeletonEntity(EntityType<? extends MobultionSkeletonEntity> type, World world) {
+    protected MobultionSkeletonEntity(EntityType<? extends MobultionSkeletonEntity> type, Level world) {
         super(type, world);
     }
 
@@ -31,13 +31,13 @@ public abstract class MobultionSkeletonEntity extends MonsterEntity implements I
     public void aiStep() {
         boolean isUnderDirectSun = this.isSunBurnTick();
         if (isUnderDirectSun) {
-            ItemStack itemstack = this.getItemBySlot(EquipmentSlotType.HEAD);
+            ItemStack itemstack = this.getItemBySlot(EquipmentSlot.HEAD);
             if (!itemstack.isEmpty()) {
                 if (itemstack.isDamageableItem()) {
                     itemstack.setDamageValue(itemstack.getDamageValue() + this.random.nextInt(2));
                     if (itemstack.getDamageValue() >= itemstack.getMaxDamage()) {
-                        this.broadcastBreakEvent(EquipmentSlotType.HEAD);
-                        this.setItemSlot(EquipmentSlotType.HEAD, ItemStack.EMPTY);
+                        this.broadcastBreakEvent(EquipmentSlot.HEAD);
+                        this.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
                     }
                 }
                 isUnderDirectSun = false;
@@ -64,7 +64,7 @@ public abstract class MobultionSkeletonEntity extends MonsterEntity implements I
     protected void tickDeath() {
         ++this.deathTime;
         if (this.deathTime == getMaxDeathTime()) {
-            remove();
+            discard();
         }
     }
 
@@ -83,8 +83,8 @@ public abstract class MobultionSkeletonEntity extends MonsterEntity implements I
      * @param power The power of the bow usually given in the attack goal or AI.
      * @return An arrow entity instance
      */
-    protected AbstractArrowEntity getArrow(ItemStack bow, float power) {
-        return ProjectileHelper.getMobArrow(this, bow, power);
+    protected AbstractArrow getArrow(ItemStack bow, float power) {
+        return ProjectileUtil.getMobArrow(this, bow, power);
     }
 
     /**
@@ -127,13 +127,13 @@ public abstract class MobultionSkeletonEntity extends MonsterEntity implements I
     }
 
     /**
-     * The type of creature this mob is. Check {@link CreatureAttribute}
+     * The type of creature this mob is. Check {@link MobType}
      * @return An enum of the creature type
      */
     @Nonnull
     @Override
-    public CreatureAttribute getMobType() {
-        return CreatureAttribute.UNDEAD;
+    public MobType getMobType() {
+        return MobType.UNDEAD;
     }
 
 }

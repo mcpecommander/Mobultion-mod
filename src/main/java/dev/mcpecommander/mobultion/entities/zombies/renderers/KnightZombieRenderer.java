@@ -1,14 +1,14 @@
 package dev.mcpecommander.mobultion.entities.zombies.renderers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.mcpecommander.mobultion.entities.zombies.entities.KnightZombieEntity;
 import dev.mcpecommander.mobultion.entities.zombies.layers.IronArmourLayer;
 import dev.mcpecommander.mobultion.entities.zombies.layers.ItemHoldingLayer;
 import dev.mcpecommander.mobultion.entities.zombies.models.KnightZombieModel;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 /* McpeCommander created on 26/07/2021 inside the package - dev.mcpecommander.mobultion.entities.zombies.renderers */
 public class KnightZombieRenderer extends GeoEntityRenderer<KnightZombieEntity> {
 
-    public KnightZombieRenderer(EntityRendererManager renderManager) {
+    public KnightZombieRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new KnightZombieModel());
         this.shadowRadius = 0.5f;
         this.addLayer(new IronArmourLayer(this));
@@ -31,8 +31,8 @@ public class KnightZombieRenderer extends GeoEntityRenderer<KnightZombieEntity> 
     }
 
     @Override
-    public void render(GeoModel model, KnightZombieEntity animatable, float partialTicks, RenderType type, MatrixStack matrixStackIn,
-                @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn,
+    public void render(GeoModel model, KnightZombieEntity animatable, float partialTicks, RenderType type, PoseStack matrixStackIn,
+                @Nullable MultiBufferSource renderTypeBuffer, @Nullable VertexConsumer vertexBuilder, int packedLightIn,
                 int packedOverlayIn, float red, float green, float blue, float alpha) {
         renderEarly(animatable, matrixStackIn, partialTicks, renderTypeBuffer, vertexBuilder, packedLightIn,
                 packedOverlayIn, red, green, blue, alpha);

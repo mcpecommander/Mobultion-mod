@@ -4,26 +4,29 @@ import dev.mcpecommander.mobultion.entities.endermen.EndermenConfig;
 import dev.mcpecommander.mobultion.entities.endermen.entityGoals.EndermanFindStaringPlayerGoal;
 import dev.mcpecommander.mobultion.entities.endermen.entityGoals.GlassEndermanShotsAttackGoal;
 import dev.mcpecommander.mobultion.particles.PortalParticle;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.monster.CreeperEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.ResetUniversalAngerTargetGoal;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -31,10 +34,10 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.core.util.Color;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.awt.*;
 import java.util.Objects;
 
 /* McpeCommander created on 02/07/2021 inside the package - dev.mcpecommander.mobultion.entities.endermen.entities */
@@ -47,16 +50,16 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
     /**
      * The color data parameter to sync the color to the client side.
      */
-    private static final DataParameter<Integer> DATA_COLOR = EntityDataManager.defineId(GlassEndermanEntity.class, DataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DATA_COLOR = SynchedEntityData.defineId(GlassEndermanEntity.class, EntityDataSerializers.INT);
     /**
      * The amount of balls data parameter to sync the amount of balls to the client side.
      */
-    private static final DataParameter<Byte> DATA_BALLS = EntityDataManager.defineId(GlassEndermanEntity.class, DataSerializers.BYTE);
+    private static final EntityDataAccessor<Byte> DATA_BALLS = SynchedEntityData.defineId(GlassEndermanEntity.class, EntityDataSerializers.BYTE);
 
-    public GlassEndermanEntity(EntityType<? extends MobultionEndermanEntity> type, World world) {
+    public GlassEndermanEntity(EntityType<? extends MobultionEndermanEntity> type, Level world) {
         super(type, world);
         //Set the priority to negative to signal that this entity avoids water at all costs.
-        this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
+        this.setPathfindingMalus(BlockPathTypes.WATER, -1.0F);
     }
 
     /**
@@ -65,7 +68,7 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(DATA_COLOR, Color.WHITE.getRGB());
+        this.entityData.define(DATA_COLOR, Color.ofRGB(255,255,255).getColor());
         this.entityData.define(DATA_BALLS, (byte)3);
     }
 
@@ -80,10 +83,10 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
      */
     @Nullable
     @Override
-    public ILivingEntityData finalizeSpawn(@Nonnull IServerWorld serverWorld, @Nonnull DifficultyInstance difficulty,
-                                           @Nonnull SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityData,
-                                           @Nullable CompoundNBT NBTTag) {
-        setColor(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat()));
+    public SpawnGroupData finalizeSpawn(@Nonnull ServerLevelAccessor serverWorld, @Nonnull DifficultyInstance difficulty,
+                                           @Nonnull MobSpawnType spawnReason, @Nullable SpawnGroupData livingEntityData,
+                                           @Nullable CompoundTag NBTTag) {
+        setColor(Color.ofRGB(random.nextFloat(), random.nextFloat(), random.nextFloat()));
         return super.finalizeSpawn(serverWorld, difficulty, spawnReason, livingEntityData, NBTTag);
     }
 
@@ -101,22 +104,22 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
      */
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new GlassEndermanShotsAttackGoal(this));
-        this.goalSelector.addGoal(2, new AvoidEntityGoal<PlayerEntity>(this, PlayerEntity.class,
-                8.0F, 0.6D, 1.2D, livingEntity -> getBalls() <= 1){
+        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, Player.class,
+                8.0F, 0.6D, 1.2D, livingEntity -> getBalls() <= 1) {
             @Override
             public void start() {
                 super.start();
                 //Sets the target to null to make sure the speed modifier is off.
-                if(getTarget() != null) setTarget(null);
+                if (getTarget() != null) setTarget(null);
             }
         });
-        this.goalSelector.addGoal(3, new WaterAvoidingRandomWalkingGoal(this, 1.0D, 0.0F));
-        this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
+        this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new EndermanFindStaringPlayerGoal(this, livingEntity -> getBalls() > 0));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, CreeperEntity.class, 10, true, false,
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Creeper.class, 10, true, false,
                 livingEntity -> getBalls() > 0));
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this){
             @Override
@@ -125,7 +128,7 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
                 return super.canUse() && getBalls() > 0;
             }
         });
-        this.targetSelector.addGoal(4, new ResetAngerGoal<>(this, false));
+        this.targetSelector.addGoal(4, new ResetUniversalAngerTargetGoal<>(this, false));
     }
 
     /**
@@ -133,7 +136,7 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
      * @param color the color that this enderman is rendered by.
      */
     public void setColor(Color color){
-        this.entityData.set(DATA_COLOR, color.getRGB());
+        this.entityData.set(DATA_COLOR, color.getColor());
     }
 
     /**
@@ -141,7 +144,7 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
      * @return Color of this enderman.
      */
     public Color getColor(){
-        return new Color(this.entityData.get(DATA_COLOR));
+        return Color.ofOpaque(this.entityData.get(DATA_COLOR));
     }
 
     /**
@@ -164,7 +167,7 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
      * Decreases the amount of balls by one clamped between 0 and 3.
      */
     public void useBall(){
-        this.entityData.set(DATA_BALLS, (byte) MathHelper.clamp(getBalls() - 1, 0, 3));
+        this.entityData.set(DATA_BALLS, (byte) Mth.clamp(getBalls() - 1, 0, 3));
     }
 
     /**
@@ -172,10 +175,10 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
      * @param NBTTag The NBT tag that holds the saved data.
      */
     @Override
-    public void readAdditionalSaveData(@Nonnull CompoundNBT NBTTag) {
+    public void readAdditionalSaveData(@Nonnull CompoundTag NBTTag) {
         super.readAdditionalSaveData(NBTTag);
-        if(NBTTag.contains("mobultion:color", Constants.NBT.TAG_INT))this.setColor(new Color(NBTTag.getInt("mobultion:color")));
-        if(NBTTag.contains("mobultion:balls", Constants.NBT.TAG_BYTE))this.setBalls(NBTTag.getByte("mobultion:balls"));
+        if(NBTTag.contains("mobultion:color", Tag.TAG_INT))this.setColor(Color.ofOpaque(NBTTag.getInt("mobultion:color")));
+        if(NBTTag.contains("mobultion:balls", Tag.TAG_BYTE))this.setBalls(NBTTag.getByte("mobultion:balls"));
     }
 
     /**
@@ -183,9 +186,9 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
      * @param NBTTag The tag where the additional data will be written to.
      */
     @Override
-    public void addAdditionalSaveData(@Nonnull CompoundNBT NBTTag) {
+    public void addAdditionalSaveData(@Nonnull CompoundTag NBTTag) {
         super.addAdditionalSaveData(NBTTag);
-        NBTTag.putInt("mobultion:color", getColor().getRGB());
+        NBTTag.putInt("mobultion:color", getColor().getColor());
         NBTTag.putByte("mobultion:balls", getBalls());
     }
 
@@ -194,8 +197,8 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
      * @see dev.mcpecommander.mobultion.Mobultion
      * @return AttributeModifierMap.MutableAttribute
      */
-    public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, EndermenConfig.GLASS_HEALTH.get())
+    public static AttributeSupplier.Builder createAttributes() {
+        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, EndermenConfig.GLASS_HEALTH.get())
                 .add(Attributes.MOVEMENT_SPEED, EndermenConfig.GLASS_SPEED.get())
                 .add(Attributes.ATTACK_DAMAGE, EndermenConfig.GLASS_DAMAGE.get())
                 .add(Attributes.FOLLOW_RANGE, EndermenConfig.GLASS_RADIUS.get());
@@ -208,7 +211,7 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
     protected void customServerAiStep() {
         super.customServerAiStep();
         if(this.tickCount % 150 == 0){
-            this.setBalls((byte) MathHelper.clamp(getBalls() + 1, 0, 3));
+            this.setBalls((byte) Mth.clamp(getBalls() + 1, 0, 3));
         }
     }
 
@@ -231,7 +234,7 @@ public class GlassEndermanEntity extends MobultionEndermanEntity{
                 double finalX = this.getX() + Math.cos(random.nextFloat() * Math.PI * 2) * 2;
                 double finalY = this.getY(0.5f) + (random.nextFloat() * 2 - 1);
                 double finalZ = this.getZ() + Math.sin(random.nextFloat() * Math.PI * 2) * 2;
-                Vector3d speed = new Vector3d(finalX - this.getX(),
+                Vec3 speed = new Vec3(finalX - this.getX(),
                         finalY - getY(2f/3f),
                         finalZ - this.getZ()).normalize();
                 this.level.addParticle(new PortalParticle.PortalParticleData((this.getColor().getRed()/255f),

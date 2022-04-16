@@ -1,18 +1,19 @@
 package dev.mcpecommander.mobultion.entities.spiders.entities;
 
-import net.minecraft.block.AbstractFireBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseFireBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -34,7 +35,7 @@ public class MagmaSpiderEntity extends MobultionSpiderEntity{
      */
     private int flameParticleTick = 0;
 
-    public MagmaSpiderEntity(EntityType<MagmaSpiderEntity> mob, World world) {
+    public MagmaSpiderEntity(EntityType<MagmaSpiderEntity> mob, Level world) {
         super(mob, world);
     }
 
@@ -52,8 +53,8 @@ public class MagmaSpiderEntity extends MobultionSpiderEntity{
      * @see dev.mcpecommander.mobultion.Mobultion
      * @return AttributeModifierMap.MutableAttribute
      */
-    public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 26.0D).add(Attributes.MOVEMENT_SPEED, 0.3D);
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 26.0D).add(Attributes.MOVEMENT_SPEED, 0.3D);
     }
 
     /**
@@ -87,9 +88,9 @@ public class MagmaSpiderEntity extends MobultionSpiderEntity{
     }
 
     @Override
-    public float rotate(Rotation p_184229_1_) {
+    public float rotate(@NotNull Rotation rotation) {
         if(isDeadOrDying()) return 0;
-        return super.rotate(p_184229_1_);
+        return super.rotate(rotation);
     }
 
     /**
@@ -143,7 +144,7 @@ public class MagmaSpiderEntity extends MobultionSpiderEntity{
     }
 
     /**
-     * Is the entity immune to fire like {@link net.minecraft.entity.monster.BlazeEntity}
+     * Is the entity immune to fire like {@link net.minecraft.world.entity.monster.Blaze}
      * @return true if the entity is immune to fire
      */
     @Override
@@ -156,75 +157,74 @@ public class MagmaSpiderEntity extends MobultionSpiderEntity{
      * @param event: gives access to the locator name, particle name and script data.
      */
     private <T extends IAnimatable> void particleListener(ParticleKeyFrameEvent<T> event) {
-        switch (event.locator){
-            case "all":
-                flameParticleTick = 2;
-                return;
-            case "leg1":
-                Vector3d leg1 = new Vector3d( (-16.4f/16f), (2.9d/16d), (9.3f/16f));
+        switch (event.locator) {
+            case "all" -> flameParticleTick = 2;
+            case "leg1" -> {
+                Vec3 leg1 = new Vec3((-16.4f / 16f), (2.9d / 16d), (9.3f / 16f));
                 leg1 = leg1.yRot((float) Math.toRadians(-this.yBodyRot)).add(this.position());
                 this.level.addParticle(ParticleTypes.FLAME,
                         leg1.x, leg1.y, leg1.z, 0, 0, 0);
                 this.level.addParticle(ParticleTypes.LARGE_SMOKE,
                         leg1.x, leg1.y + 0.1f, leg1.z, 0, 0.1f, 0);
-                return;
-            case "leg2":
-                Vector3d leg2 = new Vector3d( (-16.5f/16f), (2.9d/16d), (4f/16f));
+            }
+            case "leg2" -> {
+                Vec3 leg2 = new Vec3((-16.5f / 16f), (2.9d / 16d), (4f / 16f));
                 leg2 = leg2.yRot((float) Math.toRadians(-this.yBodyRot)).add(this.position());
                 this.level.addParticle(ParticleTypes.FLAME,
                         leg2.x, leg2.y, leg2.z, 0, 0, 0);
                 this.level.addParticle(ParticleTypes.LARGE_SMOKE,
                         leg2.x, leg2.y + 0.1f, leg2.z, 0, 0.1f, 0);
-                return;
-            case "leg3":
-                Vector3d leg3 = new Vector3d( (-16.5f/16f), (2.9d/16d), (-3.3f/16f));
+            }
+            case "leg3" -> {
+                Vec3 leg3 = new Vec3((-16.5f / 16f), (2.9d / 16d), (-3.3f / 16f));
                 leg3 = leg3.yRot((float) Math.toRadians(-this.yBodyRot)).add(this.position());
                 this.level.addParticle(ParticleTypes.FLAME,
                         leg3.x, leg3.y, leg3.z, 0, 0, 0);
                 this.level.addParticle(ParticleTypes.LARGE_SMOKE,
                         leg3.x, leg3.y + 0.1f, leg3.z, 0, 0.1f, 0);
-                return;
-            case "leg4":
-                Vector3d leg4 = new Vector3d( (-16.4f/16f), (2.9d/16d), (-9.3f/16f));
+            }
+            case "leg4" -> {
+                Vec3 leg4 = new Vec3((-16.4f / 16f), (2.9d / 16d), (-9.3f / 16f));
                 leg4 = leg4.yRot((float) Math.toRadians(-this.yBodyRot)).add(this.position());
                 this.level.addParticle(ParticleTypes.FLAME,
                         leg4.x, leg4.y, leg4.z, 0, 0, 0);
                 this.level.addParticle(ParticleTypes.LARGE_SMOKE,
                         leg4.x, leg4.y + 0.1f, leg4.z, 0, 0.1f, 0);
-                return;
-            case "leg5":
-                Vector3d leg5 = new Vector3d( (16.4f/16f), (2.9d/16d), (9.3f/16f));
+            }
+            case "leg5" -> {
+                Vec3 leg5 = new Vec3((16.4f / 16f), (2.9d / 16d), (9.3f / 16f));
                 leg5 = leg5.yRot((float) Math.toRadians(-this.yBodyRot)).add(this.position());
                 this.level.addParticle(ParticleTypes.FLAME,
                         leg5.x, leg5.y, leg5.z, 0, 0, 0);
                 this.level.addParticle(ParticleTypes.LARGE_SMOKE,
                         leg5.x, leg5.y + 0.1f, leg5.z, 0, 0.1f, 0);
-                return;
-            case "leg6":
-                Vector3d leg6 = new Vector3d( (16.5f/16f), (2.9d/16d), (4f/16f));
+            }
+            case "leg6" -> {
+                Vec3 leg6 = new Vec3((16.5f / 16f), (2.9d / 16d), (4f / 16f));
                 leg6 = leg6.yRot((float) Math.toRadians(-this.yBodyRot)).add(this.position());
                 this.level.addParticle(ParticleTypes.FLAME,
                         leg6.x, leg6.y, leg6.z, 0, 0, 0);
                 this.level.addParticle(ParticleTypes.LARGE_SMOKE,
                         leg6.x, leg6.y + 0.1f, leg6.z, 0, 0.1f, 0);
-                return;
-            case "leg7":
-                Vector3d leg7 = new Vector3d( (16.5f/16f), (2.9d/16d), (-3.3f/16f));
+            }
+            case "leg7" -> {
+                Vec3 leg7 = new Vec3((16.5f / 16f), (2.9d / 16d), (-3.3f / 16f));
                 leg7 = leg7.yRot((float) Math.toRadians(-this.yBodyRot)).add(this.position());
                 this.level.addParticle(ParticleTypes.FLAME,
                         leg7.x, leg7.y, leg7.z, 0, 0, 0);
                 this.level.addParticle(ParticleTypes.LARGE_SMOKE,
                         leg7.x, leg7.y + 0.1f, leg7.z, 0, 0.1f, 0);
-                return;
-            case "leg8":
-                Vector3d leg8 = new Vector3d( (16.4f/16f), (2.9d/16d), (-9.3f/16f));
+            }
+            case "leg8" -> {
+                Vec3 leg8 = new Vec3((16.4f / 16f), (2.9d / 16d), (-9.3f / 16f));
                 leg8 = leg8.yRot((float) Math.toRadians(-this.yBodyRot)).add(this.position());
                 this.level.addParticle(ParticleTypes.FLAME,
                         leg8.x, leg8.y, leg8.z, 0, 0, 0);
                 this.level.addParticle(ParticleTypes.LARGE_SMOKE,
                         leg8.x, leg8.y + 0.1f, leg8.z, 0, 0.1f, 0);
-                return;
-            default:
+            }
+            default -> {
+            }
         }
     }
 
@@ -239,11 +239,11 @@ public class MagmaSpiderEntity extends MobultionSpiderEntity{
     @Override
     protected void tickDeath() {
         if(this.deathTime++ == getMaxDeathTick()){
-            this.remove();
+            this.discard();
             BlockPos pos = new BlockPos(this.getX(), this.getY(), this.getZ());
-            if(AbstractFireBlock.canBePlacedAt(this.level, pos, Direction.UP)){
-                BlockState state = AbstractFireBlock.getState(this.level, pos);
-                this.level.setBlock(pos, state, Constants.BlockFlags.DEFAULT_AND_RERENDER);
+            if(BaseFireBlock.canBePlacedAt(this.level, pos, Direction.UP)){
+                BlockState state = BaseFireBlock.getState(this.level, pos);
+                this.level.setBlock(pos, state, Block.UPDATE_ALL_IMMEDIATE);
             }
         }
     }

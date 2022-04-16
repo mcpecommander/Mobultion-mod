@@ -1,14 +1,15 @@
 package dev.mcpecommander.mobultion.entities.zombies.layers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import dev.mcpecommander.mobultion.entities.zombies.entities.WorkerZombieEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
@@ -29,19 +30,19 @@ public class HardHatLayer extends GeoLayerRenderer<WorkerZombieEntity> {
     }
 
     @Override
-    public void render(MatrixStack matrix, IRenderTypeBuffer renderBuffer, int packedLight, WorkerZombieEntity entity,
+    public void render(PoseStack matrix, MultiBufferSource renderBuffer, int packedLight, WorkerZombieEntity entity,
                        float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        this.helmet = entity.getItemBySlot(EquipmentSlotType.HEAD);
+        this.helmet = entity.getItemBySlot(EquipmentSlot.HEAD);
         GeoModel model = this.getEntityModel().getModel(ZOMBIE_MODEL);
         //I only have one top level bone which is Main or All.
-        renderRecursively(model.topLevelBones.get(0), matrix, renderBuffer, packedLight, GeoEntityRenderer.getPackedOverlay(entity, 0));
+        renderRecursively(entity, model.topLevelBones.get(0), matrix, renderBuffer, packedLight, GeoEntityRenderer.getPackedOverlay(entity, 0));
     }
 
     //Copied from IGeoRenderer but removed the actual rendering of cubes and only render items to prevent overriding
     //the original renderRecursively and affecting other layers that might need different RenderTypes.
     //While it might seem like a niche use, it is quite important for example with entities that have both glowing parts
     //and hold/equip items/armour like endermen.
-    private void renderRecursively(GeoBone bone, MatrixStack stack, IRenderTypeBuffer renderBuffer, int packedLightIn, int packedOverlayIn) {
+    private void renderRecursively(Entity entity, GeoBone bone, PoseStack stack, MultiBufferSource renderBuffer, int packedLightIn, int packedOverlayIn) {
 
         stack.pushPose();
         RenderUtils.translate(bone, stack);
@@ -60,8 +61,8 @@ public class HardHatLayer extends GeoLayerRenderer<WorkerZombieEntity> {
             //Sets the scaling of the item.
             stack.scale(0.65f, 0.65f, 0.65f);
             // Change mainHand to predefined Itemstack and TransformType to what transform you would want to use
-            Minecraft.getInstance().getItemRenderer().renderStatic(helmet, ItemCameraTransforms.TransformType.HEAD,
-                    packedLightIn, packedOverlayIn, stack, renderBuffer);
+            Minecraft.getInstance().getItemRenderer().renderStatic(helmet, ItemTransforms.TransformType.HEAD,
+                    packedLightIn, packedOverlayIn, stack, renderBuffer, entity.getId());
             stack.popPose();
             //Stops unnecessary further recursive method calling. Only works if I am rendering one thing per layer.
             stack.popPose();
@@ -70,7 +71,7 @@ public class HardHatLayer extends GeoLayerRenderer<WorkerZombieEntity> {
 
         if (!bone.isHidden) {
             for (GeoBone childBone : bone.childBones) {
-                renderRecursively(childBone, stack, renderBuffer, packedLightIn, packedOverlayIn);
+                renderRecursively(entity, childBone, stack, renderBuffer, packedLightIn, packedOverlayIn);
             }
         }
 

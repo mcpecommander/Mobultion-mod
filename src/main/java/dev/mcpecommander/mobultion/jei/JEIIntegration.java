@@ -4,10 +4,10 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.registration.IRecipeRegistration;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
@@ -29,8 +29,8 @@ public class JEIIntegration implements IModPlugin {
     public void registerRecipes(@Nonnull IRecipeRegistration registration) {
         for(Item item : ForgeRegistries.ITEMS.getValues()){
             if(!Objects.requireNonNull(item.getRegistryName()).getNamespace().equals(MODID)) continue;
-            registration.addIngredientInfo(new ItemStack(item), VanillaTypes.ITEM,
-                    new TranslationTextComponent(item.getRegistryName().toString().concat(".info")));
+            registration.addIngredientInfo(new ItemStack(item), VanillaTypes.ITEM_STACK,
+                    new TranslatableComponent(item.getRegistryName().toString().concat(".info")));
         }
     }
 

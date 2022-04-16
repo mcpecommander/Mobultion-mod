@@ -1,16 +1,16 @@
 package dev.mcpecommander.mobultion.items;
 
 import dev.mcpecommander.mobultion.setup.ModSetup;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.UseAction;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -29,23 +29,23 @@ public class FangNecklaceItem extends Item {
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> use(@Nonnull World world, PlayerEntity player, @Nonnull Hand hand) {
+    public InteractionResultHolder<ItemStack> use(@Nonnull Level world, Player player, @Nonnull InteractionHand hand) {
         if(player.getHealth() < player.getMaxHealth() - 5f){
             player.startUsingItem(hand);
-            return ActionResult.sidedSuccess(player.getItemInHand(hand), world.isClientSide);
+            return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), world.isClientSide);
         }
-        return ActionResult.pass(player.getItemInHand(hand));
+        return InteractionResultHolder.pass(player.getItemInHand(hand));
     }
 
     @Nonnull
     @Override
-    public UseAction getUseAnimation(@Nonnull ItemStack stack) {
-        return UseAction.BOW;
+    public UseAnim getUseAnimation(@Nonnull ItemStack stack) {
+        return UseAnim.BOW;
     }
 
     @Nonnull
     @Override
-    public ItemStack finishUsingItem(@Nonnull ItemStack stack, @Nonnull World world, @Nonnull LivingEntity livingEntity) {
+    public ItemStack finishUsingItem(@Nonnull ItemStack stack, @Nonnull Level world, @Nonnull LivingEntity livingEntity) {
         List<Entity> entities = livingEntity.level.getEntities(livingEntity, livingEntity.getBoundingBox().inflate(10), entity ->
             entity instanceof LivingEntity && entity.isAlive() && ((LivingEntity) entity).getHealth() > 2);
         if(!entities.isEmpty() && entities.size() > 2){

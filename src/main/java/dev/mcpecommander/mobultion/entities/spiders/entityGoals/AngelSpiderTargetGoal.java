@@ -1,11 +1,11 @@
 package dev.mcpecommander.mobultion.entities.spiders.entityGoals;
 
 import dev.mcpecommander.mobultion.entities.spiders.entities.MobultionSpiderEntity;
-import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.goal.TargetGoal;
-import net.minecraft.entity.monster.SpiderEntity;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.monster.Spider;
+import net.minecraft.world.phys.AABB;
 
 import java.util.EnumSet;
 
@@ -19,9 +19,9 @@ public class AngelSpiderTargetGoal extends TargetGoal {
     /**
      * The target entity that this spider will target to heal.
      */
-    protected MobEntity targetEntity;
+    protected Mob targetEntity;
 
-    public AngelSpiderTargetGoal(MobEntity spider) {
+    public AngelSpiderTargetGoal(Mob spider) {
         super(spider, true, false);
         this.targetChance = 10;
         this.setFlags(EnumSet.of(Flag.TARGET));
@@ -33,7 +33,7 @@ public class AngelSpiderTargetGoal extends TargetGoal {
      * @param range: x and z parameters of the box
      * @return A box that is 4 high with x and z equals to the range plus the mob bounding box.
      */
-    protected AxisAlignedBB getTargetSearchArea(double range) {
+    protected AABB getTargetSearchArea(double range) {
         return this.mob.getBoundingBox().inflate(range, 4.0D, range);
     }
 
@@ -48,11 +48,12 @@ public class AngelSpiderTargetGoal extends TargetGoal {
         } else if (this.mob.getTarget() != null) {
             return false;
         } else {
-            this.targetEntity = this.mob.level.getNearestLoadedEntity(MobultionSpiderEntity.class,
-                    EntityPredicate.DEFAULT.selector(livingEntity -> livingEntity.getHealth() < livingEntity.getMaxHealth()),
+            this.targetEntity = this.mob.level.getNearestEntity(MobultionSpiderEntity.class,
+                    TargetingConditions.DEFAULT.selector(livingEntity -> livingEntity.getHealth() < livingEntity.getMaxHealth()),
                     this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ(),
                     this.getTargetSearchArea(this.getFollowDistance()));
-            if(this.targetEntity == null) this.targetEntity = this.mob.level.getNearestLoadedEntity(SpiderEntity.class, EntityPredicate.DEFAULT, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ(),
+            if(this.targetEntity == null) this.targetEntity = this.mob.level.getNearestEntity(Spider.class, TargetingConditions.DEFAULT,
+                    this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ(),
                     this.getTargetSearchArea(this.getFollowDistance()));
             return this.targetEntity != null;
         }

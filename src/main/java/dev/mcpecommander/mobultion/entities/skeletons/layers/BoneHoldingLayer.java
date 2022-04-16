@@ -1,16 +1,17 @@
 package dev.mcpecommander.mobultion.entities.skeletons.layers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.CorruptedSkeletonEntity;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.MobultionSkeletonEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
@@ -31,13 +32,13 @@ public class BoneHoldingLayer<T extends MobultionSkeletonEntity> extends GeoLaye
     }
 
     @Override
-    public void render(MatrixStack matrix, IRenderTypeBuffer renderBuffer, int packedLight, T entity,
+    public void render(PoseStack matrix, MultiBufferSource renderBuffer, int packedLight, T entity,
                        float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if(!(entity instanceof CorruptedSkeletonEntity)) return;
-        this.mainHand = entity.getItemBySlot(EquipmentSlotType.MAINHAND);
+        this.mainHand = entity.getItemBySlot(EquipmentSlot.MAINHAND);
         GeoModel model = this.getEntityModel().getModel(SKELETON_MODEL);
         for (GeoBone group : model.topLevelBones) {
-            renderRecursively(group, matrix, renderBuffer, packedLight, OverlayTexture.pack(OverlayTexture.u(0),
+            renderRecursively(entity, group, matrix, renderBuffer, packedLight, OverlayTexture.pack(OverlayTexture.u(0),
                     OverlayTexture.v(entity.hurtTime > 0)));
         }
     }
@@ -46,7 +47,7 @@ public class BoneHoldingLayer<T extends MobultionSkeletonEntity> extends GeoLaye
     //the original renderRecursively and affecting other layers that might need different RenderTypes.
     //While it might seem like a niche use, it is quite important for example with entities that have both glowing parts
     //and hold/equip items/armour like endermen.
-    private void renderRecursively(GeoBone bone, MatrixStack stack, IRenderTypeBuffer renderBuffer, int packedLightIn, int packedOverlayIn) {
+    private void renderRecursively(Entity entity, GeoBone bone, PoseStack stack, MultiBufferSource renderBuffer, int packedLightIn, int packedOverlayIn) {
 
         stack.pushPose();
         RenderUtils.translate(bone, stack);
@@ -65,8 +66,8 @@ public class BoneHoldingLayer<T extends MobultionSkeletonEntity> extends GeoLaye
             //Sets the scaling of the item.
             stack.scale(1.5f, 1.0f, 1.5f);
             // Change mainHand to predefined Itemstack and TransformType to what transform you would want to use.
-            Minecraft.getInstance().getItemRenderer().renderStatic(mainHand, ItemCameraTransforms.TransformType.THIRD_PERSON_RIGHT_HAND,
-                    packedLightIn, packedOverlayIn, stack, renderBuffer);
+            Minecraft.getInstance().getItemRenderer().renderStatic(mainHand, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND,
+                    packedLightIn, packedOverlayIn, stack, renderBuffer, entity.getId());
             stack.popPose();
             //Stops unnecessary further recursive method calling. Only works if I am rendering one thing per layer.
             stack.popPose();
@@ -75,7 +76,7 @@ public class BoneHoldingLayer<T extends MobultionSkeletonEntity> extends GeoLaye
 
         if (!bone.isHidden) {
             for (GeoBone childBone : bone.childBones) {
-                renderRecursively(childBone, stack, renderBuffer, packedLightIn, packedOverlayIn);
+                renderRecursively(entity, childBone, stack, renderBuffer, packedLightIn, packedOverlayIn);
             }
         }
 

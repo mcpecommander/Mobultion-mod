@@ -5,23 +5,24 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.mcpecommander.mobultion.setup.ClientSetup;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleType;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Locale;
 
 /* McpeCommander created on 10/07/2021 inside the package - dev.mcpecommander.mobultion.particles */
-public class SnowFlakeParticle extends SpriteTexturedParticle {
+public class SnowFlakeParticle extends TextureSheetParticle {
 
-    protected SnowFlakeParticle(ClientWorld world, double posX, double posY, double posZ,
+    protected SnowFlakeParticle(ClientLevel world, double posX, double posY, double posZ,
                              double speedX, double speedY, double speedZ,
                              SnowFlakeParticle.SnowFlakeParticleData data) {
         super(world, posX, posY, posZ, speedX, speedY, speedZ);
@@ -56,21 +57,21 @@ public class SnowFlakeParticle extends SpriteTexturedParticle {
     }
 
     @Override
-    public IParticleRenderType getRenderType() {
-        return IParticleRenderType.PARTICLE_SHEET_OPAQUE;
+    public @NotNull ParticleRenderType getRenderType() {
+        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
-    public static class Factory implements IParticleFactory<SnowFlakeParticle.SnowFlakeParticleData> {
+    public static class Factory implements ParticleProvider<SnowFlakeParticle.SnowFlakeParticleData> {
 
-        private final IAnimatedSprite sprite;
+        private final SpriteSet sprite;
 
-        public Factory(IAnimatedSprite sprite){
+        public Factory(SpriteSet sprite){
             this.sprite = sprite;
         }
 
         @Nullable
         @Override
-        public Particle createParticle(SnowFlakeParticle.SnowFlakeParticleData data, ClientWorld world,
+        public Particle createParticle(SnowFlakeParticle.@NotNull SnowFlakeParticleData data, @NotNull ClientLevel world,
                                        double posX, double posY, double posZ,
                                        double speedX, double speedY, double speedZ) {
             SnowFlakeParticle particle = new SnowFlakeParticle(world, posX, posY, posZ, speedX, speedY, speedZ, data);
@@ -79,11 +80,11 @@ public class SnowFlakeParticle extends SpriteTexturedParticle {
         }
     }
 
-    public static class SnowFlakeParticleData implements IParticleData {
+    public static class SnowFlakeParticleData implements ParticleOptions {
 
-        public static final IParticleData.IDeserializer<SnowFlakeParticle.SnowFlakeParticleData> DESERIALIZER = new IDeserializer<SnowFlakeParticle.SnowFlakeParticleData>() {
+        public static final ParticleOptions.Deserializer<SnowFlakeParticle.SnowFlakeParticleData> DESERIALIZER = new Deserializer<>() {
             @Override
-            public SnowFlakeParticle.SnowFlakeParticleData fromCommand(ParticleType<SnowFlakeParticle.SnowFlakeParticleData> particleType, StringReader reader) throws CommandSyntaxException {
+            public SnowFlakeParticle.@NotNull SnowFlakeParticleData fromCommand(@NotNull ParticleType<SnowFlakeParticle.SnowFlakeParticleData> particleType, StringReader reader) throws CommandSyntaxException {
                 reader.expect(' ');
                 float red = (float) reader.readDouble();
                 reader.expect(' ');
@@ -96,7 +97,7 @@ public class SnowFlakeParticle extends SpriteTexturedParticle {
             }
 
             @Override
-            public SnowFlakeParticle.SnowFlakeParticleData fromNetwork(ParticleType<SnowFlakeParticle.SnowFlakeParticleData> particleType, PacketBuffer buffer) {
+            public SnowFlakeParticle.@NotNull SnowFlakeParticleData fromNetwork(@NotNull ParticleType<SnowFlakeParticle.SnowFlakeParticleData> particleType, FriendlyByteBuf buffer) {
                 return new SnowFlakeParticle.SnowFlakeParticleData(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(),
                         buffer.readFloat());
             }
@@ -118,7 +119,7 @@ public class SnowFlakeParticle extends SpriteTexturedParticle {
             this.red = red;
             this.green = green;
             this.blue = blue;
-            this.alpha = MathHelper.clamp(alpha, 0.01f, 4.0f);
+            this.alpha = Mth.clamp(alpha, 0.01f, 4.0f);
 
         }
 
@@ -144,12 +145,12 @@ public class SnowFlakeParticle extends SpriteTexturedParticle {
 
 
         @Override
-        public ParticleType<?> getType() {
+        public @NotNull ParticleType<?> getType() {
             return ClientSetup.SNOW_FLAKE_PARTICLE_TYPE.get();
         }
 
         @Override
-        public void writeToNetwork(PacketBuffer buffer) {
+        public void writeToNetwork(FriendlyByteBuf buffer) {
             buffer.writeFloat(this.red);
             buffer.writeFloat(this.green);
             buffer.writeFloat(this.blue);
@@ -157,7 +158,7 @@ public class SnowFlakeParticle extends SpriteTexturedParticle {
         }
 
         @Override
-        public String writeToString() {
+        public @NotNull String writeToString() {
             return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f", Registry.PARTICLE_TYPE.getKey(this.getType()),
                     this.red, this.green, this.blue, this.alpha);
         }

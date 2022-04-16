@@ -1,23 +1,23 @@
 package dev.mcpecommander.mobultion.entities.spiders.entities;
 
 import dev.mcpecommander.mobultion.setup.Registration;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.DamagingProjectileEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.IPacket;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ItemParticleData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
@@ -25,7 +25,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import javax.annotation.Nonnull;
 
 /* McpeCommander created on 08/08/2021 inside the package - dev.mcpecommander.mobultion.entities.spiders.entities */
-public class HypnoWaveEntity extends DamagingProjectileEntity implements IAnimatable {
+public class HypnoWaveEntity extends AbstractHurtingProjectile implements IAnimatable {
 
     /**
      * The animation factory, for more information check GeckoLib.
@@ -33,7 +33,7 @@ public class HypnoWaveEntity extends DamagingProjectileEntity implements IAnimat
     private final AnimationFactory factory = new AnimationFactory(this);
 
     //Use with caution, otherwise use the second one.
-    public HypnoWaveEntity(EntityType<HypnoWaveEntity> projectileType, World world){
+    public HypnoWaveEntity(EntityType<HypnoWaveEntity> projectileType, Level world){
         super(projectileType, world);
     }
 
@@ -50,13 +50,14 @@ public class HypnoWaveEntity extends DamagingProjectileEntity implements IAnimat
     @Override
     public void tick() {
         super.tick();
-        this.yRot = (float)(MathHelper.atan2(this.getDeltaMovement().x, this.getDeltaMovement().z) * (double)(180F / (float)Math.PI));
-        this.xRot = (float)(MathHelper.atan2(this.getDeltaMovement().y, MathHelper.sqrt(getHorizontalDistanceSqr(this.getDeltaMovement())))
-                * (double)(180F / (float)Math.PI));
-        this.xRot = lerpRotation(this.xRotO, this.xRot);
+        this.setYRot((float)(Mth.atan2(this.getDeltaMovement().x, this.getDeltaMovement().z) * (double)(180F / (float)Math.PI)));
+        this.setXRot((float) (Mth.atan2(this.getDeltaMovement().y, this.getDeltaMovement().horizontalDistance())
+                        * (double)(180F / (float)Math.PI)));
+
+        this.setXRot(lerpRotation(this.xRotO, this.getXRot()));
         //The y rotation is being calculated somewhere else and when interpolating between them, I get crazy results so
         //because the projectile doesn't change direction, the y rotation can be considered to the same every frame.
-        this.yRotO = yRot;
+        this.yRotO = getYRot();
 
     }
 
@@ -66,8 +67,8 @@ public class HypnoWaveEntity extends DamagingProjectileEntity implements IAnimat
      */
     @Nonnull
     @Override
-    protected IParticleData getTrailParticle() {
-        return new ItemParticleData(ParticleTypes.ITEM, new ItemStack(Registration.HYPNOEMITTER.get()));
+    protected ParticleOptions getTrailParticle() {
+        return new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(Registration.HYPNOEMITTER.get()));
     }
 
     /**
@@ -95,11 +96,11 @@ public class HypnoWaveEntity extends DamagingProjectileEntity implements IAnimat
      * @param rayTraceResult has information about which entity got hit.
      */
     @Override
-    protected void onHitEntity(@Nonnull EntityRayTraceResult rayTraceResult) {
+    protected void onHitEntity(@Nonnull EntityHitResult rayTraceResult) {
         Entity entity = rayTraceResult.getEntity();
         if(this.getOwner() == null || !this.getOwner().isAlive() || !(entity instanceof LivingEntity)) return;
         entity.hurt(DamageSource.thrown(this, this.getOwner()), 1);
-        ((LivingEntity) entity).addEffect(new EffectInstance(Registration.HYPNO_EFFECT.get(), 20 * 10,
+        ((LivingEntity) entity).addEffect(new MobEffectInstance(Registration.HYPNO_EFFECT.get(), 20 * 10,
                 this.level.getDifficulty() == Difficulty.HARD ? 1 : 0));
     }
 
@@ -108,9 +109,9 @@ public class HypnoWaveEntity extends DamagingProjectileEntity implements IAnimat
      * @param result The RayTraceResult which has information about what was hit.
      */
     @Override
-    protected void onHit(@Nonnull RayTraceResult result) {
+    protected void onHit(@Nonnull HitResult result) {
         super.onHit(result);
-        remove();
+        discard();
     }
 
     /**
@@ -155,7 +156,7 @@ public class HypnoWaveEntity extends DamagingProjectileEntity implements IAnimat
      */
     @Nonnull
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

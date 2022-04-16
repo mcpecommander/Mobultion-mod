@@ -1,14 +1,13 @@
 package dev.mcpecommander.mobultion.entities.spiders.layers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import dev.mcpecommander.mobultion.entities.spiders.entities.MobultionSpiderEntity;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
-import software.bernie.geckolib3.util.AnimationUtils;
 
 import static dev.mcpecommander.mobultion.Mobultion.MODID;
 
@@ -33,7 +32,7 @@ public class SpiderEyesLayer<T extends MobultionSpiderEntity> extends GeoLayerRe
     }
 
     @Override
-    public void render(MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLightIn, T entity, float limbSwing,
+    public void render(PoseStack matrixStack, MultiBufferSource buffer, int packedLightIn, T entity, float limbSwing,
                        float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         this.getRenderer().render(getEntityModel().getModel(SPIDER_MODEL), entity, partialTicks, RenderType.eyes(SPIDER_EYES),
                 matrixStack, buffer, buffer.getBuffer(RenderType.eyes(SPIDER_EYES)), packedLightIn, OverlayTexture.pack(

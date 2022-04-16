@@ -2,19 +2,24 @@ package dev.mcpecommander.mobultion.entities.skeletons.entities;
 
 import dev.mcpecommander.mobultion.entities.skeletons.entityGoals.ShamanHealGoal;
 import dev.mcpecommander.mobultion.setup.Registration;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Hand;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -27,14 +32,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /* McpeCommander created on 21/07/2021 inside the package - dev.mcpecommander.mobultion.entities.skeletons.entities */
-public class ShamanSkeletonEntity extends MobultionSkeletonEntity implements IRangedAttackMob {
+public class ShamanSkeletonEntity extends MobultionSkeletonEntity implements RangedAttackMob {
 
     /**
      * The animation factory, for more information check GeckoLib.
      */
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    public ShamanSkeletonEntity(EntityType<? extends MobultionSkeletonEntity> type, World world) {
+    public ShamanSkeletonEntity(EntityType<? extends MobultionSkeletonEntity> type, Level world) {
         super(type, world);
     }
 
@@ -45,12 +50,12 @@ public class ShamanSkeletonEntity extends MobultionSkeletonEntity implements IRa
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new RestrictSunGoal(this));
         this.goalSelector.addGoal(1, new FleeSunGoal(this, 1.0D));
-        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, WolfEntity.class, 6.0F, 1.0D, 1.2D));
-        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, PlayerEntity.class, 6.0F, 1.0D, 1.2D));
+        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, Wolf.class, 6.0F, 1.0D, 1.2D));
+        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, Player.class, 6.0F, 1.0D, 1.2D));
         this.goalSelector.addGoal(2, new ShamanHealGoal(this, 1D, 30, 25.0F));
-        this.goalSelector.addGoal(3, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        this.goalSelector.addGoal(4, new LookAtGoal(this, MobultionSkeletonEntity.class, 8.0F));
-        this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, MobultionSkeletonEntity.class, 8.0F));
+        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, MobultionSkeletonEntity.class, 10, false,
                 false, skeleton -> skeleton.getHealth() < skeleton.getMaxHealth() && !skeleton.isUsingItem()));
     }
@@ -73,8 +78,8 @@ public class ShamanSkeletonEntity extends MobultionSkeletonEntity implements IRa
      * @see dev.mcpecommander.mobultion.Mobultion
      * @return AttributeModifierMap.MutableAttribute
      */
-    public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, 18)
+    public static AttributeSupplier.Builder createAttributes() {
+        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 18)
                 .add(Attributes.MOVEMENT_SPEED, 0.3D)
                 .add(Attributes.FOLLOW_RANGE, 64);
     }
@@ -90,10 +95,10 @@ public class ShamanSkeletonEntity extends MobultionSkeletonEntity implements IRa
      */
     @Nullable
     @Override
-    public ILivingEntityData finalizeSpawn(@Nonnull IServerWorld serverWorld, @Nonnull DifficultyInstance difficulty,
-                                           @Nonnull SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityData,
-                                           @Nullable CompoundNBT NBTTag) {
-        this.setItemInHand(Hand.MAIN_HAND, new ItemStack(Registration.HEALINGSTAFF.get()));
+    public SpawnGroupData finalizeSpawn(@Nonnull ServerLevelAccessor serverWorld, @Nonnull DifficultyInstance difficulty,
+                                           @Nonnull MobSpawnType spawnReason, @Nullable SpawnGroupData livingEntityData,
+                                           @Nullable CompoundTag NBTTag) {
+        this.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Registration.HEALINGSTAFF.get()));
         return super.finalizeSpawn(serverWorld, difficulty, spawnReason, livingEntityData, NBTTag);
     }
 

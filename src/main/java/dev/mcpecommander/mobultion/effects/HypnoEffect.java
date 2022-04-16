@@ -1,20 +1,20 @@
 package dev.mcpecommander.mobultion.effects;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 
 import java.util.Random;
 
 /* McpeCommander created on 08/08/2021 inside the package - dev.mcpecommander.mobultion.effects */
-public class HypnoEffect extends Effect {
+public class HypnoEffect extends MobEffect {
     /**
      * Used to randomise the breaking effect instead of a consistent breaking event.
      */
     Random random;
 
     public HypnoEffect(){
-        super(EffectType.HARMFUL, 0x7E0476);
+        super(MobEffectCategory.HARMFUL, 0x7E0476);
         this.random = new Random();
     }
 

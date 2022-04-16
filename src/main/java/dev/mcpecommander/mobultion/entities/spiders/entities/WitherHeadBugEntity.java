@@ -1,16 +1,17 @@
 package dev.mcpecommander.mobultion.entities.spiders.entities;
 
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -20,11 +21,11 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 /* McpeCommander created on 19/06/2021 inside the package - dev.mcpecommander.mobultion.entities.spiders.entities */
-public class WitherHeadBugEntity extends MonsterEntity implements IAnimatable {
+public class WitherHeadBugEntity extends Monster implements IAnimatable {
 
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    public WitherHeadBugEntity(EntityType<? extends MonsterEntity> mob, World level) {
+    public WitherHeadBugEntity(EntityType<? extends Monster> mob, Level level) {
         super(mob, level);
     }
 
@@ -33,9 +34,9 @@ public class WitherHeadBugEntity extends MonsterEntity implements IAnimatable {
      */
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new SwimGoal(this));
-        this.goalSelector.addGoal(4, new WaterAvoidingRandomWalkingGoal(this, 0.8D));
-        this.goalSelector.addGoal(6, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(1, new FloatGoal(this));
+        this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 0.8D));
+        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
     }
 
     /**
@@ -43,8 +44,8 @@ public class WitherHeadBugEntity extends MonsterEntity implements IAnimatable {
      * @see dev.mcpecommander.mobultion.Mobultion
      * @return AttributeModifierMap.MutableAttribute
      */
-    public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 6.0D).add(Attributes.MOVEMENT_SPEED, 0.5D);
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 6.0D).add(Attributes.MOVEMENT_SPEED, 0.5D);
     }
 
     /**
@@ -89,7 +90,7 @@ public class WitherHeadBugEntity extends MonsterEntity implements IAnimatable {
      * @return a float representing the eye height.
      */
     @Override
-    protected float getStandingEyeHeight(Pose pose, EntitySize entitySize) {
+    protected float getStandingEyeHeight(@NotNull Pose pose, @NotNull EntityDimensions entitySize) {
         return 0.25F;
     }
 }

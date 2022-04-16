@@ -1,23 +1,25 @@
 package dev.mcpecommander.mobultion.entities.skeletons.entities;
 
 import dev.mcpecommander.mobultion.setup.Registration;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.Hand;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -39,7 +41,7 @@ public class CorruptedSkeletonEntity extends MobultionSkeletonEntity {
     //TODO: Make it throw the bone and melee attack with it.
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    public CorruptedSkeletonEntity(EntityType<? extends MobultionSkeletonEntity> type, World world) {
+    public CorruptedSkeletonEntity(EntityType<? extends MobultionSkeletonEntity> type, Level world) {
         super(type, world);
     }
 
@@ -50,13 +52,13 @@ public class CorruptedSkeletonEntity extends MobultionSkeletonEntity {
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new RestrictSunGoal(this));
         this.goalSelector.addGoal(1, new FleeSunGoal(this, 1.0D));
-        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, WolfEntity.class, 6.0F, 1.0D, 1.2D));
+        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, Wolf.class, 6.0F, 1.0D, 1.2D));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2D, false));
-        this.goalSelector.addGoal(3, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 
     /**
@@ -64,8 +66,8 @@ public class CorruptedSkeletonEntity extends MobultionSkeletonEntity {
      * @see dev.mcpecommander.mobultion.Mobultion
      * @return AttributeModifierMap.MutableAttribute
      */
-    public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, 35)
+    public static AttributeSupplier.Builder createAttributes() {
+        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 35)
                 .add(Attributes.MOVEMENT_SPEED, 0.4D)
                 .add(Attributes.FOLLOW_RANGE, 20)
                 .add(Attributes.ATTACK_DAMAGE, 6D);
@@ -82,10 +84,10 @@ public class CorruptedSkeletonEntity extends MobultionSkeletonEntity {
      */
     @Nullable
     @Override
-    public ILivingEntityData finalizeSpawn(@Nonnull IServerWorld serverWorld, @Nonnull DifficultyInstance difficulty,
-                                           @Nonnull SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityData,
-                                           @Nullable CompoundNBT NBTTag) {
-        this.setItemInHand(Hand.MAIN_HAND, new ItemStack(Registration.CORRUPTEDBONE.get()));
+    public SpawnGroupData finalizeSpawn(@Nonnull ServerLevelAccessor serverWorld, @Nonnull DifficultyInstance difficulty,
+                                           @Nonnull MobSpawnType spawnReason, @Nullable SpawnGroupData livingEntityData,
+                                           @Nullable CompoundTag NBTTag) {
+        this.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Registration.CORRUPTEDBONE.get()));
         return super.finalizeSpawn(serverWorld, difficulty, spawnReason, livingEntityData, NBTTag);
     }
 
@@ -97,8 +99,8 @@ public class CorruptedSkeletonEntity extends MobultionSkeletonEntity {
     @Override
     public boolean doHurtTarget(@Nonnull Entity hurtEntity) {
         boolean flag = super.doHurtTarget(hurtEntity);
-        if(flag && hurtEntity instanceof PlayerEntity){
-            ((PlayerEntity) hurtEntity).addEffect(new EffectInstance(Registration.CORRUPTION_EFFECT.get(),
+        if(flag && hurtEntity instanceof Player){
+            ((Player) hurtEntity).addEffect(new MobEffectInstance(Registration.CORRUPTION_EFFECT.get(),
                     20 * 30, Math.max(this.level.getDifficulty().getId() - 1, 0)));
         }
         return flag;

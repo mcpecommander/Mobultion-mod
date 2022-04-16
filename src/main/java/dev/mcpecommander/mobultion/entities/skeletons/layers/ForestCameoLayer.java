@@ -1,16 +1,15 @@
 package dev.mcpecommander.mobultion.entities.skeletons.layers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.ForestSkeletonEntity;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.MobultionSkeletonEntity;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.biome.BiomeColors;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
-import software.bernie.geckolib3.util.AnimationUtils;
 
 import static dev.mcpecommander.mobultion.Mobultion.MODID;
 
@@ -31,7 +30,7 @@ public class ForestCameoLayer<T extends MobultionSkeletonEntity> extends GeoLaye
     }
 
     @Override
-    public void render(MatrixStack matrix, IRenderTypeBuffer bufferIn, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void render(PoseStack matrix, MultiBufferSource bufferIn, int packedLightIn, T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if(entity instanceof ForestSkeletonEntity){
             int color = BiomeColors.getAverageFoliageColor(entity.level, entity.blockPosition());
             float r = 1.0f;

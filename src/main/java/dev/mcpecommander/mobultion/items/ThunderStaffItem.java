@@ -2,24 +2,27 @@ package dev.mcpecommander.mobultion.items;
 
 import dev.mcpecommander.mobultion.items.renderers.ThunderStaffRenderer;
 import dev.mcpecommander.mobultion.setup.ModSetup;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.LightningBoltEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileHelper;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.UseAction;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.network.PacketDistributor;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -32,6 +35,7 @@ import software.bernie.geckolib3.network.ISyncable;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
+import java.util.function.Consumer;
 
 /* McpeCommander created on 23/06/2021 inside the package - dev.mcpecommander.mobultion.items */
 public class ThunderStaffItem extends Item implements IAnimatable, ISyncable {
@@ -39,8 +43,21 @@ public class ThunderStaffItem extends Item implements IAnimatable, ISyncable {
     public AnimationFactory factory = new AnimationFactory(this);
 
     public ThunderStaffItem() {
-        super(new Properties().stacksTo(1).tab(ModSetup.ITEM_GROUP).setNoRepair().setISTER(() -> ThunderStaffRenderer::new));
+        super(new Properties().stacksTo(1).tab(ModSetup.ITEM_GROUP).setNoRepair());
         GeckoLibNetwork.registerSyncable(this);
+    }
+
+    @Override
+    public void initializeClient(@NotNull Consumer<IItemRenderProperties> consumer) {
+        super.initializeClient(consumer);
+        consumer.accept(new IItemRenderProperties() {
+            private final BlockEntityWithoutLevelRenderer renderer = new ThunderStaffRenderer();
+
+            @Override
+            public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+                return renderer;
+            }
+        });
     }
 
     @Override
@@ -50,8 +67,8 @@ public class ThunderStaffItem extends Item implements IAnimatable, ISyncable {
 
     @Nonnull
     @Override
-    public UseAction getUseAnimation(@Nonnull ItemStack itemStack) {
-        return UseAction.BOW;
+    public UseAnim getUseAnimation(@Nonnull ItemStack itemStack) {
+        return UseAnim.BOW;
     }
 
     @Override
@@ -60,9 +77,9 @@ public class ThunderStaffItem extends Item implements IAnimatable, ISyncable {
     }
 
     @Override
-    public void releaseUsing(@Nonnull ItemStack itemStack, @Nonnull World world, @Nonnull LivingEntity holder, int charge) {
+    public void releaseUsing(@Nonnull ItemStack itemStack, @Nonnull Level world, @Nonnull LivingEntity holder, int charge) {
         if(getUseDuration(itemStack) - charge < 40 && !world.isClientSide){
-            final int id = GeckoLibUtil.guaranteeIDForStack(itemStack, (ServerWorld) world);
+            final int id = GeckoLibUtil.guaranteeIDForStack(itemStack, (ServerLevel) world);
             final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF
                     .with(() -> holder);
             GeckoLibNetwork.syncAnimation(target, this, id, 1);
@@ -70,24 +87,24 @@ public class ThunderStaffItem extends Item implements IAnimatable, ISyncable {
     }
 
     @Override
-    public void onUseTick(@Nonnull World world, @Nonnull LivingEntity holder, @Nonnull ItemStack itemStack, int charge) {
-        if(getUseDuration(itemStack) - charge > 35 && holder instanceof PlayerEntity){
+    public void onUseTick(@Nonnull Level world, @Nonnull LivingEntity holder, @Nonnull ItemStack itemStack, int charge) {
+        if(getUseDuration(itemStack) - charge > 35 && holder instanceof Player){
             if(!world.isClientSide){
                 holder.stopUsingItem();
-                RayTraceResult result = getPOVHitResult(world, (PlayerEntity) holder);
-                if(result.getType() == RayTraceResult.Type.MISS) return;
-                LightningBoltEntity entity = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, world);
-                if(result instanceof BlockRayTraceResult){
-                    entity.setPos(((BlockRayTraceResult) result).getBlockPos().getX(),
-                            ((BlockRayTraceResult) result).getBlockPos().getY(),
-                            ((BlockRayTraceResult) result).getBlockPos().getZ());
+                HitResult result = getPOVHitResult(world, (Player) holder);
+                if(result.getType() == HitResult.Type.MISS) return;
+                LightningBolt entity = new LightningBolt(EntityType.LIGHTNING_BOLT, world);
+                if(result instanceof BlockHitResult){
+                    entity.setPos(((BlockHitResult) result).getBlockPos().getX(),
+                            ((BlockHitResult) result).getBlockPos().getY(),
+                            ((BlockHitResult) result).getBlockPos().getZ());
                 }else{
-                    Vector3d pos = ((EntityRayTraceResult)result).getEntity().position();
+                    Vec3 pos = ((EntityHitResult)result).getEntity().position();
                     entity.setPos(pos.x, pos.y, pos.z);
                 }
 
                 world.addFreshEntity(entity);
-                ((PlayerEntity) holder).getCooldowns().addCooldown(this, 200);
+                ((Player) holder).getCooldowns().addCooldown(this, 200);
             }
 
 
@@ -101,16 +118,16 @@ public class ThunderStaffItem extends Item implements IAnimatable, ISyncable {
      * @param player: the player that ray tracing begins from.
      * @return BlockRayTraceResult that has a non-null block pos and the type of collision.
      */
-    private static RayTraceResult getPOVHitResult(World world, PlayerEntity player) {
-        Vector3d from = player.getEyePosition(1.0F);
-        Vector3d temp = player.getViewVector(1.0f);
-        Vector3d to = from.add(temp.x * 60d, temp.y * 60d, temp.z * 60d);
-        EntityRayTraceResult entityRayTraceResult = ProjectileHelper.getEntityHitResult(world, player, from, to,
+    private static HitResult getPOVHitResult(Level world, Player player) {
+        Vec3 from = player.getEyePosition(1.0F);
+        Vec3 temp = player.getViewVector(1.0f);
+        Vec3 to = from.add(temp.x * 60d, temp.y * 60d, temp.z * 60d);
+        EntityHitResult entityRayTraceResult = ProjectileUtil.getEntityHitResult(world, player, from, to,
                 player.getBoundingBox().expandTowards(temp.x * 60, temp.y * 60, temp.z * 60)
                         .inflate( 2,  2,  2),
                 entity -> entity != null && !entity.isSpectator());
-        BlockRayTraceResult blockRayTraceResult = world.clip(new RayTraceContext(from, to, RayTraceContext.BlockMode.OUTLINE,
-                RayTraceContext.FluidMode.NONE, player));
+        BlockHitResult blockRayTraceResult = world.clip(new ClipContext(from, to, ClipContext.Block.OUTLINE,
+                ClipContext.Fluid.NONE, player));
         if(entityRayTraceResult == null) {
             return blockRayTraceResult;
         }else if (player.distanceToSqr(blockRayTraceResult.getBlockPos().getX(),
@@ -123,17 +140,17 @@ public class ThunderStaffItem extends Item implements IAnimatable, ISyncable {
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> use(@Nonnull World world, PlayerEntity player, @Nonnull Hand hand) {
+    public InteractionResultHolder<ItemStack> use(@Nonnull Level world, Player player, @Nonnull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
-        if(hand == Hand.OFF_HAND) return ActionResult.fail(itemstack);
+        if(hand == InteractionHand.OFF_HAND) return InteractionResultHolder.fail(itemstack);
         player.startUsingItem(hand);
         if(!world.isClientSide) {
-            final int id = GeckoLibUtil.guaranteeIDForStack(itemstack, (ServerWorld) world);
+            final int id = GeckoLibUtil.guaranteeIDForStack(itemstack, (ServerLevel) world);
             final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF
                     .with(() -> player);
             GeckoLibNetwork.syncAnimation(target, this, id, 0);
         }
-        return ActionResult.consume(itemstack);
+        return InteractionResultHolder.consume(itemstack);
     }
 
     private <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {

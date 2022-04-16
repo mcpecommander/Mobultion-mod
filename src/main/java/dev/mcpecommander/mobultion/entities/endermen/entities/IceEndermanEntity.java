@@ -3,19 +3,22 @@ package dev.mcpecommander.mobultion.entities.endermen.entities;
 import dev.mcpecommander.mobultion.entities.endermen.EndermenConfig;
 import dev.mcpecommander.mobultion.entities.endermen.entityGoals.EndermanFindStaringPlayerGoal;
 import dev.mcpecommander.mobultion.particles.SnowFlakeParticle;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.monster.EndermiteEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.ResetUniversalAngerTargetGoal;
+import net.minecraft.world.entity.monster.Endermite;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -35,7 +38,7 @@ public class IceEndermanEntity extends MobultionEndermanEntity{
      */
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    public IceEndermanEntity(EntityType<? extends MobultionEndermanEntity> type, World world) {
+    public IceEndermanEntity(EntityType<? extends MobultionEndermanEntity> type, Level world) {
         super(type, world);
     }
 
@@ -47,7 +50,7 @@ public class IceEndermanEntity extends MobultionEndermanEntity{
     public boolean doHurtTarget(@Nonnull Entity target) {
         if (super.doHurtTarget(target)) {
             if (target instanceof LivingEntity) {
-                ((LivingEntity)target).addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 5 * 20, 0));
+                ((LivingEntity)target).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 5 * 20, 0));
             }
             return true;
         }
@@ -59,15 +62,15 @@ public class IceEndermanEntity extends MobultionEndermanEntity{
      */
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, false));
-        this.goalSelector.addGoal(3, new RandomWalkingGoal(this, 1.0D, 80));
-        this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(3, new RandomStrollGoal(this, 1.0D, 80));
+        this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new EndermanFindStaringPlayerGoal(this, livingEntity -> true));
         this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, EndermiteEntity.class, 10, true, false, (entity) -> entity instanceof EndermiteEntity && ((EndermiteEntity)entity).isPlayerSpawned()));
-        this.targetSelector.addGoal(4, new ResetAngerGoal<>(this, false));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Endermite.class, true, false));
+        this.targetSelector.addGoal(4, new ResetUniversalAngerTargetGoal<>(this, false));
     }
 
     /**
@@ -75,8 +78,8 @@ public class IceEndermanEntity extends MobultionEndermanEntity{
      * @see dev.mcpecommander.mobultion.Mobultion
      * @return AttributeModifierMap.MutableAttribute
      */
-    public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, EndermenConfig.ICE_HEALTH.get())
+    public static AttributeSupplier.Builder createAttributes() {
+        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, EndermenConfig.ICE_HEALTH.get())
                 .add(Attributes.MOVEMENT_SPEED, EndermenConfig.ICE_SPEED.get())
                 .add(Attributes.ATTACK_DAMAGE, EndermenConfig.ICE_DAMAGE.get())
                 .add(Attributes.FOLLOW_RANGE, EndermenConfig.ICE_RADIUS.get());
@@ -102,7 +105,7 @@ public class IceEndermanEntity extends MobultionEndermanEntity{
                 double finalX = this.getX() + Math.cos(random.nextFloat() * Math.PI * 2) * 2;
                 double finalY = this.getY(1f) + (random.nextFloat() * 2 - 1);
                 double finalZ = this.getZ() + Math.sin(random.nextFloat() * Math.PI * 2) * 2;
-                Vector3d speed = new Vector3d(finalX - this.getX(),
+                Vec3 speed = new Vec3(finalX - this.getX(),
                         finalY - getY(2f/3f),
                         finalZ - this.getZ()).normalize();
                 this.level.addParticle(new SnowFlakeParticle.SnowFlakeParticleData(1f, 1f, 1f, 1f),

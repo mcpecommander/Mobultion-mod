@@ -3,15 +3,18 @@ package dev.mcpecommander.mobultion.items;
 import dev.mcpecommander.mobultion.entities.spiders.entities.HypnoWaveEntity;
 import dev.mcpecommander.mobultion.items.renderers.HypnoEmitterRenderer;
 import dev.mcpecommander.mobultion.setup.ModSetup;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.network.PacketDistributor;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -24,6 +27,7 @@ import software.bernie.geckolib3.network.ISyncable;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
+import java.util.function.Consumer;
 
 /* McpeCommander created on 08/08/2021 inside the package - dev.mcpecommander.mobultion.items */
 public class HypnoEmitterItem extends Item implements IAnimatable, ISyncable {
@@ -31,25 +35,38 @@ public class HypnoEmitterItem extends Item implements IAnimatable, ISyncable {
     private final AnimationFactory factory = new AnimationFactory(this);
 
     public HypnoEmitterItem() {
-        super(new Properties().tab(ModSetup.ITEM_GROUP).durability(150).setISTER(() -> HypnoEmitterRenderer::new));
+        super(new Properties().tab(ModSetup.ITEM_GROUP).durability(150));
         GeckoLibNetwork.registerSyncable(this);
+    }
+
+    @Override
+    public void initializeClient(@NotNull Consumer<IItemRenderProperties> consumer) {
+        super.initializeClient(consumer);
+        consumer.accept(new IItemRenderProperties() {
+            private final BlockEntityWithoutLevelRenderer renderer = new HypnoEmitterRenderer();
+
+            @Override
+            public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+                return renderer;
+            }
+        });
     }
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> use(@Nonnull World world, @Nonnull PlayerEntity player, @Nonnull Hand hand) {
+    public InteractionResultHolder<ItemStack> use(@Nonnull Level world, @Nonnull Player player, @Nonnull InteractionHand hand) {
         if(!world.isClientSide){
             HypnoWaveEntity hypnoWave = new HypnoWaveEntity(player);
-            hypnoWave.shootFromRotation(player, player.xRot, player.yRot, 0, 0.4F, 0);
+            hypnoWave.shootFromRotation(player, player.getXRot(), player.getYRot(), 0, 0.4F, 0);
             world.addFreshEntity(hypnoWave);
         }
         player.getCooldowns().addCooldown(this, 30);
 
-        if (!player.abilities.instabuild) {
+        if (!player.getAbilities().instabuild) {
             player.getItemInHand(hand).hurtAndBreak(1, player,
                     (livingEntity) -> livingEntity.broadcastBreakEvent(player.getUsedItemHand()));
         }
-        return ActionResult.sidedSuccess(player.getItemInHand(hand), world.isClientSide);
+        return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), world.isClientSide);
     }
 
     private <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event)
@@ -69,10 +86,10 @@ public class HypnoEmitterItem extends Item implements IAnimatable, ISyncable {
     }
 
     @Override
-    public void inventoryTick(ItemStack itemStack, World world, @Nonnull Entity holder, int slotNumber, boolean isSelected) {
+    public void inventoryTick(ItemStack itemStack, Level world, @Nonnull Entity holder, int slotNumber, boolean isSelected) {
         boolean started = itemStack.getOrCreateTag().getBoolean("Started");
         if(!world.isClientSide){
-            final int id = GeckoLibUtil.guaranteeIDForStack(itemStack, (ServerWorld) world);
+            final int id = GeckoLibUtil.guaranteeIDForStack(itemStack, (ServerLevel) world);
             if(isSelected && !started){
                 final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF
                         .with(() -> holder);

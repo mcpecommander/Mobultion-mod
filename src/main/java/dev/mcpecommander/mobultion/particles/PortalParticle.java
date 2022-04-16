@@ -6,30 +6,31 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.mcpecommander.mobultion.setup.ClientSetup;
 import dev.mcpecommander.mobultion.utils.MathCalculations;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleType;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Locale;
 
 /* McpeCommander created on 09/07/2021 inside the package - dev.mcpecommander.mobultion.particles */
-public class PortalParticle extends SpriteTexturedParticle {
+public class PortalParticle extends TextureSheetParticle {
 
-    IAnimatedSprite sprite;
-    Vector3d finalPos;
+    SpriteSet sprite;
+    Vec3 finalPos;
     float oSize;
 
-    protected PortalParticle(ClientWorld world, double posX, double posY, double posZ,
+    protected PortalParticle(ClientLevel world, double posX, double posY, double posZ,
                            double speedX, double speedY, double speedZ,
-                             PortalParticle.PortalParticleData data, IAnimatedSprite sprite) {
+                             PortalParticle.PortalParticleData data, SpriteSet sprite) {
         super(world, posX, posY, posZ, speedX, speedY, speedZ);
         this.x = posX;
         this.y = posY;
@@ -37,7 +38,7 @@ public class PortalParticle extends SpriteTexturedParticle {
         this.xd = speedX;
         this.yd = speedY;
         this.zd = speedZ;
-        this.finalPos = new Vector3d(data.getFinalX(), data.getFinalY(), data.getFinalZ());
+        this.finalPos = new Vec3(data.getFinalX(), data.getFinalY(), data.getFinalZ());
         this.quadSize = 0.3f * (this.random.nextFloat() * 2f);
         this.oSize = quadSize;
         this.rCol = data.getRed();
@@ -76,21 +77,21 @@ public class PortalParticle extends SpriteTexturedParticle {
     }
 
     @Override
-    public IParticleRenderType getRenderType() {
-        return alpha != 1.0f ? IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT : IParticleRenderType.PARTICLE_SHEET_LIT;
+    public @NotNull ParticleRenderType getRenderType() {
+        return alpha != 1.0f ? ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT : ParticleRenderType.PARTICLE_SHEET_LIT;
     }
 
-    public static class Factory implements IParticleFactory<PortalParticle.PortalParticleData> {
+    public static class Factory implements ParticleProvider<PortalParticle.PortalParticleData> {
 
-        private final IAnimatedSprite sprite;
+        private final SpriteSet sprite;
 
-        public Factory(IAnimatedSprite sprite){
+        public Factory(SpriteSet sprite){
             this.sprite = sprite;
         }
 
         @Nullable
         @Override
-        public Particle createParticle(PortalParticle.PortalParticleData data, ClientWorld world,
+        public Particle createParticle(PortalParticle.@NotNull PortalParticleData data, @NotNull ClientLevel world,
                                        double posX, double posY, double posZ,
                                        double speedX, double speedY, double speedZ) {
             PortalParticle particle = new PortalParticle(world, posX, posY, posZ, speedX, speedY, speedZ, data, sprite);
@@ -99,11 +100,11 @@ public class PortalParticle extends SpriteTexturedParticle {
         }
     }
 
-    public static class PortalParticleData implements IParticleData {
+    public static class PortalParticleData implements ParticleOptions {
 
-        public static final IParticleData.IDeserializer<PortalParticle.PortalParticleData> DESERIALIZER = new IDeserializer<PortalParticle.PortalParticleData>() {
+        public static final ParticleOptions.Deserializer<PortalParticle.PortalParticleData> DESERIALIZER = new Deserializer<>() {
             @Override
-            public PortalParticle.PortalParticleData fromCommand(ParticleType<PortalParticle.PortalParticleData> particleType, StringReader reader) throws CommandSyntaxException {
+            public PortalParticle.@NotNull PortalParticleData fromCommand(@NotNull ParticleType<PortalParticle.PortalParticleData> particleType, StringReader reader) throws CommandSyntaxException {
                 reader.expect(' ');
                 float red = (float) reader.readDouble();
                 reader.expect(' ');
@@ -122,7 +123,7 @@ public class PortalParticle extends SpriteTexturedParticle {
             }
 
             @Override
-            public PortalParticle.PortalParticleData fromNetwork(ParticleType<PortalParticle.PortalParticleData> particleType, PacketBuffer buffer) {
+            public PortalParticle.@NotNull PortalParticleData fromNetwork(@NotNull ParticleType<PortalParticle.PortalParticleData> particleType, FriendlyByteBuf buffer) {
                 return new PortalParticle.PortalParticleData(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(),
                         buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
             }
@@ -150,7 +151,7 @@ public class PortalParticle extends SpriteTexturedParticle {
             this.red = red;
             this.green = green;
             this.blue = blue;
-            this.alpha = MathHelper.clamp(alpha, 0.01f, 4.0f);
+            this.alpha = Mth.clamp(alpha, 0.01f, 4.0f);
             this.finalX = finalX;
             this.finalY = finalY;
             this.finalZ = finalZ;
@@ -192,12 +193,12 @@ public class PortalParticle extends SpriteTexturedParticle {
         }
 
         @Override
-        public ParticleType<?> getType() {
+        public @NotNull ParticleType<?> getType() {
             return ClientSetup.PORTAL_PARTICLE_TYPE.get();
         }
 
         @Override
-        public void writeToNetwork(PacketBuffer buffer) {
+        public void writeToNetwork(FriendlyByteBuf buffer) {
             buffer.writeFloat(this.red);
             buffer.writeFloat(this.green);
             buffer.writeFloat(this.blue);
@@ -208,7 +209,7 @@ public class PortalParticle extends SpriteTexturedParticle {
         }
 
         @Override
-        public String writeToString() {
+        public @NotNull String writeToString() {
             return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f %.2f %.2f %.2f", Registry.PARTICLE_TYPE.getKey(this.getType()),
                     this.red, this.green, this.blue, this.alpha, this.finalX, this.finalY, this.finalZ);
         }

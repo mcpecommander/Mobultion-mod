@@ -1,7 +1,7 @@
 package dev.mcpecommander.mobultion.blocks.model;
 
 import dev.mcpecommander.mobultion.blocks.tile.SpiderEggTile;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 import static dev.mcpecommander.mobultion.Mobultion.MODID;

@@ -2,7 +2,7 @@ package dev.mcpecommander.mobultion.datagen;
 
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
 import static dev.mcpecommander.mobultion.Mobultion.MODID;
 

@@ -1,18 +1,18 @@
 package dev.mcpecommander.mobultion.items;
 
 import dev.mcpecommander.mobultion.setup.ModSetup;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.item.*;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 import java.util.function.Predicate;
@@ -25,11 +25,10 @@ public class ForestBowItem extends BowItem {
     }
 
     @Override
-    public void releaseUsing(@Nonnull ItemStack bowItemStack, @Nonnull World world, @Nonnull LivingEntity shooter, int remainingUseTicks) {
-        if (shooter instanceof PlayerEntity) {
-            PlayerEntity playerentity = (PlayerEntity)shooter;
+    public void releaseUsing(@Nonnull ItemStack bowItemStack, @Nonnull Level world, @Nonnull LivingEntity shooter, int remainingUseTicks) {
+        if (shooter instanceof Player playerentity) {
             //instabuild is creative mode for fuck's sake.
-            boolean infiniteArrows = playerentity.abilities.instabuild ||
+            boolean infiniteArrows = playerentity.getAbilities().instabuild ||
                     EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, bowItemStack) > 0;
 
             ItemStack itemstack = playerentity.getProjectile(bowItemStack);
@@ -41,14 +40,14 @@ public class ForestBowItem extends BowItem {
 
                 float shootingPower = getPowerForTime(this.getUseDuration(bowItemStack) - remainingUseTicks);
                 if (shootingPower > 0.1f) {
-                    boolean flag1 = playerentity.abilities.instabuild ||
+                    boolean flag1 = playerentity.getAbilities().instabuild ||
                             (itemstack.getItem() instanceof ArrowItem &&
                                     ((ArrowItem)itemstack.getItem()).isInfinite(itemstack, bowItemStack, playerentity));
                     if (!world.isClientSide) {
                         ArrowItem arrowitem = (ArrowItem)(itemstack.getItem() instanceof ArrowItem ? itemstack.getItem() : Items.ARROW);
-                        AbstractArrowEntity arrowEntity = arrowitem.createArrow(world, itemstack, playerentity);
+                        AbstractArrow arrowEntity = arrowitem.createArrow(world, itemstack, playerentity);
                         arrowEntity = customArrow(arrowEntity);
-                        arrowEntity.shootFromRotation(playerentity, playerentity.xRot, playerentity.yRot,
+                        arrowEntity.shootFromRotation(playerentity, playerentity.getXRot(), playerentity.getYRot(),
                                 0.0F, shootingPower * 3.0F, 1.0F);
                         if (shootingPower == 1.0F) {
                             arrowEntity.setCritArrow(true);
@@ -70,21 +69,21 @@ public class ForestBowItem extends BowItem {
 
                         bowItemStack.hurtAndBreak(1, playerentity,
                                 (livingEntity) -> livingEntity.broadcastBreakEvent(playerentity.getUsedItemHand()));
-                        if (flag1 || playerentity.abilities.instabuild &&
+                        if (flag1 || playerentity.getAbilities().instabuild &&
                                 (itemstack.getItem() == Items.SPECTRAL_ARROW || itemstack.getItem() == Items.TIPPED_ARROW)) {
-                            arrowEntity.pickup = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
+                            arrowEntity.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                         }
 
                         world.addFreshEntity(arrowEntity);
                     }
 
                     world.playSound(null, playerentity.getX(), playerentity.getY(), playerentity.getZ(),
-                            SoundEvents.ARROW_SHOOT, SoundCategory.PLAYERS,
-                            1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + shootingPower * 0.5F);
-                    if (!flag1 && !playerentity.abilities.instabuild) {
+                            SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS,
+                            1.0F, 1.0F / (world.random.nextFloat() * 0.4F + 1.2F) + shootingPower * 0.5F);
+                    if (!flag1 && !playerentity.getAbilities().instabuild) {
                         itemstack.shrink(1);
                         if (itemstack.isEmpty()) {
-                            playerentity.inventory.removeItem(itemstack);
+                            playerentity.getInventory().removeItem(itemstack);
                         }
                     }
 
@@ -96,13 +95,13 @@ public class ForestBowItem extends BowItem {
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> use(@Nonnull World world, PlayerEntity shooter, @Nonnull Hand hand) {
+    public InteractionResultHolder<ItemStack> use(@Nonnull Level world, Player shooter, @Nonnull InteractionHand hand) {
         ItemStack itemstack = shooter.getItemInHand(hand);
-        if (!shooter.abilities.instabuild && shooter.getProjectile(itemstack).isEmpty()) {
-            return ActionResult.fail(itemstack);
+        if (!shooter.getAbilities().instabuild && shooter.getProjectile(itemstack).isEmpty()) {
+            return InteractionResultHolder.fail(itemstack);
         } else {
             shooter.startUsingItem(hand);
-            return ActionResult.consume(itemstack);
+            return InteractionResultHolder.consume(itemstack);
         }
     }
 
@@ -119,8 +118,8 @@ public class ForestBowItem extends BowItem {
 
     @Nonnull
     @Override
-    public UseAction getUseAnimation(@Nonnull ItemStack itemStack) {
-        return UseAction.BOW;
+    public UseAnim getUseAnimation(@Nonnull ItemStack itemStack) {
+        return UseAnim.BOW;
     }
 
     @Nonnull
@@ -131,7 +130,7 @@ public class ForestBowItem extends BowItem {
 
     @Nonnull
     @Override
-    public AbstractArrowEntity customArrow(@Nonnull AbstractArrowEntity arrow) {
+    public AbstractArrow customArrow(@Nonnull AbstractArrow arrow) {
         return arrow;
     }
 

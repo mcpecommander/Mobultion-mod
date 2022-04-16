@@ -2,19 +2,22 @@ package dev.mcpecommander.mobultion.entities.endermen.entities;
 
 import dev.mcpecommander.mobultion.entities.endermen.EndermenConfig;
 import dev.mcpecommander.mobultion.entities.endermen.entityGoals.EndermanFindStaringPlayerGoal;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.monster.EndermiteEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.ResetUniversalAngerTargetGoal;
+import net.minecraft.world.entity.monster.Endermite;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -34,10 +37,10 @@ public class MagmaEndermanEntity extends MobultionEndermanEntity{
      */
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    public MagmaEndermanEntity(EntityType<? extends MobultionEndermanEntity> type, World world) {
+    public MagmaEndermanEntity(EntityType<? extends MobultionEndermanEntity> type, Level world) {
         super(type, world);
         //Set the priority to negative to signal that this entity avoids water at all costs.
-        this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
+        this.setPathfindingMalus(BlockPathTypes.WATER, -1.0F);
     }
 
     /**
@@ -54,15 +57,15 @@ public class MagmaEndermanEntity extends MobultionEndermanEntity{
      */
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, false));
-        this.goalSelector.addGoal(3, new WaterAvoidingRandomWalkingGoal(this, 1.0D, 0.0F));
-        this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
+        this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new EndermanFindStaringPlayerGoal(this, livingEntity -> true));
         this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, EndermiteEntity.class, 10, true, false, (entity) -> entity instanceof EndermiteEntity && ((EndermiteEntity)entity).isPlayerSpawned()));
-        this.targetSelector.addGoal(4, new ResetAngerGoal<>(this, false));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Endermite.class, true, false));
+        this.targetSelector.addGoal(4, new ResetUniversalAngerTargetGoal<>(this, false));
     }
 
     /**
@@ -70,8 +73,8 @@ public class MagmaEndermanEntity extends MobultionEndermanEntity{
      * @see dev.mcpecommander.mobultion.Mobultion
      * @return AttributeModifierMap.MutableAttribute
      */
-    public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, EndermenConfig.MAGMA_HEALTH.get())
+    public static AttributeSupplier.Builder createAttributes() {
+        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, EndermenConfig.MAGMA_HEALTH.get())
                 .add(Attributes.MOVEMENT_SPEED, EndermenConfig.MAGMA_SPEED.get())
                 .add(Attributes.ATTACK_DAMAGE, EndermenConfig.MAGMA_DAMAGE.get())
                 .add(Attributes.FOLLOW_RANGE, EndermenConfig.MAGMA_RADIUS.get());
@@ -96,7 +99,7 @@ public class MagmaEndermanEntity extends MobultionEndermanEntity{
                 double finalX = this.getX() + Math.cos(random.nextFloat() * Math.PI * 2) * 2;
                 double finalY = this.getY(1f) + (random.nextFloat() * 2 - 1);
                 double finalZ = this.getZ() + Math.sin(random.nextFloat() * Math.PI * 2) * 2;
-                Vector3d speed = new Vector3d(finalX - this.getX(),
+                Vec3 speed = new Vec3(finalX - this.getX(),
                         finalY - getY(2f/3f),
                         finalZ - this.getZ()).normalize();
                 this.level.addParticle(ParticleTypes.FLAME,

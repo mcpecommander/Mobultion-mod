@@ -1,7 +1,7 @@
 package dev.mcpecommander.mobultion.entities.endermen.models;
 
 import dev.mcpecommander.mobultion.entities.endermen.entities.GlassShotEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 import static dev.mcpecommander.mobultion.Mobultion.MODID;

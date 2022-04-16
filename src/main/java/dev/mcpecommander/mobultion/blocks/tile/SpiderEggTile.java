@@ -1,7 +1,9 @@
 package dev.mcpecommander.mobultion.blocks.tile;
 
 import dev.mcpecommander.mobultion.setup.Registration;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -11,15 +13,15 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 /* McpeCommander created on 10/08/2021 inside the package - dev.mcpecommander.mobultion.blocks */
-public class SpiderEggTile extends TileEntity implements IAnimatable {
+public class SpiderEggTile extends BlockEntity implements IAnimatable {
 
     /**
      * The animation factory, for more information check GeckoLib.
      */
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    public SpiderEggTile() {
-        super(Registration.SPIDEREGG_TILE.get());
+    public SpiderEggTile(BlockPos pos, BlockState state) {
+        super(Registration.SPIDEREGG_TILE.get(), pos, state);
     }
 
     /**

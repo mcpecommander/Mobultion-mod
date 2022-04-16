@@ -1,23 +1,23 @@
 package dev.mcpecommander.mobultion.entities.zombies.entities;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.*;
-import net.minecraft.entity.monster.CreeperEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
 
 /* McpeCommander created on 27/07/2021 inside the package - dev.mcpecommander.mobultion.entities.zombies.entities */
-public abstract class MobultionZombieEntity extends MonsterEntity implements IAnimatable {
+public abstract class MobultionZombieEntity extends Monster implements IAnimatable {
 
-    protected MobultionZombieEntity(EntityType<? extends MobultionZombieEntity> type, World world) {
+    protected MobultionZombieEntity(EntityType<? extends MobultionZombieEntity> type, Level world) {
         super(type, world);
     }
 
@@ -26,13 +26,13 @@ public abstract class MobultionZombieEntity extends MonsterEntity implements IAn
         if (this.isAlive()) {
             boolean isBurningFromTheSun = this.isSunBurnTick();
             if (isBurningFromTheSun) {
-                ItemStack itemstack = this.getItemBySlot(EquipmentSlotType.HEAD);
+                ItemStack itemstack = this.getItemBySlot(EquipmentSlot.HEAD);
                 if (!itemstack.isEmpty()) {
                     if (itemstack.isDamageableItem()) {
                         itemstack.setDamageValue(itemstack.getDamageValue() + this.random.nextInt(2));
                         if (itemstack.getDamageValue() >= itemstack.getMaxDamage()) {
-                            this.broadcastBreakEvent(EquipmentSlotType.HEAD);
-                            this.setItemSlot(EquipmentSlotType.HEAD, ItemStack.EMPTY);
+                            this.broadcastBreakEvent(EquipmentSlot.HEAD);
+                            this.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
                         }
                     }
 
@@ -55,7 +55,7 @@ public abstract class MobultionZombieEntity extends MonsterEntity implements IAn
     }
 
     @Override
-    public void knockback(float strength, double ratioX, double ratioZ) {
+    public void knockback(double strength, double ratioX, double ratioZ) {
         if(isDeadOrDying()) return;
         super.knockback(strength, ratioX, ratioZ);
     }
@@ -66,7 +66,7 @@ public abstract class MobultionZombieEntity extends MonsterEntity implements IAn
     }
 
     @Override
-    protected SoundEvent getHurtSound(DamageSource damageSource) {
+    protected SoundEvent getHurtSound(@NotNull DamageSource damageSource) {
         return SoundEvents.ZOMBIE_HURT;
     }
 
@@ -76,17 +76,17 @@ public abstract class MobultionZombieEntity extends MonsterEntity implements IAn
     }
 
     @Override
-    protected void playStepSound(BlockPos position, BlockState state) {
+    protected void playStepSound(@NotNull BlockPos position, @NotNull BlockState state) {
         this.playSound(SoundEvents.ZOMBIE_STEP, 0.15F, 1.0F);
     }
 
     @Override
-    public CreatureAttribute getMobType() {
-        return CreatureAttribute.UNDEAD;
+    public @NotNull MobType getMobType() {
+        return MobType.UNDEAD;
     }
 
     @Override
-    protected float getStandingEyeHeight(Pose pose, EntitySize size) {
+    protected float getStandingEyeHeight(@NotNull Pose pose, @NotNull EntityDimensions size) {
         return 1.74F;
     }
 
@@ -96,11 +96,10 @@ public abstract class MobultionZombieEntity extends MonsterEntity implements IAn
     }
 
     @Override
-    protected void dropCustomDeathLoot(DamageSource damageSource, int lootingLevel, boolean killedByPlayer) {
+    protected void dropCustomDeathLoot(@NotNull DamageSource damageSource, int lootingLevel, boolean killedByPlayer) {
         super.dropCustomDeathLoot(damageSource, lootingLevel, killedByPlayer);
         Entity entity = damageSource.getEntity();
-        if (entity instanceof CreeperEntity) {
-            CreeperEntity creeperentity = (CreeperEntity)entity;
+        if (entity instanceof Creeper creeperentity) {
             if (creeperentity.canDropMobsSkull()) {
                 ItemStack itemstack = new ItemStack(Blocks.ZOMBIE_HEAD);
                 if (!itemstack.isEmpty()) {
@@ -126,7 +125,7 @@ public abstract class MobultionZombieEntity extends MonsterEntity implements IAn
         deathParticles();
 
         if(this.deathTime == getMaxDeathCount()){
-            this.remove();
+            this.discard();
         }
     }
 }

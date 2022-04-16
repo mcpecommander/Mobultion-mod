@@ -1,26 +1,27 @@
 package dev.mcpecommander.mobultion.entities.skeletons.entities;
 
 import dev.mcpecommander.mobultion.setup.Registration;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
-import net.minecraft.entity.passive.TurtleEntity;
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.Turtle;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -33,7 +34,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /* McpeCommander created on 21/06/2021 inside the package - dev.mcpecommander.mobultion.entities.skeletons.entities */
-public class JokerSkeletonEntity extends MobultionSkeletonEntity implements IRangedAttackMob {
+public class JokerSkeletonEntity extends MobultionSkeletonEntity implements RangedAttackMob {
 
     //TODO: Should dance when it kills something or at least whistle and laugh.
     /**
@@ -41,7 +42,7 @@ public class JokerSkeletonEntity extends MobultionSkeletonEntity implements IRan
      */
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    public JokerSkeletonEntity(EntityType<JokerSkeletonEntity> entityType, World world) {
+    public JokerSkeletonEntity(EntityType<JokerSkeletonEntity> entityType, Level world) {
         super(entityType, world);
     }
 
@@ -49,16 +50,16 @@ public class JokerSkeletonEntity extends MobultionSkeletonEntity implements IRan
      * Register the AI/goals here. Server side only.
      */
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new SwimGoal(this));
-        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, WolfEntity.class, 6.0F, 1.0D, 1.2D));
+        this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, Wolf.class, 6.0F, 1.0D, 1.2D));
         this.goalSelector.addGoal(2, new RangedBowAttackGoal<>(this, 1.0D, 10, 15.0F));
-        this.goalSelector.addGoal(3, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, TurtleEntity.class, 10, true, false, TurtleEntity.BABY_ON_LAND_SELECTOR));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Turtle.class, 10, true, false, Turtle.BABY_ON_LAND_SELECTOR));
     }
 
     /**
@@ -72,7 +73,7 @@ public class JokerSkeletonEntity extends MobultionSkeletonEntity implements IRan
 
     /**
      * Used to randomly calculate the time between each ambient sound event triggering.
-     * Check {@link MobEntity} baseTick method for the calculation bit.
+     * Check {@link net.minecraft.world.entity.Mob} baseTick method for the calculation bit.
      * @return An integer to be used for ambient sound event playing.
      */
     @Override
@@ -85,8 +86,8 @@ public class JokerSkeletonEntity extends MobultionSkeletonEntity implements IRan
      * @see dev.mcpecommander.mobultion.Mobultion
      * @return AttributeModifierMap.MutableAttribute
      */
-    public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, 12)
+    public static AttributeSupplier.Builder createAttributes() {
+        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 12)
                 .add(Attributes.MOVEMENT_SPEED, 0.6D)
                 .add(Attributes.FOLLOW_RANGE, 50)
                 .add(Registration.RANGED_DAMAGE.get(), 0.5D);
@@ -98,9 +99,9 @@ public class JokerSkeletonEntity extends MobultionSkeletonEntity implements IRan
      * @param difficulty The difficulty instance.
      */
     protected void populateDefaultEquipmentSlots(@Nonnull DifficultyInstance difficulty) {
-        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BOW));
-        this.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(Registration.HEARTARROW_ITEM.get()));
-        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Registration.JOKERHAT.get()));
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
+        this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Registration.HEARTARROW_ITEM.get()));
+        this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Registration.JOKERHAT.get()));
     }
 
     /**
@@ -113,9 +114,9 @@ public class JokerSkeletonEntity extends MobultionSkeletonEntity implements IRan
      * @return ILivingEntityData that holds information about the entity spawning.
      */
     @Nullable
-    public ILivingEntityData finalizeSpawn(@Nonnull IServerWorld serverWorld, @Nonnull DifficultyInstance difficulty,
-                                           @Nonnull SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityData,
-                                           @Nullable CompoundNBT NBTTag) {
+    public SpawnGroupData finalizeSpawn(@Nonnull ServerLevelAccessor serverWorld, @Nonnull DifficultyInstance difficulty,
+                                           @Nonnull MobSpawnType spawnReason, @Nullable SpawnGroupData livingEntityData,
+                                           @Nullable CompoundTag NBTTag) {
         this.populateDefaultEquipmentSlots(difficulty);
         this.setCanPickUpLoot(false);
         return super.finalizeSpawn(serverWorld, difficulty, spawnReason, livingEntityData, NBTTag);
@@ -127,15 +128,15 @@ public class JokerSkeletonEntity extends MobultionSkeletonEntity implements IRan
      * @param power The power of the arrow, usually defined from the goal itself for each mob.
      */
     public void performRangedAttack(LivingEntity target, float power) {
-        ItemStack itemstack = this.getProjectile(this.getItemInHand(Hand.MAIN_HAND));
-        AbstractArrowEntity arrow = this.getArrow(itemstack, power);
+        ItemStack itemstack = this.getProjectile(this.getItemInHand(InteractionHand.MAIN_HAND));
+        AbstractArrow arrow = this.getArrow(itemstack, power);
         arrow.setBaseDamage(0.5d);
         double motionX = target.getX() - this.getX();
         double motionY = target.getY(0.3333333333333333D) - arrow.getY();
         double motionZ = target.getZ() - this.getZ();
         //Calculates the horizontal distance to add a bit of lift to the arrow to simulate real life height adjustment
         //for far away targets.
-        double horizontalDistance = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
+        double horizontalDistance = Math.sqrt(motionX * motionX + motionZ * motionZ);
         //1.1 is the vector scaling factor which in turn translates into speed.
         //The last parameter is the error scale. 0 = exact shot.
         arrow.shoot(motionX, motionY + horizontalDistance * 0.3d, motionZ, 1.1F, 6);

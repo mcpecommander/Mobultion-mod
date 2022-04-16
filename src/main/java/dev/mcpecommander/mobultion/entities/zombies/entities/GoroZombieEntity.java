@@ -1,12 +1,12 @@
 package dev.mcpecommander.mobultion.entities.zombies.entities;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -20,12 +20,12 @@ public class GoroZombieEntity extends MobultionZombieEntity{
 
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    public GoroZombieEntity(EntityType<? extends MobultionZombieEntity> type, World world) {
+    public GoroZombieEntity(EntityType<? extends MobultionZombieEntity> type, Level world) {
         super(type, world);
     }
 
-    public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.FOLLOW_RANGE, 35.0D)
+    public static AttributeSupplier.Builder createAttributes() {
+        return Monster.createMonsterAttributes().add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.23D).add(Attributes.ATTACK_DAMAGE, 3.0D)
                 .add(Attributes.ARMOR, 2.0D).add(Attributes.SPAWN_REINFORCEMENTS_CHANCE, 0.75D);
     }
@@ -39,7 +39,7 @@ public class GoroZombieEntity extends MobultionZombieEntity{
                         //Math.cos(i) for the initial circle position on the x axis.
                         //* 0.5d to make the circle half as wide.
                         //(random.nextGaussian() * 0.01d - 0.005d) adds a small -0.01 - 0.01 variation to the diameter.
-                        this.getX() + MathHelper.cos((float) i) * 0.5d + (random.nextGaussian() * 0.01d - 0.005d),
+                        this.getX() + Mth.cos((float) i) * 0.5d + (random.nextGaussian() * 0.01d - 0.005d),
                         //this.blockPosition().getY() to make sure the particles spawn at ground level.
                         //(MathHelper.floor(this.getY()) would work too).
                         //+ random.nextGaussian() * 0.02f adds a small height variation.
@@ -47,7 +47,7 @@ public class GoroZombieEntity extends MobultionZombieEntity{
                         //Math.sin(i) for the initial circle position on the y axis.
                         //* 0.5d to make the circle half as wide.
                         //(random.nextGaussian() * 0.01d - 0.005d) adds a small -0.01 - 0.01 variation to the diameter.
-                        this.getZ() + MathHelper.sin((float) i) * 0.5d + (random.nextGaussian() * 0.01d - 0.005d),
+                        this.getZ() + Mth.sin((float) i) * 0.5d + (random.nextGaussian() * 0.01d - 0.005d),
                         //Small random speeds on the x and z axis to make it feel alive.
                         this.random.nextGaussian() * 0.002d - 0.001d,
                         //Constant upwards speed.

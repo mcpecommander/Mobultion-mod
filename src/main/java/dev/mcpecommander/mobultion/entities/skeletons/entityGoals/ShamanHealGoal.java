@@ -3,9 +3,9 @@ package dev.mcpecommander.mobultion.entities.skeletons.entityGoals;
 import dev.mcpecommander.mobultion.entities.skeletons.SkeletonsConfig;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.ShamanSkeletonEntity;
 import dev.mcpecommander.mobultion.setup.Registration;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
 
 import java.util.EnumSet;
 
@@ -58,7 +58,7 @@ public class ShamanHealGoal extends Goal{
             //The current distance to the target.
             double distance = this.mob.distanceToSqr(target.getX(), target.getY(), target.getZ());
             //If the skeleton can see the target.
-            boolean canSee = this.mob.getSensing().canSee(target);
+            boolean canSee = this.mob.getSensing().hasLineOfSight(target);
             //If the skeleton has seen the target, the see time increases otherwise it is decreased
             boolean hasSeen = this.seeTime > 0;
             //If the target has not been seen for a long time, reset the seeTime.
@@ -89,13 +89,13 @@ public class ShamanHealGoal extends Goal{
                     int i = this.mob.getTicksUsingItem();
                     if (i >= 70) {
                         this.mob.stopUsingItem();
-                        this.mob.performRangedAttack(target, new Float(SkeletonsConfig.SHAMAN_HEALING.get()));
+                        this.mob.performRangedAttack(target, SkeletonsConfig.SHAMAN_HEALING.get().floatValue());
                         this.healingTime = this.healingIntervalMin;
                     }
                 }
             //Start using the item if the healing cooldown is 0 and if still seeing the player for long enough time.
             } else if (--this.healingTime <= 0 && this.seeTime >= -60) {
-                this.mob.startUsingItem(Hand.MAIN_HAND);
+                this.mob.startUsingItem(InteractionHand.MAIN_HAND);
             }
 
         }

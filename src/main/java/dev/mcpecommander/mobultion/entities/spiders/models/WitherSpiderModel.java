@@ -1,9 +1,9 @@
 package dev.mcpecommander.mobultion.entities.spiders.models;
 
 import dev.mcpecommander.mobultion.entities.spiders.entities.WitherSpiderEntity;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
@@ -92,7 +92,7 @@ public class WitherSpiderModel extends AnimatedGeoModel<WitherSpiderEntity> {
 
 
         if(entity.getHealth() <= 2f/3f * entity.getMaxHealth() && entity.tickCount % 6 == 0){
-            Vector3d decapHead1 = new Vector3d( (10f/16f), (19d/16d), (9.3f/16f));
+            Vec3 decapHead1 = new Vec3( (10f/16f), (19d/16d), (9.3f/16f));
             decapHead1 = decapHead1.yRot((float) Math.toRadians(-entity.yBodyRot)).add(entity.position());
             entity.level.addParticle(ParticleTypes.DRAGON_BREATH, decapHead1.x, decapHead1.y, decapHead1.z,
                     0, 0, 0);
@@ -101,7 +101,7 @@ public class WitherSpiderModel extends AnimatedGeoModel<WitherSpiderEntity> {
         }
 
         if(entity.getHealth() <= 1f/3f * entity.getMaxHealth() && entity.tickCount % 6 == 0){
-            Vector3d decapHead2 = new Vector3d( (-10f/16f), (19d/16d), (9.3f/16f));
+            Vec3 decapHead2 = new Vec3( (-10f/16f), (19d/16d), (9.3f/16f));
             decapHead2 = decapHead2.yRot((float) Math.toRadians(-entity.yBodyRot)).add(entity.position());
             entity.level.addParticle(ParticleTypes.DRAGON_BREATH, decapHead2.x, decapHead2.y, decapHead2.z,
                     0, 0, 0);

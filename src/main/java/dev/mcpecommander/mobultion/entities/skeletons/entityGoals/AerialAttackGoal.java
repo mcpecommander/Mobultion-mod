@@ -2,15 +2,16 @@ package dev.mcpecommander.mobultion.entities.skeletons.entityGoals;
 
 import dev.mcpecommander.mobultion.entities.skeletons.entities.ForestSkeletonEntity;
 import dev.mcpecommander.mobultion.setup.Registration;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.item.BowItem;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.util.LandRandomPos;
+import net.minecraft.world.entity.ai.util.RandomPos;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nonnull;
 import java.util.EnumSet;
@@ -68,7 +69,7 @@ public class AerialAttackGoal extends Goal{
                 //The current distance to the target.
                 double distance = this.mob.distanceToSqr(target.getX(), target.getY(), target.getZ());
                 //If the skeleton can see the target.
-                boolean canSee = this.mob.getSensing().canSee(target);
+                boolean canSee = this.mob.getSensing().hasLineOfSight(target);
                 //If the skeleton has seen the target, the see time increases otherwise it is decreased
                 boolean hasSeen = this.seeTime > 0;
                 //If the target has not been seen for a long time, reset the seeTime.
@@ -134,13 +135,13 @@ public class AerialAttackGoal extends Goal{
                     }
                     //Start using the item if the attack cooldown is 0 and if still seeing the player for long enough time.
                 } else if (--this.attackTime <= 0 && this.seeTime >= -60) {
-                    this.mob.startUsingItem(Hand.MAIN_HAND);
+                    this.mob.startUsingItem(InteractionHand.MAIN_HAND);
                 }
             }else {
                 if(this.mob.getNavigation().isInProgress()) return;
                 //Try a maximum of 5 times to move towards open sky.
                 for(int i = 0; i < 5; i++){
-                    Vector3d pos = RandomPositionGenerator.getLandPosAvoid(this.mob, 10, 7, target.position());
+                    Vec3 pos = LandRandomPos.getPosAway(this.mob, 10, 7, target.position());
                     if(pos != null && target.distanceToSqr(pos) < attackRadiusSqr && checkVicinity(target, pos)){
                         if(this.mob.getNavigation().moveTo(pos.x, pos.y, pos.z, 1)){
                             return;
@@ -151,13 +152,13 @@ public class AerialAttackGoal extends Goal{
         }
     }
 
-    private boolean checkVicinity(@Nonnull LivingEntity target, Vector3d pos) {
+    private boolean checkVicinity(@Nonnull LivingEntity target, Vec3 pos) {
         double targetX = (target.getX() - pos.x) / 2 + pos.x;
         double targetY = pos.y + 15;
         double targetZ = (target.getZ() - pos.z) / 2 + pos.z;
-        BlockRayTraceResult rayTraceResult = this.mob.level.clip(new RayTraceContext(pos.add(0, 1.7, 0),
-                new Vector3d(targetX, targetY, targetZ), RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE,
+        BlockHitResult rayTraceResult = this.mob.level.clip(new ClipContext(pos.add(0, 1.7, 0),
+                new Vec3(targetX, targetY, targetZ), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE,
                 this.mob));
-        return rayTraceResult.getType() == RayTraceResult.Type.MISS;
+        return rayTraceResult.getType() == HitResult.Type.MISS;
     }
 }

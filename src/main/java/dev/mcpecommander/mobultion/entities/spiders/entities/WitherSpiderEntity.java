@@ -1,19 +1,20 @@
 package dev.mcpecommander.mobultion.entities.spiders.entities;
 
 import dev.mcpecommander.mobultion.setup.Registration;
-import net.minecraft.entity.AreaEffectCloudEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.potion.Potions;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.AreaEffectCloud;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -33,7 +34,7 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
     int timer = -1;
     boolean isDroppingHead1, isDroppingHead2 = false;
 
-    public WitherSpiderEntity(EntityType<WitherSpiderEntity> mob, World world) {
+    public WitherSpiderEntity(EntityType<WitherSpiderEntity> mob, Level world) {
         super(mob, world);
         prevHealth = this.getMaxHealth();
     }
@@ -52,8 +53,8 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
      * @see dev.mcpecommander.mobultion.Mobultion
      * @return AttributeModifierMap.MutableAttribute
      */
-    public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 60.0D).add(Attributes.MOVEMENT_SPEED, 0.3D);
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 60.0D).add(Attributes.MOVEMENT_SPEED, 0.3D);
     }
 
     /**
@@ -126,10 +127,10 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
      * @param amount: the amount of damage the entity received.
      */
     @Override
-    protected void actuallyHurt(DamageSource damageSource, float amount) {
+    protected void actuallyHurt(@NotNull DamageSource damageSource, float amount) {
         if(isDroppingHead1 ||isDroppingHead2) return;
         float prev = this.getHealth();
-        super.actuallyHurt(damageSource, MathHelper.clamp(amount, 0, 1f/3f * this.getMaxHealth()));
+        super.actuallyHurt(damageSource, Mth.clamp(amount, 0, 1f/3f * this.getMaxHealth()));
         if(prev < 1f/3f * this.getMaxHealth() || this.isDeadOrDying()) return;
         if(prev > 2f/3f * this.getMaxHealth()
                 && this.getHealth() < 2f/3f * this.getMaxHealth()
@@ -158,7 +159,7 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
         super.tick();
         if(!this.level.isClientSide && (isDroppingHead1 || isDroppingHead2)){
             if(timer == 0){
-                Vector3d pos = new Vector3d(isDroppingHead1 ? 1d : -1d, 0.0d, 1d);
+                Vec3 pos = new Vec3(isDroppingHead1 ? 1d : -1d, 0.0d, 1d);
                 pos = pos.yRot((float) Math.toRadians(-this.yBodyRot)).add(this.position());
                 WitherHeadBugEntity bug = new WitherHeadBugEntity(Registration.WITHERHEADBUG.get(), this.level);
                 bug.setPos(pos.x, pos.y, pos.z);
@@ -173,17 +174,18 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
     /**
      * Removes the entity from the level. Gets called when the death timer has reached 20 or if the entity is despawned.
      */
+    //TODO: check if this actually works
     @Override
-    public void remove() {
-        super.remove();
+    public void kill() {
+        super.kill();
         if(!this.level.isClientSide) {
-            AreaEffectCloudEntity areaeffectcloudentity = new AreaEffectCloudEntity(this.level, this.getX(), this.getY(), this.getZ());
+            AreaEffectCloud areaeffectcloudentity = new AreaEffectCloud(this.level, this.getX(), this.getY(), this.getZ());
             areaeffectcloudentity.setOwner(this);
             areaeffectcloudentity.setRadius(3.0F);
             areaeffectcloudentity.setRadiusOnUse(-0.5F);
             areaeffectcloudentity.setWaitTime(10);
             areaeffectcloudentity.setRadiusPerTick(-areaeffectcloudentity.getRadius() / (float) areaeffectcloudentity.getDuration());
-            areaeffectcloudentity.addEffect(new EffectInstance(Effects.WITHER, 160));
+            areaeffectcloudentity.addEffect(new MobEffectInstance(MobEffects.WITHER, 160));
             areaeffectcloudentity.setPotion(Potions.EMPTY);
 
             this.level.addFreshEntity(areaeffectcloudentity);
@@ -196,8 +198,8 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
      * @return true if the mob can be affected.
      */
     @Override
-    public boolean canBeAffected(EffectInstance effectInstance) {
-        Effect effect = effectInstance.getEffect();
-        return effect != Effects.REGENERATION && effect != Effects.POISON && effect != Effects.WITHER;
+    public boolean canBeAffected(MobEffectInstance effectInstance) {
+        MobEffect effect = effectInstance.getEffect();
+        return effect != MobEffects.REGENERATION && effect != MobEffects.POISON && effect != MobEffects.WITHER;
     }
 }

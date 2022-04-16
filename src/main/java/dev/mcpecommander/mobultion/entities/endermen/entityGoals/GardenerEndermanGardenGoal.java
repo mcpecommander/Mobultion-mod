@@ -2,13 +2,13 @@ package dev.mcpecommander.mobultion.entities.endermen.entityGoals;
 
 import dev.mcpecommander.mobultion.entities.endermen.entities.GardenerEndermanEntity;
 import dev.mcpecommander.mobultion.entities.endermen.entities.MobultionEndermanEntity;
-import net.minecraft.block.*;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.Path;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -18,7 +18,7 @@ import java.util.Random;
 public class GardenerEndermanGardenGoal extends Goal {
 
     GardenerEndermanEntity owner;
-    World level;
+    Level level;
     BlockPos pos, initialTeleportPos;
 
     GardenerEndermanEntity.GardeningState state;
@@ -121,23 +121,23 @@ public class GardenerEndermanGardenGoal extends Goal {
                     BlockState above = level.getBlockState(pos.above());
                     switch (state) {
                         case BONEMEAL:
-                            if (above.getBlock() instanceof IGrowable) {
-                                ((IGrowable) above.getBlock()).performBonemeal((ServerWorld) level, owner.getRandom(), pos, above);
+                            if (above.getBlock() instanceof BonemealableBlock) {
+                                ((BonemealableBlock) above.getBlock()).performBonemeal((ServerLevel) level, owner.getRandom(), pos, above);
                             }
                             break;
                         case WATERING:
                             if (blockState.is(Blocks.FARMLAND)) {
-                                level.setBlock(pos, blockState.setValue(FarmlandBlock.MOISTURE, 7), Constants.BlockFlags.BLOCK_UPDATE);
+                                level.setBlock(pos, blockState.setValue(FarmBlock.MOISTURE, 7), Block.UPDATE_CLIENTS);
                             }
                             break;
                         case PLANTING:
-                            if (above.isAir(level, pos.above())) {
-                                level.setBlock(pos.above(), Blocks.ALLIUM.defaultBlockState(), Constants.BlockFlags.DEFAULT_AND_RERENDER);
+                            if (above.isAir()) {
+                                level.setBlock(pos.above(), Blocks.ALLIUM.defaultBlockState(), Block.UPDATE_ALL_IMMEDIATE);
                             }
                             break;
                         case PICKING:
                             if (above.getBlock() instanceof FlowerBlock) {
-                                level.setBlock(pos.above(), Blocks.AIR.defaultBlockState(), Constants.BlockFlags.DEFAULT_AND_RERENDER);
+                                level.setBlock(pos.above(), Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL_IMMEDIATE);
                             }
                             break;
                         case NONE:

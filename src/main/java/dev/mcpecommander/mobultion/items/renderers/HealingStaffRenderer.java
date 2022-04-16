@@ -1,13 +1,13 @@
 package dev.mcpecommander.mobultion.items.renderers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import dev.mcpecommander.mobultion.items.HealingStaffItem;
 import dev.mcpecommander.mobultion.items.models.HealingStaffModel;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.geo.render.built.GeoCube;
@@ -27,7 +27,7 @@ public class HealingStaffRenderer extends GeoItemRenderer<HealingStaffItem>
 
     //Copied the whole thing and modified the render buffer to make sure that the gem is lit.
     @Override
-    public void render(HealingStaffItem animatable, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn,
+    public void render(HealingStaffItem animatable, PoseStack stack, MultiBufferSource bufferIn, int packedLightIn,
                        ItemStack itemStack) {
         this.currentItemStack = itemStack;
         GeoModel model = modelProvider.getModel(modelProvider.getModelLocation(animatable));
@@ -38,14 +38,14 @@ public class HealingStaffRenderer extends GeoItemRenderer<HealingStaffItem>
         stack.translate(0, 0.01f, 0);
         stack.translate(0.5, 0.5, 0.5);
 
-        Minecraft.getInstance().textureManager.bind(getTextureLocation(animatable));
+        Minecraft.getInstance().textureManager.bindForSetup(getTextureLocation(animatable));
         renderRecursively(animatable, model.topLevelBones.get(0), stack, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY,
                     1f, 1f, 1f, 1f);
         stack.popPose();
     }
 
     //Copied from IGeoRenderer but removed the IVertexBuffer parameter in favor of inlined one to make the gem use a different RenderType.
-    public void renderRecursively(HealingStaffItem animatable, GeoBone bone, MatrixStack stack, IRenderTypeBuffer renderTypeBuffer,
+    public void renderRecursively(HealingStaffItem animatable, GeoBone bone, PoseStack stack, MultiBufferSource renderTypeBuffer,
                                   int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         stack.pushPose();
         RenderUtils.translate(bone, stack);

@@ -2,15 +2,15 @@ package dev.mcpecommander.mobultion.entities.endermen.entityGoals;
 
 import dev.mcpecommander.mobultion.entities.endermen.entities.WanderingEndermanEntity;
 import dev.mcpecommander.mobultion.setup.Registration;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.effect.LightningBoltEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.Path;
 
 import java.util.EnumSet;
 
@@ -18,7 +18,7 @@ import java.util.EnumSet;
 public class WanderingEndermanLightningAttackGoal extends Goal {
 
     WanderingEndermanEntity owner;
-    World world;
+    Level world;
     LivingEntity target;
     BlockPos lightningTarget;
     int maxCooldown, cooldown;
@@ -93,7 +93,7 @@ public class WanderingEndermanLightningAttackGoal extends Goal {
             }else{
                 if(lightningTarget == null || cooldown == 5) lightningTarget = this.target.blockPosition();
                 if(this.cooldown-- == 0){
-                    LightningBoltEntity bolt = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, world);
+                    LightningBolt bolt = new LightningBolt(EntityType.LIGHTNING_BOLT, world);
                     bolt.setPos(lightningTarget.getX(), lightningTarget.getY(), lightningTarget.getZ());
                     bolt.setDamage((float) this.owner.getAttributeValue(Attributes.ATTACK_DAMAGE));
                     this.world.addFreshEntity(bolt);
@@ -114,6 +114,6 @@ public class WanderingEndermanLightningAttackGoal extends Goal {
     }
 
     private boolean isWandInHand(){
-        return this.owner.getItemBySlot(EquipmentSlotType.MAINHAND).getItem() == Registration.THUNDERSTAFF.get();
+        return this.owner.getItemBySlot(EquipmentSlot.MAINHAND).getItem() == Registration.THUNDERSTAFF.get();
     }
 }

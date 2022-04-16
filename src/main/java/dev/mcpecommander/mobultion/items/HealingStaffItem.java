@@ -2,12 +2,15 @@ package dev.mcpecommander.mobultion.items;
 
 import dev.mcpecommander.mobultion.items.renderers.HealingStaffRenderer;
 import dev.mcpecommander.mobultion.setup.ModSetup;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.network.PacketDistributor;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -20,6 +23,7 @@ import software.bernie.geckolib3.network.ISyncable;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
+import java.util.function.Consumer;
 
 /* McpeCommander created on 24/07/2021 inside the package - dev.mcpecommander.mobultion.items */
 public class HealingStaffItem extends Item implements IAnimatable, ISyncable {
@@ -27,15 +31,28 @@ public class HealingStaffItem extends Item implements IAnimatable, ISyncable {
     public AnimationFactory factory = new AnimationFactory(this);
 
     public HealingStaffItem() {
-        super(new Properties().tab(ModSetup.ITEM_GROUP).setNoRepair().durability(100).setISTER(() -> HealingStaffRenderer::new));
+        super(new Properties().tab(ModSetup.ITEM_GROUP).setNoRepair().durability(100));
         GeckoLibNetwork.registerSyncable(this);
     }
 
     @Override
-    public void inventoryTick(ItemStack itemStack, World world, @Nonnull Entity holder, int slotNumber, boolean isSelected) {
+    public void initializeClient(@NotNull Consumer<IItemRenderProperties> consumer) {
+        super.initializeClient(consumer);
+        consumer.accept(new IItemRenderProperties() {
+            private final BlockEntityWithoutLevelRenderer renderer = new HealingStaffRenderer();
+
+            @Override
+            public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+                return renderer;
+            }
+        });
+    }
+
+    @Override
+    public void inventoryTick(ItemStack itemStack, Level world, @Nonnull Entity holder, int slotNumber, boolean isSelected) {
         boolean started = itemStack.getOrCreateTag().getBoolean("Started");
         if(!world.isClientSide){
-            final int id = GeckoLibUtil.guaranteeIDForStack(itemStack, (ServerWorld) world);
+            final int id = GeckoLibUtil.guaranteeIDForStack(itemStack, (ServerLevel) world);
             if(isSelected && !started){
                 final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF
                         .with(() -> holder);

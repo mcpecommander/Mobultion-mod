@@ -1,35 +1,34 @@
 package dev.mcpecommander.mobultion.entities.skeletons.entities;
 
 import dev.mcpecommander.mobultion.setup.Registration;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.NetworkHooks;
 
 import javax.annotation.Nonnull;
 
 /* McpeCommander created on 23/07/2021 inside the package - dev.mcpecommander.mobultion.entities.skeletons.entities */
-public class CrossArrowEntity extends AbstractArrowEntity {
+public class CrossArrowEntity extends AbstractArrow {
 
     /**
      * This parameter is always expected to have a value.
      */
-    private Vector3d explosionPoint = Vector3d.ZERO;
+    private Vec3 explosionPoint = Vec3.ZERO;
     /**
      * Used for a janky proximity calculation.
      */
     private int closerTime, oCloserTime;
 
-    public CrossArrowEntity(EntityType<CrossArrowEntity> type, World world) {
+    public CrossArrowEntity(EntityType<CrossArrowEntity> type, Level world) {
         super(type, world);
     }
 
@@ -47,7 +46,7 @@ public class CrossArrowEntity extends AbstractArrowEntity {
      * A setter for the explosion point of this arrow.
      * @param target A vector3d for the coords of the explosion point.
      */
-    public void setTarget(@Nonnull Vector3d target){
+    public void setTarget(@Nonnull Vec3 target){
         this.explosionPoint = target;
     }
 
@@ -56,7 +55,7 @@ public class CrossArrowEntity extends AbstractArrowEntity {
      * @return A vector3d of the explosion points coords.
      */
     @Nonnull
-    public Vector3d getTarget(){
+    public Vec3 getTarget(){
         return this.explosionPoint;
     }
 
@@ -73,7 +72,7 @@ public class CrossArrowEntity extends AbstractArrowEntity {
             } else {
                 closerTime--;
             }
-            if (closerTime < -100) remove();
+            if (closerTime < -100) discard();
             if (this.distanceToSqr(explosionPoint) < 1 || closerTime < oCloserTime - 2) {
                 this.explode();
             }
@@ -95,7 +94,7 @@ public class CrossArrowEntity extends AbstractArrowEntity {
                     for (int j = -1; j < 2; j++) {
                         //This check gives me the X pattern.
                         if ((i == 0 || j == 0) && i != j) continue;
-                        ArrowEntity arrow = new ArrowEntity(EntityType.ARROW, level);
+                        Arrow arrow = new Arrow(EntityType.ARROW, level);
                         arrow.setBaseDamage(this.getBaseDamage());
                         arrow.setOwner(this.getOwner());
                         arrow.setPos(this.getX(), this.getY(), this.getZ());
@@ -104,7 +103,7 @@ public class CrossArrowEntity extends AbstractArrowEntity {
                         double motionZ = target.getZ() + j - this.getZ();
                         //Calculates the horizontal distance to add a bit of lift to the arrow to simulate real life height adjustment
                         //for far away targets.
-                        double horizontalDistance = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
+                        double horizontalDistance = Math.sqrt(motionX * motionX + motionZ * motionZ);
                         //1.6 is the vector scaling factor which in turn translates into speed.
                         //The last parameter is the error scale. 0 = exact shot.
                         arrow.shoot(motionX, motionY + horizontalDistance * 0.2d, motionZ, 1.6F, 0);
@@ -113,7 +112,7 @@ public class CrossArrowEntity extends AbstractArrowEntity {
                 }
             }
         }
-        this.remove();
+        this.discard();
     }
 
     /**
@@ -121,7 +120,7 @@ public class CrossArrowEntity extends AbstractArrowEntity {
      * @param NBTTag The tag where the additional data will be written to.
      */
     @Override
-    public void addAdditionalSaveData(@Nonnull CompoundNBT NBTTag) {
+    public void addAdditionalSaveData(@Nonnull CompoundTag NBTTag) {
         super.addAdditionalSaveData(NBTTag);
         NBTTag.putDouble("mobultion:targetx", this.getTarget().x);
         NBTTag.putDouble("mobultion:targety", this.getTarget().y);
@@ -133,13 +132,13 @@ public class CrossArrowEntity extends AbstractArrowEntity {
      * @param NBTTag The NBT tag that holds the saved data.
      */
     @Override
-    public void readAdditionalSaveData(@Nonnull CompoundNBT NBTTag) {
+    public void readAdditionalSaveData(@Nonnull CompoundTag NBTTag) {
         super.readAdditionalSaveData(NBTTag);
-        if(NBTTag.contains("mobultion:targetx", Constants.NBT.TAG_DOUBLE)){
-            this.setTarget(new Vector3d(NBTTag.getDouble("mobultion:targetx"), NBTTag.getDouble("mobultion:targety"),
+        if(NBTTag.contains("mobultion:targetx", Tag.TAG_DOUBLE)){
+            this.setTarget(new Vec3(NBTTag.getDouble("mobultion:targetx"), NBTTag.getDouble("mobultion:targety"),
                     NBTTag.getDouble("mobultion:targetz")));
         }else{
-            this.setTarget(Vector3d.ZERO);
+            this.setTarget(Vec3.ZERO);
         }
     }
 
@@ -150,7 +149,7 @@ public class CrossArrowEntity extends AbstractArrowEntity {
      */
     @Nonnull
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

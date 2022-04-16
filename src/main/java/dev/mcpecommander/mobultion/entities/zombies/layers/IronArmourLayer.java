@@ -1,10 +1,9 @@
 package dev.mcpecommander.mobultion.entities.zombies.layers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import dev.mcpecommander.mobultion.entities.zombies.entities.KnightZombieEntity;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.util.ResourceLocation;
-import software.bernie.geckolib3.model.provider.GeoModelProvider;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 
@@ -21,12 +20,12 @@ public class IronArmourLayer extends GeoLayerRenderer<KnightZombieEntity> {
 
     //It is way easier to just make the entity render the whole iron armour instead of making if statements for each part.
     @Override
-    public void render(MatrixStack stack, IRenderTypeBuffer buffer, int packedLight,
+    public void render(PoseStack stack, MultiBufferSource buffer, int packedLight,
                        KnightZombieEntity entity, float limbSwing, float limbSwingAmount,
                        float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         stack.pushPose();
         stack.scale(1.1f, 1.01f, 1.1f);
-        renderCopyModel((GeoModelProvider<KnightZombieEntity>) this.getEntityModel(), IRON_ARMOUR, stack, buffer, packedLight, entity, partialTicks, 1f, 1f,1f);
+        renderCopyModel(this.getEntityModel(), IRON_ARMOUR, stack, buffer, packedLight, entity, partialTicks, 1f, 1f,1f);
         stack.popPose();
     }
 }

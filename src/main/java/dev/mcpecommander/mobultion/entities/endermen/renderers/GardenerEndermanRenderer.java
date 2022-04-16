@@ -1,19 +1,20 @@
 package dev.mcpecommander.mobultion.entities.endermen.renderers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.mcpecommander.mobultion.Mobultion;
 import dev.mcpecommander.mobultion.entities.endermen.entities.GardenerEndermanEntity;
 import dev.mcpecommander.mobultion.entities.endermen.layers.EndermanEyesLayer;
 import dev.mcpecommander.mobultion.entities.endermen.layers.GardenerEndermanItemLayer;
 import dev.mcpecommander.mobultion.entities.endermen.models.GardenerEndermanModel;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.culling.ClippingHelper;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.client.renderer.culling.Frustum;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import com.mojang.math.Quaternion;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 import javax.annotation.Nonnull;
@@ -22,7 +23,7 @@ import java.util.List;
 /* McpeCommander created on 26/06/2021 inside the package - dev.mcpecommander.mobultion.entities.endermen.renderers */
 public class GardenerEndermanRenderer extends GeoEntityRenderer<GardenerEndermanEntity> {
 
-    public GardenerEndermanRenderer(EntityRendererManager renderManager) {
+    public GardenerEndermanRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new GardenerEndermanModel());
         this.shadowRadius = 0.5F;
         this.addLayer(new EndermanEyesLayer<>(this, "gardenerenderman"));
@@ -40,7 +41,7 @@ public class GardenerEndermanRenderer extends GeoEntityRenderer<GardenerEnderman
      * @return true if the entity should be rendered.
      */
     @Override
-    public boolean shouldRender(@Nonnull GardenerEndermanEntity entity, @Nonnull ClippingHelper clippingHelper,
+    public boolean shouldRender(@Nonnull GardenerEndermanEntity entity, @Nonnull Frustum clippingHelper,
                                 double x, double y, double z) {
         return Mobultion.DEBUG || super.shouldRender(entity, clippingHelper, x, y, z);
     }
@@ -58,18 +59,18 @@ public class GardenerEndermanRenderer extends GeoEntityRenderer<GardenerEnderman
     //An awful way to debug navigation paths, but it works.
     //DO NOT REPEAT OR COPY AT ALL COSTS.
     @Override
-    public void renderLate(GardenerEndermanEntity animatable, MatrixStack stackIn, float ticks,
-                           IRenderTypeBuffer renderTypeBuffer, IVertexBuilder bufferIn, int packedLightIn,
+    public void renderLate(GardenerEndermanEntity animatable, PoseStack stackIn, float ticks,
+                           MultiBufferSource renderTypeBuffer, VertexConsumer bufferIn, int packedLightIn,
                            int packedOverlayIn, float red, float green, float blue, float partialTicks) {
         //Render debug path
         if(!Mobultion.DEBUG) return;
         List<BlockPos> positions = animatable.getDebugRoad();
         stackIn.pushPose();
-        IVertexBuilder builder = renderTypeBuffer.getBuffer(RenderType.LINES);
+        VertexConsumer builder = renderTypeBuffer.getBuffer(RenderType.LINES);
 
         //Rotate the lines to be in the right direction
         stackIn.mulPose(new Quaternion(0,
-                180 + MathHelper.rotLerp(partialTicks, animatable.yBodyRotO, animatable.yBodyRot),
+                180 + Mth.rotLerp(partialTicks, animatable.yBodyRotO, animatable.yBodyRot),
                 0, true));
         //Translate to the entity position
         stackIn.translate(-animatable.position().x, -animatable.position().y, -animatable.position().z);

@@ -1,11 +1,11 @@
 package dev.mcpecommander.mobultion.entities.zombies.layers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import dev.mcpecommander.mobultion.entities.zombies.entities.MagmaZombieEntity;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import software.bernie.geckolib3.util.AnimationUtils;
@@ -29,7 +29,7 @@ public class ZombieMagmaLayer extends GeoLayerRenderer<MagmaZombieEntity> {
     }
 
     @Override
-    public void render(MatrixStack matrix, IRenderTypeBuffer bufferIn, int packedLightIn, MagmaZombieEntity entity, float limbSwing,
+    public void render(PoseStack matrix, MultiBufferSource bufferIn, int packedLightIn, MagmaZombieEntity entity, float limbSwing,
                        float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         RenderType cameo =  RenderType.eyes(MAGMA);
         this.getRenderer().render(this.getEntityModel().getModel(MODEL), entity, partialTicks, cameo, matrix, bufferIn,

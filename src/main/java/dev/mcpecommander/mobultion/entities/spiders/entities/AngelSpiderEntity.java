@@ -3,18 +3,18 @@ package dev.mcpecommander.mobultion.entities.spiders.entities;
 import dev.mcpecommander.mobultion.entities.spiders.entityGoals.AngelSpiderHealGoal;
 import dev.mcpecommander.mobultion.entities.spiders.entityGoals.AngelSpiderTargetGoal;
 import dev.mcpecommander.mobultion.particles.HealParticle;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.AvoidEntityGoal;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.world.World;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -33,13 +33,13 @@ public class AngelSpiderEntity extends MobultionSpiderEntity {
     /**
      * A data parameter to help keep the target in sync and to be saved when quiting the game.
      */
-    private static final DataParameter<Integer> TARGET = EntityDataManager.defineId(AngelSpiderEntity.class, DataSerializers.INT);
+    private static final EntityDataAccessor<Integer> TARGET = SynchedEntityData.defineId(AngelSpiderEntity.class, EntityDataSerializers.INT);
     /**
      * The animation factory, for more information check GeckoLib.
      */
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    public AngelSpiderEntity(EntityType<AngelSpiderEntity> mob, World world) {
+    public AngelSpiderEntity(EntityType<AngelSpiderEntity> mob, Level world) {
         super(mob, world);
     }
 
@@ -49,7 +49,7 @@ public class AngelSpiderEntity extends MobultionSpiderEntity {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, PlayerEntity.class, 8.0F, 0.6D, 0.8D));
+        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, Player.class, 8.0F, 0.6D, 0.8D));
         this.goalSelector.addGoal(3, new AngelSpiderHealGoal(this));
         this.targetSelector.addGoal(1, new AngelSpiderTargetGoal(this));
     }
@@ -59,8 +59,8 @@ public class AngelSpiderEntity extends MobultionSpiderEntity {
      * @see dev.mcpecommander.mobultion.Mobultion
      * @return AttributeModifierMap.MutableAttribute
      */
-    public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.MOVEMENT_SPEED, 0.4D);
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.MOVEMENT_SPEED, 0.4D);
     }
 
     /**
@@ -159,7 +159,7 @@ public class AngelSpiderEntity extends MobultionSpiderEntity {
      * @return true if the mob can be affected.
      */
     @Override
-    public boolean canBeAffected(EffectInstance effect) {
+    public boolean canBeAffected(MobEffectInstance effect) {
         return true;
     }
 

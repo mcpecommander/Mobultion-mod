@@ -1,12 +1,12 @@
 package dev.mcpecommander.mobultion.entities.endermen.layers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.mcpecommander.mobultion.entities.endermen.entities.MobultionEndermanEntity;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.LivingRenderer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
@@ -35,12 +35,12 @@ public class EndermanEyesLayer<T extends MobultionEndermanEntity> extends GeoLay
     }
 
     @Override
-    public void render(MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn, T entity, float limbSwing,
+    public void render(PoseStack stack, MultiBufferSource bufferIn, int packedLightIn, T entity, float limbSwing,
                        float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 
         stack.pushPose();
         //Copied from GeoLayerRenderer.
-        IVertexBuilder ivertexbuilder = bufferIn.getBuffer(RenderType.eyes(ENDERMAN_EYES));
+        VertexConsumer ivertexbuilder = bufferIn.getBuffer(RenderType.eyes(ENDERMAN_EYES));
         //The main group of my model is "all"
         //This section is from renderRecursively, but I am doing the first step here to stop anything other than the
         //head from rendering which guarantees that the render type is not changed when rendering items.
@@ -55,7 +55,7 @@ public class EndermanEyesLayer<T extends MobultionEndermanEntity> extends GeoLay
             //eye layer.
             if(!childBone.getName().equals("Head")) continue;
             this.getRenderer().renderRecursively(childBone, stack, ivertexbuilder, packedLightIn,
-                    LivingRenderer.getOverlayCoords(entity, 0.0F), 1f, 1f, 1f, 1f);
+                    LivingEntityRenderer.getOverlayCoords(entity, 0.0F), 1f, 1f, 1f, 1f);
         }
         stack.popPose();
     }

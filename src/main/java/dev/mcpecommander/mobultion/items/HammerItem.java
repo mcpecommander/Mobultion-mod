@@ -3,12 +3,12 @@ package dev.mcpecommander.mobultion.items;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import dev.mcpecommander.mobultion.setup.ModSetup;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 /* McpeCommander created on 28/07/2021 inside the package - dev.mcpecommander.mobultion.items */
 public class HammerItem extends Item {
@@ -25,7 +25,7 @@ public class HammerItem extends Item {
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
-        return slot == EquipmentSlotType.MAINHAND || slot == EquipmentSlotType.OFFHAND ? attributes : super.getAttributeModifiers(slot, stack);
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
+        return slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.OFFHAND ? attributes : super.getAttributeModifiers(slot, stack);
     }
 }

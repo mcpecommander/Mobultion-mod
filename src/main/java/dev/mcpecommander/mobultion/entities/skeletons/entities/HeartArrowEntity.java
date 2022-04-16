@@ -1,14 +1,14 @@
 package dev.mcpecommander.mobultion.entities.skeletons.entities;
 
 import dev.mcpecommander.mobultion.setup.Registration;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.IPacket;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -19,14 +19,14 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import javax.annotation.Nonnull;
 
 /* McpeCommander created on 23/07/2021 inside the package - dev.mcpecommander.mobultion.entities.skeletons.entities */
-public class HeartArrowEntity extends AbstractArrowEntity implements IAnimatable {
+public class HeartArrowEntity extends AbstractArrow implements IAnimatable {
 
     /**
      * The animation factory, for more information check GeckoLib.
      */
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    public HeartArrowEntity(EntityType<HeartArrowEntity> type, World world) {
+    public HeartArrowEntity(EntityType<HeartArrowEntity> type, Level world) {
         super(type, world);
     }
 
@@ -47,7 +47,7 @@ public class HeartArrowEntity extends AbstractArrowEntity implements IAnimatable
      */
     protected void doPostHurtEffects(@Nonnull LivingEntity attackedEntity) {
         super.doPostHurtEffects(attackedEntity);
-        EffectInstance effectinstance = new EffectInstance(Registration.JOKERNESS_EFFECT.get(), 10 * 20, 0);
+        MobEffectInstance effectinstance = new MobEffectInstance(Registration.JOKERNESS_EFFECT.get(), 10 * 20, 0);
         attackedEntity.addEffect(effectinstance);
     }
 
@@ -79,7 +79,7 @@ public class HeartArrowEntity extends AbstractArrowEntity implements IAnimatable
      */
     @Nonnull
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

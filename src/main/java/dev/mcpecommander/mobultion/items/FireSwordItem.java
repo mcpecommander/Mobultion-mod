@@ -5,22 +5,22 @@ import com.google.common.collect.Multimap;
 import dev.mcpecommander.mobultion.setup.ModSetup;
 import dev.mcpecommander.mobultion.setup.Registration;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.block.AbstractFireBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseFireBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 
@@ -40,31 +40,31 @@ public class FireSwordItem extends Item {
 
     @Nonnull
     @Override
-    public ActionResultType useOn(@Nonnull ItemUseContext useContext) {
-        PlayerEntity playerentity = useContext.getPlayer();
-        World world = useContext.getLevel();
+    public InteractionResult useOn(@Nonnull UseOnContext useContext) {
+        Player playerentity = useContext.getPlayer();
+        Level world = useContext.getLevel();
         BlockPos blockpos = useContext.getClickedPos();
         BlockPos blockpos1 = blockpos.relative(useContext.getClickedFace());
-        if (AbstractFireBlock.canBePlacedAt(world, blockpos1, useContext.getHorizontalDirection())) {
-            world.playSound(playerentity, blockpos1, Registration.IGNITE_SOUND.get(), SoundCategory.BLOCKS,
-                    1F, random.nextFloat() * 0.4F + 0.8F);
-            BlockState blockstate1 = AbstractFireBlock.getState(world, blockpos1);
+        if (BaseFireBlock.canBePlacedAt(world, blockpos1, useContext.getHorizontalDirection())) {
+            world.playSound(playerentity, blockpos1, Registration.IGNITE_SOUND.get(), SoundSource.BLOCKS,
+                    1F, world.random.nextFloat() * 0.4F + 0.8F);
+            BlockState blockstate1 = BaseFireBlock.getState(world, blockpos1);
             world.setBlock(blockpos1, blockstate1, 11);
             ItemStack itemstack = useContext.getItemInHand();
-            if (playerentity instanceof ServerPlayerEntity) {
-                CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayerEntity)playerentity, blockpos1, itemstack);
+            if (playerentity instanceof ServerPlayer) {
+                CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayer)playerentity, blockpos1, itemstack);
                 itemstack.hurtAndBreak(1, playerentity, (p_219998_1_) ->
                         p_219998_1_.broadcastBreakEvent(useContext.getHand()));
             }
-            return ActionResultType.sidedSuccess(world.isClientSide());
+            return InteractionResult.sidedSuccess(world.isClientSide());
         } else {
-            return ActionResultType.FAIL;
+            return InteractionResult.FAIL;
         }
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
-        return slot == EquipmentSlotType.MAINHAND || slot == EquipmentSlotType.OFFHAND ? attributes : super.getAttributeModifiers(slot, stack);
+    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
+        return slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.OFFHAND ? attributes : super.getAttributeModifiers(slot, stack);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package dev.mcpecommander.mobultion.entities.zombies.models;
 
 import dev.mcpecommander.mobultion.entities.zombies.entities.KnightZombieEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;

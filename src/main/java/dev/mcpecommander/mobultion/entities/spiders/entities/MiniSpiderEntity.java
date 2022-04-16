@@ -1,10 +1,10 @@
 package dev.mcpecommander.mobultion.entities.spiders.entities;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.level.Level;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -18,7 +18,7 @@ public class MiniSpiderEntity extends MobultionSpiderEntity{
 
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    public MiniSpiderEntity(EntityType<? extends MobultionSpiderEntity> type, World world) {
+    public MiniSpiderEntity(EntityType<? extends MobultionSpiderEntity> type, Level world) {
         super(type, world);
     }
 
@@ -27,8 +27,8 @@ public class MiniSpiderEntity extends MobultionSpiderEntity{
      * @see dev.mcpecommander.mobultion.Mobultion
      * @return AttributeModifierMap.MutableAttribute
      */
-    public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 26.0D).add(Attributes.MOVEMENT_SPEED, 0.3D);
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 26.0D).add(Attributes.MOVEMENT_SPEED, 0.3D);
     }
 
     /**

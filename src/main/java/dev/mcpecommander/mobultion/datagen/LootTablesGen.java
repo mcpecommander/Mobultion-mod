@@ -4,16 +4,15 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
 import dev.mcpecommander.mobultion.setup.Registration;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.LootTableProvider;
-import net.minecraft.data.loot.BlockLootTables;
-import net.minecraft.data.loot.EntityLootTables;
-import net.minecraft.entity.EntityType;
-import net.minecraft.loot.*;
-import net.minecraft.loot.functions.LootingEnchantBonus;
-import net.minecraft.loot.functions.SetCount;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.data.loot.BlockLoot;
+import net.minecraft.data.loot.EntityLoot;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.storage.loot.functions.LootingEnchantFunction;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -21,6 +20,16 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.LootTables;
+import net.minecraft.world.level.storage.loot.ValidationContext;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 /* McpeCommander created on 26/07/2021 inside the package - dev.mcpecommander.mobultion.datagen */
 public class LootTablesGen extends LootTableProvider {
@@ -34,9 +43,9 @@ public class LootTablesGen extends LootTableProvider {
      * location and loot table builder.
      * Just copy it and change according to the names of your inner loot table classes.
      */
-    private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> tables =
-            ImmutableList.of(Pair.of(LootTablesGen.EntityTables::new, LootParameterSets.ENTITY),
-                             Pair.of(LootTablesGen.BlockTables::new, LootParameterSets.BLOCK));
+    private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> tables =
+            ImmutableList.of(Pair.of(LootTablesGen.EntityTables::new, LootContextParamSets.ENTITY),
+                             Pair.of(LootTablesGen.BlockTables::new, LootContextParamSets.BLOCK));
 
     /**
      * Takes that complicated monstrosity up here to know what classes to run the loot table gen for.
@@ -44,7 +53,7 @@ public class LootTablesGen extends LootTableProvider {
      */
     @Nonnull
     @Override
-    public List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootParameterSet>> getTables() {
+    public List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables() {
         return tables;
     }
 
@@ -55,11 +64,11 @@ public class LootTablesGen extends LootTableProvider {
      * @param validationtracker The validation tracker that can validate loot tables.
      */
     @Override
-    protected void validate(Map<ResourceLocation, LootTable> map, @Nonnull ValidationTracker validationtracker) {
-        map.forEach((resourceLocation, lootTable) -> LootTableManager.validate(validationtracker, resourceLocation, lootTable));
+    protected void validate(Map<ResourceLocation, LootTable> map, @Nonnull ValidationContext validationtracker) {
+        map.forEach((resourceLocation, lootTable) -> LootTables.validate(validationtracker, resourceLocation, lootTable));
     }
 
-    public static class EntityTables extends EntityLootTables{
+    public static class EntityTables extends EntityLoot{
 
         /**
          * Add loot tables for living entities here. Trying to add a loot table to an entity that doesn't extend living
@@ -68,9 +77,9 @@ public class LootTablesGen extends LootTableProvider {
         @Override
         protected void addTables() {
             this.add(Registration.VAMPIRESKELETON.get(), LootTable.lootTable().withPool(LootPool.lootPool().name("pool1")
-                    .setRolls(ConstantRange.exactly(1)).add(ItemLootEntry.lootTableItem(Registration.FANG.get())
-                            .apply(SetCount.setCount(RandomValueRange.between(0.0F, 1.0F)))
-                            .apply(LootingEnchantBonus.lootingMultiplier(RandomValueRange.between(0.0F, 1.0F))))));
+                    .setRolls(ConstantValue.exactly(1)).add(LootItem.lootTableItem(Registration.FANG.get())
+                            .apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 1.0F)))
+                            .apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0.0F, 1.0F))))));
         }
 
         /**
@@ -91,7 +100,7 @@ public class LootTablesGen extends LootTableProvider {
         }
     }
 
-    public static class BlockTables extends BlockLootTables{
+    public static class BlockTables extends BlockLoot{
 
         /**
          * Add loot tables for blocks here.

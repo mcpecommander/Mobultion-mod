@@ -1,6 +1,6 @@
 package dev.mcpecommander.mobultion.utils;
 
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
 
 /* McpeCommander created on 09/07/2021 inside the package - dev.mcpecommander.mobultion.utils */
 public class MathCalculations {
@@ -10,9 +10,9 @@ public class MathCalculations {
         double value =(number - start) / (stop - start) * (finalStop - finalStart) + finalStart;
 
         if (finalStart < finalStop) {
-            return MathHelper.clamp(value, finalStart, finalStop);
+            return Mth.clamp(value, finalStart, finalStop);
         } else {
-            return MathHelper.clamp(value, finalStop, finalStart);
+            return Mth.clamp(value, finalStop, finalStart);
         }
     }
 }

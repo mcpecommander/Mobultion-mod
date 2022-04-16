@@ -15,22 +15,21 @@ import dev.mcpecommander.mobultion.particles.HealParticle;
 import dev.mcpecommander.mobultion.particles.PortalParticle;
 import dev.mcpecommander.mobultion.particles.SnowFlakeParticle;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.ArrowRenderer;
-import net.minecraft.item.ItemModelsProperties;
-import net.minecraft.particles.ParticleType;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.RegistryObject;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nonnull;
 
@@ -43,43 +42,43 @@ public class ClientSetup {
     public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, MODID);
 
     public static final RegistryObject<ParticleType<HealParticle.HealParticleData>> HEAL_PARTICLE_TYPE =
-            PARTICLE_TYPES.register("healparticle", () -> new ParticleType<HealParticle.HealParticleData>(false,
+            PARTICLE_TYPES.register("healparticle", () -> new ParticleType<>(false,
                     HealParticle.HealParticleData.DESERIALIZER) {
-        @Nonnull
-        @Override
-        public Codec<HealParticle.HealParticleData> codec() {
-            return HealParticle.HealParticleData.CODEC;
-        }
-    });
+                @Nonnull
+                @Override
+                public Codec<HealParticle.HealParticleData> codec() {
+                    return HealParticle.HealParticleData.CODEC;
+                }
+            });
     public static final RegistryObject<ParticleType<PortalParticle.PortalParticleData>> PORTAL_PARTICLE_TYPE =
-            PARTICLE_TYPES.register("portalparticle", () -> new ParticleType<PortalParticle.PortalParticleData>(false,
+            PARTICLE_TYPES.register("portalparticle", () -> new ParticleType<>(false,
                     PortalParticle.PortalParticleData.DESERIALIZER) {
-        @Nonnull
-        @Override
-        public Codec<PortalParticle.PortalParticleData> codec() {
-            return PortalParticle.PortalParticleData.CODEC;
-        }
-    });
+                @Nonnull
+                @Override
+                public Codec<PortalParticle.PortalParticleData> codec() {
+                    return PortalParticle.PortalParticleData.CODEC;
+                }
+            });
 
     public static final RegistryObject<ParticleType<SnowFlakeParticle.SnowFlakeParticleData>> SNOW_FLAKE_PARTICLE_TYPE =
-            PARTICLE_TYPES.register("snowflakeparticle", () -> new ParticleType<SnowFlakeParticle.SnowFlakeParticleData>(false,
+            PARTICLE_TYPES.register("snowflakeparticle", () -> new ParticleType<>(false,
                     SnowFlakeParticle.SnowFlakeParticleData.DESERIALIZER) {
-        @Nonnull
-        @Override
-        public Codec<SnowFlakeParticle.SnowFlakeParticleData> codec() {
-            return SnowFlakeParticle.SnowFlakeParticleData.CODEC;
-        }
-    });
+                @Nonnull
+                @Override
+                public Codec<SnowFlakeParticle.SnowFlakeParticleData> codec() {
+                    return SnowFlakeParticle.SnowFlakeParticleData.CODEC;
+                }
+            });
 
     public static final RegistryObject<ParticleType<FlowerParticle.FlowerParticleData>> FLOWER_PARTICLE_TYPE =
-            PARTICLE_TYPES.register("flowerparticle", () -> new ParticleType<FlowerParticle.FlowerParticleData>(false,
+            PARTICLE_TYPES.register("flowerparticle", () -> new ParticleType<>(false,
                     FlowerParticle.FlowerParticleData.DESERIALIZER) {
-        @Nonnull
-        @Override
-        public Codec<FlowerParticle.FlowerParticleData> codec() {
-            return FlowerParticle.FlowerParticleData.CODEC;
-        }
-    });
+                @Nonnull
+                @Override
+                public Codec<FlowerParticle.FlowerParticleData> codec() {
+                    return FlowerParticle.FlowerParticleData.CODEC;
+                }
+            });
 
 
     @SubscribeEvent
@@ -90,98 +89,105 @@ public class ClientSetup {
         Minecraft.getInstance().particleEngine.register(FLOWER_PARTICLE_TYPE.get(), FlowerParticle.Factory::new);
     }
 
-    //Register rendering related stuff here.
     @SubscribeEvent
-    public static void init(final FMLClientSetupEvent event) {
-        RenderTypeLookup.setRenderLayer(Registration.HAYHAT.get(), RenderType.translucent());
+    public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
 
-        ClientRegistry.bindTileEntityRenderer(Registration.SPIDEREGG_TILE.get(), SpiderEggRenderer::new);
+        event.registerBlockEntityRenderer(Registration.SPIDEREGG_TILE.get(), SpiderEggRenderer::new);
 
-        ItemModelsProperties.register(Registration.FORESTBOW.get(), new ResourceLocation(MODID, "pull"),
-                (stack, world, entity) -> entity != null && entity.getUseItem() == stack ?
-                        (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / 20.0F : 0);
-        ItemModelsProperties.register(Registration.FORESTBOW.get(), new ResourceLocation(MODID, "pulling"),
-                (stack, world, entity) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
-
-        ItemModelsProperties.register(Registration.FANGNECKLACE.get(), new ResourceLocation(MODID, "pull"),
-                (stack, world, entity) -> entity != null && entity.getUseItem() == stack ?
-                        (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / 60.0F : 0);
-        ItemModelsProperties.register(Registration.FANGNECKLACE.get(), new ResourceLocation(MODID, "pulling"),
-                (stack, world, entity) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
-
-        RenderingRegistry.registerEntityRenderingHandler(Registration.ANGELSPIDER.get(),
+        event.registerEntityRenderer(Registration.ANGELSPIDER.get(),
                 AngelSpiderRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(Registration.WITCHSPIDER.get(),
+        event.registerEntityRenderer(Registration.WITCHSPIDER.get(),
                 WitchSpiderRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(Registration.HYPNOSPIDER.get(),
+        event.registerEntityRenderer(Registration.HYPNOSPIDER.get(),
                 HypnoSpiderRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(Registration.HYPNOWAVE.get(),
+        event.registerEntityRenderer(Registration.HYPNOWAVE.get(),
                 HypnoWaveRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(Registration.MAGMASPIDER.get(),
+        event.registerEntityRenderer(Registration.MAGMASPIDER.get(),
                 MagmaSpiderRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(Registration.MOTHERSPIDER.get(),
+        event.registerEntityRenderer(Registration.MOTHERSPIDER.get(),
                 MotherSpiderRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(Registration.MINISPIDER.get(),
+        event.registerEntityRenderer(Registration.MINISPIDER.get(),
                 MiniSpiderRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(Registration.WITHERSPIDER.get(),
+        event.registerEntityRenderer(Registration.WITHERSPIDER.get(),
                 WitherSpiderRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(Registration.WITHERHEADBUG.get(),
+        event.registerEntityRenderer(Registration.WITHERHEADBUG.get(),
                 WitherHeadBugRenderer::new);
 
-        RenderingRegistry.registerEntityRenderingHandler(Registration.JOKERSKELETON.get(),
+        event.registerEntityRenderer(Registration.JOKERSKELETON.get(),
                 JokerSkeletonRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(Registration.HEARTARROW.get(),
+        event.registerEntityRenderer(Registration.HEARTARROW.get(),
                 HeartArrowRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(Registration.CORRUPTEDSKELETON.get(),
+        event.registerEntityRenderer(Registration.CORRUPTEDSKELETON.get(),
                 BaseSkeletonRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(Registration.VAMPIRESKELETON.get(),
+        event.registerEntityRenderer(Registration.VAMPIRESKELETON.get(),
                 BaseSkeletonRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(Registration.FORESTSKELETON.get(),
+        event.registerEntityRenderer(Registration.FORESTSKELETON.get(),
                 BaseSkeletonRenderer::new);
+
         //Use the same renderer as the vanilla arrow for now.
         //TODO: Decide if I want an animated model or just a texture.
-        RenderingRegistry.registerEntityRenderingHandler(Registration.CROSSARROW.get(),
-                manager -> new ArrowRenderer<CrossArrowEntity>(manager) {
+        event.registerEntityRenderer(Registration.CROSSARROW.get(),
+                manager -> new ArrowRenderer<>(manager) {
                     @Nonnull
                     @Override
                     public ResourceLocation getTextureLocation(@Nonnull CrossArrowEntity arrow) {
                         return new ResourceLocation("textures/entity/projectiles/arrow.png");
                     }
                 });
-        RenderingRegistry.registerEntityRenderingHandler(Registration.SHAMANSKELETON.get(),
+        event.registerEntityRenderer(Registration.SHAMANSKELETON.get(),
                 BaseSkeletonRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(Registration.MINILIGHTNING.get(),
+        event.registerEntityRenderer(Registration.MINILIGHTNING.get(),
                 MiniLightningRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(Registration.MAGMASKELETON.get(),
+        event.registerEntityRenderer(Registration.MAGMASKELETON.get(),
                 BaseSkeletonRenderer::new);
 
-        RenderingRegistry.registerEntityRenderingHandler(Registration.WANDERINGENDERMAN.get(),
+        event.registerEntityRenderer(Registration.WANDERINGENDERMAN.get(),
                 WanderingEndermanRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(Registration.MAGMAENDERMAN.get(),
+        event.registerEntityRenderer(Registration.MAGMAENDERMAN.get(),
                 MagmaEndermanRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(Registration.GLASSENDERMAN.get(),
+        event.registerEntityRenderer(Registration.GLASSENDERMAN.get(),
                 GlassEndermanRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(Registration.GLASSSHOT.get(),
+        event.registerEntityRenderer(Registration.GLASSSHOT.get(),
                 GlassShotRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(Registration.ICEENDERMAN.get(),
+        event.registerEntityRenderer(Registration.ICEENDERMAN.get(),
                 IceEndermanRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(Registration.GARDENERENDERMAN.get(),
+        event.registerEntityRenderer(Registration.GARDENERENDERMAN.get(),
                 GardenerEndermanRenderer::new);
 
-        RenderingRegistry.registerEntityRenderingHandler(Registration.KNIGHTZOMBIE.get(),
+        event.registerEntityRenderer(Registration.KNIGHTZOMBIE.get(),
                 KnightZombieRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(Registration.WORKERZOMBIE.get(),
+        event.registerEntityRenderer(Registration.WORKERZOMBIE.get(),
                 WorkerZombieRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(Registration.MAGMAZOMBIE.get(),
+        event.registerEntityRenderer(Registration.MAGMAZOMBIE.get(),
                 MagmaZombieRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(Registration.DOCTORZOMBIE.get(),
+        event.registerEntityRenderer(Registration.DOCTORZOMBIE.get(),
                 DoctorZombieRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(Registration.HUNGRYZOMBIE.get(),
+        event.registerEntityRenderer(Registration.HUNGRYZOMBIE.get(),
                 HungryZombieRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(Registration.GOROZOMBIE.get(),
+        event.registerEntityRenderer(Registration.GOROZOMBIE.get(),
                 GoroZombieRenderer::new);
-        RenderingRegistry.registerEntityRenderingHandler(Registration.GENIEZOMBIE.get(),
+        event.registerEntityRenderer(Registration.GENIEZOMBIE.get(),
                 GenieZombieRenderer::new);
+    }
+
+    //Register rendering related stuff here.
+    @SubscribeEvent
+    public static void init(final FMLClientSetupEvent event) {
+        ItemBlockRenderTypes.setRenderLayer(Registration.HAYHAT.get(), RenderType.translucent());
+
+        ItemProperties.register(Registration.FORESTBOW.get(), new ResourceLocation(MODID, "pull"),
+                (stack, world, entity, id) -> entity != null && entity.getUseItem() == stack ?
+                        (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / 20.0F : 0);
+        ItemProperties.register(Registration.FORESTBOW.get(), new ResourceLocation(MODID, "pulling"),
+                (stack, world, entity, id) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+
+        ItemProperties.register(Registration.FANGNECKLACE.get(), new ResourceLocation(MODID, "pull"),
+                (stack, world, entity, id) -> entity != null && entity.getUseItem() == stack ?
+                        (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / 60.0F : 0);
+        ItemProperties.register(Registration.FANGNECKLACE.get(), new ResourceLocation(MODID, "pulling"),
+                (stack, world, entity, id) -> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F);
+
+
     }
 
 

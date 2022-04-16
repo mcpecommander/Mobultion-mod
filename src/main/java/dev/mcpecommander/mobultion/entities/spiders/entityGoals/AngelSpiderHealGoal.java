@@ -1,16 +1,16 @@
 package dev.mcpecommander.mobultion.entities.spiders.entityGoals;
 
 import dev.mcpecommander.mobultion.entities.spiders.entities.AngelSpiderEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.Level;
 
 import java.util.EnumSet;
 
 /* Created by McpeCommander on 2021/06/18 */
 public class AngelSpiderHealGoal extends Goal {
 
-    World world;
+    Level world;
     /**
      * The angel spider that will do this goal
      */

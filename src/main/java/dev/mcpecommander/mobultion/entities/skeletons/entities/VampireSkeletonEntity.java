@@ -1,17 +1,19 @@
 package dev.mcpecommander.mobultion.entities.skeletons.entities;
 
 import dev.mcpecommander.mobultion.setup.Registration;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.passive.BatEntity;
-import net.minecraft.entity.passive.SheepEntity;
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ambient.Bat;
+import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -30,7 +32,7 @@ public class VampireSkeletonEntity extends MobultionSkeletonEntity{
      */
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    public VampireSkeletonEntity(EntityType<VampireSkeletonEntity> type, World world) {
+    public VampireSkeletonEntity(EntityType<VampireSkeletonEntity> type, Level world) {
         super(type, world);
     }
 
@@ -42,13 +44,13 @@ public class VampireSkeletonEntity extends MobultionSkeletonEntity{
         this.goalSelector.addGoal(0, new RestrictSunGoal(this));
         this.goalSelector.addGoal(1, new FleeSunGoal(this, 1.0D));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2D, false));
-        this.goalSelector.addGoal(3, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 1.0D));
+        this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, WolfEntity.class, true));
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, SheepEntity.class, true));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Wolf.class, true));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Sheep.class, true));
     }
 
     /**
@@ -61,9 +63,9 @@ public class VampireSkeletonEntity extends MobultionSkeletonEntity{
     @Override
     public boolean hurt(@Nonnull DamageSource damageSource, float amount) {
         boolean flag = super.hurt(damageSource, amount);
-        if(flag && damageSource.getEntity() instanceof PlayerEntity && !damageSource.isCreativePlayer()
+        if(flag && damageSource.getEntity() instanceof Player && !damageSource.isCreativePlayer()
                 && random.nextFloat() < 0.1f){
-            BatEntity bat = new BatEntity(EntityType.BAT, this.level){
+            Bat bat = new Bat(EntityType.BAT, this.level){
                 //Make the bat remorph into a vampire skeleton after some random time
                 @Override
                 public void tick() {
@@ -74,13 +76,13 @@ public class VampireSkeletonEntity extends MobultionSkeletonEntity{
                         skeletonEntity.setHealth(skeletonEntity.getMaxHealth() - random.nextInt(5));
                         skeletonEntity.setPos(this.getX(), this.getY(), this.getZ());
                         this.level.addFreshEntity(skeletonEntity);
-                        this.remove();
+                        this.discard();
                     }
                 }
             };
             bat.setPos(this.getX(), this.getY(), this.getZ());
             this.level.addFreshEntity(bat);
-            this.remove();
+            this.discard();
         }
         return flag;
     }
@@ -90,8 +92,8 @@ public class VampireSkeletonEntity extends MobultionSkeletonEntity{
      * @see dev.mcpecommander.mobultion.Mobultion
      * @return AttributeModifierMap.MutableAttribute
      */
-    public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, 30)
+    public static AttributeSupplier.Builder createAttributes() {
+        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 30)
                 .add(Attributes.MOVEMENT_SPEED, 0.5D)
                 .add(Attributes.FOLLOW_RANGE, 26)
                 .add(Attributes.ATTACK_DAMAGE, 6D);

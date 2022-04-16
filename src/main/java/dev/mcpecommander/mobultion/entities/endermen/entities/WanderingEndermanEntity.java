@@ -4,27 +4,29 @@ import dev.mcpecommander.mobultion.entities.endermen.EndermenConfig;
 import dev.mcpecommander.mobultion.entities.endermen.entityGoals.EndermanFindStaringPlayerGoal;
 import dev.mcpecommander.mobultion.entities.endermen.entityGoals.WanderingEndermanLightningAttackGoal;
 import dev.mcpecommander.mobultion.setup.Registration;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.effect.LightningBoltEntity;
-import net.minecraft.entity.monster.CreeperEntity;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.util.DamageSource;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.ResetUniversalAngerTargetGoal;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -43,7 +45,7 @@ public class WanderingEndermanEntity extends MobultionEndermanEntity {
     /**
      * Is casting the lightning spell.
      */
-    private static final DataParameter<Boolean> DATA_CASTING = EntityDataManager.defineId(WanderingEndermanEntity.class, DataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> DATA_CASTING = SynchedEntityData.defineId(WanderingEndermanEntity.class, EntityDataSerializers.BOOLEAN);
     /**
      * The animation factory, for more information check GeckoLib.
      */
@@ -53,10 +55,10 @@ public class WanderingEndermanEntity extends MobultionEndermanEntity {
      */
     public double xCloakO, yCloakO, zCloakO, xCloak, yCloak, zCloak;
 
-    public WanderingEndermanEntity(EntityType<WanderingEndermanEntity> entityType, World world) {
+    public WanderingEndermanEntity(EntityType<WanderingEndermanEntity> entityType, Level world) {
         super(entityType, world);
         //Set the priority to negative to signal that this entity avoids water at all costs.
-        this.setPathfindingMalus(PathNodeType.WATER, -1.0F);
+        this.setPathfindingMalus(BlockPathTypes.WATER, -1.0F);
     }
 
     /**
@@ -73,15 +75,15 @@ public class WanderingEndermanEntity extends MobultionEndermanEntity {
      */
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(2, new WanderingEndermanLightningAttackGoal(this, 60));
-        this.goalSelector.addGoal(3, new WaterAvoidingRandomWalkingGoal(this, 1.0D, 0.0F));
-        this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 1.0D, 0.0F));
+        this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new EndermanFindStaringPlayerGoal(this, livingEntity -> true));
         this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, CreeperEntity.class, 10, true, false, null));
-        this.targetSelector.addGoal(4, new ResetAngerGoal<>(this, false));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Creeper.class, 10, true, false, null));
+        this.targetSelector.addGoal(4, new ResetUniversalAngerTargetGoal<>(this, false));
     }
 
     /**
@@ -89,8 +91,8 @@ public class WanderingEndermanEntity extends MobultionEndermanEntity {
      * @see dev.mcpecommander.mobultion.Mobultion
      * @return AttributeModifierMap.MutableAttribute
      */
-    public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, EndermenConfig.WANDERING_HEALTH.get())
+    public static AttributeSupplier.Builder createAttributes() {
+        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, EndermenConfig.WANDERING_HEALTH.get())
                 .add(Attributes.ATTACK_DAMAGE, EndermenConfig.WANDERING_DAMAGE.get())
                 .add(Attributes.MOVEMENT_SPEED, EndermenConfig.WANDERING_SPEED.get())
                 .add(Attributes.FOLLOW_RANGE, EndermenConfig.WANDERING_RADIUS.get());
@@ -118,7 +120,7 @@ public class WanderingEndermanEntity extends MobultionEndermanEntity {
     protected void tickDeath() {
         super.tickDeath();
         if (this.deathTime == 25 && !level.isClientSide) {
-            LightningBoltEntity entity = new LightningBoltEntity(EntityType.LIGHTNING_BOLT, level);
+            LightningBolt entity = new LightningBolt(EntityType.LIGHTNING_BOLT, level);
             entity.setPos(this.getX(), this.getY(), this.getZ());
             entity.setVisualOnly(true);
             level.addFreshEntity(entity);
@@ -236,9 +238,9 @@ public class WanderingEndermanEntity extends MobultionEndermanEntity {
      */
     @Nullable
     @Override
-    public ILivingEntityData finalizeSpawn(IServerWorld serverWorld, DifficultyInstance difficulty, SpawnReason spawnReason,
-                                           @Nullable ILivingEntityData livingEntityData, @Nullable CompoundNBT NBTTag) {
-        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Registration.THUNDERSTAFF.get()));
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor serverWorld, DifficultyInstance difficulty, MobSpawnType spawnReason,
+                                           @Nullable SpawnGroupData livingEntityData, @Nullable CompoundTag NBTTag) {
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Registration.THUNDERSTAFF.get()));
         return super.finalizeSpawn(serverWorld, difficulty, spawnReason, livingEntityData, NBTTag);
     }
 

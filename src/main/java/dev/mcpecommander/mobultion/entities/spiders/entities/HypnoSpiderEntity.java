@@ -1,12 +1,12 @@
 package dev.mcpecommander.mobultion.entities.spiders.entities;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.world.World;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.level.Level;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -25,7 +25,7 @@ public class HypnoSpiderEntity extends MobultionSpiderEntity{
      */
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    public HypnoSpiderEntity(EntityType<HypnoSpiderEntity> mob, World world) {
+    public HypnoSpiderEntity(EntityType<HypnoSpiderEntity> mob, Level world) {
         super(mob, world);
     }
 
@@ -42,8 +42,8 @@ public class HypnoSpiderEntity extends MobultionSpiderEntity{
      * @see dev.mcpecommander.mobultion.Mobultion
      * @return AttributeModifierMap.MutableAttribute
      */
-    public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MobEntity.createMobAttributes().add(Attributes.MAX_HEALTH, 16.0D).add(Attributes.MOVEMENT_SPEED, 0.3D);
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 16.0D).add(Attributes.MOVEMENT_SPEED, 0.3D);
     }
 
     /**
@@ -108,7 +108,7 @@ public class HypnoSpiderEntity extends MobultionSpiderEntity{
     @Override
     protected void tickDeath() {
         if(this.deathTime++ == getMaxDeathTick()){
-            this.remove();
+            this.discard();
             for(int i = 0; i < 20; ++i) {
                 double d0 = this.random.nextGaussian() * 0.02D;
                 double d1 = this.random.nextGaussian() * 0.02D;
@@ -129,7 +129,7 @@ public class HypnoSpiderEntity extends MobultionSpiderEntity{
      * @return true if the mob can be affected.
      */
     @Override
-    public boolean canBeAffected(@Nonnull EffectInstance effect) {
+    public boolean canBeAffected(@Nonnull MobEffectInstance effect) {
         return true;
     }
 }

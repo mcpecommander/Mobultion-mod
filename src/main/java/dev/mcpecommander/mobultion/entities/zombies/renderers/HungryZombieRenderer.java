@@ -1,18 +1,18 @@
 package dev.mcpecommander.mobultion.entities.zombies.renderers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3f;
 import dev.mcpecommander.mobultion.entities.zombies.entities.HungryZombieEntity;
 import dev.mcpecommander.mobultion.entities.zombies.layers.KnifeForkHoldingLayer;
 import dev.mcpecommander.mobultion.entities.zombies.models.HungryZombieModel;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.Blocks;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 /* McpeCommander created on 28/07/2021 inside the package - dev.mcpecommander.mobultion.entities.zombies.renderers */
 public class HungryZombieRenderer extends GeoEntityRenderer<HungryZombieEntity> {
 
-    public HungryZombieRenderer(EntityRendererManager renderManager) {
+    public HungryZombieRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new HungryZombieModel());
         this.shadowRadius = 0.5f;
         this.addLayer(new KnifeForkHoldingLayer(this));
@@ -33,8 +33,8 @@ public class HungryZombieRenderer extends GeoEntityRenderer<HungryZombieEntity> 
     }
 
     @Override
-    public void render(GeoModel model, HungryZombieEntity animatable, float partialTicks, RenderType type, MatrixStack stack,
-                       @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn,
+    public void render(GeoModel model, HungryZombieEntity animatable, float partialTicks, RenderType type, PoseStack stack,
+                       @Nullable MultiBufferSource renderTypeBuffer, @Nullable VertexConsumer vertexBuilder, int packedLightIn,
                        int packedOverlayIn, float red, float green, float blue, float alpha) {
         renderEarly(animatable, stack, partialTicks, renderTypeBuffer, vertexBuilder, packedLightIn,
                 packedOverlayIn, red, green, blue, alpha);
@@ -50,8 +50,8 @@ public class HungryZombieRenderer extends GeoEntityRenderer<HungryZombieEntity> 
                 //Move the block to the center.
                 stack.translate(-0.5f, 0f, -0.5f);
                 //Move the block to the border of a circle.
-                stack.translate(MathHelper.cos((float) (Math.PI/4 * i)) * 0.5, 0,
-                        MathHelper.sin((float) (Math.PI/4 * i)) * 0.5);
+                stack.translate(Mth.cos((float) (Math.PI/4 * i)) * 0.5, 0,
+                        Mth.sin((float) (Math.PI/4 * i)) * 0.5);
                 //Translate to the rotation and scaling pivot point.
                 stack.translate(0.5f, 0f, 0.5f);
                 //Rotate each cake around its middle y-axis.

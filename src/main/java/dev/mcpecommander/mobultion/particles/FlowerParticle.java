@@ -5,23 +5,24 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.mcpecommander.mobultion.setup.ClientSetup;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleType;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Locale;
 
 /* McpeCommander created on 10/07/2021 inside the package - dev.mcpecommander.mobultion.particles */
-public class FlowerParticle extends SpriteTexturedParticle {
+public class FlowerParticle extends TextureSheetParticle {
 
-    protected FlowerParticle(ClientWorld world, double posX, double posY, double posZ,
+    protected FlowerParticle(ClientLevel world, double posX, double posY, double posZ,
                              double speedX, double speedY, double speedZ,
                              FlowerParticle.FlowerParticleData data) {
         super(world, posX, posY, posZ, speedX, speedY, speedZ);
@@ -56,21 +57,21 @@ public class FlowerParticle extends SpriteTexturedParticle {
     }
 
     @Override
-    public IParticleRenderType getRenderType() {
-        return IParticleRenderType.PARTICLE_SHEET_OPAQUE;
+    public @NotNull ParticleRenderType getRenderType() {
+        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
-    public static class Factory implements IParticleFactory<FlowerParticle.FlowerParticleData> {
+    public static class Factory implements ParticleProvider<FlowerParticle.FlowerParticleData> {
 
-        private final IAnimatedSprite sprite;
+        private final SpriteSet sprite;
 
-        public Factory(IAnimatedSprite sprite){
+        public Factory(SpriteSet sprite){
             this.sprite = sprite;
         }
 
         @Nullable
         @Override
-        public Particle createParticle(FlowerParticle.FlowerParticleData data, ClientWorld world,
+        public Particle createParticle(FlowerParticle.@NotNull FlowerParticleData data, @NotNull ClientLevel world,
                                        double posX, double posY, double posZ,
                                        double speedX, double speedY, double speedZ) {
             FlowerParticle particle = new FlowerParticle(world, posX, posY, posZ, speedX, speedY, speedZ, data);
@@ -79,11 +80,11 @@ public class FlowerParticle extends SpriteTexturedParticle {
         }
     }
 
-    public static class FlowerParticleData implements IParticleData {
+    public static class FlowerParticleData implements ParticleOptions {
 
-        public static final IDeserializer<FlowerParticle.FlowerParticleData> DESERIALIZER = new IDeserializer<FlowerParticle.FlowerParticleData>() {
+        public static final Deserializer<FlowerParticle.FlowerParticleData> DESERIALIZER = new Deserializer<>() {
             @Override
-            public FlowerParticle.FlowerParticleData fromCommand(ParticleType<FlowerParticle.FlowerParticleData> particleType, StringReader reader) throws CommandSyntaxException {
+            public FlowerParticle.@NotNull FlowerParticleData fromCommand(@NotNull ParticleType<FlowerParticle.FlowerParticleData> particleType, StringReader reader) throws CommandSyntaxException {
                 reader.expect(' ');
                 float red = (float) reader.readDouble();
                 reader.expect(' ');
@@ -98,7 +99,7 @@ public class FlowerParticle extends SpriteTexturedParticle {
             }
 
             @Override
-            public FlowerParticle.FlowerParticleData fromNetwork(ParticleType<FlowerParticle.FlowerParticleData> particleType, PacketBuffer buffer) {
+            public FlowerParticle.@NotNull FlowerParticleData fromNetwork(@NotNull ParticleType<FlowerParticle.FlowerParticleData> particleType, FriendlyByteBuf buffer) {
                 return new FlowerParticle.FlowerParticleData(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(),
                         buffer.readFloat(), buffer.readFloat());
             }
@@ -122,7 +123,7 @@ public class FlowerParticle extends SpriteTexturedParticle {
             this.red = red;
             this.green = green;
             this.blue = blue;
-            this.alpha = MathHelper.clamp(alpha, 0.01f, 4.0f);
+            this.alpha = Mth.clamp(alpha, 0.01f, 4.0f);
             this.size = size;
         }
 
@@ -152,12 +153,12 @@ public class FlowerParticle extends SpriteTexturedParticle {
         }
 
         @Override
-        public ParticleType<?> getType() {
+        public @NotNull ParticleType<?> getType() {
             return ClientSetup.FLOWER_PARTICLE_TYPE.get();
         }
 
         @Override
-        public void writeToNetwork(PacketBuffer buffer) {
+        public void writeToNetwork(FriendlyByteBuf buffer) {
             buffer.writeFloat(this.red);
             buffer.writeFloat(this.green);
             buffer.writeFloat(this.blue);
@@ -166,7 +167,7 @@ public class FlowerParticle extends SpriteTexturedParticle {
         }
 
         @Override
-        public String writeToString() {
+        public @NotNull String writeToString() {
             return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f %.2f", Registry.PARTICLE_TYPE.getKey(this.getType()),
                     this.red, this.green, this.blue, this.alpha, this.size);
         }

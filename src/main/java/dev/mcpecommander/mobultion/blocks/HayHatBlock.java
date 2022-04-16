@@ -1,16 +1,17 @@
 package dev.mcpecommander.mobultion.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.BlockGetter;
 
 import javax.annotation.Nonnull;
+
 
 public class HayHatBlock extends Block {
 
@@ -31,11 +32,11 @@ public class HayHatBlock extends Block {
      * @param selectionContext The selection context that has some information about the player.
      * @return The voxel shape of the hitbox.
      */
-    @Nonnull
+
     @Override
-    public VoxelShape getShape(@Nonnull BlockState blockState, @Nonnull IBlockReader world, @Nonnull BlockPos pos,
-                               @Nonnull ISelectionContext selectionContext) {
-        return VoxelShapes.or(C_BASE, C_TOP);
+    public VoxelShape getShape(@Nonnull BlockState blockState, @Nonnull BlockGetter world, @Nonnull BlockPos pos,
+                               @Nonnull CollisionContext selectionContext) {
+        return Shapes.or(C_BASE, C_TOP);
     }
 
 }

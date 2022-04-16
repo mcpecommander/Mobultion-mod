@@ -1,9 +1,9 @@
 package dev.mcpecommander.mobultion.effects;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.potion.Effect;
-import net.minecraft.potion.EffectType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -11,13 +11,13 @@ import java.util.Random;
 import java.util.Set;
 
 /* McpeCommander created on 18/07/2021 inside the package - dev.mcpecommander.mobultion.effects */
-public class JokernessEffect extends Effect {
+public class JokernessEffect extends MobEffect {
 
     Random random;
     public Set<PlayingCard> effectFixers;
 
     public JokernessEffect() {
-        super(EffectType.HARMFUL, 0xffffff);
+        super(MobEffectCategory.HARMFUL, 0xffffff);
         this.random = new Random();
         effectFixers = new HashSet<>();
     }

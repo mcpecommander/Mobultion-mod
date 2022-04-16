@@ -6,30 +6,34 @@ import dev.mcpecommander.mobultion.entities.endermen.entityGoals.GardenerEnderma
 import dev.mcpecommander.mobultion.entities.endermen.entityGoals.GardenerEndermanPosFinderGoal;
 import dev.mcpecommander.mobultion.particles.FlowerParticle;
 import dev.mcpecommander.mobultion.setup.Registration;
-import net.minecraft.block.*;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.*;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.FarmBlock;
+import net.minecraft.world.level.block.FlowerBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -50,15 +54,15 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
     /**
      * A data parameter that syncs the gardening boolean to the client for animation sake. Much better than sending a packet.
      */
-    private static final DataParameter<Boolean> DATA_GARDENING = EntityDataManager.defineId(GardenerEndermanEntity.class, DataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> DATA_GARDENING = SynchedEntityData.defineId(GardenerEndermanEntity.class, EntityDataSerializers.BOOLEAN);
     /**
      * A data parameter that syncs a derp state for animation sake.
      */
-    private static final DataParameter<Boolean> DATA_DERP = EntityDataManager.defineId(GardenerEndermanEntity.class, DataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> DATA_DERP = SynchedEntityData.defineId(GardenerEndermanEntity.class, EntityDataSerializers.BOOLEAN);
     /**
      * A data parameter for AI debugging purposes.
      */
-    private static final DataParameter<List<BlockPos>> DATA_DEBUG = EntityDataManager.defineId(GardenerEndermanEntity.class, Registration.BLOCKPOS_LIST);
+    private static final EntityDataAccessor<List<BlockPos>> DATA_DEBUG = SynchedEntityData.defineId(GardenerEndermanEntity.class, Registration.BLOCKPOS_LIST);
     /**
      * The target position that this entity is targeting for its gardening purposes.
      */
@@ -68,7 +72,7 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
      */
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    public GardenerEndermanEntity(EntityType<? extends MobultionEndermanEntity> type, World world) {
+    public GardenerEndermanEntity(EntityType<? extends MobultionEndermanEntity> type, Level world) {
         super(type, world);
     }
 
@@ -77,8 +81,8 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
      */
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new SwimGoal(this));
-        this.goalSelector.addGoal(1, new AvoidEntityGoal<PlayerEntity>(this, PlayerEntity.class,
+        this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(1, new AvoidEntityGoal<Player>(this, Player.class,
                 8.0F, 1.3D, 1.5D){
             @Override
             public void start() {
@@ -107,7 +111,7 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
             }
         });
         this.goalSelector.addGoal(2, new GardenerEndermanGardenGoal(this, 30));
-        this.goalSelector.addGoal(3, new RandomWalkingGoal(this, 1.0D, 80){
+        this.goalSelector.addGoal(3, new RandomStrollGoal(this, 1.0D, 80){
             @Override
             public void start() {
                 super.start();
@@ -115,8 +119,8 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
                 setDebugRoad(MobultionEndermanEntity.getPathNodes((MobultionEndermanEntity) this.mob));
             }
         });
-        this.goalSelector.addGoal(4, new LookAtGoal(this, PlayerEntity.class, 8.0F));
-        this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(0, new GardenerEndermanPosFinderGoal(this, 150, EndermenConfig.GARDENER_RADIUS.get()));
 
     }
@@ -130,8 +134,8 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
      * @param random The random instance.
      * @return true if the entity can be spawned on this location and world.
      */
-    public static boolean checkMobSpawnRules(EntityType<? extends MobEntity> type, IWorld world,
-                                             SpawnReason reason, BlockPos pos, Random random) {
+    public static boolean checkMobSpawnRules(EntityType<? extends Mob> type, LevelAccessor world,
+                                             MobSpawnType reason, BlockPos pos, Random random) {
         return world.getBlockState(pos.below()).isFaceSturdy(world, pos.below(), Direction.UP) && random.nextInt(10) == 0;
     }
 
@@ -168,7 +172,7 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
      * @param syncedParameter The parameter that is being synced.
      */
     @Override
-    public void onSyncedDataUpdated(@Nonnull DataParameter<?> syncedParameter) {
+    public void onSyncedDataUpdated(@Nonnull EntityDataAccessor<?> syncedParameter) {
         super.onSyncedDataUpdated(syncedParameter);
         if(syncedParameter.equals(DATA_GARDENING) && this.level.isClientSide){
             if(isGardening()) {
@@ -235,7 +239,7 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
      * @param NBTTag The tag where the additional data will be written to.
      */
     @Override
-    public void addAdditionalSaveData(@Nonnull CompoundNBT NBTTag) {
+    public void addAdditionalSaveData(@Nonnull CompoundTag NBTTag) {
         super.addAdditionalSaveData(NBTTag);
         if(targetPos != null) NBTTag.putIntArray("mobultion:targetpos", new int[]{targetPos.getX(),
                 targetPos.getY(), targetPos.getZ()});
@@ -246,9 +250,9 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
      * @param NBTTag The NBT tag that holds the saved data.
      */
     @Override
-    public void readAdditionalSaveData(@Nonnull CompoundNBT NBTTag) {
+    public void readAdditionalSaveData(@Nonnull CompoundTag NBTTag) {
         super.readAdditionalSaveData(NBTTag);
-        if(NBTTag.contains("mobultion:targetpos", Constants.NBT.TAG_INT_ARRAY)){
+        if(NBTTag.contains("mobultion:targetpos", Tag.TAG_INT_ARRAY)){
             setTargetPos(new BlockPos(NBTTag.getIntArray("mobultion:targetpos")[0],
                     NBTTag.getIntArray("mobultion:targetpos")[1], NBTTag.getIntArray("mobultion:targetpos")[2]));
         }
@@ -262,8 +266,8 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
      * @return A float value where higher is better and anything under 0.0f (not 0.0f) blocks natural spawning.
      */
     @Override
-    public float getWalkTargetValue(@Nonnull BlockPos pos, IWorldReader world) {
-        return world.getBlockState(pos).is(Tags.Blocks.DIRT) ? 15f : (15f - world.getBrightness(pos));
+    public float getWalkTargetValue(@Nonnull BlockPos pos, LevelReader world) {
+        return world.getBlockState(pos).is(BlockTags.DIRT) ? 15f : (15f - world.getBrightness(pos));
     }
 
     /**
@@ -271,8 +275,8 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
      * @see dev.mcpecommander.mobultion.Mobultion
      * @return AttributeModifierMap.MutableAttribute
      */
-    public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MonsterEntity.createMonsterAttributes().add(Attributes.MAX_HEALTH, EndermenConfig.GARDENER_HEALTH.get())
+    public static AttributeSupplier.Builder createAttributes() {
+        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, EndermenConfig.GARDENER_HEALTH.get())
                 .add(Attributes.MOVEMENT_SPEED, EndermenConfig.GARDENER_SPEED.get());
     }
 
@@ -295,7 +299,7 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
                 double finalX = this.getX() + Math.cos(random.nextFloat() * Math.PI * 2) * 2;
                 double finalY = this.getY(1f) + (random.nextFloat() * 4 - 2);
                 double finalZ = this.getZ() + Math.sin(random.nextFloat() * Math.PI * 2) * 2;
-                Vector3d speed = new Vector3d(finalX - this.getX(),
+                Vec3 speed = new Vec3(finalX - this.getX(),
                         finalY - getY(2f/3f),
                         finalZ - this.getZ()).normalize();
                 this.level.addParticle(new FlowerParticle.FlowerParticleData(1f, 1f, 1f, 1f, 3f),
@@ -331,11 +335,11 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
      */
     @Nullable
     @Override
-    public ILivingEntityData finalizeSpawn(@Nonnull IServerWorld serverWorld, @Nonnull DifficultyInstance difficulty,
-                                           @Nonnull SpawnReason spawnReason, @Nullable ILivingEntityData livingEntityData,
-                                           @Nullable CompoundNBT NBTTag) {
-        this.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Registration.HAYHAT_ITEM.get()));
-        this.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.BONE_MEAL));
+    public SpawnGroupData finalizeSpawn(@Nonnull ServerLevelAccessor serverWorld, @Nonnull DifficultyInstance difficulty,
+                                           @Nonnull MobSpawnType spawnReason, @Nullable SpawnGroupData livingEntityData,
+                                           @Nullable CompoundTag NBTTag) {
+        this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Registration.HAYHAT_ITEM.get()));
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BONE_MEAL));
         return super.finalizeSpawn(serverWorld, difficulty, spawnReason, livingEntityData, NBTTag);
     }
 
@@ -401,19 +405,19 @@ public class GardenerEndermanEntity extends MobultionEndermanEntity{
      * @param pos The position being tested.
      * @return {@link GardeningState} enum of what to do if the block is to be gardened.
      */
-    public static GardeningState checkPos(World level, BlockPos pos){
+    public static GardeningState checkPos(Level level, BlockPos pos){
         BlockState blockState = level.getBlockState(pos);
-        if(blockState.is(Tags.Blocks.DIRT)){
+        if(blockState.is(BlockTags.DIRT)){
             BlockState above = level.getBlockState(pos.above());
-            if(above.getBlock() instanceof IGrowable){
+            if(above.getBlock() instanceof BonemealableBlock){
                 return GardeningState.BONEMEAL;
             }else if(above.getBlock() instanceof FlowerBlock){
                 return GardeningState.PICKING;
-            } else if(above.isAir(level, pos.above())){
+            } else if(above.isAir()){
                 return GardeningState.PLANTING;
             }
 
-        }else if(blockState.is(Blocks.FARMLAND) && blockState.getValue(FarmlandBlock.MOISTURE) < 7){
+        }else if(blockState.is(Blocks.FARMLAND) && blockState.getValue(FarmBlock.MOISTURE) < 7){
             return GardeningState.WATERING;
         }
         return GardeningState.NONE;

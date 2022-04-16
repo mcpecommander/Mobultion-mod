@@ -3,17 +3,17 @@ package dev.mcpecommander.mobultion.items;
 import dev.mcpecommander.mobultion.setup.ModSetup;
 import dev.mcpecommander.mobultion.setup.Registration;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.UseAction;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 
@@ -26,11 +26,11 @@ public class HealthPackItem extends Item {
 
     @Nonnull
     @Override
-    public ActionResult<ItemStack> use(@Nonnull World world, @Nonnull PlayerEntity player, @Nonnull Hand hand) {
+    public InteractionResultHolder<ItemStack> use(@Nonnull Level world, @Nonnull Player player, @Nonnull InteractionHand hand) {
         ItemStack item = player.getItemInHand(hand);
-        if(player.abilities.instabuild || player.getHealth() == player.getMaxHealth()) return ActionResult.pass(item);
+        if(player.getAbilities().instabuild || player.getHealth() == player.getMaxHealth()) return InteractionResultHolder.pass(item);
         player.startUsingItem(hand);
-        return ActionResult.consume(item);
+        return InteractionResultHolder.consume(item);
     }
 
     @Nonnull
@@ -41,13 +41,13 @@ public class HealthPackItem extends Item {
 
     @Nonnull
     @Override
-    public ItemStack finishUsingItem(@Nonnull ItemStack item, @Nonnull World world, @Nonnull LivingEntity holder) {
+    public ItemStack finishUsingItem(@Nonnull ItemStack item, @Nonnull Level world, @Nonnull LivingEntity holder) {
         holder.heal(20f);
-        if(holder instanceof ServerPlayerEntity){
-            CriteriaTriggers.CONSUME_ITEM.trigger((ServerPlayerEntity) holder, item);
-            ((ServerPlayerEntity) holder).awardStat(Stats.ITEM_USED.get(this));
+        if(holder instanceof ServerPlayer){
+            CriteriaTriggers.CONSUME_ITEM.trigger((ServerPlayer) holder, item);
+            ((ServerPlayer) holder).awardStat(Stats.ITEM_USED.get(this));
         }
-        if(holder instanceof PlayerEntity && !((PlayerEntity)holder).abilities.instabuild) item.shrink(1);
+        if(holder instanceof Player && !((Player)holder).getAbilities().instabuild) item.shrink(1);
 
         return super.finishUsingItem(item, world, holder);
     }
@@ -59,7 +59,7 @@ public class HealthPackItem extends Item {
 
     @Nonnull
     @Override
-    public UseAction getUseAnimation(@Nonnull ItemStack item) {
-        return UseAction.EAT;
+    public UseAnim getUseAnimation(@Nonnull ItemStack item) {
+        return UseAnim.EAT;
     }
 }

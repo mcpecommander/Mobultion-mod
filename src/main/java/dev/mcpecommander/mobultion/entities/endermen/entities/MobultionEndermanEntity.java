@@ -1,26 +1,33 @@
 package dev.mcpecommander.mobultion.entities.endermen.entities;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.util.TimeUtil;
+import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.IndirectEntityDamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.util.LandRandomPos;
+import net.minecraft.world.entity.ai.util.RandomPos;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
 
 import javax.annotation.Nonnull;
@@ -30,7 +37,7 @@ import java.util.List;
 import java.util.UUID;
 
 /* McpeCommander created on 26/06/2021 inside the package - dev.mcpecommander.mobultion.entities.endermen.entities */
-public abstract class MobultionEndermanEntity extends MonsterEntity implements IAngerable, IAnimatable {
+public abstract class MobultionEndermanEntity extends Monster implements NeutralMob, IAnimatable {
     /**
      * Unique ID for the speed modifier.
      */
@@ -42,11 +49,11 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
     /**
      * A synced boolean of whether this entity is angry or not.
      */
-    private static final DataParameter<Boolean> DATA_CREEPY = EntityDataManager.defineId(MobultionEndermanEntity.class, DataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> DATA_CREEPY = SynchedEntityData.defineId(MobultionEndermanEntity.class, EntityDataSerializers.BOOLEAN);
     /**
      * A synced boolean of whether this entity is being stared at or not.
      */
-    private static final DataParameter<Boolean> DATA_STARED_AT = EntityDataManager.defineId(MobultionEndermanEntity.class, DataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> DATA_STARED_AT = SynchedEntityData.defineId(MobultionEndermanEntity.class, EntityDataSerializers.BOOLEAN);
     /**
      * A counter to make sure that the creepy enderman sound is not spammed or overlapped.
      */
@@ -58,7 +65,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
     /**
      * A persistent anger timer that keeps track both on server and client and even when the games is restarted.
      */
-    private static final RangedInteger PERSISTENT_ANGER_TIME = TickRangeConverter.rangeOfSeconds(20, 39);
+    private static final UniformInt PERSISTENT_ANGER_TIME = TimeUtil.rangeOfSeconds(20, 39);
     /**
      * The remaining anger time. It is synced and persists when the game is restarted.
      */
@@ -68,7 +75,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
      */
     private UUID persistentAngerTarget;
 
-    public MobultionEndermanEntity(EntityType<? extends MobultionEndermanEntity> type, World world){
+    public MobultionEndermanEntity(EntityType<? extends MobultionEndermanEntity> type, Level world){
         super(type, world);
         //Means that this entity can step up blocks that are 1 high.
         this.maxUpStep = 1.0F;
@@ -80,7 +87,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
      */
     @Override
     public void setTarget(@Nullable LivingEntity target) {
-        ModifiableAttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
+        AttributeInstance modifiableattributeinstance = this.getAttribute(Attributes.MOVEMENT_SPEED);
         if (target == null) {
             this.targetChangeTime = 0;
             this.entityData.set(DATA_CREEPY, false);
@@ -113,7 +120,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
      */
     @Override
     public void startPersistentAngerTimer() {
-        this.setRemainingPersistentAngerTime(PERSISTENT_ANGER_TIME.randomValue(this.random));
+        this.setRemainingPersistentAngerTime(PERSISTENT_ANGER_TIME.sample(this.random));
     }
 
     //These 4 methods under this comment are harder to grasp, but I copied them from the vanilla enderman, and they work
@@ -170,7 +177,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
         ++this.deathTime;
         if(this.level.isClientSide) addDeathParticles();
         if (this.deathTime == maxDeathAge()) {
-            this.remove();
+            this.discard();
         }
     }
 
@@ -179,7 +186,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
      * @param syncedParameter The parameter that is being synced.
      */
     @Override
-    public void onSyncedDataUpdated(@Nonnull DataParameter<?> syncedParameter) {
+    public void onSyncedDataUpdated(@Nonnull EntityDataAccessor<?> syncedParameter) {
         if (DATA_CREEPY.equals(syncedParameter) && this.hasBeenStaredAt() && this.level.isClientSide) {
             this.playStareSound();
         }
@@ -191,7 +198,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
      * @param NBTTag The tag where the additional data will be written to.
      */
     @Override
-    public void addAdditionalSaveData(@Nonnull CompoundNBT NBTTag) {
+    public void addAdditionalSaveData(@Nonnull CompoundTag NBTTag) {
         super.addAdditionalSaveData(NBTTag);
         //Writes the anger time and the UUID of the target to the NBT tag.
         this.addPersistentAngerSaveData(NBTTag);
@@ -202,10 +209,10 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
      * @param NBTTag The NBT tag that holds the saved data.
      */
     @Override
-    public void readAdditionalSaveData(@Nonnull CompoundNBT NBTTag) {
+    public void readAdditionalSaveData(@Nonnull CompoundTag NBTTag) {
         super.readAdditionalSaveData(NBTTag);
         if(!level.isClientSide)
-            this.readPersistentAngerSaveData((ServerWorld)this.level, NBTTag);
+            this.readPersistentAngerSaveData(this.level, NBTTag);
     }
 
     /**
@@ -213,17 +220,17 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
      * @param player The player that is being tested.
      * @return true if the looking vector of the player is pointing at the enderman head.
      */
-    public boolean isLookingAtMe(PlayerEntity player) {
-        ItemStack itemstack = player.inventory.armor.get(3);
+    public boolean isLookingAtMe(Player player) {
+        ItemStack itemstack = player.getInventory().armor.get(3);
         if (itemstack.getItem() == Blocks.CARVED_PUMPKIN.asItem()) {
             return false;
         } else {
-            Vector3d vector3d = player.getViewVector(1.0F).normalize();
-            Vector3d vector3d1 = new Vector3d(this.getX() - player.getX(), this.getEyeY() - player.getEyeY(), this.getZ() - player.getZ());
+            Vec3 vector3d = player.getViewVector(1.0F).normalize();
+            Vec3 vector3d1 = new Vec3(this.getX() - player.getX(), this.getEyeY() - player.getEyeY(), this.getZ() - player.getZ());
             double d0 = vector3d1.length();
             vector3d1 = vector3d1.normalize();
             double d1 = vector3d.dot(vector3d1);
-            return d1 > 1.0D - 0.025D / d0 && player.canSee(this);
+            return d1 > 1.0D - 0.025D / d0 && player.hasLineOfSight(this);
         }
     }
 
@@ -234,7 +241,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
      * @return a float of how high are the eye from the ground up.
      */
     @Override
-    protected float getStandingEyeHeight(@Nonnull Pose pose, @Nonnull EntitySize size) {
+    protected float getStandingEyeHeight(@Nonnull Pose pose, @Nonnull EntityDimensions size) {
         return 2.55F;
     }
 
@@ -263,7 +270,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
 
         this.jumping = false;
         if (!this.level.isClientSide) {
-            this.updatePersistentAnger((ServerWorld)this.level, true);
+            this.updatePersistentAnger((ServerLevel)this.level, true);
         }
 
         super.aiStep();
@@ -306,7 +313,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
      * @return true if the actual teleport method returns true and the teleportation location is possible.
      */
     private boolean teleportTowards(Entity target) {
-        Vector3d vector3d = new Vector3d(this.getX() - target.getX(), this.getY(0.5D) - target.getEyeY(), this.getZ() - target.getZ());
+        Vec3 vector3d = new Vec3(this.getX() - target.getX(), this.getY(0.5D) - target.getEyeY(), this.getZ() - target.getZ());
         vector3d = vector3d.normalize();
         double d1 = this.getX() + (this.random.nextDouble() - 0.5D) * 8.0D - vector3d.x * 16.0D;
         double d2 = this.getY() + (double)(this.random.nextInt(16) - 8) - vector3d.y * 16.0D;
@@ -320,7 +327,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
      * @return true if the teleportation is successful.
      */
     public boolean teleportAround(Entity target){
-        Vector3d pos = RandomPositionGenerator.getLandPosTowards(this, 10, 7, target.position());
+        Vec3 pos = LandRandomPos.getPosTowards(this, 10, 7, target.position());
         if(pos != null){
             return this.teleport(pos.x, pos.y, pos.z);
         }
@@ -335,7 +342,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
      * @return true if the entity can teleport to this position.
      */
     public boolean teleport(double x, double y, double z) {
-        BlockPos.Mutable mutablePosition = new BlockPos.Mutable(x, y, z);
+        BlockPos.MutableBlockPos mutablePosition = new BlockPos.MutableBlockPos(x, y, z);
 
         while(mutablePosition.getY() > 0 && !this.level.getBlockState(mutablePosition).getMaterial().blocksMotion()) {
             mutablePosition.move(Direction.DOWN);
@@ -371,7 +378,7 @@ public abstract class MobultionEndermanEntity extends MonsterEntity implements I
         double d3 = y;
         boolean flag = false;
         BlockPos blockpos = new BlockPos(x, y, z);
-        World world = this.level;
+        Level world = this.level;
         if (world.hasChunkAt(blockpos)) {
             boolean flag1 = false;
 

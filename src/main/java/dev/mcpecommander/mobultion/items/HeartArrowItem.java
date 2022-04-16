@@ -3,12 +3,12 @@ package dev.mcpecommander.mobultion.items;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.HeartArrowEntity;
 import dev.mcpecommander.mobultion.setup.ModSetup;
 import dev.mcpecommander.mobultion.setup.Registration;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.item.ArrowItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.ArrowItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nonnull;
 
@@ -21,13 +21,13 @@ public class HeartArrowItem extends ArrowItem {
     }
 
     @Override
-    public boolean isInfinite(@Nonnull ItemStack stack, @Nonnull ItemStack bow, @Nonnull PlayerEntity player) {
+    public boolean isInfinite(@Nonnull ItemStack stack, @Nonnull ItemStack bow, @Nonnull Player player) {
         return false;
     }
 
     @Nonnull
     @Override
-    public AbstractArrowEntity createArrow(@Nonnull World world, @Nonnull ItemStack arrowStack, LivingEntity shooter) {
+    public AbstractArrow createArrow(@Nonnull Level world, @Nonnull ItemStack arrowStack, LivingEntity shooter) {
         HeartArrowEntity arrow = new HeartArrowEntity(Registration.HEARTARROW.get(), world);
         arrow.setPos(shooter.getX(), shooter.getEyeY() - 0.1f, shooter.getZ());
         arrow.setOwner(shooter);

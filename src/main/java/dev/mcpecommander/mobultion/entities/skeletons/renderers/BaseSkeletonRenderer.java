@@ -1,13 +1,13 @@
 package dev.mcpecommander.mobultion.entities.skeletons.renderers;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.MobultionSkeletonEntity;
 import dev.mcpecommander.mobultion.entities.skeletons.layers.*;
 import dev.mcpecommander.mobultion.entities.skeletons.models.BaseSkeletonModel;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
@@ -19,7 +19,7 @@ public class BaseSkeletonRenderer<T extends MobultionSkeletonEntity> extends Geo
 
     private float rotationYaw;
 
-    public BaseSkeletonRenderer(EntityRendererManager renderManager) {
+    public BaseSkeletonRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new BaseSkeletonModel<>());
         this.shadowRadius = 0.5F;
         //This was a test to see if I can get to reuse the same renderer class for all skeletons, but it is not worth it.
@@ -40,7 +40,7 @@ public class BaseSkeletonRenderer<T extends MobultionSkeletonEntity> extends Geo
     //If I am ever to go out of the entity's rendering frustum, I believe the rotation will become 0, but it is an edge case
     //that isn't easily noticeable.
     @Override
-    protected void applyRotations(T entityLiving, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
+    protected void applyRotations(T entityLiving, PoseStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
         if(entityLiving.isDeadOrDying()){
             super.applyRotations(entityLiving, matrixStackIn, ageInTicks, this.rotationYaw, partialTicks);
         }else{
@@ -60,8 +60,8 @@ public class BaseSkeletonRenderer<T extends MobultionSkeletonEntity> extends Geo
     }
 
     @Override
-    public void render(GeoModel model, T animatable, float partialTicks, RenderType type, MatrixStack matrixStackIn,
-                       @Nullable IRenderTypeBuffer renderTypeBuffer, @Nullable IVertexBuilder vertexBuilder, int packedLightIn,
+    public void render(GeoModel model, T animatable, float partialTicks, RenderType type, PoseStack matrixStackIn,
+                       @Nullable MultiBufferSource renderTypeBuffer, @Nullable VertexConsumer vertexBuilder, int packedLightIn,
                        int packedOverlayIn, float red, float green, float blue, float alpha) {
         renderEarly(animatable, matrixStackIn, partialTicks, renderTypeBuffer, vertexBuilder, packedLightIn,
                 packedOverlayIn, red, green, blue, alpha);

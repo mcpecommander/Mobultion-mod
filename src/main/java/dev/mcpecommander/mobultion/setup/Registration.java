@@ -11,31 +11,31 @@ import dev.mcpecommander.mobultion.entities.skeletons.entities.*;
 import dev.mcpecommander.mobultion.entities.spiders.entities.*;
 import dev.mcpecommander.mobultion.entities.zombies.entities.*;
 import dev.mcpecommander.mobultion.items.*;
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.entity.EntitySpawnPlacementRegistry;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.RangedAttribute;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.SpawnEggItem;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.datasync.IDataSerializer;
-import net.minecraft.potion.Effect;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.gen.Heightmap;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.RangedAttribute;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DataSerializerEntry;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -48,13 +48,13 @@ import static dev.mcpecommander.mobultion.Mobultion.MODID;
 public class Registration {
 
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
-    private static final DeferredRegister<TileEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, MODID);
+    private static final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, MODID);
     private static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, MODID);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
-    private static final DeferredRegister<Effect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, MODID);
+    private static final DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, MODID);
     private static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, MODID);
     private static final DeferredRegister<DataSerializerEntry> DATA_SERIALIZER = DeferredRegister.
-            create(ForgeRegistries.DATA_SERIALIZERS, MODID);
+            create(ForgeRegistries.DATA_SERIALIZERS.get(), MODID);
     private static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, MODID);
 
     public static void init() {
@@ -95,8 +95,8 @@ public class Registration {
         event.put(GLASSENDERMAN.get(), GlassEndermanEntity.createAttributes().build());
         event.put(ICEENDERMAN.get(), IceEndermanEntity.createAttributes().build());
         event.put(GARDENERENDERMAN.get(), GardenerEndermanEntity.createAttributes().build());
-        EntitySpawnPlacementRegistry.register(GARDENERENDERMAN.get(),
-                EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES,
+        SpawnPlacements.register(GARDENERENDERMAN.get(),
+                SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 GardenerEndermanEntity::checkMobSpawnRules);
 
         event.put(KNIGHTZOMBIE.get(), KnightZombieEntity.createAttributes().build());
@@ -109,21 +109,21 @@ public class Registration {
     }
 
     //This is not inlined in the deferred register because .get() returns a generic IDataSerializer.
-    public static final IDataSerializer<List<BlockPos>> BLOCKPOS_LIST = new IDataSerializer<List<BlockPos>>() {
+    public static final EntityDataSerializer<List<BlockPos>> BLOCKPOS_LIST = new EntityDataSerializer<>() {
         @Override
-        public void write(PacketBuffer buffer, List<BlockPos> list) {
+        public void write(FriendlyByteBuf buffer, List<BlockPos> list) {
             buffer.writeInt(list.size());
-            for(BlockPos pos : list){
+            for (BlockPos pos : list) {
                 buffer.writeBlockPos(pos);
             }
         }
 
         @Nonnull
         @Override
-        public List<BlockPos> read(PacketBuffer buffer) {
+        public List<BlockPos> read(FriendlyByteBuf buffer) {
             int size = buffer.readInt();
             ArrayList<BlockPos> positions = new ArrayList<>();
-            for(int i = 0; i < size; i++){
+            for (int i = 0; i < size; i++) {
                 positions.add(buffer.readBlockPos());
             }
             return positions;
@@ -143,8 +143,8 @@ public class Registration {
     public static final RegistryObject<SpiderEggBlock> SPIDEREGG = BLOCKS.register("spidereggblock", SpiderEggBlock::new);
     public static final RegistryObject<Item> SPIDEREGG_ITEM = ITEMS.register("spidereggblock", () -> new BlockItem(SPIDEREGG.get(),
             new Item.Properties().tab(ModSetup.ITEM_GROUP)));
-    public static final RegistryObject<TileEntityType<SpiderEggTile>> SPIDEREGG_TILE = TILE_ENTITIES.register("spidereggtile",
-            () -> TileEntityType.Builder.of(SpiderEggTile::new, SPIDEREGG.get()).build(null));
+    public static final RegistryObject<BlockEntityType<SpiderEggTile>> SPIDEREGG_TILE = TILE_ENTITIES.register("spidereggtile",
+            () -> BlockEntityType.Builder.of(SpiderEggTile::new, SPIDEREGG.get()).build(null));
 
     public static final RegistryObject<ThunderStaffItem> THUNDERSTAFF = ITEMS.register("thunderstaffitem", ThunderStaffItem::new);
     public static final RegistryObject<ForestBowItem> FORESTBOW = ITEMS.register("forestbowitem", ForestBowItem::new);
@@ -178,226 +178,226 @@ public class Registration {
     public static final RegistryObject<JokerHatItem> JOKERHAT = ITEMS.register("jokerhatitem", JokerHatItem::new);
 
     private static final EntityType<AngelSpiderEntity> ANGELSPIDER_TYPE = EntityType.Builder.of(AngelSpiderEntity::new,
-                    EntityClassification.MONSTER).sized(1.4f, 1f).build("angelspider");
+                    MobCategory.MONSTER).sized(1.4f, 1f).build("angelspider");
     public static final RegistryObject<EntityType<AngelSpiderEntity>> ANGELSPIDER = ENTITIES.register("angelspider",
             () -> ANGELSPIDER_TYPE);
     public static final RegistryObject<Item> ANGELSPIDER_EGG = ITEMS.register("angelspider_egg"
-            , () -> new SpawnEggItem(ANGELSPIDER_TYPE, 0xFFFFFF, 0xFFFF53,
+            , () -> new ForgeSpawnEggItem(() -> ANGELSPIDER_TYPE, 0xFFFFFF, 0xFFFF53,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
     private static final EntityType<WitchSpiderEntity> WITCHSPIDER_TYPE = EntityType.Builder.of(WitchSpiderEntity::new,
-                    EntityClassification.MONSTER).sized(1.4f, 1f).build("witchspider");
+                    MobCategory.MONSTER).sized(1.4f, 1f).build("witchspider");
     public static final RegistryObject<EntityType<WitchSpiderEntity>> WITCHSPIDER = ENTITIES.register("witchspider",
             () -> WITCHSPIDER_TYPE);
     public static final RegistryObject<Item> WITCHSPIDER_EGG = ITEMS.register("witchspider_egg"
-            , () -> new SpawnEggItem(WITCHSPIDER_TYPE, 0x6AA84F, 0x12436F,
+            , () -> new ForgeSpawnEggItem(() -> WITCHSPIDER_TYPE, 0x6AA84F, 0x12436F,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
     private static final EntityType<HypnoSpiderEntity> HYPNOSPIDER_TYPE = EntityType.Builder.of(HypnoSpiderEntity::new,
-                    EntityClassification.MONSTER).sized(1.4f, 1f).build("hypnospider");
+                    MobCategory.MONSTER).sized(1.4f, 1f).build("hypnospider");
     public static final RegistryObject<EntityType<HypnoSpiderEntity>> HYPNOSPIDER = ENTITIES.register("hypnospider",
             () -> HYPNOSPIDER_TYPE);
     public static final RegistryObject<Item> HYPNOSPIDER_EGG = ITEMS.register("hypnospider_egg"
-            , () -> new SpawnEggItem(HYPNOSPIDER_TYPE, 0xDD06DD, 0xF736F7,
+            , () -> new ForgeSpawnEggItem(() -> HYPNOSPIDER_TYPE, 0xDD06DD, 0xF736F7,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
     public static final RegistryObject<EntityType<HypnoWaveEntity>> HYPNOWAVE = ENTITIES.register("hypnowave",
-            () -> EntityType.Builder.of((EntityType.IFactory<HypnoWaveEntity>) HypnoWaveEntity::new, EntityClassification.MISC)
+            () -> EntityType.Builder.of((EntityType.EntityFactory<HypnoWaveEntity>) HypnoWaveEntity::new, MobCategory.MISC)
                     .sized(0.5F, 0.5F).build("hypnowave"));
 
     private static final EntityType<MagmaSpiderEntity> MAGMASPIDER_TYPE = EntityType.Builder.of(MagmaSpiderEntity::new,
-                    EntityClassification.MONSTER).sized(1.4f, 1f).fireImmune().build("magmaspider");
+                    MobCategory.MONSTER).sized(1.4f, 1f).fireImmune().build("magmaspider");
     public static final RegistryObject<EntityType<MagmaSpiderEntity>> MAGMASPIDER = ENTITIES.register("magmsspider",
             () -> MAGMASPIDER_TYPE);
     public static final RegistryObject<Item> MAGMASPIDER_EGG = ITEMS.register("magmaspider_egg"
-            , () -> new SpawnEggItem(MAGMASPIDER_TYPE, 0x230E0E, 0xF01414,
+            , () -> new ForgeSpawnEggItem(() -> MAGMASPIDER_TYPE, 0x230E0E, 0xF01414,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
     private static final EntityType<MotherSpiderEntity> MOTHERSPIDER_TYPE = EntityType.Builder.of(MotherSpiderEntity::new,
-            EntityClassification.MONSTER).sized(1.4f, 1f).build("motherspider");
+            MobCategory.MONSTER).sized(1.4f, 1f).build("motherspider");
     public static final RegistryObject<EntityType<MotherSpiderEntity>> MOTHERSPIDER = ENTITIES.register("motherspider",
             () -> MOTHERSPIDER_TYPE);
     public static final RegistryObject<Item> MOTHERSPIDER_EGG = ITEMS.register("motherspider_egg"
-            , () -> new SpawnEggItem(MOTHERSPIDER_TYPE, 0x444444, 0x9D8888,
+            , () -> new ForgeSpawnEggItem(() -> MOTHERSPIDER_TYPE, 0x444444, 0x9D8888,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
     private static final EntityType<MiniSpiderEntity> MINISPIDER_TYPE = EntityType.Builder.of(MiniSpiderEntity::new,
-            EntityClassification.MONSTER).sized(0.8f, 0.6f).build("minispider");
+            MobCategory.MONSTER).sized(0.8f, 0.6f).build("minispider");
     public static final RegistryObject<EntityType<MiniSpiderEntity>> MINISPIDER = ENTITIES.register("minispider",
             () -> MINISPIDER_TYPE);
     public static final RegistryObject<Item> MINISPIDER_EGG = ITEMS.register("minispider_egg"
-            , () -> new SpawnEggItem(MINISPIDER_TYPE, 0xFFFFFF, 0xAAAAAA,
+            , () -> new ForgeSpawnEggItem(() -> MINISPIDER_TYPE, 0xFFFFFF, 0xAAAAAA,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
     private static final EntityType<WitherSpiderEntity> WITHERSPIDER_TYPE = EntityType.Builder.of(WitherSpiderEntity::new,
-                    EntityClassification.MONSTER).sized(1.4f, 1f).build("witherspider");
+                    MobCategory.MONSTER).sized(1.4f, 1f).build("witherspider");
     public static final RegistryObject<EntityType<WitherSpiderEntity>> WITHERSPIDER = ENTITIES.register("witherspider",
             () -> WITHERSPIDER_TYPE);
     public static final RegistryObject<Item> WITHERSPIDER_EGG = ITEMS.register("witherspider_egg"
-            , () -> new SpawnEggItem(WITHERSPIDER_TYPE, 0x666666, 0x444444,
+            , () -> new ForgeSpawnEggItem(() -> WITHERSPIDER_TYPE, 0x666666, 0x444444,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
     public static final RegistryObject<EntityType<WitherHeadBugEntity>> WITHERHEADBUG = ENTITIES.register("witherheadbug",
-            () -> EntityType.Builder.of(WitherHeadBugEntity::new, EntityClassification.MONSTER)
+            () -> EntityType.Builder.of(WitherHeadBugEntity::new, MobCategory.MONSTER)
                     .sized(0.7f, 0.7f).build("witherheadbug"));
 
     private static final EntityType<JokerSkeletonEntity> JOKERSKELETON_TYPE = EntityType.Builder.of(JokerSkeletonEntity::new,
-                    EntityClassification.MONSTER).sized(0.6F, 1.99F).build("jokerskeleton");
+                    MobCategory.MONSTER).sized(0.6F, 1.99F).build("jokerskeleton");
     public static final RegistryObject<EntityType<JokerSkeletonEntity>> JOKERSKELETON = ENTITIES.register("jokerskeleton",
             () -> JOKERSKELETON_TYPE);
     public static final RegistryObject<Item> JOKERSKELETON_EGG = ITEMS.register("jokerskeleton_egg"
-            , () -> new SpawnEggItem(JOKERSKELETON_TYPE, 0xFF0000, 0xFFFF00,
+            , () -> new ForgeSpawnEggItem(() -> JOKERSKELETON_TYPE, 0xFF0000, 0xFFFF00,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
     public static final RegistryObject<EntityType<HeartArrowEntity>> HEARTARROW = ENTITIES.register("heartarrow",
-            () -> EntityType.Builder.of(HeartArrowEntity::new, EntityClassification.MISC)
+            () -> EntityType.Builder.of(HeartArrowEntity::new, MobCategory.MISC)
             .sized(0.5F, 0.5F).build("heartarrow"));
 
     private static final EntityType<CorruptedSkeletonEntity> CORRUPTEDSKELETON_TYPE = EntityType.Builder.of(CorruptedSkeletonEntity::new,
-                    EntityClassification.MONSTER).sized(0.6F, 1.99F).build("corruptedskeleton");
+                    MobCategory.MONSTER).sized(0.6F, 1.99F).build("corruptedskeleton");
     public static final RegistryObject<EntityType<CorruptedSkeletonEntity>> CORRUPTEDSKELETON = ENTITIES.register("corruptedskeleton",
             () -> CORRUPTEDSKELETON_TYPE);
     public static final RegistryObject<Item> CORRUPTEDSKELETON_EGG = ITEMS.register("corruptedskeleton_egg"
-            , () -> new SpawnEggItem(CORRUPTEDSKELETON_TYPE, 0x745F1D, 0x927006,
+            , () -> new ForgeSpawnEggItem(() -> CORRUPTEDSKELETON_TYPE, 0x745F1D, 0x927006,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
     private static final EntityType<VampireSkeletonEntity> VAMPIRESKELETON_TYPE = EntityType.Builder.of(VampireSkeletonEntity::new,
-                    EntityClassification.MONSTER).sized(0.6F, 1.99F).build("vampireskeleton");
+                    MobCategory.MONSTER).sized(0.6F, 1.99F).build("vampireskeleton");
     public static final RegistryObject<EntityType<VampireSkeletonEntity>> VAMPIRESKELETON = ENTITIES.register("vampireskeleton",
             () -> VAMPIRESKELETON_TYPE);
     public static final RegistryObject<Item> VAMPIRESKELETON_EGG = ITEMS.register("vampireskeleton_egg"
-            , () -> new SpawnEggItem(VAMPIRESKELETON_TYPE, 0xBB8A8A, 0x540D0D,
+            , () -> new ForgeSpawnEggItem(() -> VAMPIRESKELETON_TYPE, 0xBB8A8A, 0x540D0D,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
     private static final EntityType<ForestSkeletonEntity> FORESTSKELETON_TYPE = EntityType.Builder.of(ForestSkeletonEntity::new,
-                    EntityClassification.MONSTER).sized(0.6F, 1.99F).build("forestskeleton");
+                    MobCategory.MONSTER).sized(0.6F, 1.99F).build("forestskeleton");
     public static final RegistryObject<EntityType<ForestSkeletonEntity>> FORESTSKELETON = ENTITIES.register("forestskeleton",
             () -> FORESTSKELETON_TYPE);
     public static final RegistryObject<Item> FORESTSKELETON_EGG = ITEMS.register("forestskeleton_egg"
-            , () -> new SpawnEggItem(FORESTSKELETON_TYPE, 0x38761D, 0x93C47D,
+            , () -> new ForgeSpawnEggItem(() -> FORESTSKELETON_TYPE, 0x38761D, 0x93C47D,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
     public static final RegistryObject<EntityType<CrossArrowEntity>> CROSSARROW = ENTITIES.register("crossarrow",
-            () -> EntityType.Builder.of(CrossArrowEntity::new, EntityClassification.MISC)
+            () -> EntityType.Builder.of(CrossArrowEntity::new, MobCategory.MISC)
                     .sized(0.5F, 0.5F).build("crossarrow"));
 
     private static final EntityType<ShamanSkeletonEntity> SHAMANSKELETON_TYPE = EntityType.Builder.of(ShamanSkeletonEntity::new,
-                    EntityClassification.MONSTER).sized(0.6F, 1.99F).build("shamanskeleton");
+                    MobCategory.MONSTER).sized(0.6F, 1.99F).build("shamanskeleton");
     public static final RegistryObject<EntityType<ShamanSkeletonEntity>> SHAMANSKELETON = ENTITIES.register("shamanskeleton",
             () -> SHAMANSKELETON_TYPE);
     public static final RegistryObject<Item> SHAMANSKELETON_EGG = ITEMS.register("shamanskeleton_egg"
-            , () -> new SpawnEggItem(SHAMANSKELETON_TYPE, 0x050572, 0x741B47,
+            , () -> new ForgeSpawnEggItem(() -> SHAMANSKELETON_TYPE, 0x050572, 0x741B47,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
     public static final RegistryObject<EntityType<MiniLightningEntity>> MINILIGHTNING = ENTITIES.register("minilightning",
-            () -> EntityType.Builder.of(MiniLightningEntity::new, EntityClassification.MISC)
+            () -> EntityType.Builder.of(MiniLightningEntity::new, MobCategory.MISC)
                     .noSave().sized(0.0F, 0.0F).clientTrackingRange(16).updateInterval(Integer.MAX_VALUE).build("minilightning"));
 
     private static final EntityType<MagmaSkeletonEntity> MAGMASKELETON_TYPE = EntityType.Builder.of(MagmaSkeletonEntity::new,
-                    EntityClassification.MONSTER).sized(0.6F, 1.99F).fireImmune().build("magmaskeleton");
+                    MobCategory.MONSTER).sized(0.6F, 1.99F).fireImmune().build("magmaskeleton");
     public static final RegistryObject<EntityType<MagmaSkeletonEntity>> MAGMASKELETON = ENTITIES.register("magmaskeleton",
             () -> MAGMASKELETON_TYPE);
     public static final RegistryObject<Item> MAGMASKELETON_EGG = ITEMS.register("magmaskeleton_egg"
-            , () -> new SpawnEggItem(MAGMASKELETON_TYPE, 0x811616, 0xFD1D1D,
+            , () -> new ForgeSpawnEggItem(() -> MAGMASKELETON_TYPE, 0x811616, 0xFD1D1D,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
     private static final EntityType<WanderingEndermanEntity> WANDERINGENDERMAN_TYPE = EntityType.Builder.of(WanderingEndermanEntity::new,
-                    EntityClassification.MONSTER).sized(0.7F, 2.9F).build("wanderingenderman");
+                    MobCategory.MONSTER).sized(0.7F, 2.9F).build("wanderingenderman");
     public static final RegistryObject<EntityType<WanderingEndermanEntity>> WANDERINGENDERMAN = ENTITIES.register("wanderingenderman",
             () -> WANDERINGENDERMAN_TYPE);
     public static final RegistryObject<Item> WANDERINGENDERMAN_EGG = ITEMS.register("wanderingenderman_egg"
-            , () -> new SpawnEggItem(WANDERINGENDERMAN_TYPE, 0x422C01, 0x036303,
+            , () -> new ForgeSpawnEggItem(() -> WANDERINGENDERMAN_TYPE, 0x422C01, 0x036303,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
     private static final EntityType<MagmaEndermanEntity> MAGMAENDERMAN_TYPE = EntityType.Builder.of(MagmaEndermanEntity::new,
-                    EntityClassification.MONSTER).sized(0.7F, 2.9F).fireImmune().build("magmaenderman");
+                    MobCategory.MONSTER).sized(0.7F, 2.9F).fireImmune().build("magmaenderman");
     public static final RegistryObject<EntityType<MagmaEndermanEntity>> MAGMAENDERMAN = ENTITIES.register("magmaenderman",
             () -> MAGMAENDERMAN_TYPE);
     public static final RegistryObject<Item> MAGMAENDERMAN_EGG = ITEMS.register("magmaenderman_egg"
-            , () -> new SpawnEggItem(MAGMAENDERMAN_TYPE, 0xB40A0A, 0xE7E740,
+            , () -> new ForgeSpawnEggItem(() -> MAGMAENDERMAN_TYPE, 0xB40A0A, 0xE7E740,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
     private static final EntityType<GlassEndermanEntity> GLASSENDERMAN_TYPE = EntityType.Builder.of(GlassEndermanEntity::new,
-                    EntityClassification.MONSTER).sized(0.7F, 2.9F).build("glassenderman");
+                    MobCategory.MONSTER).sized(0.7F, 2.9F).build("glassenderman");
     public static final RegistryObject<EntityType<GlassEndermanEntity>> GLASSENDERMAN = ENTITIES.register("glassenderman",
             () -> GLASSENDERMAN_TYPE);
     public static final RegistryObject<Item> GLASSENDERMAN_EGG = ITEMS.register("glassenderman_egg"
-            , () -> new SpawnEggItem(GLASSENDERMAN_TYPE, 0x2D2C2F, 0x535056,
+            , () -> new ForgeSpawnEggItem(() -> GLASSENDERMAN_TYPE, 0x2D2C2F, 0x535056,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
     public static final RegistryObject<EntityType<GlassShotEntity>> GLASSSHOT = ENTITIES.register("glassshot",
-            () -> EntityType.Builder.of((EntityType.IFactory<GlassShotEntity>) GlassShotEntity::new, EntityClassification.MISC)
+            () -> EntityType.Builder.of((EntityType.EntityFactory<GlassShotEntity>) GlassShotEntity::new, MobCategory.MISC)
             .sized(0.5F, 0.5F).clientTrackingRange(8).setUpdateInterval(1).build("glassshot"));
 
     private static final EntityType<IceEndermanEntity> ICEENDERMAN_TYPE = EntityType.Builder.of(IceEndermanEntity::new,
-                    EntityClassification.MONSTER).sized(0.7F, 2.9F).build("iceenderman");
+                    MobCategory.MONSTER).sized(0.7F, 2.9F).build("iceenderman");
     public static final RegistryObject<EntityType<IceEndermanEntity>> ICEENDERMAN = ENTITIES.register("iceenderman",
             () -> ICEENDERMAN_TYPE);
     public static final RegistryObject<Item> ICEENDERMAN_EGG = ITEMS.register("iceenderman_egg"
-            , () -> new SpawnEggItem(ICEENDERMAN_TYPE, 0xC5F9F9, 0x30ABAB,
+            , () -> new ForgeSpawnEggItem(() -> ICEENDERMAN_TYPE, 0xC5F9F9, 0x30ABAB,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
     private static final EntityType<GardenerEndermanEntity> GARDENERENDERMAN_TYPE = EntityType.Builder.of(GardenerEndermanEntity::new,
-                    EntityClassification.CREATURE).sized(0.7F, 2.9F).build("gardenerenderman");
+                    MobCategory.CREATURE).sized(0.7F, 2.9F).build("gardenerenderman");
     public static final RegistryObject<EntityType<GardenerEndermanEntity>> GARDENERENDERMAN = ENTITIES.register("gardenerenderman",
             () -> GARDENERENDERMAN_TYPE);
     public static final RegistryObject<Item> GARDENERENDERMAN_EGG = ITEMS.register("gardenerenderman_egg"
-            , () -> new SpawnEggItem(GARDENERENDERMAN_TYPE, 0x1DE11D, 0xF97AD9,
+            , () -> new ForgeSpawnEggItem(() -> GARDENERENDERMAN_TYPE, 0x1DE11D, 0xF97AD9,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
     private static final EntityType<KnightZombieEntity> KNIGHTZOMBIE_TYPE = EntityType.Builder.of(KnightZombieEntity::new,
-                    EntityClassification.MONSTER).sized(0.7F, 2.0F).build("knightzombie");
+                    MobCategory.MONSTER).sized(0.7F, 2.0F).build("knightzombie");
     public static final RegistryObject<EntityType<KnightZombieEntity>> KNIGHTZOMBIE = ENTITIES.register("knightzombie",
             () -> KNIGHTZOMBIE_TYPE);
     public static final RegistryObject<Item> KNIGHTZOMBIE_EGG = ITEMS.register("knightzombie_egg"
-            , () -> new SpawnEggItem(KNIGHTZOMBIE_TYPE, 0xEEEEEE, 0xD0E0E3,
+            , () -> new ForgeSpawnEggItem(() -> KNIGHTZOMBIE_TYPE, 0xEEEEEE, 0xD0E0E3,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
     private static final EntityType<WorkerZombieEntity> WORKERZOMBIE_TYPE = EntityType.Builder.of(WorkerZombieEntity::new,
-                    EntityClassification.MONSTER).sized(0.7F, 2.0F).build("workerzombie");
+                    MobCategory.MONSTER).sized(0.7F, 2.0F).build("workerzombie");
     public static final RegistryObject<EntityType<WorkerZombieEntity>> WORKERZOMBIE = ENTITIES.register("workerzombie",
             () -> WORKERZOMBIE_TYPE);
     public static final RegistryObject<Item> WORKERZOMBIE_EGG = ITEMS.register("workerzombie_egg"
-            , () -> new SpawnEggItem(WORKERZOMBIE_TYPE, 0xFFE599, 0xFFFF00,
+            , () -> new ForgeSpawnEggItem(() -> WORKERZOMBIE_TYPE, 0xFFE599, 0xFFFF00,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
     private static final EntityType<MagmaZombieEntity> MAGMAZOMBIE_TYPE = EntityType.Builder.of(MagmaZombieEntity::new,
-                    EntityClassification.MONSTER).sized(0.7F, 2.0F).fireImmune().build("magmazombie");
+                    MobCategory.MONSTER).sized(0.7F, 2.0F).fireImmune().build("magmazombie");
     public static final RegistryObject<EntityType<MagmaZombieEntity>> MAGMAZOMBIE = ENTITIES.register("magmazombie",
             () -> MAGMAZOMBIE_TYPE);
     public static final RegistryObject<Item> MAGMAZOMBIE_EGG = ITEMS.register("magmazombie_egg"
-            , () -> new SpawnEggItem(MAGMAZOMBIE_TYPE, 0xFFF144, 0xCC0000,
+            , () -> new ForgeSpawnEggItem(() -> MAGMAZOMBIE_TYPE, 0xFFF144, 0xCC0000,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
     private static final EntityType<DoctorZombieEntity> DOCTORZOMBIE_TYPE = EntityType.Builder.of(DoctorZombieEntity::new,
-                    EntityClassification.MONSTER).sized(0.7F, 2.0F).build("doctorzombie");
+                    MobCategory.MONSTER).sized(0.7F, 2.0F).build("doctorzombie");
     public static final RegistryObject<EntityType<DoctorZombieEntity>> DOCTORZOMBIE = ENTITIES.register("doctorzombie",
             () -> DOCTORZOMBIE_TYPE);
     public static final RegistryObject<Item> DOCTORZOMBIE_EGG = ITEMS.register("doctorzombie_egg"
-            , () -> new SpawnEggItem(DOCTORZOMBIE_TYPE, 0xFFFFFF, 0xFD1D1D,
+            , () -> new ForgeSpawnEggItem(() -> DOCTORZOMBIE_TYPE, 0xFFFFFF, 0xFD1D1D,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
     private static final EntityType<HungryZombieEntity> HUNGRYZOMBIE_TYPE = EntityType.Builder.of(HungryZombieEntity::new,
-                    EntityClassification.MONSTER).sized(0.7F, 2.0F).build("hungryzombie");
+                    MobCategory.MONSTER).sized(0.7F, 2.0F).build("hungryzombie");
     public static final RegistryObject<EntityType<HungryZombieEntity>> HUNGRYZOMBIE = ENTITIES.register("hungryzombie",
             () -> HUNGRYZOMBIE_TYPE);
     public static final RegistryObject<Item> HUNGRYZOMBIE_EGG = ITEMS.register("hungryzombie_egg"
-            , () -> new SpawnEggItem(HUNGRYZOMBIE_TYPE, 0x6AA84F, 0xD41A1A,
+            , () -> new ForgeSpawnEggItem(() -> HUNGRYZOMBIE_TYPE, 0x6AA84F, 0xD41A1A,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
     private static final EntityType<GoroZombieEntity> GOROZOMBIE_TYPE = EntityType.Builder.of(GoroZombieEntity::new,
-                    EntityClassification.MONSTER).sized(0.7F, 2.0F).build("gorozombie");
+                    MobCategory.MONSTER).sized(0.7F, 2.0F).build("gorozombie");
     public static final RegistryObject<EntityType<GoroZombieEntity>> GOROZOMBIE = ENTITIES.register("gorozombie",
             () -> GOROZOMBIE_TYPE);
     public static final RegistryObject<Item> GOROZOMBIE_EGG = ITEMS.register("gorozombie_egg"
-            , () -> new SpawnEggItem(GOROZOMBIE_TYPE, 0x95BD84, 0xCEA937,
+            , () -> new ForgeSpawnEggItem(() -> GOROZOMBIE_TYPE, 0x95BD84, 0xCEA937,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
     private static final EntityType<GenieZombieEntity> GENIEZOMBIE_TYPE = EntityType.Builder.of(GenieZombieEntity::new,
-            EntityClassification.MONSTER).sized(0.7F, 2.0F).build("geniezombie");
+            MobCategory.MONSTER).sized(0.7F, 2.0F).build("geniezombie");
     public static final RegistryObject<EntityType<GenieZombieEntity>> GENIEZOMBIE = ENTITIES.register("geniezombie",
             () -> GENIEZOMBIE_TYPE);
     public static final RegistryObject<Item> GENIEZOMBIE_EGG = ITEMS.register("geniezombie_egg"
-            , () -> new SpawnEggItem(GENIEZOMBIE_TYPE, 0xB18D47, 0x463AA5,
+            , () -> new ForgeSpawnEggItem(() -> GENIEZOMBIE_TYPE, 0xB18D47, 0x463AA5,
                     (new Item.Properties()).tab(ModSetup.ITEM_GROUP)));
 
-    public static final RegistryObject<Effect> JOKERNESS_EFFECT = EFFECTS.register("jokernesseffect", JokernessEffect::new);
-    public static final RegistryObject<Effect> HYPNO_EFFECT = EFFECTS.register("hypnoeffect", HypnoEffect::new);
-    public static final RegistryObject<Effect> CORRUPTION_EFFECT = EFFECTS.register("corruptioneffect", CorruptionEffect::new);
+    public static final RegistryObject<MobEffect> JOKERNESS_EFFECT = EFFECTS.register("jokernesseffect", JokernessEffect::new);
+    public static final RegistryObject<MobEffect> HYPNO_EFFECT = EFFECTS.register("hypnoeffect", HypnoEffect::new);
+    public static final RegistryObject<MobEffect> CORRUPTION_EFFECT = EFFECTS.register("corruptioneffect", CorruptionEffect::new);
 
     public static final RegistryObject<SoundEvent> HEALING_SOUND = SOUNDS.register("healing", () ->
             new SoundEvent(new ResourceLocation(MODID, "healing")));

@@ -2,7 +2,7 @@ package dev.mcpecommander.mobultion.datagen;
 
 import dev.mcpecommander.mobultion.setup.Registration;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.LanguageProvider;
 
 import static dev.mcpecommander.mobultion.Mobultion.MODID;

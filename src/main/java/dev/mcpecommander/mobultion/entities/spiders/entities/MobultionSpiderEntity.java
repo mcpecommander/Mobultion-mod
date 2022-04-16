@@ -1,37 +1,37 @@
 package dev.mcpecommander.mobultion.entities.spiders.entities;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Pose;
-import net.minecraft.entity.ai.goal.LookRandomlyGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.ClimberPathNavigator;
-import net.minecraft.pathfinding.PathNavigator;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.geckolib3.core.IAnimatable;
 
 import javax.annotation.Nonnull;
 
 /* Created by McpeCommander on 2021/06/18 */
-public abstract class MobultionSpiderEntity extends MonsterEntity implements IAnimatable{
+public abstract class MobultionSpiderEntity extends Monster implements IAnimatable{
 
     /**
      * A data parameter copied from the minecraft spider that sets the spider climbing.
      */
-    private static final DataParameter<Byte> DATA_FLAGS_ID = EntityDataManager.defineId(MobultionSpiderEntity.class, DataSerializers.BYTE);
+    private static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(MobultionSpiderEntity.class, EntityDataSerializers.BYTE);
 
-    public MobultionSpiderEntity(EntityType<? extends MobultionSpiderEntity> type, World world) {
+    public MobultionSpiderEntity(EntityType<? extends MobultionSpiderEntity> type, Level world) {
         super(type, world);
     }
 
@@ -40,9 +40,9 @@ public abstract class MobultionSpiderEntity extends MonsterEntity implements IAn
      */
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new SwimGoal(this));
-        this.goalSelector.addGoal(4, new WaterAvoidingRandomWalkingGoal(this, 0.8D));
-        this.goalSelector.addGoal(6, new LookRandomlyGoal(this));
+        this.goalSelector.addGoal(1, new FloatGoal(this));
+        this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 0.8D));
+        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
     }
 
     /**
@@ -123,8 +123,8 @@ public abstract class MobultionSpiderEntity extends MonsterEntity implements IAn
      */
     @Nonnull
     @Override
-    public CreatureAttribute getMobType() {
-        return CreatureAttribute.ARTHROPOD;
+    public MobType getMobType() {
+        return MobType.ARTHROPOD;
     }
 
     /**
@@ -149,8 +149,8 @@ public abstract class MobultionSpiderEntity extends MonsterEntity implements IAn
      */
     @Nonnull
     @Override
-    protected PathNavigator createNavigation(@Nonnull World world) {
-        return new ClimberPathNavigator(this, world);
+    protected PathNavigation createNavigation(@Nonnull Level world) {
+        return new WallClimberNavigation(this, world);
     }
 
     /**
@@ -159,7 +159,7 @@ public abstract class MobultionSpiderEntity extends MonsterEntity implements IAn
     @Override
     protected void tickDeath() {
         if(this.deathTime++ == getMaxDeathTick()){
-            this.remove();
+            this.discard();
         }
     }
 
@@ -174,7 +174,7 @@ public abstract class MobultionSpiderEntity extends MonsterEntity implements IAn
      * @return a float representing the eye height.
      */
     @Override
-    protected float getStandingEyeHeight(@Nonnull Pose pose, @Nonnull EntitySize entitySize) {
+    protected float getStandingEyeHeight(@Nonnull Pose pose, @Nonnull EntityDimensions entitySize) {
         return 0.65F;
     }
 

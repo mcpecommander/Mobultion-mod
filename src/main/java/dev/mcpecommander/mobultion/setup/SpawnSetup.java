@@ -1,7 +1,7 @@
 package dev.mcpecommander.mobultion.setup;
 
-import net.minecraft.entity.EntityClassification;
-import net.minecraft.world.biome.MobSpawnInfo;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -17,8 +17,8 @@ public class SpawnSetup {
     public static void registerSpawns(BiomeLoadingEvent event){
         switch(event.getCategory()){
             case ICY:
-                event.getSpawns().addSpawn(EntityClassification.MONSTER,
-                        new MobSpawnInfo.Spawners(Registration.ICEENDERMAN.get(), 10, 1, 4));
+                event.getSpawns().addSpawn(MobCategory.MONSTER,
+                        new MobSpawnSettings.SpawnerData(Registration.ICEENDERMAN.get(), 10, 1, 4));
                 return;
             case BEACH:
                 return;
@@ -35,15 +35,15 @@ public class SpawnSetup {
             case MUSHROOM:
                 return;
             case NETHER:
-                event.getSpawns().addSpawn(EntityClassification.MONSTER,
-                        new MobSpawnInfo.Spawners(Registration.MAGMAENDERMAN.get(), 10, 1, 2));
+                event.getSpawns().addSpawn(MobCategory.MONSTER,
+                        new MobSpawnSettings.SpawnerData(Registration.MAGMAENDERMAN.get(), 10, 1, 2));
                 return;
             case OCEAN:
                 return;
             case PLAINS:
 
-                event.getSpawns().addSpawn(EntityClassification.AMBIENT,
-                        new MobSpawnInfo.Spawners(Registration.GARDENERENDERMAN.get(), 2, 1, 2));
+                event.getSpawns().addSpawn(MobCategory.AMBIENT,
+                        new MobSpawnSettings.SpawnerData(Registration.GARDENERENDERMAN.get(), 2, 1, 2));
                 return;
             case RIVER:
                 return;

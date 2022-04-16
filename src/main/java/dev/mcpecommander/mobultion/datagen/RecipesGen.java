@@ -2,11 +2,16 @@ package dev.mcpecommander.mobultion.datagen;
 
 import dev.mcpecommander.mobultion.setup.Registration;
 import net.minecraft.data.*;
-import net.minecraft.item.Items;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
+
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 
 /* McpeCommander created on 01/08/2021 inside the package - dev.mcpecommander.mobultion.datagen */
 public class RecipesGen extends RecipeProvider {
@@ -20,7 +25,7 @@ public class RecipesGen extends RecipeProvider {
      * @param finishedRecipe Used in the .save(); when finishing building a recipe.
      */
     @Override
-    protected void buildShapelessRecipes(@Nonnull Consumer<IFinishedRecipe> finishedRecipe) {
+    protected void buildCraftingRecipes(@Nonnull Consumer<FinishedRecipe> finishedRecipe) {
         ShapelessRecipeBuilder.shapeless(Registration.CORRUPTEDBONEMEAL.get(), 3)
                 .requires(Registration.CORRUPTEDBONE.get()).unlockedBy("has_corrupted_bonemeal",
                         has(Registration.CORRUPTEDBONE.get())).save(finishedRecipe);

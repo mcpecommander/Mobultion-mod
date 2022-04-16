@@ -4,7 +4,7 @@ import dev.mcpecommander.mobultion.entities.skeletons.entities.CorruptedSkeleton
 import dev.mcpecommander.mobultion.entities.skeletons.entities.MagmaSkeletonEntity;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.MobultionSkeletonEntity;
 import dev.mcpecommander.mobultion.entities.skeletons.entities.VampireSkeletonEntity;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;

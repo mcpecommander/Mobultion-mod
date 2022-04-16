@@ -6,38 +6,39 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import dev.mcpecommander.mobultion.setup.ClientSetup;
 import dev.mcpecommander.mobultion.utils.MathCalculations;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleType;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Locale;
 
 /* McpeCommander created on 09/07/2021 inside the package - dev.mcpecommander.mobultion.particles */
-public class HealParticle extends SpriteTexturedParticle {
+public class HealParticle extends TextureSheetParticle {
 
-    IAnimatedSprite sprite;
+    SpriteSet sprite;
     double finalX, finalY, finalZ;
     double originalDistance;
 
-    protected HealParticle(ClientWorld world, double posX, double posY, double posZ,
-                               double finalX, double finalY, double finalZ, HealParticleData data, IAnimatedSprite sprite) {
+    protected HealParticle(ClientLevel world, double posX, double posY, double posZ,
+                               double finalX, double finalY, double finalZ, HealParticleData data, SpriteSet sprite) {
         super(world, posX, posY, posZ, finalX, finalY, finalZ);
         this.x = posX;
         this.y = posY;
         this.z = posZ;
-        originalDistance = new Vector3d(posX, posY, posZ).distanceTo(new Vector3d(finalX, finalY, finalZ));
+        originalDistance = new Vec3(posX, posY, posZ).distanceTo(new Vec3(finalX, finalY, finalZ));
         this.finalX = finalX;
         this.finalY = finalY;
         this.finalZ = finalZ;
-        Vector3d speed = new Vector3d(finalX - posX, finalY - posY, finalZ - posZ).normalize();
+        Vec3 speed = new Vec3(finalX - posX, finalY - posY, finalZ - posZ).normalize();
         this.xd = speed.x / 2f;
         this.yd = speed.y / 2f;
         this.zd = speed.z / 2f;
@@ -72,39 +73,39 @@ public class HealParticle extends SpriteTexturedParticle {
     }
 
     @Override
-    public void setSpriteFromAge(IAnimatedSprite sprite) {
-        double currentDistance = Math.sqrt(new Vector3d(x, y, z).distanceToSqr(finalX, finalY, finalZ));
+    public void setSpriteFromAge(@NotNull SpriteSet sprite) {
+        double currentDistance = Math.sqrt(new Vec3(x, y, z).distanceToSqr(finalX, finalY, finalZ));
         this.setSprite(this.sprite.get((int) MathCalculations.map(currentDistance, 0, originalDistance, 0, lifetime), lifetime));
         //this.setSprite(this.sprite.get(MathHelper.floor(this.age/2f), this.lifetime));
     }
 
     @Override
-    public IParticleRenderType getRenderType() {
-        return IParticleRenderType.PARTICLE_SHEET_LIT;
+    public @NotNull ParticleRenderType getRenderType() {
+        return ParticleRenderType.PARTICLE_SHEET_LIT;
     }
 
-    public static class Factory implements IParticleFactory<HealParticleData>{
+    public static class Factory implements ParticleProvider<HealParticleData>{
 
-        private final IAnimatedSprite sprite;
+        private final SpriteSet sprite;
 
-        public Factory(IAnimatedSprite sprite){
+        public Factory(SpriteSet sprite){
             this.sprite = sprite;
         }
 
         @Nullable
         @Override
-        public Particle createParticle(HealParticleData data, ClientWorld world,
+        public Particle createParticle(@NotNull HealParticleData data, @NotNull ClientLevel world,
                                        double posX, double posY, double posZ,
                                        double speedX, double speedY, double speedZ) {
             return new HealParticle(world, posX, posY, posZ, speedX, speedY, speedZ, data, sprite);
         }
     }
 
-    public static class HealParticleData implements IParticleData{
+    public static class HealParticleData implements ParticleOptions{
 
-        public static final IParticleData.IDeserializer<HealParticleData> DESERIALIZER = new IDeserializer<HealParticleData>() {
+        public static final ParticleOptions.Deserializer<HealParticleData> DESERIALIZER = new Deserializer<>() {
             @Override
-            public HealParticleData fromCommand(ParticleType<HealParticleData> particleType, StringReader reader) throws CommandSyntaxException {
+            public @NotNull HealParticleData fromCommand(@NotNull ParticleType<HealParticleData> particleType, StringReader reader) throws CommandSyntaxException {
                 reader.expect(' ');
                 float red = (float) reader.readDouble();
                 reader.expect(' ');
@@ -117,7 +118,7 @@ public class HealParticle extends SpriteTexturedParticle {
             }
 
             @Override
-            public HealParticleData fromNetwork(ParticleType<HealParticleData> particleType, PacketBuffer buffer) {
+            public @NotNull HealParticleData fromNetwork(@NotNull ParticleType<HealParticleData> particleType, FriendlyByteBuf buffer) {
                 return new HealParticleData(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(),
                         buffer.readFloat());
             }
@@ -139,7 +140,7 @@ public class HealParticle extends SpriteTexturedParticle {
             this.red = red;
             this.green = green;
             this.blue = blue;
-            this.alpha = MathHelper.clamp(alpha, 0.01f, 4.0f);
+            this.alpha = Mth.clamp(alpha, 0.01f, 4.0f);
         }
 
         @OnlyIn(Dist.CLIENT)
@@ -163,12 +164,12 @@ public class HealParticle extends SpriteTexturedParticle {
         }
 
         @Override
-        public ParticleType<?> getType() {
+        public @NotNull ParticleType<?> getType() {
             return ClientSetup.HEAL_PARTICLE_TYPE.get();
         }
 
         @Override
-        public void writeToNetwork(PacketBuffer buffer) {
+        public void writeToNetwork(FriendlyByteBuf buffer) {
             buffer.writeFloat(this.red);
             buffer.writeFloat(this.green);
             buffer.writeFloat(this.blue);
@@ -176,7 +177,7 @@ public class HealParticle extends SpriteTexturedParticle {
         }
 
         @Override
-        public String writeToString() {
+        public @NotNull String writeToString() {
             return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f", Registry.PARTICLE_TYPE.getKey(this.getType()),
                     this.red, this.green, this.blue, this.alpha);
         }

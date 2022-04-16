@@ -1,28 +1,28 @@
 package dev.mcpecommander.mobultion.entities.endermen.entityGoals;
 
 import dev.mcpecommander.mobultion.entities.endermen.entities.MobultionEndermanEntity;
-import net.minecraft.entity.EntityPredicate;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.player.Player;
 
 import javax.annotation.Nonnull;
 import java.util.EnumSet;
 import java.util.function.Predicate;
 
 /* McpeCommander created on 28/06/2021 inside the package - dev.mcpecommander.mobultion.entities.endermen.entityGoals */
-public class EndermanFindStaringPlayerGoal extends NearestAttackableTargetGoal<PlayerEntity> {
+public class EndermanFindStaringPlayerGoal extends NearestAttackableTargetGoal<Player> {
 
     MobultionEndermanEntity enderman;
-    PlayerEntity possibleTarget;
-    EntityPredicate condition;
+    Player possibleTarget;
+    TargetingConditions condition;
 
     public EndermanFindStaringPlayerGoal(MobultionEndermanEntity endermanEntity, @Nonnull Predicate<LivingEntity> extraCondition) {
-        super(endermanEntity, PlayerEntity.class, false);
+        super(endermanEntity, Player.class, false);
         this.setFlags(EnumSet.of(Flag.TARGET));
         this.enderman = endermanEntity;
-        this.condition = new EntityPredicate().range(this.getFollowDistance()).
-                selector(((Predicate<LivingEntity>) livingEntity -> enderman.isLookingAtMe((PlayerEntity) livingEntity)).and(extraCondition));
+        this.condition = TargetingConditions.forCombat().range(this.getFollowDistance()).
+                selector(((Predicate<LivingEntity>) livingEntity -> enderman.isLookingAtMe((Player) livingEntity)).and(extraCondition));
     }
 
     /**

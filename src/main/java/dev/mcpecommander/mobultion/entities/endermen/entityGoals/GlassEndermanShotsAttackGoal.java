@@ -3,10 +3,10 @@ package dev.mcpecommander.mobultion.entities.endermen.entityGoals;
 import dev.mcpecommander.mobultion.entities.endermen.entities.GlassEndermanEntity;
 import dev.mcpecommander.mobultion.entities.endermen.entities.GlassShotEntity;
 import dev.mcpecommander.mobultion.setup.Registration;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.pathfinding.Path;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.pathfinder.Path;
 
 import java.util.EnumSet;
 
@@ -71,7 +71,7 @@ public class GlassEndermanShotsAttackGoal extends Goal {
         endermanEntity.lookAt(target, 30f, 30f);
         if(timer <= 0){
             timer = 30;
-            if(endermanEntity.canSee(target)){
+            if(endermanEntity.hasLineOfSight(target)){
                 GlassShotEntity shot = new GlassShotEntity(Registration.GLASSSHOT.get(), endermanEntity.getX(),
                         endermanEntity.getEyeY() + 1, endermanEntity.getZ(),
                         (target.getX() - endermanEntity.getX()) / 2d,
