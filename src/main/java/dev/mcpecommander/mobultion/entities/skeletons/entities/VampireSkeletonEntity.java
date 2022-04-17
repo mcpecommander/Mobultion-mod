@@ -1,6 +1,13 @@
 package dev.mcpecommander.mobultion.entities.skeletons.entities;
 
+import dev.mcpecommander.mobultion.entities.skeletons.SkeletonsConfig;
+import dev.mcpecommander.mobultion.particles.PortalParticle;
 import dev.mcpecommander.mobultion.setup.Registration;
+import net.minecraft.client.particle.SmokeParticle;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -14,6 +21,7 @@ import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -26,6 +34,8 @@ import javax.annotation.Nonnull;
 
 /* McpeCommander created on 20/07/2021 inside the package - dev.mcpecommander.mobultion.entities.skeletons.entities */
 public class VampireSkeletonEntity extends MobultionSkeletonEntity{
+
+    private static final EntityDataAccessor<Integer> DATA_MORPHING = SynchedEntityData.defineId(VampireSkeletonEntity.class, EntityDataSerializers.INT);
 
     /**
      * The animation factory, for more information check GeckoLib.
@@ -42,7 +52,7 @@ public class VampireSkeletonEntity extends MobultionSkeletonEntity{
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new RestrictSunGoal(this));
-        this.goalSelector.addGoal(1, new FleeSunGoal(this, 1.0D));
+        this.goalSelector.addGoal(1, new FleeSunGoal(this, 1.5D));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2D, false));
         this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 8.0F));
@@ -51,6 +61,20 @@ public class VampireSkeletonEntity extends MobultionSkeletonEntity{
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Wolf.class, true));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Sheep.class, true));
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(DATA_MORPHING, -1);
+    }
+
+    public int getMorphingTime(){
+        return this.entityData.get(DATA_MORPHING);
+    }
+
+    public void setMorphingTime(int morphingTime){
+        this.entityData.set(DATA_MORPHING, morphingTime);
     }
 
     /**
@@ -62,15 +86,28 @@ public class VampireSkeletonEntity extends MobultionSkeletonEntity{
      */
     @Override
     public boolean hurt(@Nonnull DamageSource damageSource, float amount) {
-        boolean flag = super.hurt(damageSource, amount);
-        if(flag && damageSource.getEntity() instanceof Player && !damageSource.isCreativePlayer()
+        boolean gotHurt = super.hurt(damageSource, amount);
+        if(gotHurt && damageSource.getEntity() instanceof Player && !damageSource.isCreativePlayer()
                 && random.nextFloat() < 0.1f){
+            setMorphingTime(15);
+        }
+        return gotHurt;
+    }
+
+    @Override
+    protected void customServerAiStep() {
+        super.customServerAiStep();
+        int morphingTime = getMorphingTime();
+        if (morphingTime > 0){
+            setMorphingTime(morphingTime - 1);
+        } else if (morphingTime == 0) {
             Bat bat = new Bat(EntityType.BAT, this.level){
+                private final int randomExtraTime = this.random.nextInt(150);
                 //Make the bat remorph into a vampire skeleton after some random time
                 @Override
                 public void tick() {
                     super.tick();
-                    if(this.tickCount > 150 + random.nextInt(100) && !this.level.isClientSide){
+                    if(this.tickCount > 150 + randomExtraTime && !this.level.isClientSide){
                         VampireSkeletonEntity skeletonEntity = new VampireSkeletonEntity(Registration.VAMPIRESKELETON.get(),
                                 this.level);
                         skeletonEntity.setHealth(skeletonEntity.getMaxHealth() - random.nextInt(5));
@@ -80,11 +117,10 @@ public class VampireSkeletonEntity extends MobultionSkeletonEntity{
                     }
                 }
             };
-            bat.setPos(this.getX(), this.getY(), this.getZ());
+            bat.setPos(this.getX(), this.getY() + 1, this.getZ());
             this.level.addFreshEntity(bat);
             this.discard();
         }
-        return flag;
     }
 
     /**
@@ -93,10 +129,10 @@ public class VampireSkeletonEntity extends MobultionSkeletonEntity{
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeSupplier.Builder createAttributes() {
-        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 30)
-                .add(Attributes.MOVEMENT_SPEED, 0.25D)
-                .add(Attributes.FOLLOW_RANGE, 26)
-                .add(Attributes.ATTACK_DAMAGE, 6D);
+        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, SkeletonsConfig.VAMPIRE_HEALTH.get())
+                .add(Attributes.MOVEMENT_SPEED, SkeletonsConfig.VAMPIRE_SPEED.get())
+                .add(Attributes.FOLLOW_RANGE, SkeletonsConfig.VAMPIRE_RADIUS.get())
+                .add(Attributes.ATTACK_DAMAGE, SkeletonsConfig.VAMPIRE_DAMAGE.get());
     }
 
     /**
@@ -125,10 +161,27 @@ public class VampireSkeletonEntity extends MobultionSkeletonEntity{
     private <E extends IAnimatable> PlayState controllerPredicate(AnimationEvent<E> event)
     {
         if(isDeadOrDying()){
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("death", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("death", false));
             return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("melee", true));
+        if(getMorphingTime() > 0){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("morph", false));
+            double finalX = this.getX() + Math.cos(random.nextFloat() * Math.PI * 2) * 2;
+            double finalY = this.getY(0.5f) + (random.nextFloat() * 2 - 1);
+            double finalZ = this.getZ() + Math.sin(random.nextFloat() * Math.PI * 2) * 2;
+            Vec3 speed = new Vec3(finalX - this.getX(),
+                    finalY - getY(2f/3f),
+                    finalZ - this.getZ()).normalize();
+            this.level.addParticle(ParticleTypes.SMOKE,
+                    this.getX(), getY(2f/3f), this.getZ(),
+                    speed.x/20f, speed.y/20f, speed.z/20f);
+            return PlayState.CONTINUE;
+        }
+        if(tickCount >= 1 && tickCount < 30){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("unmorph", false));
+            return PlayState.CONTINUE;
+        }
+        //event.getController().setAnimation(new AnimationBuilder().addAnimation("melee", true));
 
         return PlayState.STOP;
     }
