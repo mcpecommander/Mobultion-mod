@@ -26,6 +26,7 @@ public class BaseSkeletonModel<T extends MobultionSkeletonEntity> extends Animat
      */
     @Override
     public ResourceLocation getModelLocation(T entity) {
+        if(entity instanceof VampireSkeletonEntity) return new ResourceLocation(MODID, "geo/skeletons/vampireskeleton.json");
         return new ResourceLocation(MODID, "geo/skeletons/baseskeleton.json");
     }
 

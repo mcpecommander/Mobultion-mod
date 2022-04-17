@@ -1,5 +1,7 @@
 package dev.mcpecommander.mobultion.events;
 
+import dev.mcpecommander.mobultion.entities.skeletons.entities.HeartArrowEntity;
+import dev.mcpecommander.mobultion.entities.skeletons.entities.JokerSkeletonEntity;
 import dev.mcpecommander.mobultion.setup.Registration;
 import net.minecraft.Util;
 import net.minecraft.network.chat.ChatType;
@@ -8,6 +10,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DiggerItem;
@@ -81,6 +84,14 @@ public class CommonEvents {
                         "But " + wolf.getName().getString() + " was revived by some mystical holy powers."),
                         ChatType.CHAT, Util.NIL_UUID);
 
+            }
+        }
+        if(event.getEntityLiving() instanceof Animal){
+            if(event.getSource().getEntity() instanceof JokerSkeletonEntity joker){
+                if(joker.isAlive()) joker.setDancing(35);
+            }else if(event.getSource().getEntity() instanceof HeartArrowEntity arrow &&
+                    arrow.getOwner() instanceof JokerSkeletonEntity joker){
+                if (joker.isAlive()) joker.setDancing(35);
             }
         }
     }
