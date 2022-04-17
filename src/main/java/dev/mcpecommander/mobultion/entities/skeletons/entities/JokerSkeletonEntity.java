@@ -1,16 +1,23 @@
 package dev.mcpecommander.mobultion.entities.skeletons.entities;
 
+import dev.mcpecommander.mobultion.entities.endermen.entities.GardenerEndermanEntity;
+import dev.mcpecommander.mobultion.entities.skeletons.SkeletonsConfig;
 import dev.mcpecommander.mobultion.setup.Registration;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Turtle;
 import net.minecraft.world.entity.animal.Wolf;
@@ -36,7 +43,8 @@ import javax.annotation.Nullable;
 /* McpeCommander created on 21/06/2021 inside the package - dev.mcpecommander.mobultion.entities.skeletons.entities */
 public class JokerSkeletonEntity extends MobultionSkeletonEntity implements RangedAttackMob {
 
-    //TODO: Should dance when it kills something or at least whistle and laugh.
+    private static final EntityDataAccessor<Integer> DATA_DANCING = SynchedEntityData.defineId(JokerSkeletonEntity.class, EntityDataSerializers.INT);
+
     /**
      * The animation factory, for more information check GeckoLib.
      */
@@ -52,14 +60,34 @@ public class JokerSkeletonEntity extends MobultionSkeletonEntity implements Rang
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, Wolf.class, 6.0F, 1.0D, 1.2D));
-        this.goalSelector.addGoal(2, new RangedBowAttackGoal<>(this, 1.0D, 10, 15.0F));
+        this.goalSelector.addGoal(2, new RangedBowAttackGoal<JokerSkeletonEntity>(this, 1.0D, 10, 15.0F){
+            @Override
+            public boolean canUse() {
+                return super.canUse() && getDancing() <= 0;
+            }
+        });
         this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Turtle.class, 10, true, false, Turtle.BABY_ON_LAND_SELECTOR));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Animal.class, true));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Turtle.class, 10, true, false, Turtle.BABY_ON_LAND_SELECTOR));
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(DATA_DANCING, 0);
+    }
+
+    public void setDancing(int ticks){
+        this.entityData.set(DATA_DANCING, ticks);
+    }
+
+    public int getDancing(){
+        return this.entityData.get(DATA_DANCING);
     }
 
     /**
@@ -87,10 +115,10 @@ public class JokerSkeletonEntity extends MobultionSkeletonEntity implements Rang
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeSupplier.Builder createAttributes() {
-        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 12)
-                .add(Attributes.MOVEMENT_SPEED, 0.3D)
-                .add(Attributes.FOLLOW_RANGE, 50)
-                .add(Registration.RANGED_DAMAGE.get(), 0.5D);
+        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, SkeletonsConfig.JOKER_HEALTH.get())
+                .add(Attributes.MOVEMENT_SPEED, SkeletonsConfig.JOKER_SPEED.get())
+                .add(Attributes.FOLLOW_RANGE, SkeletonsConfig.JOKER_RADIUS.get())
+                .add(Registration.RANGED_DAMAGE.get(), SkeletonsConfig.JOKER_DAMAGE.get());
     }
 
     /**
@@ -139,7 +167,7 @@ public class JokerSkeletonEntity extends MobultionSkeletonEntity implements Rang
         double horizontalDistance = Math.sqrt(motionX * motionX + motionZ * motionZ);
         //1.1 is the vector scaling factor which in turn translates into speed.
         //The last parameter is the error scale. 0 = exact shot.
-        arrow.shoot(motionX, motionY + horizontalDistance * 0.3d, motionZ, 1.1F, 6);
+        arrow.shoot(motionX, motionY + horizontalDistance * 0.3d, motionZ, 1.1F, SkeletonsConfig.JOKER_ACCURACY.get());
         this.playSound(Registration.HARP_SOUND.get(), 1.0F, this.getRandom().nextFloat() * 0.4F + 0.8F);
         this.level.addFreshEntity(arrow);
     }
@@ -161,6 +189,15 @@ public class JokerSkeletonEntity extends MobultionSkeletonEntity implements Rang
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController<>(this, "movement", 0, this::movementPredicate));
         data.addAnimationController(new AnimationController<>(this, "controller", 0, this::attackPredicate));
+    }
+
+    @Override
+    protected void customServerAiStep() {
+        super.customServerAiStep();
+        if(getDancing() > 0){
+            setDancing(getDancing() - 1);
+        }
+
     }
 
     /**
@@ -195,7 +232,11 @@ public class JokerSkeletonEntity extends MobultionSkeletonEntity implements Rang
             event.getController().setAnimation(new AnimationBuilder().addAnimation("death", true));
             return PlayState.CONTINUE;
         }
-        if(isAggressive()){
+        if(getDancing() > 0){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("dance", true));
+            return PlayState.CONTINUE;
+        }
+        if(isAggressive() && getDancing() <= 0){
             event.getController().setAnimation(new AnimationBuilder().addAnimation("aim", true));
             return PlayState.CONTINUE;
         }

@@ -6,7 +6,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.util.LandRandomPos;
-import net.minecraft.world.entity.ai.util.RandomPos;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
@@ -143,9 +142,7 @@ public class AerialAttackGoal extends Goal{
                 for(int i = 0; i < 5; i++){
                     Vec3 pos = LandRandomPos.getPosAway(this.mob, 10, 7, target.position());
                     if(pos != null && target.distanceToSqr(pos) < attackRadiusSqr && checkVicinity(target, pos)){
-                        if(this.mob.getNavigation().moveTo(pos.x, pos.y, pos.z, 1)){
-                            return;
-                        }
+                        if(this.mob.getNavigation().moveTo(pos.x, pos.y, pos.z, 1)) return;
                     }
                 }
             }

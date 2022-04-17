@@ -1,5 +1,6 @@
 package dev.mcpecommander.mobultion.entities.skeletons.entities;
 
+import dev.mcpecommander.mobultion.entities.skeletons.SkeletonsConfig;
 import dev.mcpecommander.mobultion.entities.skeletons.entityGoals.ShamanHealGoal;
 import dev.mcpecommander.mobultion.setup.Registration;
 import net.minecraft.nbt.CompoundTag;
@@ -79,9 +80,9 @@ public class ShamanSkeletonEntity extends MobultionSkeletonEntity implements Ran
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeSupplier.Builder createAttributes() {
-        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 18)
-                .add(Attributes.MOVEMENT_SPEED, 0.28D)
-                .add(Attributes.FOLLOW_RANGE, 64);
+        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, SkeletonsConfig.SHAMAN_HEALTH.get())
+                .add(Attributes.MOVEMENT_SPEED, SkeletonsConfig.SHAMAN_SPEED.get())
+                .add(Attributes.FOLLOW_RANGE, SkeletonsConfig.SHAMAN_RADIUS.get());
     }
 
     /**

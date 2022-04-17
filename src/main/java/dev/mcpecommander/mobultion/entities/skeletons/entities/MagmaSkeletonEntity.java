@@ -1,5 +1,6 @@
 package dev.mcpecommander.mobultion.entities.skeletons.entities;
 
+import dev.mcpecommander.mobultion.entities.skeletons.SkeletonsConfig;
 import dev.mcpecommander.mobultion.setup.Registration;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
@@ -68,10 +69,10 @@ public class MagmaSkeletonEntity extends MobultionSkeletonEntity implements Rang
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeSupplier.Builder createAttributes() {
-        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 24)
-                .add(Attributes.MOVEMENT_SPEED, 0.25D)
-                .add(Attributes.FOLLOW_RANGE, 16)
-                .add(Registration.RANGED_DAMAGE.get(), 1.5D);
+        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, SkeletonsConfig.MAGMA_HEALTH.get())
+                .add(Attributes.MOVEMENT_SPEED, SkeletonsConfig.MAGMA_SPEED.get())
+                .add(Attributes.FOLLOW_RANGE, SkeletonsConfig.MAGMA_RADIUS.get())
+                .add(Registration.RANGED_DAMAGE.get(), SkeletonsConfig.MAGMA_DAMAGE.get());
     }
 
     /**
@@ -131,7 +132,7 @@ public class MagmaSkeletonEntity extends MobultionSkeletonEntity implements Rang
         double d3 = Math.sqrt(d0 * d0 + d2 * d2);
         //1.6 is the vector scaling factor which in turn translates into speed.
         //The last parameter is the error scale. 0 = exact shot.
-        arrow.shoot(d0, d1 + d3 * 0.2d, d2, 1.6F, 3);
+        arrow.shoot(d0, d1 + d3 * 0.2d, d2, 1.6F, SkeletonsConfig.MAGMA_ACCURACY.get());
         this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.level.addFreshEntity(arrow);
     }

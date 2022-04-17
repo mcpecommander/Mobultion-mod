@@ -1,5 +1,6 @@
 package dev.mcpecommander.mobultion.entities.skeletons.entities;
 
+import dev.mcpecommander.mobultion.entities.skeletons.SkeletonsConfig;
 import dev.mcpecommander.mobultion.entities.skeletons.entityGoals.AerialAttackGoal;
 import dev.mcpecommander.mobultion.setup.Registration;
 import net.minecraft.nbt.CompoundTag;
@@ -69,10 +70,10 @@ public class ForestSkeletonEntity extends MobultionSkeletonEntity implements Ran
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeSupplier.Builder createAttributes() {
-        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 16d)
-                .add(Attributes.MOVEMENT_SPEED, 0.25D)
-                .add(Attributes.FOLLOW_RANGE, 36)
-                .add(Registration.RANGED_DAMAGE.get(), 3d);
+        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, SkeletonsConfig.FOREST_HEALTH.get())
+                .add(Attributes.MOVEMENT_SPEED, SkeletonsConfig.FOREST_SPEED.get())
+                .add(Attributes.FOLLOW_RANGE, SkeletonsConfig.FOREST_RADIUS.get())
+                .add(Registration.RANGED_DAMAGE.get(), SkeletonsConfig.FOREST_DAMAGE.get());
     }
 
     /**
@@ -117,7 +118,7 @@ public class ForestSkeletonEntity extends MobultionSkeletonEntity implements Ran
 
         //1.6 is the vector scaling factor which in turn translates into speed.
         //The last parameter is the error scale. 0 = exact shot.
-        arrow.shoot(motionX, motionY, motionZ, 1.6F, 0);
+        arrow.shoot(motionX, motionY, motionZ, 1.6F, SkeletonsConfig.FOREST_ACCURACY.get());
         this.playSound(Registration.SLASH_SOUND.get(), 1.0F, 0.4f);
         this.level.addFreshEntity(arrow);
     }

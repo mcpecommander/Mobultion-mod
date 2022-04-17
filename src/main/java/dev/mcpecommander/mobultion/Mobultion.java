@@ -18,7 +18,7 @@ import software.bernie.geckolib3.GeckoLib;
 public class Mobultion
 {
     public static final String MODID = "mobultion";
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     private static final Logger LOGGER = LogManager.getLogger();
 

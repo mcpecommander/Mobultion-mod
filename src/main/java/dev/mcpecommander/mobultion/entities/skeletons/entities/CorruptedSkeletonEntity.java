@@ -1,5 +1,6 @@
 package dev.mcpecommander.mobultion.entities.skeletons.entities;
 
+import dev.mcpecommander.mobultion.entities.skeletons.SkeletonsConfig;
 import dev.mcpecommander.mobultion.entities.skeletons.entityGoals.AnimatedMeleeAttackGoal;
 import dev.mcpecommander.mobultion.setup.Registration;
 import net.minecraft.nbt.CompoundTag;
@@ -68,10 +69,10 @@ public class CorruptedSkeletonEntity extends MobultionSkeletonEntity {
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeSupplier.Builder createAttributes() {
-        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 35)
-                .add(Attributes.MOVEMENT_SPEED, 0.25D)
-                .add(Attributes.FOLLOW_RANGE, 20)
-                .add(Attributes.ATTACK_DAMAGE, 6D);
+        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, SkeletonsConfig.CORRUPTED_HEALTH.get())
+                .add(Attributes.MOVEMENT_SPEED, SkeletonsConfig.CORRUPTED_SPEED.get())
+                .add(Attributes.FOLLOW_RANGE, SkeletonsConfig.CORRUPTED_RADIUS.get())
+                .add(Attributes.ATTACK_DAMAGE, SkeletonsConfig.CORRUPTED_DAMAGE.get());
     }
 
     /**
