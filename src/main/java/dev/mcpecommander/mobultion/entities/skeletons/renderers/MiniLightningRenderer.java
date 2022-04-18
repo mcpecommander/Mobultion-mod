@@ -44,7 +44,7 @@ public class MiniLightningRenderer extends EntityRenderer<MiniLightningEntity> {
 
         matrixStack.pushPose();
         //Rotate the whole thing constantly.
-        matrixStack.mulPose(Vector3f.YP.rotation(entity.tickCount * 0.2f));
+        matrixStack.mulPose(Vector3f.YP.rotation(entity.tickCount * 0.08f));
         //Set the render type to vanilla lightning and get the vertex builder.
         VertexConsumer ivertexbuilder = renderTypeBuffer.getBuffer(RenderType.lightning());
         Matrix4f matrix4f = matrixStack.last().pose();
@@ -54,22 +54,20 @@ public class MiniLightningRenderer extends EntityRenderer<MiniLightningEntity> {
             matrixStack.mulPose(Vector3f.YP.rotationDegrees(30));
         }
         matrixStack.popPose();
-
-
     }
 
-    private static void quad(Matrix4f matrix4f, VertexConsumer vertexBuilder, float height) {
+    private static void quad(Matrix4f matrix4f, VertexConsumer vertexBuilder, float color) {
         //Front
-        vertexBuilder.vertex(matrix4f, -0.6f, 0,          -0.6f).color(1 - height, height * 0.8f, 0.3f, 0.3F).endVertex();
-        vertexBuilder.vertex(matrix4f, -0.6f, 3 * height, -0.6f).color(1 - height, height * 0.8f, 0.3f, 0.3F).endVertex();
-        vertexBuilder.vertex(matrix4f,  0.6f, 3 * height, -0.6f).color(1 - height, height * 0.8f, 0.3f, 0.3F).endVertex();
-        vertexBuilder.vertex(matrix4f,  0.6f, 0,          -0.6f).color(1 - height, height * 0.8f, 0.3f, 0.3F).endVertex();
+        vertexBuilder.vertex(matrix4f, -0.6f, 0,    -0.6f).color(1 - color, color * 0.8f, 0.3f, 0.3F).endVertex();
+        vertexBuilder.vertex(matrix4f, -0.6f, 0.4f, -0.6f).color(1 - color, color * 0.8f, 0.3f, 0.3F).endVertex();
+        vertexBuilder.vertex(matrix4f,  0.6f, 0.4f, -0.6f).color(1 - color, color * 0.8f, 0.3f, 0.3F).endVertex();
+        vertexBuilder.vertex(matrix4f,  0.6f, 0,    -0.6f).color(1 - color, color * 0.8f, 0.3f, 0.3F).endVertex();
 
         //Back
-        vertexBuilder.vertex(matrix4f,  0.6f, 0,          -0.6f).color(1 - height, height * 0.8f, 0.3f, 0.3F).endVertex();
-        vertexBuilder.vertex(matrix4f,  0.6f, 3 * height, -0.6f).color(1 - height, height * 0.8f, 0.3f, 0.3F).endVertex();
-        vertexBuilder.vertex(matrix4f, -0.6f, 3 * height, -0.6f).color(1 - height, height * 0.8f, 0.3f, 0.3F).endVertex();
-        vertexBuilder.vertex(matrix4f, -0.6f, 0,          -0.6f).color(1 - height, height * 0.8f, 0.3f, 0.3F).endVertex();
+        vertexBuilder.vertex(matrix4f,  0.6f, 0,    -0.6f).color(1 - color, color * 0.8f, 0.3f, 0.3F).endVertex();
+        vertexBuilder.vertex(matrix4f,  0.6f, 0.4f, -0.6f).color(1 - color, color * 0.8f, 0.3f, 0.3F).endVertex();
+        vertexBuilder.vertex(matrix4f, -0.6f, 0.4f, -0.6f).color(1 - color, color * 0.8f, 0.3f, 0.3F).endVertex();
+        vertexBuilder.vertex(matrix4f, -0.6f, 0,    -0.6f).color(1 - color, color * 0.8f, 0.3f, 0.3F).endVertex();
     }
 
     @Nonnull

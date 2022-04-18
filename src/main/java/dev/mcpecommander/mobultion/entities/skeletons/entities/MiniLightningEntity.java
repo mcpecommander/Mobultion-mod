@@ -23,6 +23,7 @@ public class MiniLightningEntity extends Entity {
 
     public MiniLightningEntity(EntityType<?> entityType, Level world) {
         super(entityType, world);
+        setNoGravity(true);
 
     }
 
@@ -35,7 +36,7 @@ public class MiniLightningEntity extends Entity {
         Entity target = this.getTarget();
         if(target != null && target.isAlive()){
             //Move the effect towards the entity as long as it is available.
-            this.setPos(target.getX(), target.getY(), target.getZ());
+            this.setPos(target.getX(), target.getY() + target.getBbHeight() - (target.getBbHeight() * tickCount/20), target.getZ());
         }
         //Lives for only 20 ticks.
         if(tickCount > 20){

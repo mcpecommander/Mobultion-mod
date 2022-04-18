@@ -68,7 +68,7 @@ public class ShamanSkeletonEntity extends MobultionSkeletonEntity implements Ran
      */
     public void performRangedAttack(@Nonnull LivingEntity target, float power) {
         MiniLightningEntity boltEntity = new MiniLightningEntity(Registration.MINILIGHTNING.get(), this.level);
-        boltEntity.setPos(target.getX(), target.getY(), target.getZ());
+        boltEntity.setPos(target.getX(), target.getY() + target.getBbHeight(), target.getZ());
         boltEntity.setTarget(target.getId());
         this.level.addFreshEntity(boltEntity);
         target.heal(power);
