@@ -1,19 +1,25 @@
 package dev.mcpecommander.mobultion.entities.spiders.entities;
 
+import dev.mcpecommander.mobultion.entities.spiders.entityGoals.MobultionSpiderMeleeGoal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -22,6 +28,8 @@ import software.bernie.geckolib3.core.event.ParticleKeyFrameEvent;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+
+import javax.annotation.Nonnull;
 
 /* Created by McpeCommander on 2021/06/18 */
 public class MagmaSpiderEntity extends MobultionSpiderEntity{
@@ -45,6 +53,21 @@ public class MagmaSpiderEntity extends MobultionSpiderEntity{
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        this.goalSelector.addGoal(3, new MobultionSpiderMeleeGoal(this, 1.0, 0.5f, 0.7f));
+        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true){
+            @Override
+            public boolean canUse() {
+                return !(mob.getBrightness() >= 0.5F) && super.canUse();
+            }
+        });
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true){
+            @Override
+            public boolean canUse() {
+                return !(mob.getBrightness() >= 0.5F) && super.canUse();
+            }
+        });
 
     }
 
@@ -54,7 +77,9 @@ public class MagmaSpiderEntity extends MobultionSpiderEntity{
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 26.0D).add(Attributes.MOVEMENT_SPEED, 0.3D);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 26.0D)
+                .add(Attributes.MOVEMENT_SPEED, 0.3D)
+                .add(Attributes.ATTACK_DAMAGE, 2);
     }
 
     /**
@@ -77,30 +102,27 @@ public class MagmaSpiderEntity extends MobultionSpiderEntity{
     }
 
     /**
-     * Sets the rotation of the entity
-     * @param xRot: x axis rotation in degrees.
-     * @param yRot: y axis rotation in degrees.
+     * Whether the entity is hurt by water, whether it is rain, bubble column or in water.
+     * @return true if the entity is damaged by water.
      */
     @Override
-    protected void setRot(float xRot, float yRot) {
-        if(isDeadOrDying()) return;
-        super.setRot(xRot, yRot);
-    }
-
-    @Override
-    public float rotate(@NotNull Rotation rotation) {
-        if(isDeadOrDying()) return 0;
-        return super.rotate(rotation);
+    public boolean isSensitiveToWater() {
+        return true;
     }
 
     /**
-     * Sets the body rotation (entities body only rotate on the y axis)
-     * @param yBodyRot: the wanted y axis rotation angle in degrees.
+     * Gets called when an entity is hit by this enderman.
+     * @param target The entity that this enderman hit.
+     * @return true if the attack was successful which is in turn determined from hurt method.
      */
-    @Override
-    public void setYBodyRot(float yBodyRot) {
-        if(isDeadOrDying()) return;
-        super.setYBodyRot(yBodyRot);
+    public boolean doHurtTarget(@Nonnull Entity target) {
+        if (super.doHurtTarget(target)) {
+            if (target instanceof LivingEntity) {
+                target.setSecondsOnFire(4);
+            }
+            return true;
+        }
+        return false;
     }
 
     /**
