@@ -19,6 +19,8 @@ import javax.annotation.Nullable;
 /* Created by McpeCommander on 2021/06/18 */
 public class MagmaSpiderRenderer extends GeoEntityRenderer<MagmaSpiderEntity> {
 
+    private float rotationAngle;
+
     public MagmaSpiderRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new MagmaSpiderModel());
         this.shadowRadius = 0.7F;
@@ -27,7 +29,9 @@ public class MagmaSpiderRenderer extends GeoEntityRenderer<MagmaSpiderEntity> {
     }
 
     @Override
-    public void render(GeoModel model, MagmaSpiderEntity animatable, float partialTicks, RenderType type, PoseStack matrixStackIn, @Nullable MultiBufferSource renderTypeBuffer, @Nullable VertexConsumer vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    public void render(GeoModel model, MagmaSpiderEntity animatable, float partialTicks, RenderType type,
+                       PoseStack matrixStackIn, @Nullable MultiBufferSource renderTypeBuffer, @Nullable VertexConsumer vertexBuilder,
+                       int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
         renderEarly(animatable, matrixStackIn, partialTicks, renderTypeBuffer, vertexBuilder, packedLightIn,
                 packedOverlayIn, red, green, blue, alpha);
 
@@ -39,6 +43,16 @@ public class MagmaSpiderRenderer extends GeoEntityRenderer<MagmaSpiderEntity> {
             renderRecursively(group, matrixStackIn, vertexBuilder, packedLightIn, OverlayTexture.pack(0,
                             OverlayTexture.v(animatable.hurtTime > 0)), red, green, blue, alpha);
         }
+    }
+
+    //A solution for the spider rotating after dying and ruining my particles.
+    @Override
+    protected void applyRotations(MagmaSpiderEntity entityLiving, PoseStack matrixStackIn, float ageInTicks,
+                                  float rotationYaw, float partialTicks) {
+        if (!entityLiving.isDeadOrDying()){
+            this.rotationAngle = rotationYaw;
+        }
+        super.applyRotations(entityLiving, matrixStackIn, ageInTicks, this.rotationAngle, partialTicks);
     }
 
     @Override
