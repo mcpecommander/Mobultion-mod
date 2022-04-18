@@ -188,7 +188,7 @@
 		},
 		"attack": {
 			"loop": "hold_on_last_frame",
-			"animation_length": 1.04,
+			"animation_length": 2.6,
 			"bones": {
 				"Horn5": {
 					"rotation": {
@@ -757,5 +757,6 @@
 				}
 			}
 		}
-	}
+	},
+	"geckolib_format_version": 2
 }

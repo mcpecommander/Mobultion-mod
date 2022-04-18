@@ -1,12 +1,20 @@
 package dev.mcpecommander.mobultion.entities.spiders.entities;
 
+import dev.mcpecommander.mobultion.entities.spiders.entityGoals.HypnoSpiderRangedGoal;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -35,6 +43,9 @@ public class HypnoSpiderEntity extends MobultionSpiderEntity{
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        this.goalSelector.addGoal(2, new HypnoSpiderRangedGoal(this, 1.1, 20, 12));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 
     /**
@@ -57,12 +68,15 @@ public class HypnoSpiderEntity extends MobultionSpiderEntity{
             event.getController().setAnimation(new AnimationBuilder().addAnimation("death", false));
             return PlayState.CONTINUE;
         }
-        if(event.isMoving()){
+        if(this.isUsingItem()){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("attack", false));
+            return PlayState.CONTINUE;
+        } else if(event.isMoving()){
             event.getController().setAnimation(new AnimationBuilder().addAnimation("move", true));
-        }else{
-            return PlayState.STOP;
+            return PlayState.CONTINUE;
         }
-        return PlayState.CONTINUE;
+
+        return PlayState.STOP;
     }
 
     /**
@@ -75,7 +89,8 @@ public class HypnoSpiderEntity extends MobultionSpiderEntity{
     private <E extends IAnimatable> PlayState predicateIdle(AnimationEvent<E> event)
     {
         if(this.isDeadOrDying()) return PlayState.STOP;
-        AnimationController controller = factory.getOrCreateAnimationData(this.getId()).getAnimationControllers().get("controller");
+        AnimationController controller = factory.getOrCreateAnimationData(this.getUUID().hashCode()).getAnimationControllers().get("controller");
+        //System.out.println(controller.getCurrentAnimation());
         if(controller.getCurrentAnimation() == null || controller.getCurrentAnimation().animationName.equals("move")){
             event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", true));
             return PlayState.CONTINUE;
@@ -113,9 +128,38 @@ public class HypnoSpiderEntity extends MobultionSpiderEntity{
                 double d0 = this.random.nextGaussian() * 0.02D;
                 double d1 = this.random.nextGaussian() * 0.02D;
                 double d2 = this.random.nextGaussian() * 0.02D;
-                this.level.addParticle(ParticleTypes.POOF, this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
+                this.level.addParticle(ParticleTypes.POOF,
+                        this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D)
+                        , d0, d1, d2);
             }
         }
+    }
+
+    @Override
+    public @NotNull ItemStack getItemInHand(@NotNull InteractionHand hand) {
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public void startUsingItem(@NotNull InteractionHand hand) {
+        if (!this.isUsingItem()) {
+            this.useItemRemaining = 22;
+            if (!this.level.isClientSide) {
+                this.setLivingEntityFlag(1, true);
+                this.setLivingEntityFlag(2, hand == InteractionHand.OFF_HAND);
+            }
+        }
+    }
+
+    public void performRangedAttack(LivingEntity target) {
+        HypnoWaveEntity wave = new HypnoWaveEntity(this);
+        double d0 = target.getX() - this.getX();
+        double d1 = target.getY(2d/3d) - wave.getY();
+        double d2 = target.getZ() - this.getZ();
+        //1F is the vector scaling factor which in turn translates into speed.
+        //The last parameter is the error scale. 0 = exact shot.
+        wave.shoot(d0, d1, d2, 1F, 0);
+        this.level.addFreshEntity(wave);
     }
 
     @Override

@@ -3,6 +3,7 @@ package dev.mcpecommander.mobultion.effects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.Random;
 
@@ -26,7 +27,7 @@ public class HypnoEffect extends MobEffect {
      */
     @Override
     public boolean isDurationEffectTick(int duration, int amplifier) {
-        return duration % 4 == 0 && random.nextInt(11) <= amplifier;
+        return duration % 4 == 0 && random.nextInt(8) <= amplifier;
     }
 
     /**
@@ -36,9 +37,9 @@ public class HypnoEffect extends MobEffect {
      */
     @Override
     public void applyEffectTick(LivingEntity affectedEntity, int amplifier) {
-        if(!affectedEntity.level.isClientSide) return;
-        affectedEntity.setDeltaMovement((random.nextDouble() - 0.5d) * (((float)amplifier)/10 + 1) ,
-                0, (random.nextDouble() - 0.5d) * (((float)amplifier)/10 + 1));
+        if(!affectedEntity.level.isClientSide || (affectedEntity instanceof Player player && player.isCreative())) return;
+        affectedEntity.setDeltaMovement((2*random.nextDouble() - 1d) * (((float)amplifier)/10 + 1) ,
+                0, (2*random.nextDouble() - 1d) * (((float)amplifier)/10 + 1));
     }
 
 }
