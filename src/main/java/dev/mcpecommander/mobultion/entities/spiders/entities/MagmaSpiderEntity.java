@@ -53,7 +53,7 @@ public class MagmaSpiderEntity extends MobultionSpiderEntity{
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(3, new MobultionSpiderMeleeGoal(this, 1.0, 0.5f, 0.7f));
+        this.goalSelector.addGoal(3, new MobultionSpiderMeleeGoal(this, true, 1.0, 0.5f, 0.7f));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true){

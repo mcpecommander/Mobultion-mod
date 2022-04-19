@@ -13,11 +13,11 @@ import java.util.EnumSet;
 /* McpeCommander created on 18/04/2022 inside the package - dev.mcpecommander.mobultion.entities.spiders.entityGoals */
 public class MobultionSpiderMeleeGoal extends Goal{
     protected final PathfinderMob attacker;
-    private final double speedMultiplier;
+    private final double speedMultiplier, jumpHeight, jumpSpeed;
     private Path path;
     private int ticksUntilNextAttack;
     private long lastCanUseCheck;
-    private final float jumpHeight, jumpSpeed;
+    private final boolean forgiveInDay;
     private static final long COOLDOWN_BETWEEN_CAN_USE_CHECKS = 20;
 
     /**
@@ -28,8 +28,9 @@ public class MobultionSpiderMeleeGoal extends Goal{
      * @param jumpHeight The height of the spider leap, vanilla uses 0.3f
      * @param jumpSpeed A float to multiply the jump vector by, vanilla uses 0.4f
      */
-    public MobultionSpiderMeleeGoal(PathfinderMob attacker, double speedMultiplier, float jumpHeight, float jumpSpeed) {
+    public MobultionSpiderMeleeGoal(PathfinderMob attacker, boolean forgiveInDay, double speedMultiplier, float jumpHeight, float jumpSpeed) {
         this.attacker = attacker;
+        this.forgiveInDay = forgiveInDay;
         this.speedMultiplier = speedMultiplier;
         this.jumpHeight = jumpHeight;
         this.jumpSpeed = jumpSpeed;
@@ -73,17 +74,13 @@ public class MobultionSpiderMeleeGoal extends Goal{
     public boolean canContinueToUse() {
         //If it is bright enough, there is a 1% for the spider to stop being angry at the target.
         float brightness = this.attacker.getBrightness();
-        if (brightness >= 0.5F && this.attacker.getRandom().nextInt(100) == 0) {
+        if (!forgiveInDay && brightness >= 0.5F && this.attacker.getRandom().nextInt(100) == 0) {
             this.attacker.setTarget(null);
             return false;
         } else {
             LivingEntity livingentity = this.attacker.getTarget();
-            boolean followingTargetEvenIfNotSeen = true;
             if (livingentity == null || !livingentity.isAlive()) {
                 return false;
-                //Check if the attacker should continue following after reaching the end node and not seeing the player anymore.
-            } else if (!followingTargetEvenIfNotSeen) {
-                return !this.attacker.getNavigation().isDone();
             } else {
                 //Check whether the target switched to creative after being targeted.
                 return !(livingentity instanceof Player) || !livingentity.isSpectator() && !((Player) livingentity).isCreative();
