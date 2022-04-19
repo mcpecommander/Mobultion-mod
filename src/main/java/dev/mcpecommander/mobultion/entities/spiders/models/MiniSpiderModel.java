@@ -2,7 +2,10 @@ package dev.mcpecommander.mobultion.entities.spiders.models;
 
 import dev.mcpecommander.mobultion.entities.spiders.entities.MiniSpiderEntity;
 import net.minecraft.resources.ResourceLocation;
+import software.bernie.geckolib3.core.AnimationState;
+import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
@@ -53,14 +56,19 @@ public class MiniSpiderModel extends AnimatedGeoModel<MiniSpiderEntity> {
     @Override
     public void setLivingAnimations(MiniSpiderEntity entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
-        IBone head = this.getAnimationProcessor().getBone("Head");
-        assert customPredicate != null;
-        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-        head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
-        head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
-        if(entity.isDeadOrDying()) {
-            head.setRotationX(0f);
-            head.setRotationY(0f);
+        AnimationController controller = entity.getFactory().getOrCreateAnimationData(uniqueID)
+                .getAnimationControllers().get("controller");
+        if (controller.getAnimationState() == AnimationState.Stopped || controller.getCurrentAnimation() == null
+        || (controller.getCurrentAnimation() != null && controller.getCurrentAnimation().animationName.equals("move"))) {
+            IBone head = this.getAnimationProcessor().getBone("Head");
+            assert customPredicate != null;
+            EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+            head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
+            head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
+            if (entity.isDeadOrDying()) {
+                head.setRotationX(0f);
+                head.setRotationY(0f);
+            }
         }
 
     }
