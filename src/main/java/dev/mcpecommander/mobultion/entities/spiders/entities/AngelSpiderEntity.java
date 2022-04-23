@@ -3,9 +3,11 @@ package dev.mcpecommander.mobultion.entities.spiders.entities;
 import dev.mcpecommander.mobultion.entities.spiders.entityGoals.AngelSpiderHealGoal;
 import dev.mcpecommander.mobultion.entities.spiders.entityGoals.AngelSpiderTargetGoal;
 import dev.mcpecommander.mobultion.particles.HealParticle;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -31,7 +33,7 @@ import javax.annotation.Nullable;
 public class AngelSpiderEntity extends MobultionSpiderEntity {
 
     /**
-     * A data parameter to help keep the target in sync and to be saved when quiting the game.
+     * A data parameter to help keep the target in sync and to be saved (in another method) when quiting the game.
      */
     private static final EntityDataAccessor<Integer> TARGET = SynchedEntityData.defineId(AngelSpiderEntity.class, EntityDataSerializers.INT);
     /**
@@ -145,6 +147,22 @@ public class AngelSpiderEntity extends MobultionSpiderEntity {
             this.entityData.set(TARGET, target.getId());
         } else {
             this.entityData.set(TARGET, -1);
+        }
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag NBTTag) {
+        super.addAdditionalSaveData(NBTTag);
+        if(getTarget() != null) {
+            NBTTag.putUUID("mobultion:target", getTarget().getUUID());
+        }
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag NBTTag) {
+        super.readAdditionalSaveData(NBTTag);
+        if(NBTTag.hasUUID("mobultion:target") && !this.level.isClientSide){
+            this.setTarget((LivingEntity) ((ServerLevel)this.level).getEntity(NBTTag.getUUID("mobultion:target")));
         }
     }
 
