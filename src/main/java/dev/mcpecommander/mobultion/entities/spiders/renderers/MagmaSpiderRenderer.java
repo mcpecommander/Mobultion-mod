@@ -28,6 +28,23 @@ public class MagmaSpiderRenderer extends GeoEntityRenderer<MagmaSpiderEntity> {
         this.addLayer(new SpiderEyesLayer<>(this, "magmaspider"));
     }
 
+    /**
+     * The main render method with all of its glory. Has several parts in it that are called from other method such as
+     * renderLate and renderEarly
+     * @param model The geckolib model
+     * @param animatable The entity being rendered
+     * @param partialTicks The partial ticks which are used for interpolation at different fps
+     * @param type The render type, which has its own method
+     * @param matrixStackIn The pose stack which controls translation, rotation and scaling
+     * @param renderTypeBuffer The render buffer which way over my pay grade
+     * @param vertexBuilder The vertex builder that is used to render quads
+     * @param packedLightIn The light level which has some magic number calculation in it
+     * @param packedOverlayIn I have no idea what this is
+     * @param red The red color channel
+     * @param green The green color channel
+     * @param blue The blue color channel
+     * @param alpha The transparency channel
+     */
     @Override
     public void render(GeoModel model, MagmaSpiderEntity animatable, float partialTicks, RenderType type,
                        PoseStack matrixStackIn, @Nullable MultiBufferSource renderTypeBuffer, @Nullable VertexConsumer vertexBuilder,
@@ -46,6 +63,7 @@ public class MagmaSpiderRenderer extends GeoEntityRenderer<MagmaSpiderEntity> {
     }
 
     //A solution for the spider rotating after dying and ruining my particles.
+    //A better explanation in dev.mcpecommander.mobultion.entities.skeletons.renderers.BaseSkeletonRenderer.java
     @Override
     protected void applyRotations(MagmaSpiderEntity entityLiving, PoseStack matrixStackIn, float ageInTicks,
                                   float rotationYaw, float partialTicks) {
@@ -55,8 +73,13 @@ public class MagmaSpiderRenderer extends GeoEntityRenderer<MagmaSpiderEntity> {
         super.applyRotations(entityLiving, matrixStackIn, ageInTicks, this.rotationAngle, partialTicks);
     }
 
+    /**
+     * How much the entity rotates when it dies. The default is 90 degrees like lying on the ground dead.
+     * @param entity The entity that is dying.
+     * @return a float of the degrees that this entity rotates on death.
+     */
     @Override
-    protected float getDeathMaxRotation(MagmaSpiderEntity entityLivingBaseIn) {
+    protected float getDeathMaxRotation(MagmaSpiderEntity entity) {
         return 0;
     }
 }

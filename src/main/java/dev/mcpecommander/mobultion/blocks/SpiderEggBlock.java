@@ -1,35 +1,97 @@
 package dev.mcpecommander.mobultion.blocks;
 
 import dev.mcpecommander.mobultion.blocks.tile.SpiderEggTile;
+import dev.mcpecommander.mobultion.entities.spiders.entities.MiniSpiderEntity;
 import dev.mcpecommander.mobultion.entities.spiders.entities.MobultionSpiderEntity;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
+import dev.mcpecommander.mobultion.setup.Registration;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import org.checkerframework.checker.units.qual.A;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.RenderShape;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
-
 /* McpeCommander created on 10/08/2021 inside the package - dev.mcpecommander.mobultion.blocks */
 public class SpiderEggBlock extends Block implements EntityBlock {
 
+    public static final VoxelShape SHAPE_1 = Block.box(4, 0, 4, 12, 7, 12);
+    public static final VoxelShape SHAPE_2 = Block.box(10, 0, 0, 16, 7, 6);
+    public static final VoxelShape SHAPE_3 = Block.box(2, 0, 0, 8, 7, 6);
+    public static final VoxelShape SHAPE_4 = Block.box(2, 0, 10, 8, 7, 16);
+    public static final VoxelShape SHAPE_5 = Block.box(10, 0, 9, 16, 7, 15);
+
+    /**
+     * Amount of eggs per block
+     */
+    public static final IntegerProperty EGGS = IntegerProperty.create("eggs", 1, 5);
+
     public SpiderEggBlock() {
         super(Properties.of(Material.EGG, MaterialColor.COLOR_GRAY).strength(0.5F).sound(SoundType.METAL).noOcclusion());
+        this.registerDefaultState(this.stateDefinition.any().setValue(EGGS, 1));
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> stateBuilder) {
+        super.createBlockStateDefinition(stateBuilder);
+        stateBuilder.add(EGGS);
+    }
+
+    @Override
+    public void playerDestroy(@NotNull Level world, @NotNull Player player, @NotNull BlockPos pos, @NotNull BlockState currentState,
+                              @Nullable BlockEntity blockEntity, @NotNull ItemStack itemUsedToDestroy) {
+        super.playerDestroy(world, player, pos, currentState, blockEntity, itemUsedToDestroy);
+        if (!world.isClientSide){
+            if(EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, itemUsedToDestroy) == 0){
+                for (int i = 0; i < currentState.getValue(EGGS); i++){
+                    MiniSpiderEntity spider = new MiniSpiderEntity(Registration.MINISPIDER.get(), world);
+                    spider.setPos(Vec3.atCenterOf(pos).add(world.random.nextGaussian() * 0.5 - 0.5, 0,
+                            world.random.nextDouble() * .5 - 0.5));
+                    world.addFreshEntity(spider);
+                }
+            }else{
+
+            }
+        }
+    }
+
+
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
+        BlockState blockstate = blockPlaceContext.getLevel().getBlockState(blockPlaceContext.getClickedPos());
+        return blockstate.is(this) ? blockstate.setValue(EGGS, Math.min(5, blockstate.getValue(EGGS) + 1)) :
+                super.getStateForPlacement(blockPlaceContext);
+    }
+
+    public boolean canBeReplaced(@NotNull BlockState currentState, BlockPlaceContext placementContext) {
+        return !placementContext.isSecondaryUseActive() && placementContext.getItemInHand().getItem() == this.asItem()
+                && currentState.getValue(EGGS) < 5 || super.canBeReplaced(currentState, placementContext);
     }
 
     /**
@@ -59,6 +121,7 @@ public class SpiderEggBlock extends Block implements EntityBlock {
     public void fallOn(@Nonnull Level world, @NotNull BlockState state, @Nonnull BlockPos pos, @Nonnull Entity entity, float distance) {
         if (entity instanceof LivingEntity && !(entity instanceof MobultionSpiderEntity)){
             world.destroyBlock(pos, false);
+
         }
         super.fallOn(world, state, pos, entity, distance);
     }
@@ -77,7 +140,13 @@ public class SpiderEggBlock extends Block implements EntityBlock {
     @Override
     public VoxelShape getShape(@Nonnull BlockState blockState, @Nonnull BlockGetter world, @Nonnull BlockPos pos,
                                @Nonnull CollisionContext selectionContext) {
-        return Block.box(5, 0, 5, 11, 7, 11);
+        return switch (blockState.getValue(EGGS)) {
+            case 2 -> Shapes.or(SHAPE_1, SHAPE_2);
+            case 3 -> Shapes.or(SHAPE_1, SHAPE_2, SHAPE_3);
+            case 4 -> Shapes.or(SHAPE_1, SHAPE_2, SHAPE_3, SHAPE_4);
+            case 5 -> Shapes.or(SHAPE_1, SHAPE_2, SHAPE_3, SHAPE_4, SHAPE_5);
+            default -> SHAPE_1;
+        };
     }
 
     /**
@@ -90,6 +159,17 @@ public class SpiderEggBlock extends Block implements EntityBlock {
     @Override
     public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
         return new SpiderEggTile(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state,
+                                                                  @NotNull BlockEntityType<T> type) {
+        return (lvl, pos, blockState, t) -> {
+            if (t instanceof SpiderEggTile tile) {
+                tile.tick();
+            }
+        };
     }
 
     /**

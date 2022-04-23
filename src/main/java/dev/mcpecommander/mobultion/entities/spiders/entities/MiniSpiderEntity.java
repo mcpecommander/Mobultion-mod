@@ -1,6 +1,10 @@
 package dev.mcpecommander.mobultion.entities.spiders.entities;
 
+import dev.mcpecommander.mobultion.entities.spiders.entityGoals.FollowMotherGoal;
 import dev.mcpecommander.mobultion.entities.spiders.entityGoals.MiniSpiderMeleeGoal;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -11,6 +15,9 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.util.ITeleporter;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -19,9 +26,12 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import java.util.UUID;
+
 /* McpeCommander created on 10/08/2021 inside the package - dev.mcpecommander.mobultion.entities.spiders.entities */
 public class MiniSpiderEntity extends MobultionSpiderEntity{
 
+    private UUID ownerID;
     /**
      * The animation factory, for more information check GeckoLib.
      */
@@ -37,7 +47,8 @@ public class MiniSpiderEntity extends MobultionSpiderEntity{
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(3, new MiniSpiderMeleeGoal(this, 1.0f, 0.5f, 0.9f));
+        this.goalSelector.addGoal(3, new MiniSpiderMeleeGoal(this, 1.0F, 0.5F, 0.9F));
+        this.goalSelector.addGoal(4, new FollowMotherGoal(this, 1.1D));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
@@ -53,6 +64,53 @@ public class MiniSpiderEntity extends MobultionSpiderEntity{
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 26.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.3D)
                 .add(Attributes.ATTACK_DAMAGE, 2D);
+    }
+
+    public void setOwnerID(UUID ownerID) {
+        this.ownerID = ownerID;
+        if (this.level instanceof ServerLevel && ((ServerLevel)this.level).getEntity(ownerID) instanceof MotherSpiderEntity mother){
+            mother.addMiniSpider(this.getUUID());
+        }
+    }
+
+    public UUID getOwnerID() {
+        return ownerID;
+    }
+
+    @Override
+    public void readAdditionalSaveData(@NotNull CompoundTag NBTTag) {
+        super.readAdditionalSaveData(NBTTag);
+        if(NBTTag.hasUUID("mobultion:ID")){
+            this.ownerID = NBTTag.getUUID("mobultion:ID");
+        }
+    }
+
+    @Override
+    public void addAdditionalSaveData(@NotNull CompoundTag NBTTag) {
+        super.addAdditionalSaveData(NBTTag);
+        NBTTag.putUUID("mobultion:ID", this.ownerID);
+    }
+
+    @Override
+    public void remove(@NotNull RemovalReason removalReason) {
+        super.remove(removalReason);
+        if (this.level instanceof ServerLevel && ((ServerLevel)this.level).getEntity(ownerID) instanceof MotherSpiderEntity mother
+                && removalReason.shouldDestroy()){
+            mother.removeMiniSpider(this.getUUID());
+        }
+    }
+
+    @Nullable
+    @Override
+    public Entity changeDimension(@NotNull ServerLevel level, @NotNull ITeleporter teleporter) {
+        if (this.level instanceof ServerLevel && ((ServerLevel)this.level).getEntity(ownerID) instanceof MotherSpiderEntity mother){
+            mother.removeMiniSpider(this.getUUID());
+        }
+        Entity entity = super.changeDimension(level, teleporter);
+        if(entity instanceof MiniSpiderEntity spider){
+            spider.setOwnerID(null);
+        }
+        return entity;
     }
 
     /**
@@ -118,5 +176,7 @@ public class MiniSpiderEntity extends MobultionSpiderEntity{
     public AnimationFactory getFactory() {
         return this.factory;
     }
+
+
 
 }

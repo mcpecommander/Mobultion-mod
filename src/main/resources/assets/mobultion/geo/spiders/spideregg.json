@@ -6,14 +6,15 @@
 				"identifier": "geometry.spideregg",
 				"texture_width": 64,
 				"texture_height": 32,
-				"visible_bounds_width": 2,
+				"visible_bounds_width": 3,
 				"visible_bounds_height": 1.5,
 				"visible_bounds_offset": [0, 0.25, 0]
 			},
 			"bones": [
 				{
 					"name": "All",
-					"pivot": [0, 0, 0]
+					"pivot": [0, 0, 0],
+					"rotation": [0, -27.5, 0]
 				},
 				{
 					"name": "Layer1A",
@@ -109,6 +110,408 @@
 					"pivot": [0, 5, 0],
 					"cubes": [
 						{"origin": [-1.5, 4.5, -1.5], "size": [3, 2, 3], "inflate": -0.5, "uv": [52, 6]}
+					]
+				},
+				{
+					"name": "All2",
+					"pivot": [-4, 0, -5]
+				},
+				{
+					"name": "Layer1A2",
+					"parent": "All2",
+					"pivot": [-4, 0, -5],
+					"cubes": [
+						{"origin": [-6, -0.5, -7], "size": [4, 2, 4], "inflate": -0.5, "uv": [0, 26]}
+					]
+				},
+				{
+					"name": "Layer2A2",
+					"parent": "Layer1A2",
+					"pivot": [-4, 1, -5],
+					"cubes": [
+						{"origin": [-6.5, 0.5, -7.5], "size": [5, 2, 5], "inflate": -0.5, "uv": [0, 19]}
+					]
+				},
+				{
+					"name": "Layer3A2",
+					"parent": "Layer2A2",
+					"pivot": [-4, 2, -5],
+					"cubes": [
+						{"origin": [-7, 1.5, -8], "size": [6, 2, 6], "inflate": -0.5, "uv": [0, 11]}
+					]
+				},
+				{
+					"name": "Layer4A2",
+					"parent": "Layer3A2",
+					"pivot": [-4, 3, -5],
+					"cubes": [
+						{"origin": [-6.5, 2.5, -7.5], "size": [5, 2, 5], "inflate": -0.5, "uv": [0, 19]}
+					]
+				},
+				{
+					"name": "Layer5A2",
+					"parent": "Layer4A2",
+					"pivot": [-4, 4, -5],
+					"cubes": [
+						{"origin": [-6, 3.5, -7], "size": [4, 2, 4], "inflate": -0.5, "uv": [0, 26]}
+					]
+				},
+				{
+					"name": "Layer6A2",
+					"parent": "Layer5A2",
+					"pivot": [-4, 5, -5],
+					"cubes": [
+						{"origin": [-5.5, 4.5, -6.5], "size": [3, 2, 3], "inflate": -0.5, "uv": [0, 6]}
+					]
+				},
+				{
+					"name": "Layer1B2",
+					"parent": "All2",
+					"pivot": [-4, 0, -5],
+					"cubes": [
+						{"origin": [-6, -0.5, -7], "size": [4, 2, 4], "inflate": -0.5, "uv": [48, 26]}
+					]
+				},
+				{
+					"name": "Layer2B2",
+					"parent": "Layer1B2",
+					"pivot": [-4, 1, -5],
+					"cubes": [
+						{"origin": [-6.5, 0.5, -7.5], "size": [5, 2, 5], "inflate": -0.5, "uv": [44, 19]}
+					]
+				},
+				{
+					"name": "Layer3B2",
+					"parent": "Layer2B2",
+					"pivot": [-4, 2, -5],
+					"cubes": [
+						{"origin": [-7, 1.5, -8], "size": [6, 2, 6], "inflate": -0.5, "uv": [40, 11]}
+					]
+				},
+				{
+					"name": "Layer4B2",
+					"parent": "Layer3B2",
+					"pivot": [-4, 3, -5],
+					"cubes": [
+						{"origin": [-6.5, 2.5, -7.5], "size": [5, 2, 5], "inflate": -0.5, "uv": [44, 19]}
+					]
+				},
+				{
+					"name": "Layer5B2",
+					"parent": "Layer4B2",
+					"pivot": [-4, 4, -5],
+					"cubes": [
+						{"origin": [-6, 3.5, -7], "size": [4, 2, 4], "inflate": -0.5, "uv": [48, 26]}
+					]
+				},
+				{
+					"name": "Layer6B2",
+					"parent": "Layer5B2",
+					"pivot": [-4, 5, -5],
+					"cubes": [
+						{"origin": [-5.5, 4.5, -6.5], "size": [3, 2, 3], "inflate": -0.5, "uv": [52, 6]}
+					]
+				},
+				{
+					"name": "All3",
+					"pivot": [5, 0, -5],
+					"rotation": [0, 90, 0]
+				},
+				{
+					"name": "Layer1A3",
+					"parent": "All3",
+					"pivot": [5, 0, -5],
+					"cubes": [
+						{"origin": [3, -0.5, -7], "size": [4, 2, 4], "inflate": -0.5, "uv": [0, 26]}
+					]
+				},
+				{
+					"name": "Layer2A3",
+					"parent": "Layer1A3",
+					"pivot": [5, 1, -5],
+					"cubes": [
+						{"origin": [2.5, 0.5, -7.5], "size": [5, 2, 5], "inflate": -0.5, "uv": [0, 19]}
+					]
+				},
+				{
+					"name": "Layer3A3",
+					"parent": "Layer2A3",
+					"pivot": [5, 2, -5],
+					"cubes": [
+						{"origin": [2, 1.5, -8], "size": [6, 2, 6], "inflate": -0.5, "uv": [0, 11]}
+					]
+				},
+				{
+					"name": "Layer4A3",
+					"parent": "Layer3A3",
+					"pivot": [5, 3, -5],
+					"cubes": [
+						{"origin": [2.5, 2.5, -7.5], "size": [5, 2, 5], "inflate": -0.5, "uv": [0, 19]}
+					]
+				},
+				{
+					"name": "Layer5A3",
+					"parent": "Layer4A3",
+					"pivot": [5, 4, -5],
+					"cubes": [
+						{"origin": [3, 3.5, -7], "size": [4, 2, 4], "inflate": -0.5, "uv": [0, 26]}
+					]
+				},
+				{
+					"name": "Layer6A3",
+					"parent": "Layer5A3",
+					"pivot": [5, 5, -5],
+					"cubes": [
+						{"origin": [3.5, 4.5, -6.5], "size": [3, 2, 3], "inflate": -0.5, "uv": [0, 6]}
+					]
+				},
+				{
+					"name": "Layer1B3",
+					"parent": "All3",
+					"pivot": [5, 0, -5],
+					"cubes": [
+						{"origin": [3, -0.5, -7], "size": [4, 2, 4], "inflate": -0.5, "uv": [48, 26]}
+					]
+				},
+				{
+					"name": "Layer2B3",
+					"parent": "Layer1B3",
+					"pivot": [5, 1, -5],
+					"cubes": [
+						{"origin": [2.5, 0.5, -7.5], "size": [5, 2, 5], "inflate": -0.5, "uv": [44, 19]}
+					]
+				},
+				{
+					"name": "Layer3B3",
+					"parent": "Layer2B3",
+					"pivot": [5, 2, -5],
+					"cubes": [
+						{"origin": [2, 1.5, -8], "size": [6, 2, 6], "inflate": -0.5, "uv": [40, 11]}
+					]
+				},
+				{
+					"name": "Layer4B3",
+					"parent": "Layer3B3",
+					"pivot": [5, 3, -5],
+					"cubes": [
+						{"origin": [2.5, 2.5, -7.5], "size": [5, 2, 5], "inflate": -0.5, "uv": [44, 19]}
+					]
+				},
+				{
+					"name": "Layer5B3",
+					"parent": "Layer4B3",
+					"pivot": [5, 4, -5],
+					"cubes": [
+						{"origin": [3, 3.5, -7], "size": [4, 2, 4], "inflate": -0.5, "uv": [48, 26]}
+					]
+				},
+				{
+					"name": "Layer6B3",
+					"parent": "Layer5B3",
+					"pivot": [5, 5, -5],
+					"cubes": [
+						{"origin": [3.5, 4.5, -6.5], "size": [3, 2, 3], "inflate": -0.5, "uv": [52, 6]}
+					]
+				},
+				{
+					"name": "All4",
+					"pivot": [5, 0, 4]
+				},
+				{
+					"name": "Layer1A4",
+					"parent": "All4",
+					"pivot": [5, 0, 4],
+					"cubes": [
+						{"origin": [3, -0.5, 2], "size": [4, 2, 4], "inflate": -0.5, "uv": [0, 26]}
+					]
+				},
+				{
+					"name": "Layer2A4",
+					"parent": "Layer1A4",
+					"pivot": [5, 1, 4],
+					"cubes": [
+						{"origin": [2.5, 0.5, 1.5], "size": [5, 2, 5], "inflate": -0.5, "uv": [0, 19]}
+					]
+				},
+				{
+					"name": "Layer3A4",
+					"parent": "Layer2A4",
+					"pivot": [5, 2, 4],
+					"cubes": [
+						{"origin": [2, 1.5, 1], "size": [6, 2, 6], "inflate": -0.5, "uv": [0, 11]}
+					]
+				},
+				{
+					"name": "Layer4A4",
+					"parent": "Layer3A4",
+					"pivot": [5, 3, 4],
+					"cubes": [
+						{"origin": [2.5, 2.5, 1.5], "size": [5, 2, 5], "inflate": -0.5, "uv": [0, 19]}
+					]
+				},
+				{
+					"name": "Layer5A4",
+					"parent": "Layer4A4",
+					"pivot": [5, 4, 4],
+					"cubes": [
+						{"origin": [3, 3.5, 2], "size": [4, 2, 4], "inflate": -0.5, "uv": [0, 26]}
+					]
+				},
+				{
+					"name": "Layer6A4",
+					"parent": "Layer5A4",
+					"pivot": [5, 5, 4],
+					"cubes": [
+						{"origin": [3.5, 4.5, 2.5], "size": [3, 2, 3], "inflate": -0.5, "uv": [0, 6]}
+					]
+				},
+				{
+					"name": "Layer1B4",
+					"parent": "All4",
+					"pivot": [5, 0, 4],
+					"cubes": [
+						{"origin": [3, -0.5, 2], "size": [4, 2, 4], "inflate": -0.5, "uv": [48, 26]}
+					]
+				},
+				{
+					"name": "Layer2B4",
+					"parent": "Layer1B4",
+					"pivot": [5, 1, 4],
+					"cubes": [
+						{"origin": [2.5, 0.5, 1.5], "size": [5, 2, 5], "inflate": -0.5, "uv": [44, 19]}
+					]
+				},
+				{
+					"name": "Layer3B4",
+					"parent": "Layer2B4",
+					"pivot": [5, 2, 4],
+					"cubes": [
+						{"origin": [2, 1.5, 1], "size": [6, 2, 6], "inflate": -0.5, "uv": [40, 11]}
+					]
+				},
+				{
+					"name": "Layer4B4",
+					"parent": "Layer3B4",
+					"pivot": [5, 3, 4],
+					"cubes": [
+						{"origin": [2.5, 2.5, 1.5], "size": [5, 2, 5], "inflate": -0.5, "uv": [44, 19]}
+					]
+				},
+				{
+					"name": "Layer5B4",
+					"parent": "Layer4B4",
+					"pivot": [5, 4, 4],
+					"cubes": [
+						{"origin": [3, 3.5, 2], "size": [4, 2, 4], "inflate": -0.5, "uv": [48, 26]}
+					]
+				},
+				{
+					"name": "Layer6B4",
+					"parent": "Layer5B4",
+					"pivot": [5, 5, 4],
+					"cubes": [
+						{"origin": [3.5, 4.5, 2.5], "size": [3, 2, 3], "inflate": -0.5, "uv": [52, 6]}
+					]
+				},
+				{
+					"name": "All5",
+					"pivot": [-4, 0, 5],
+					"rotation": [0, 90, 0]
+				},
+				{
+					"name": "Layer1A5",
+					"parent": "All5",
+					"pivot": [-4, 0, 5],
+					"cubes": [
+						{"origin": [-6, -0.5, 3], "size": [4, 2, 4], "inflate": -0.5, "uv": [0, 26]}
+					]
+				},
+				{
+					"name": "Layer2A5",
+					"parent": "Layer1A5",
+					"pivot": [-4, 1, 5],
+					"cubes": [
+						{"origin": [-6.5, 0.5, 2.5], "size": [5, 2, 5], "inflate": -0.5, "uv": [0, 19]}
+					]
+				},
+				{
+					"name": "Layer3A5",
+					"parent": "Layer2A5",
+					"pivot": [-4, 2, 5],
+					"cubes": [
+						{"origin": [-7, 1.5, 2], "size": [6, 2, 6], "inflate": -0.5, "uv": [0, 11]}
+					]
+				},
+				{
+					"name": "Layer4A5",
+					"parent": "Layer3A5",
+					"pivot": [-4, 3, 5],
+					"cubes": [
+						{"origin": [-6.5, 2.5, 2.5], "size": [5, 2, 5], "inflate": -0.5, "uv": [0, 19]}
+					]
+				},
+				{
+					"name": "Layer5A5",
+					"parent": "Layer4A5",
+					"pivot": [-4, 4, 5],
+					"cubes": [
+						{"origin": [-6, 3.5, 3], "size": [4, 2, 4], "inflate": -0.5, "uv": [0, 26]}
+					]
+				},
+				{
+					"name": "Layer6A5",
+					"parent": "Layer5A5",
+					"pivot": [-4, 5, 5],
+					"cubes": [
+						{"origin": [-5.5, 4.5, 3.5], "size": [3, 2, 3], "inflate": -0.5, "uv": [0, 6]}
+					]
+				},
+				{
+					"name": "Layer1B5",
+					"parent": "All5",
+					"pivot": [-4, 0, 5],
+					"cubes": [
+						{"origin": [-6, -0.5, 3], "size": [4, 2, 4], "inflate": -0.5, "uv": [48, 26]}
+					]
+				},
+				{
+					"name": "Layer2B5",
+					"parent": "Layer1B5",
+					"pivot": [-4, 1, 5],
+					"cubes": [
+						{"origin": [-6.5, 0.5, 2.5], "size": [5, 2, 5], "inflate": -0.5, "uv": [44, 19]}
+					]
+				},
+				{
+					"name": "Layer3B5",
+					"parent": "Layer2B5",
+					"pivot": [-4, 2, 5],
+					"cubes": [
+						{"origin": [-7, 1.5, 2], "size": [6, 2, 6], "inflate": -0.5, "uv": [40, 11]}
+					]
+				},
+				{
+					"name": "Layer4B5",
+					"parent": "Layer3B5",
+					"pivot": [-4, 3, 5],
+					"cubes": [
+						{"origin": [-6.5, 2.5, 2.5], "size": [5, 2, 5], "inflate": -0.5, "uv": [44, 19]}
+					]
+				},
+				{
+					"name": "Layer5B5",
+					"parent": "Layer4B5",
+					"pivot": [-4, 4, 5],
+					"cubes": [
+						{"origin": [-6, 3.5, 3], "size": [4, 2, 4], "inflate": -0.5, "uv": [48, 26]}
+					]
+				},
+				{
+					"name": "Layer6B5",
+					"parent": "Layer5B5",
+					"pivot": [-4, 5, 5],
+					"cubes": [
+						{"origin": [-5.5, 4.5, 3.5], "size": [3, 2, 3], "inflate": -0.5, "uv": [52, 6]}
 					]
 				}
 			]

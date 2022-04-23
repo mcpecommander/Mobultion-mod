@@ -12,4 +12,5 @@ public class SpiderEggRenderer extends GeoBlockRenderer<SpiderEggTile> {
     public SpiderEggRenderer(BlockEntityRendererProvider.Context rendererDispatcher) {
         super(rendererDispatcher, new SpiderEggModel());
     }
+
 }

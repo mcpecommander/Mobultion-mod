@@ -1,7 +1,11 @@
 package dev.mcpecommander.mobultion.blocks.model;
 
+import dev.mcpecommander.mobultion.blocks.SpiderEggBlock;
 import dev.mcpecommander.mobultion.blocks.tile.SpiderEggTile;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 import static dev.mcpecommander.mobultion.Mobultion.MODID;
@@ -37,5 +41,47 @@ public class SpiderEggModel extends AnimatedGeoModel<SpiderEggTile> {
     @Override
     public ResourceLocation getAnimationFileLocation(SpiderEggTile animatable) {
         return new ResourceLocation(MODID, "animations/spiders/spideregg.animation.json");
+    }
+
+    @Override
+    public void setLivingAnimations(SpiderEggTile entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
+        super.setLivingAnimations(entity, uniqueID, customPredicate);
+        IBone All2 = this.getAnimationProcessor().getBone("All2");
+        IBone All3 = this.getAnimationProcessor().getBone("All3");
+        IBone All4 = this.getAnimationProcessor().getBone("All4");
+        IBone All5 = this.getAnimationProcessor().getBone("All5");
+        switch (entity.getBlockState().getValue(SpiderEggBlock.EGGS)) {
+            case 1 -> {
+                All2.setHidden(true);
+                All3.setHidden(true);
+                All4.setHidden(true);
+                All5.setHidden(true);
+            }
+            case 2 -> {
+                All2.setHidden(false);
+                All3.setHidden(true);
+                All4.setHidden(true);
+                All5.setHidden(true);
+            }
+            case 3 -> {
+                All2.setHidden(false);
+                All3.setHidden(false);
+                All4.setHidden(true);
+                All5.setHidden(true);
+            }
+            case 4 -> {
+                All2.setHidden(false);
+                All3.setHidden(false);
+                All4.setHidden(false);
+                All5.setHidden(true);
+            }
+            case 5 -> {
+                All2.setHidden(false);
+                All3.setHidden(false);
+                All4.setHidden(false);
+                All5.setHidden(false);
+            }
+        }
+
     }
 }
