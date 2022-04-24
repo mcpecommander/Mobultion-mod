@@ -49,7 +49,7 @@ public class SpiderEggTile extends BlockEntity implements IAnimatable {
             for(int i = 0; i < this.getBlockState().getValue(SpiderEggBlock.EGGS); i++){
                 MiniSpiderEntity spider = new MiniSpiderEntity(Registration.MINISPIDER.get(), level);
                 spider.setPos(Vec3.atCenterOf(this.worldPosition).add(level.random.nextGaussian() * 0.5 - 0.5, 0,
-                        level.random.nextDouble() * .5 - 0.5));
+                        level.random.nextGaussian() * 0.5 - 0.5));
                 level.addFreshEntity(spider);
                 spider.setOwnerID(this.ownerID);
             }
@@ -75,6 +75,10 @@ public class SpiderEggTile extends BlockEntity implements IAnimatable {
     public void setOwnerID(UUID ID){
         this.ownerID = ID;
         this.setChanged();
+    }
+
+    public UUID getOwnerID(){
+        return this.ownerID;
     }
 
     @Override
@@ -111,5 +115,6 @@ public class SpiderEggTile extends BlockEntity implements IAnimatable {
     public AnimationFactory getFactory() {
         return this.factory;
     }
+
 
 }

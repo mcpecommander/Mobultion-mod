@@ -31,6 +31,9 @@ import java.util.UUID;
 /* McpeCommander created on 10/08/2021 inside the package - dev.mcpecommander.mobultion.entities.spiders.entities */
 public class MiniSpiderEntity extends MobultionSpiderEntity{
 
+    /**
+     * The mother spider (owner) UUID, this variable is synced and saved.
+     */
     private UUID ownerID;
     /**
      * The animation factory, for more information check GeckoLib.
@@ -66,6 +69,10 @@ public class MiniSpiderEntity extends MobultionSpiderEntity{
                 .add(Attributes.ATTACK_DAMAGE, 2D);
     }
 
+    /**
+     * Set the owner UUID and notify the mother spider owner if the value is an actual UUID.
+     * @param ownerID the mother spider UUID or null if motherless
+     */
     public void setOwnerID(UUID ownerID) {
         this.ownerID = ownerID;
         if (this.level instanceof ServerLevel && ((ServerLevel)this.level).getEntity(ownerID) instanceof MotherSpiderEntity mother){
@@ -73,10 +80,18 @@ public class MiniSpiderEntity extends MobultionSpiderEntity{
         }
     }
 
+    /**
+     * The owner UUID getter.
+     * @return the UUID of the mother spider owner or null if motherless
+     */
     public UUID getOwnerID() {
         return ownerID;
     }
 
+    /**
+     * Reads the NBT tag and gets any pieces of saved data and applies it to the entity.
+     * @param NBTTag The NBT tag that holds the saved data.
+     */
     @Override
     public void readAdditionalSaveData(@NotNull CompoundTag NBTTag) {
         super.readAdditionalSaveData(NBTTag);
@@ -85,12 +100,21 @@ public class MiniSpiderEntity extends MobultionSpiderEntity{
         }
     }
 
+    /**
+     * Writing extra pieces of data to the NBT tag which is persisted
+     * @param NBTTag The tag where the additional data will be written to.
+     */
     @Override
     public void addAdditionalSaveData(@NotNull CompoundTag NBTTag) {
         super.addAdditionalSaveData(NBTTag);
         NBTTag.putUUID("mobultion:ID", this.ownerID);
     }
 
+    /**
+     * The final step in removing an entity from the current loaded entities in the world.
+     * @param removalReason An enum of reasons for the removal which has 2 values about saving it for later reloading
+     *                      or permanently destroying the entity.
+     */
     @Override
     public void remove(@NotNull RemovalReason removalReason) {
         super.remove(removalReason);
@@ -100,6 +124,12 @@ public class MiniSpiderEntity extends MobultionSpiderEntity{
         }
     }
 
+    /**
+     * Gets called when an entity changes dimension by travelling through an end portal or a nether portal.
+     * @param level the new dimension level being travelled to.
+     * @param teleporter a forge interface for handling entity teleportation.
+     * @return The new entity with the new position in the new dimension
+     */
     @Nullable
     @Override
     public Entity changeDimension(@NotNull ServerLevel level, @NotNull ITeleporter teleporter) {

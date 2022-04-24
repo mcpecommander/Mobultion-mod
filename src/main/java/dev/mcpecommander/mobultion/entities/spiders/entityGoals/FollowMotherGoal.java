@@ -32,7 +32,7 @@ public class FollowMotherGoal extends Goal {
             if (entity == null) {
                 System.out.println("Why did this happen, did we forget to update the owner somewhere");
                 return false;
-            } else if (this.miniSpider.distanceToSqr(entity) < 25D) {
+            } else if (!entity.isAlive() || this.miniSpider.distanceToSqr(entity) < 25D) {
                 return false;
             } else {
                 this.owner = (MotherSpiderEntity) entity;

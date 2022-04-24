@@ -80,6 +80,7 @@ public class MotherSpiderEggLayingGoal extends Goal {
     }
 
     private static boolean isPositionRightForEgg(Level level, BlockPos pos){
-        return level.getBlockState(pos).canBeReplaced(new DirectionalPlaceContext(level, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP));
+        return level.getBlockState(pos).canBeReplaced(new DirectionalPlaceContext(level, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP))
+                && !level.getBlockState(pos.below()).isAir();
     }
 }

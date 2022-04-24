@@ -7,10 +7,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobType;
-import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
@@ -96,21 +93,26 @@ public abstract class MobultionSpiderEntity extends Monster implements IAnimatab
 
     /**
      * Play the step sound in this method. It supplies the blockstate and the position of the block the entity walked on
-     * @param blockPosition
-     * @param blockState
+     * @param blockPosition the position the entity is walking on right now
+     * @param blockState the state of the block being walked on
      */
     @Override
     protected void playStepSound(@Nonnull BlockPos blockPosition, @Nonnull BlockState blockState) {
         this.playSound(SoundEvents.SPIDER_STEP, 0.15F, 1.0F);
     }
 
+    /**
+     * Gets called for example ladder blocks to set their climbing status
+     * The block in question is not supplied and should be checked manually
+     * @return true if the entity should be climbing
+     */
     @Override
     public boolean onClimbable() {
         return this.isClimbing();
     }
 
     /**
-     * Gets if the entity climbing from the data parameter.
+     * Gets if the entity is climbing from the data parameter.
      * @return true if the entity is climbing.
      */
     public boolean isClimbing() {
@@ -128,8 +130,8 @@ public abstract class MobultionSpiderEntity extends Monster implements IAnimatab
     }
 
     /**
-     * Set the entity climbing data parameter to sync it and save it.
-     * @param isClimbing
+     * Set the entity climbing data parameter to sync it to the client.
+     * @param isClimbing true if the entity should be climbing
      */
     public void setClimbing(boolean isClimbing) {
         byte b0 = this.entityData.get(DATA_FLAGS_ID);
@@ -163,7 +165,19 @@ public abstract class MobultionSpiderEntity extends Monster implements IAnimatab
         }
     }
 
+    //Usually an interface method for the ranged mobs but I want to skip having more interfaces.
+    /**
+     * Gets called from the AI attack goal, so it is only on the server.
+     * @param target The living entity that this entity is targeting with whatever is in the method.
+     */
+    public void performRangedAttack(LivingEntity target){
 
+    }
+
+    /**
+     * The amount of ticks the entity ticks after it gets killed.
+     * @return an integer of total death ticks
+     */
     protected abstract int getMaxDeathTick();
 
     /**

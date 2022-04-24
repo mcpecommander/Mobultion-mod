@@ -7,7 +7,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -42,6 +41,9 @@ public class MotherSpiderEntity extends MobultionSpiderEntity{
      */
     private final AnimationFactory factory = new AnimationFactory(this);
 
+    /**
+     * A list of children mini spiders that this mother spider own.
+     */
     private final List<UUID> miniSpiders = new ArrayList<>();
 
     /**
@@ -77,12 +79,6 @@ public class MotherSpiderEntity extends MobultionSpiderEntity{
                 .add(Attributes.ATTACK_DAMAGE, 2D);
     }
 
-    @Override
-    public void tick() {
-        //System.out.println(this.getId());
-        super.tick();
-    }
-
     /**
      * Register the animation controller here and any other particle/sound listeners.
      * @param data: Animation data that adds animation controllers.
@@ -111,20 +107,18 @@ public class MotherSpiderEntity extends MobultionSpiderEntity{
         return PlayState.STOP;
     }
 
+    /**
+     * Calculates and applies the knock-back after this entity has gotten hurt. Has a forge hook for modders to affect
+     * it via an event. Even knock-back resistance is accounted for here.
+     * @param strength The strength of the knock-back. Normal values are somewhere around 0.4-0.5
+     * @param xVec The x-ratio of the knock-back. Usually just the x-pos of the attacker - the x-pos of this.
+     * @param zVec The z-ratio of the knock-back. Usually just the z-pos of the attacker - the z-pos of this.
+     */
     @Override
-    protected void actuallyHurt(DamageSource p_21240_, float p_21241_) {
-        super.actuallyHurt(p_21240_, p_21241_);
-    }
-
-    @Override
-    public boolean hurt(DamageSource p_21016_, float p_21017_) {
-        return super.hurt(p_21016_, p_21017_);
-    }
-
-    @Override
-    public void knockback(double p_147241_, double p_147242_, double p_147243_) {
+    public void knockback(double strength, double xVec, double zVec) {
+        //For animation’s sake, don't do knock-back calculations if the last hit killed this.
         if(this.isDeadOrDying()) return;
-        super.knockback(p_147241_, p_147242_, p_147243_);
+        super.knockback(strength, xVec, zVec);
     }
 
     /**
@@ -150,37 +144,73 @@ public class MotherSpiderEntity extends MobultionSpiderEntity{
         return PlayState.STOP;
     }
 
+    /**
+     * The amount of ticks the entity ticks after it gets killed.
+     * @return an integer of total death ticks
+     */
     @Override
     protected int getMaxDeathTick() {
         return 30;
     }
 
+    /**
+     * Register/define the default value of the data parameter here.
+     */
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(PREGNANT, (byte)0);
     }
 
+    /**
+     * A public setter of the gestation status. If the value supplied is different from the old one, it will be synced
+     * to the client
+     * @param pregnancyStatus A byte value of the gestation status. 0: not pregnant. 1: eggs growing. 2: eggs ready to
+     *                        be laid. 3: eggs laying.
+     */
     public void setPregnant(byte pregnancyStatus){
         this.entityData.set(PREGNANT, pregnancyStatus);
     }
 
+    /**
+     * Retrieve the gestation status. Guaranteed to be the same on both the client and the server.
+     * @return the gestation status 0: not pregnant. 1: eggs growing. 2: eggs ready to be laid. 3: eggs laying.
+     */
     public byte getPregnancyStatus(){
         return this.entityData.get(PREGNANT);
     }
 
+    /**
+     * Return the size of the owned mini spiders list.
+     * @return int of the amount of mini spiders this entity owns.
+     */
     public int getMiniSpidersCount(){
         return this.miniSpiders.size();
     }
 
+    /**
+     * A helper method that is called mainly from the mini spiders class to register themselves as owned by this mother.
+     * @param id The UUID of the mini spider to be owned by this.
+     */
     public void addMiniSpider(UUID id){
         this.miniSpiders.add(id);
     }
 
+    /**
+     * A helper method that is called from the mini spiders class to remove them from the mini spiders list in case they
+     * die or get discarded.
+     * @param id The UUID of the mini spider that is getting removed.
+     */
     public void removeMiniSpider(UUID id){
         this.miniSpiders.remove(id);
     }
 
+    /**
+     * Gets called when an entity changes dimension by travelling through an end portal or a nether portal.
+     * @param serverLevel The new dimension level being travelled to.
+     * @param teleporter A forge interface for handling entity teleportation.
+     * @return The new entity with the new position in the new dimension
+     */
     @Nullable
     @Override
     public Entity changeDimension(@NotNull ServerLevel serverLevel, @NotNull ITeleporter teleporter) {
@@ -208,6 +238,11 @@ public class MotherSpiderEntity extends MobultionSpiderEntity{
         }
     }
 
+    /**
+     * The final step in removing an entity from the current loaded entities in the world.
+     * @param removalReason An enum of reasons for the removal which has 2 values about saving it for later reloading
+     *                      or permanently destroying the entity.
+     */
     @Override
     public void remove(@NotNull RemovalReason removalReason) {
         super.remove(removalReason);
@@ -220,6 +255,10 @@ public class MotherSpiderEntity extends MobultionSpiderEntity{
         }
     }
 
+    /**
+     * Reads the NBT tag and gets any pieces of saved data and applies it to the entity.
+     * @param NBTTag The NBT tag that holds the saved data.
+     */
     @Override
     public void readAdditionalSaveData(@NotNull CompoundTag NBTTag) {
         super.readAdditionalSaveData(NBTTag);
@@ -234,6 +273,10 @@ public class MotherSpiderEntity extends MobultionSpiderEntity{
         }
     }
 
+    /**
+     * Writing extra pieces of data to the NBT tag which is persisted
+     * @param NBTTag The tag where the additional data will be written to.
+     */
     @Override
     public void addAdditionalSaveData(@NotNull CompoundTag NBTTag) {
         super.addAdditionalSaveData(NBTTag);

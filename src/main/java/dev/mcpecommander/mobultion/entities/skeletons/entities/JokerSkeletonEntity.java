@@ -195,7 +195,6 @@ public class JokerSkeletonEntity extends MobultionSkeletonEntity implements Rang
         if(getDancing() > 0){
             setDancing(getDancing() - 1);
         }
-
     }
 
     /**

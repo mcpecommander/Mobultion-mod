@@ -1,6 +1,6 @@
 package dev.mcpecommander.mobultion.entities.spiders.entities;
 
-import dev.mcpecommander.mobultion.entities.spiders.entityGoals.HypnoSpiderRangedGoal;
+import dev.mcpecommander.mobultion.entities.spiders.entityGoals.MobultionSpiderRangedGoal;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -43,7 +43,7 @@ public class HypnoSpiderEntity extends MobultionSpiderEntity{
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(2, new HypnoSpiderRangedGoal(this, 1.1, 20, 12));
+        this.goalSelector.addGoal(2, new MobultionSpiderRangedGoal(this, 1.1, 20, 12));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
@@ -89,7 +89,8 @@ public class HypnoSpiderEntity extends MobultionSpiderEntity{
     private <E extends IAnimatable> PlayState predicateIdle(AnimationEvent<E> event)
     {
         if(this.isDeadOrDying()) return PlayState.STOP;
-        AnimationController controller = factory.getOrCreateAnimationData(this.getUUID().hashCode()).getAnimationControllers().get("controller");
+        AnimationController controller = factory.getOrCreateAnimationData(this.getUUID().hashCode()).getAnimationControllers()
+                .get("controller");
         //System.out.println(controller.getCurrentAnimation());
         if(controller.getCurrentAnimation() == null || controller.getCurrentAnimation().animationName.equals("move")){
             event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", true));
@@ -135,11 +136,22 @@ public class HypnoSpiderEntity extends MobultionSpiderEntity{
         }
     }
 
+    //A hacky way to make sure the item use tick passes instead of having to sync a one-off variable to the client.
+    /**
+     * Gets the item this entity is holding based on which hand is supplied.
+     * @param hand The hand slot for which the entity is holding an item in.
+     * @return An item stack of the item being held in the supplied hand.
+     */
     @Override
     public @NotNull ItemStack getItemInHand(@NotNull InteractionHand hand) {
         return ItemStack.EMPTY;
     }
 
+    /**
+     * When this is called, the duration of the item in supplied hand is calculated, then the state is synced to the
+     * client for the hand-using animation to be run.
+     * @param hand The hand in which the item is going to be used.
+     */
     @Override
     public void startUsingItem(@NotNull InteractionHand hand) {
         if (!this.isUsingItem()) {
@@ -151,17 +163,27 @@ public class HypnoSpiderEntity extends MobultionSpiderEntity{
         }
     }
 
+    //Usually an interface method for the ranged mobs but I want to skip having more interfaces.
+    /**
+     * Gets called from the AI attack goal, so it is only on the server.
+     * @param target The living entity that this entity is targeting with whatever is in the method.
+     */
+    @Override
     public void performRangedAttack(LivingEntity target) {
         HypnoWaveEntity wave = new HypnoWaveEntity(this);
-        double d0 = target.getX() - this.getX();
-        double d1 = target.getY(2d/3d) - wave.getY();
-        double d2 = target.getZ() - this.getZ();
+        double xVel = target.getX() - this.getX();
+        double yVel = target.getY(2d/3d) - wave.getY();
+        double zVel = target.getZ() - this.getZ();
         //1F is the vector scaling factor which in turn translates into speed.
         //The last parameter is the error scale. 0 = exact shot.
-        wave.shoot(d0, d1, d2, 1F, 0);
+        wave.shoot(xVel, yVel, zVel, 1F, 0);
         this.level.addFreshEntity(wave);
     }
 
+    /**
+     * The amount of ticks the entity ticks after it gets killed.
+     * @return an integer of total death ticks
+     */
     @Override
     protected int getMaxDeathTick() {
         return 30;

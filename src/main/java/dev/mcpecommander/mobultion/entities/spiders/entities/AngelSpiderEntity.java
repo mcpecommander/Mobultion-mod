@@ -17,6 +17,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -29,7 +30,6 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import javax.annotation.Nullable;
 
 /* Created by McpeCommander on 2021/06/18 */
-@SuppressWarnings("NullableProblems")
 public class AngelSpiderEntity extends MobultionSpiderEntity {
 
     /**
@@ -150,22 +150,34 @@ public class AngelSpiderEntity extends MobultionSpiderEntity {
         }
     }
 
+    /**
+     * Writing extra pieces of data to the NBT tag which is persisted
+     * @param NBTTag The tag where the additional data will be written to.
+     */
     @Override
-    public void addAdditionalSaveData(CompoundTag NBTTag) {
+    public void addAdditionalSaveData(@NotNull CompoundTag NBTTag) {
         super.addAdditionalSaveData(NBTTag);
         if(getTarget() != null) {
             NBTTag.putUUID("mobultion:target", getTarget().getUUID());
         }
     }
 
+    /**
+     * Reads the NBT tag and gets any pieces of saved data and applies it to the entity.
+     * @param NBTTag The NBT tag that holds the saved data.
+     */
     @Override
-    public void readAdditionalSaveData(CompoundTag NBTTag) {
+    public void readAdditionalSaveData(@NotNull CompoundTag NBTTag) {
         super.readAdditionalSaveData(NBTTag);
         if(NBTTag.hasUUID("mobultion:target") && !this.level.isClientSide){
             this.setTarget((LivingEntity) ((ServerLevel)this.level).getEntity(NBTTag.getUUID("mobultion:target")));
         }
     }
 
+    /**
+     * The amount of ticks the entity ticks after it gets killed.
+     * @return an integer of total death ticks
+     */
     @Override
     protected int getMaxDeathTick() {
         return 20;
@@ -177,7 +189,7 @@ public class AngelSpiderEntity extends MobultionSpiderEntity {
      * @return true if the mob can be affected.
      */
     @Override
-    public boolean canBeAffected(MobEffectInstance effect) {
+    public boolean canBeAffected(@NotNull MobEffectInstance effect) {
         return true;
     }
 

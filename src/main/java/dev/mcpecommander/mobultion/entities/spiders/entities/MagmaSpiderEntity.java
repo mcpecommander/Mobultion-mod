@@ -250,6 +250,10 @@ public class MagmaSpiderEntity extends MobultionSpiderEntity{
         }
     }
 
+    /**
+     * The amount of ticks the entity ticks after it gets killed.
+     * @return an integer of total death ticks
+     */
     @Override
     protected int getMaxDeathTick() {
         return 35;

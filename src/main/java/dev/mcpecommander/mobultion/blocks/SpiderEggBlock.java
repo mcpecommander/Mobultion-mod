@@ -31,7 +31,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
@@ -63,19 +62,22 @@ public class SpiderEggBlock extends Block implements EntityBlock {
     }
 
     @Override
-    public void playerDestroy(@NotNull Level world, @NotNull Player player, @NotNull BlockPos pos, @NotNull BlockState currentState,
+    public void playerDestroy(@NotNull Level level, @NotNull Player player, @NotNull BlockPos pos, @NotNull BlockState currentState,
                               @Nullable BlockEntity blockEntity, @NotNull ItemStack itemUsedToDestroy) {
-        super.playerDestroy(world, player, pos, currentState, blockEntity, itemUsedToDestroy);
-        if (!world.isClientSide){
+        super.playerDestroy(level, player, pos, currentState, blockEntity, itemUsedToDestroy);
+        if (!level.isClientSide){
             if(EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, itemUsedToDestroy) == 0){
                 for (int i = 0; i < currentState.getValue(EGGS); i++){
-                    MiniSpiderEntity spider = new MiniSpiderEntity(Registration.MINISPIDER.get(), world);
-                    spider.setPos(Vec3.atCenterOf(pos).add(world.random.nextGaussian() * 0.5 - 0.5, 0,
-                            world.random.nextDouble() * .5 - 0.5));
-                    world.addFreshEntity(spider);
+                    MiniSpiderEntity spider = new MiniSpiderEntity(Registration.MINISPIDER.get(), level);
+                    spider.setPos(Vec3.atCenterOf(pos).add(level.random.nextGaussian() * 0.5 - 0.5, 0,
+                            level.random.nextGaussian() * 0.5 - 0.5));
+                    level.addFreshEntity(spider);
+                    if (blockEntity instanceof SpiderEggTile tile){
+                        spider.setOwnerID(tile.getOwnerID());
+                    }
                 }
             }else{
-
+                dropResources(currentState, level, pos);
             }
         }
     }

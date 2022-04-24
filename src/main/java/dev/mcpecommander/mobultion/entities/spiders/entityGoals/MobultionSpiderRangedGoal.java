@@ -1,6 +1,6 @@
 package dev.mcpecommander.mobultion.entities.spiders.entityGoals;
 
-import dev.mcpecommander.mobultion.entities.spiders.entities.HypnoSpiderEntity;
+import dev.mcpecommander.mobultion.entities.spiders.entities.MobultionSpiderEntity;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -9,10 +9,10 @@ import net.minecraft.world.entity.player.Player;
 import java.util.EnumSet;
 
 /* McpeCommander created on 17/04/2022 inside the package - dev.mcpecommander.mobultion.entities.spiders.entityGoals */
-public class HypnoSpiderRangedGoal extends Goal {
+public class MobultionSpiderRangedGoal extends Goal {
     //Copied from vanilla with slight modifications.
 
-    private final HypnoSpiderEntity attacker;
+    private final MobultionSpiderEntity attacker;
     private final double speedModifier;
     private final int attackIntervalMin;
     private final float attackRadiusSqr;
@@ -22,7 +22,7 @@ public class HypnoSpiderRangedGoal extends Goal {
     private boolean strafingBackwards;
     private int strafingTime = -1;
 
-    public HypnoSpiderRangedGoal(HypnoSpiderEntity hypnoSpiderEntity, double speedModifier, int attackInterval, float attackRadius) {
+    public MobultionSpiderRangedGoal(MobultionSpiderEntity hypnoSpiderEntity, double speedModifier, int attackInterval, float attackRadius) {
         this.attacker = hypnoSpiderEntity;
         this.speedModifier = speedModifier;
         this.attackIntervalMin = attackInterval;
@@ -68,15 +68,15 @@ public class HypnoSpiderRangedGoal extends Goal {
         if (target != null) {
             //The current distance to the target.
             double distance = this.attacker.distanceToSqr(target.getX(), target.getY(), target.getZ());
-            //If the skeleton can see the target.
+            //If the attacker can see the target.
             boolean canSee = this.attacker.getSensing().hasLineOfSight(target);
-            //If the skeleton has seen the target, the see time increases otherwise it is decreased
+            //If the attacker has seen the target, the see time increases otherwise it is decreased
             boolean hasSeen = this.seeTime > 0;
             //If the target has not been seen for a long time, reset the seeTime.
             if (canSee != hasSeen) {
                 this.seeTime = 0;
             }
-            //If the skeleton can see the target, increase the seeTime otherwise decrease it.
+            //If the attacker can see the target, increase the seeTime otherwise decrease it.
             if (canSee) {
                 ++this.seeTime;
             } else {
@@ -92,7 +92,7 @@ public class HypnoSpiderRangedGoal extends Goal {
                 this.strafingTime = -1;
             }
 
-            //If the skeleton has been strafing for over 20 ticks, it has a chance to change strafing direction.
+            //If the attacker has been strafing for over 20 ticks, it has a chance to change strafing direction.
             if (this.strafingTime >= 20) {
                 if (this.attacker.getRandom().nextFloat() < 0.3D) {
                     this.strafingClockwise = !this.strafingClockwise;
@@ -122,7 +122,7 @@ public class HypnoSpiderRangedGoal extends Goal {
             }
 
             if (this.attacker.isUsingItem()) {
-                //If the skeleton cannot see the target for over 60 ticks, then stop using the item.
+                //If the attacker cannot see the target for over 60 ticks, then stop using the item.
                 if (!canSee && this.seeTime < -60) {
                     this.attacker.stopUsingItem();
                 } else if (canSee) {
