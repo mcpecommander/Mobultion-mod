@@ -72,6 +72,10 @@ public class AngelSpiderEntity extends MobultionSpiderEntity {
      */
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
     {
+        if(this.isDeadOrDying()){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("death", false));
+            return PlayState.CONTINUE;
+        }
         if(this.getTarget() != null){
             if(tickCount % 3 == 0){
                 level.addParticle(new HealParticle.HealParticleData(1f, 1f, 1f, 1f),
@@ -180,7 +184,7 @@ public class AngelSpiderEntity extends MobultionSpiderEntity {
      */
     @Override
     protected int getMaxDeathTick() {
-        return 20;
+        return 35;
     }
 
     /**
