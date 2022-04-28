@@ -9,6 +9,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.level.BlockGetter;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
@@ -34,8 +35,8 @@ public class HayHatBlock extends Block {
      */
 
     @Override
-    public VoxelShape getShape(@Nonnull BlockState blockState, @Nonnull BlockGetter world, @Nonnull BlockPos pos,
-                               @Nonnull CollisionContext selectionContext) {
+    public @NotNull VoxelShape getShape(@Nonnull BlockState blockState, @Nonnull BlockGetter world, @Nonnull BlockPos pos,
+                                        @Nonnull CollisionContext selectionContext) {
         return Shapes.or(C_BASE, C_TOP);
     }
 
