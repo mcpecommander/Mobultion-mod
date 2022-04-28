@@ -1,6 +1,6 @@
 package dev.mcpecommander.mobultion.entities.spiders.entities;
 
-import dev.mcpecommander.mobultion.entities.spiders.entityGoals.MobultionSpiderRangedGoal;
+import dev.mcpecommander.mobultion.entities.spiders.entityGoals.HypnoSpiderRangedGoal;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -43,7 +43,7 @@ public class HypnoSpiderEntity extends MobultionSpiderEntity{
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(2, new MobultionSpiderRangedGoal(this, 1.1, 20, 12));
+        this.goalSelector.addGoal(2, new HypnoSpiderRangedGoal(this, 1.1, 20, 12));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }

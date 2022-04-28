@@ -1,6 +1,6 @@
 package dev.mcpecommander.mobultion.entities.spiders.entityGoals;
 
-import dev.mcpecommander.mobultion.entities.spiders.entities.MobultionSpiderEntity;
+import dev.mcpecommander.mobultion.entities.spiders.entities.HypnoSpiderEntity;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -9,10 +9,10 @@ import net.minecraft.world.entity.player.Player;
 import java.util.EnumSet;
 
 /* McpeCommander created on 17/04/2022 inside the package - dev.mcpecommander.mobultion.entities.spiders.entityGoals */
-public class MobultionSpiderRangedGoal extends Goal {
+public class HypnoSpiderRangedGoal extends Goal {
     //Copied from vanilla with slight modifications.
 
-    private final MobultionSpiderEntity attacker;
+    private final HypnoSpiderEntity attacker;
     private final double speedModifier;
     private final int attackIntervalMin;
     private final float attackRadiusSqr;
@@ -22,7 +22,7 @@ public class MobultionSpiderRangedGoal extends Goal {
     private boolean strafingBackwards;
     private int strafingTime = -1;
 
-    public MobultionSpiderRangedGoal(MobultionSpiderEntity hypnoSpiderEntity, double speedModifier, int attackInterval, float attackRadius) {
+    public HypnoSpiderRangedGoal(HypnoSpiderEntity hypnoSpiderEntity, double speedModifier, int attackInterval, float attackRadius) {
         this.attacker = hypnoSpiderEntity;
         this.speedModifier = speedModifier;
         this.attackIntervalMin = attackInterval;
