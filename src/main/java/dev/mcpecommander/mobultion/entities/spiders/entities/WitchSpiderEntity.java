@@ -1,13 +1,14 @@
 package dev.mcpecommander.mobultion.entities.spiders.entities;
 
-import dev.mcpecommander.mobultion.entities.spiders.entityGoals.MobultionSpiderRangedGoal;
-import net.minecraft.core.BlockPos;
+import dev.mcpecommander.mobultion.entities.spiders.entityGoals.WitchSpiderAttackGoal;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -16,12 +17,12 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.LargeFireball;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseFireBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -31,18 +32,23 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /* Created by McpeCommander on 2021/06/18 */
 public class WitchSpiderEntity extends MobultionSpiderEntity{
 
-    private final List<BlockPos> attackPositions = new ArrayList<>();
-
+    private Vec3 attackPosition;
+    public static final float ATTACK_1 = 80;
+    public static final float ATTACK_2 = 15;
+    public static final float ATTACK_3 = 10;
+    public static final float ATTACK_4 = 40;
     /**
      * A data parameter to help keep the target in sync and to be saved (in another method) when quiting the game.
      */
     private static final EntityDataAccessor<Byte> ATTACK_MODE = SynchedEntityData.defineId(WitchSpiderEntity.class, EntityDataSerializers.BYTE);
+
+    /**
+     * A data parameter to sync the target entity to client. It doesn't need saving.
+     */
+    private static final EntityDataAccessor<Integer> TARGET = SynchedEntityData.defineId(WitchSpiderEntity.class, EntityDataSerializers.INT);
 
     /**
      * The animation factory, for more information check GeckoLib.
@@ -53,27 +59,13 @@ public class WitchSpiderEntity extends MobultionSpiderEntity{
         super(mob, world);
     }
 
-    @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(ATTACK_MODE, (byte)0);
-    }
-
-    public void setAttackMode(byte mode){
-        this.entityData.set(ATTACK_MODE, mode);
-    }
-
-    public byte getAttackMode(){
-        return this.entityData.get(ATTACK_MODE);
-    }
-
     /**
      * Register the AI/goals here. Server side only.
      */
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(2, new MobultionSpiderRangedGoal(this, 1.1, 50, 12));
+        this.goalSelector.addGoal(2, new WitchSpiderAttackGoal(this, 1.1, 50, 12));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
@@ -84,9 +76,156 @@ public class WitchSpiderEntity extends MobultionSpiderEntity{
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 20.0D)
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 30.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.3D)
                 .add(Attributes.ATTACK_DAMAGE, 2D);
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(ATTACK_MODE, (byte)0);
+        this.entityData.define(TARGET, -1);
+    }
+
+    public void setAttackMode(byte mode){
+        this.entityData.set(ATTACK_MODE, mode);
+    }
+
+    public byte getAttackMode(){
+        return this.entityData.get(ATTACK_MODE);
+    }
+
+    @Nullable
+    @Override
+    public LivingEntity getTarget() {
+        return super.getTarget() != null ? super.getTarget() : (LivingEntity) this.level.getEntity(this.entityData.get(TARGET));
+    }
+
+    @Override
+    public void setTarget(@Nullable LivingEntity target) {
+        super.setTarget(target);
+        this.entityData.set(TARGET, target != null ? target.getId() : -1);
+    }
+
+    @Override
+    protected void updateUsingItem(ItemStack itemStack) {
+        //Vanilla
+        itemStack.onUseTick(this.level, this, this.getUseItemRemainingTicks());
+        if (--this.useItemRemaining == 0 && !this.level.isClientSide && !itemStack.useOnRelease()) {
+            this.completeUsingItem();
+        }
+        //Mine
+        if(this.getTarget() instanceof Player player) {
+            if (this.getAttackMode() == 1) {
+                if (this.level.isClientSide) {
+                    for (int i = 0; i < 10; i++) {
+                        this.level.addParticle(ParticleTypes.SNOWFLAKE,
+                                player.getX() + Mth.cos((float) (i / 10f * Math.PI * 2)),
+                                player.getY() + 0.3f + (getUseItemRemainingTicks()/ATTACK_1) * 1.2f,
+                                player.getZ() + Mth.sin((float) (i / 10f * Math.PI * 2)),
+                                Mth.randomBetween(random, -1.0F, 1.0F) * 0.083333336F,
+                                0.05F,
+                                Mth.randomBetween(random, -1.0F, 1.0F) * 0.083333336F);
+                    }
+                } else {
+                    if(this.getTarget().canFreeze()) this.getTarget().setTicksFrozen(150);
+                }
+            }
+            if(this.getAttackMode() == 2){
+                if (this.level.isClientSide) {
+                    if(this.attackPosition == null || this.getUseItemRemainingTicks() == ATTACK_2-1){
+                        this.attackPosition = this.position();
+                    }
+                    for (int i = 0; i < 4; i++) {
+                        double xPos = player.getX() + Mth.cos((float) (i / 4f * Math.PI * 2)) * 5f;
+                        double yPos = player.getY() + 3;
+                        double zPos = player.getZ() + Mth.sin((float) (i / 4f * Math.PI * 2)) * 5f;
+                        this.level.addParticle(ParticleTypes.FLAME,
+                                Mth.lerp(this.getTicksUsingItem()/ATTACK_2, this.attackPosition.x, xPos),
+                                Mth.lerp(this.getTicksUsingItem()/ATTACK_2, this.attackPosition.y, yPos),
+                                Mth.lerp(this.getTicksUsingItem()/ATTACK_2, this.attackPosition.z, zPos),
+                                0,
+                                0.1F,
+                                0);
+                    }
+                } else {
+                    if(this.getTicksUsingItem() >= ATTACK_2 - 2){
+                        int i = this.level.random.nextInt(4);
+                        LargeFireball fireball = new LargeFireball(this.level, this,
+                                -Mth.cos((float) (i / 4f * Math.PI * 2)) * 5f,
+                                -1.75,
+                                -Mth.sin((float) (i / 4f * Math.PI * 2)) * 5f,
+                                0);
+                        fireball.setPos(
+                                player.getX() + Mth.cos((float) (i / 4f * Math.PI * 2)) * 5f,
+                                player.getY() + 3,
+                                player.getZ() + Mth.sin((float) (i / 4f * Math.PI * 2)) * 5f);
+                        this.level.addFreshEntity(fireball);
+                    }
+                }
+            }
+            if(this.getAttackMode() == 3){
+                if(this.level.isClientSide){
+                    for(int i = 0; i < 5 && this.getTicksUsingItem() >= ATTACK_3 - 3; ++i) {
+                        double xSpeed = this.random.nextGaussian() * 0.02D;
+                        double ySpeed = this.random.nextGaussian() * 0.02D;
+                        double zSpeed = this.random.nextGaussian() * 0.02D;
+                        this.level.addParticle(ParticleTypes.HAPPY_VILLAGER,
+                                this.getRandomX(1.0D),
+                                this.getRandomY() + 0.4D,
+                                this.getRandomZ(1.0D), xSpeed, ySpeed, zSpeed);
+                    }
+                }else{
+                    this.heal(0.4f * this.getMaxHealth());
+                }
+            }
+            if(this.getAttackMode() == 4 && this.getUseItemRemainingTicks() == ATTACK_4-1 && !this.level.isClientSide){
+                this.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, (int)ATTACK_4, 1));
+            }
+        }
+    }
+
+    @Override
+    public int getTicksUsingItem() {
+        switch (this.getAttackMode()){
+            case 1 -> {
+                return this.isUsingItem() ? (int) (ATTACK_1 - this.getUseItemRemainingTicks()) : 0;
+            }
+            case 2 -> {
+                return this.isUsingItem() ? (int) (ATTACK_2 - this.getUseItemRemainingTicks()) : 0;
+            }
+            case 3 ->{
+                return this.isUsingItem() ? (int) (ATTACK_3 - this.getUseItemRemainingTicks()) : 0;
+            }
+            case 4 ->{
+                return this.isUsingItem() ? (int) (ATTACK_4 - this.getUseItemRemainingTicks()) : 0;
+            }
+            default ->{
+                return super.getTicksUsingItem();
+            }
+        }
+    }
+
+    @Override
+    public void onSyncedDataUpdated(@NotNull EntityDataAccessor<?> dataParameter) {
+        super.onSyncedDataUpdated(dataParameter);
+        if(ATTACK_MODE.equals(dataParameter) && this.level.isClientSide){
+            switch (this.getAttackMode()){
+                case 0 ->
+                    this.useItemRemaining = 0;
+                case 1 ->
+                    this.useItemRemaining = (int) ATTACK_1;
+                case 2 ->
+                    this.useItemRemaining = (int) ATTACK_2;
+                case 3 ->
+                    this.useItemRemaining = (int) ATTACK_3;
+                case 4 ->
+                    this.useItemRemaining = (int) ATTACK_4;
+
+            }
+        }
+
     }
 
     @Override
@@ -97,7 +236,18 @@ public class WitchSpiderEntity extends MobultionSpiderEntity{
     @Override
     public void startUsingItem(@NotNull InteractionHand hand) {
         if (!this.isUsingItem()) {
-            this.useItemRemaining = 22;
+            switch (this.getAttackMode()){
+                case 1 ->
+                        this.useItemRemaining = (int) ATTACK_1;
+                case 2 ->
+                        this.useItemRemaining = (int) ATTACK_2;
+                case 3 ->
+                        this.useItemRemaining = (int) ATTACK_3;
+                case 4 ->
+                        this.useItemRemaining = (int) ATTACK_4;
+                default ->
+                        this.useItemRemaining = 40;
+            }
             if (!this.level.isClientSide) {
                 this.setLivingEntityFlag(1, true);
                 this.setLivingEntityFlag(2, hand == InteractionHand.OFF_HAND);
@@ -105,56 +255,6 @@ public class WitchSpiderEntity extends MobultionSpiderEntity{
         }
     }
 
-    @Override
-    public void performRangedAttack(LivingEntity target) {
-        target.isVisuallyCrawling();
-        switch (4/*this.level.random.nextInt(4) + 1*/) {
-            case 1 -> {
-                this.setAttackMode((byte)1);
-                this.level.setBlock(target.blockPosition(), Blocks.SANDSTONE.defaultBlockState(), Block.UPDATE_ALL);
-                this.level.setBlock(target.blockPosition().above(), Blocks.SANDSTONE.defaultBlockState(), Block.UPDATE_ALL);
-                this.clearAttackPositions();
-                this.attackPositions.clear();
-                this.attackPositions.add(target.blockPosition());
-                this.attackPositions.add(target.blockPosition().above());
-            }
-            case 2 -> {
-                this.setAttackMode((byte)2);
-                this.level.setBlock(target.blockPosition(), Blocks.POWDER_SNOW.defaultBlockState(), Block.UPDATE_ALL);
-                this.level.setBlock(target.blockPosition().above(), Blocks.POWDER_SNOW.defaultBlockState(), Block.UPDATE_ALL);
-                this.clearAttackPositions();
-                this.attackPositions.clear();
-                this.attackPositions.add(target.blockPosition());
-                this.attackPositions.add(target.blockPosition().above());
-            }
-            case 3 -> {
-                this.setAttackMode((byte)3);
-                this.level.setBlock(target.blockPosition(), BaseFireBlock.getState(level, target.blockPosition()), Block.UPDATE_ALL);
-                this.clearAttackPositions();
-                this.attackPositions.clear();
-                this.attackPositions.add(target.blockPosition());
-            }
-            case 4 -> {
-                this.setAttackMode((byte)4);
-                //this.level.setBlock(target.blockPosition().above(2), Blocks.DAMAGED_ANVIL.defaultBlockState(), Block.UPDATE_ALL);
-            }
-        }
-    }
-
-    private void clearAttackPositions() {
-        for(BlockPos pos : this.attackPositions){
-            if(this.attackPositions.size() == 2){
-                if(this.level.getBlockState(pos).is(Blocks.POWDER_SNOW) ||
-                        this.level.getBlockState(pos).is(Blocks.SANDSTONE)){
-                    this.level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
-                }
-            }else{
-                if(this.level.getBlockState(pos).is(Blocks.FIRE)){
-                    this.level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
-                }
-            }
-        }
-    }
 
     /**
      * The predicate for the normal controller (movement, death etc)
@@ -168,7 +268,7 @@ public class WitchSpiderEntity extends MobultionSpiderEntity{
             return PlayState.CONTINUE;
         }
         if(this.isUsingItem()){
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("attack", false));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("attack", true));
             return PlayState.CONTINUE;
         }
         if(event.isMoving()){
@@ -246,5 +346,6 @@ public class WitchSpiderEntity extends MobultionSpiderEntity{
     public boolean canBeAffected(@NotNull MobEffectInstance effect) {
         return true;
     }
+
 
 }
