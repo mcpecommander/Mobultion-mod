@@ -168,7 +168,6 @@ public class HypnoSpiderEntity extends MobultionSpiderEntity{
      * Gets called from the AI attack goal, so it is only on the server.
      * @param target The living entity that this entity is targeting with whatever is in the method.
      */
-    @Override
     public void performRangedAttack(LivingEntity target) {
         HypnoWaveEntity wave = new HypnoWaveEntity(this);
         double xVel = target.getX() - this.getX();
