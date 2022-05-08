@@ -1,13 +1,16 @@
 buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
+        maven { url = 'https://maven.parchmentmc.org' }
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.parchmentmc:librarian:1.+'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
@@ -21,7 +24,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17) // Mojang ships Java
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-    mappings channel: 'official', version: '1.18.2'
+    mappings channel: 'parchment', version: '2022.03.13-1.18.2'
     
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -121,7 +124,7 @@ dependencies {
 
     minecraft 'net.minecraftforge:forge:1.18.2-40.1.0'
 	
-    implementation fg.deobf('software.bernie.geckolib:geckolib-1.18-forge:3.0.13')
+    implementation fg.deobf('software.bernie.geckolib:geckolib-1.18-forge:3.0.17')
 	
     // compile against the JEI API but do not include it at runtime
     compileOnly fg.deobf("mezz.jei:jei-1.18.2:9.7.0.192:api")
