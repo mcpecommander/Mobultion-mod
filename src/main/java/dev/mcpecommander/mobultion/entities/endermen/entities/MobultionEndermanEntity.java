@@ -177,7 +177,7 @@ public abstract class MobultionEndermanEntity extends Monster implements Neutral
         ++this.deathTime;
         if(this.level.isClientSide) addDeathParticles();
         if (this.deathTime == maxDeathAge()) {
-            this.discard();
+            this.remove(Entity.RemovalReason.KILLED);
         }
     }
 

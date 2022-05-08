@@ -123,9 +123,8 @@ public abstract class MobultionZombieEntity extends Monster implements IAnimatab
     protected void tickDeath() {
         ++this.deathTime;
         deathParticles();
-
         if(this.deathTime == getMaxDeathCount()){
-            this.discard();
+            this.remove(Entity.RemovalReason.KILLED);
         }
     }
 }

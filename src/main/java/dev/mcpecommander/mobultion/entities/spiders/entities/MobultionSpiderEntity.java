@@ -38,8 +38,8 @@ public abstract class MobultionSpiderEntity extends Monster implements IAnimatab
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
-        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.8D));
-        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
+        //this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.8D));
+        //this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
     }
 
     /**
@@ -161,17 +161,8 @@ public abstract class MobultionSpiderEntity extends Monster implements IAnimatab
     @Override
     protected void tickDeath() {
         if(this.deathTime++ == getMaxDeathTick()){
-            this.discard();
+            this.remove(Entity.RemovalReason.KILLED);
         }
-    }
-
-    //Usually an interface method for the ranged mobs but I want to skip having more interfaces.
-    /**
-     * Gets called from the AI attack goal, so it is only on the server.
-     * @param target The living entity that this entity is targeting with whatever is in the method.
-     */
-    public void performRangedAttack(LivingEntity target){
-
     }
 
     /**

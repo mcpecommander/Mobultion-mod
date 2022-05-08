@@ -1,5 +1,6 @@
 package dev.mcpecommander.mobultion.entities.skeletons.entities;
 
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.EntityType;
@@ -64,7 +65,7 @@ public abstract class MobultionSkeletonEntity extends Monster implements IAnimat
     protected void tickDeath() {
         ++this.deathTime;
         if (this.deathTime == getMaxDeathTime()) {
-            discard();
+            this.remove(Entity.RemovalReason.KILLED);
         }
     }
 
