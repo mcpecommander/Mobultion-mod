@@ -33,10 +33,10 @@ public class SnowFlakeParticle extends TextureSheetParticle {
         this.yd = speedY;
         this.zd = speedZ;
         this.quadSize = 0.1f * (this.random.nextFloat() * 2f);
-        this.rCol = data.getRed();
-        this.gCol = data.getGreen();
-        this.bCol = data.getBlue();
-        this.alpha = data.getAlpha();
+        this.rCol = data.red();
+        this.gCol = data.green();
+        this.bCol = data.blue();
+        this.alpha = data.alpha();
         this.lifetime = this.random.nextInt(30) + 20;
     }
 
@@ -80,87 +80,86 @@ public class SnowFlakeParticle extends TextureSheetParticle {
         }
     }
 
-    public static class SnowFlakeParticleData implements ParticleOptions {
+    public record SnowFlakeParticleData(float red, float green, float blue, float alpha) implements ParticleOptions {
 
-        public static final ParticleOptions.Deserializer<SnowFlakeParticle.SnowFlakeParticleData> DESERIALIZER = new Deserializer<>() {
-            @Override
-            public SnowFlakeParticle.@NotNull SnowFlakeParticleData fromCommand(@NotNull ParticleType<SnowFlakeParticle.SnowFlakeParticleData> particleType, StringReader reader) throws CommandSyntaxException {
-                reader.expect(' ');
-                float red = (float) reader.readDouble();
-                reader.expect(' ');
-                float green = (float) reader.readDouble();
-                reader.expect(' ');
-                float blue = (float) reader.readDouble();
-                reader.expect(' ');
-                float alpha = (float) reader.readDouble();
-                return new SnowFlakeParticle.SnowFlakeParticleData(red, green, blue, alpha);
+            public static final ParticleOptions.Deserializer<SnowFlakeParticle.SnowFlakeParticleData> DESERIALIZER = new Deserializer<>() {
+                @Override
+                public SnowFlakeParticle.@NotNull SnowFlakeParticleData fromCommand(@NotNull ParticleType<SnowFlakeParticle.SnowFlakeParticleData> particleType, StringReader reader) throws CommandSyntaxException {
+                    reader.expect(' ');
+                    float red = (float) reader.readDouble();
+                    reader.expect(' ');
+                    float green = (float) reader.readDouble();
+                    reader.expect(' ');
+                    float blue = (float) reader.readDouble();
+                    reader.expect(' ');
+                    float alpha = (float) reader.readDouble();
+                    return new SnowFlakeParticle.SnowFlakeParticleData(red, green, blue, alpha);
+                }
+
+                @Override
+                public SnowFlakeParticle.@NotNull SnowFlakeParticleData fromNetwork(@NotNull ParticleType<SnowFlakeParticle.SnowFlakeParticleData> particleType, FriendlyByteBuf buffer) {
+                    return new SnowFlakeParticle.SnowFlakeParticleData(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(),
+                            buffer.readFloat());
+                }
+            };
+
+            public static final Codec<SnowFlakeParticleData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                    Codec.FLOAT.fieldOf("red").forGetter(data -> data.red),
+                    Codec.FLOAT.fieldOf("green").forGetter(data -> data.green),
+                    Codec.FLOAT.fieldOf("blue").forGetter(data -> data.blue),
+                    Codec.FLOAT.fieldOf("alpha").forGetter(data -> data.alpha)
+            ).apply(instance, SnowFlakeParticle.SnowFlakeParticleData::new));
+
+            public SnowFlakeParticleData(float red, float green, float blue, float alpha) {
+                this.red = red;
+                this.green = green;
+                this.blue = blue;
+                this.alpha = Mth.clamp(alpha, 0.01f, 4.0f);
+
             }
 
             @Override
-            public SnowFlakeParticle.@NotNull SnowFlakeParticleData fromNetwork(@NotNull ParticleType<SnowFlakeParticle.SnowFlakeParticleData> particleType, FriendlyByteBuf buffer) {
-                return new SnowFlakeParticle.SnowFlakeParticleData(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(),
-                        buffer.readFloat());
+            @OnlyIn(Dist.CLIENT)
+            public float red() {
+                return this.red;
             }
-        };
 
-        public static final Codec<SnowFlakeParticleData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                Codec.FLOAT.fieldOf("red").forGetter(data -> data.red),
-                Codec.FLOAT.fieldOf("green").forGetter(data -> data.green),
-                Codec.FLOAT.fieldOf("blue").forGetter(data -> data.blue),
-                Codec.FLOAT.fieldOf("alpha").forGetter(data -> data.alpha)
-        ).apply(instance, SnowFlakeParticle.SnowFlakeParticleData::new));
+            @Override
+            @OnlyIn(Dist.CLIENT)
+            public float green() {
+                return this.green;
+            }
 
-        private final float red;
-        private final float green;
-        private final float blue;
-        private final float alpha;
+            @Override
+            @OnlyIn(Dist.CLIENT)
+            public float blue() {
+                return this.blue;
+            }
 
-        public SnowFlakeParticleData(float red, float green, float blue, float alpha) {
-            this.red = red;
-            this.green = green;
-            this.blue = blue;
-            this.alpha = Mth.clamp(alpha, 0.01f, 4.0f);
+            @Override
+            @OnlyIn(Dist.CLIENT)
+            public float alpha() {
+                return this.alpha;
+            }
 
+
+            @Override
+            public @NotNull ParticleType<?> getType() {
+                return ClientSetup.SNOW_FLAKE_PARTICLE_TYPE.get();
+            }
+
+            @Override
+            public void writeToNetwork(FriendlyByteBuf buffer) {
+                buffer.writeFloat(this.red);
+                buffer.writeFloat(this.green);
+                buffer.writeFloat(this.blue);
+                buffer.writeFloat(this.alpha);
+            }
+
+            @Override
+            public @NotNull String writeToString() {
+                return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f", Registry.PARTICLE_TYPE.getKey(this.getType()),
+                        this.red, this.green, this.blue, this.alpha);
+            }
         }
-
-        @OnlyIn(Dist.CLIENT)
-        public float getRed() {
-            return this.red;
-        }
-
-        @OnlyIn(Dist.CLIENT)
-        public float getGreen() {
-            return this.green;
-        }
-
-        @OnlyIn(Dist.CLIENT)
-        public float getBlue() {
-            return this.blue;
-        }
-
-        @OnlyIn(Dist.CLIENT)
-        public float getAlpha() {
-            return this.alpha;
-        }
-
-
-        @Override
-        public @NotNull ParticleType<?> getType() {
-            return ClientSetup.SNOW_FLAKE_PARTICLE_TYPE.get();
-        }
-
-        @Override
-        public void writeToNetwork(FriendlyByteBuf buffer) {
-            buffer.writeFloat(this.red);
-            buffer.writeFloat(this.green);
-            buffer.writeFloat(this.blue);
-            buffer.writeFloat(this.alpha);
-        }
-
-        @Override
-        public @NotNull String writeToString() {
-            return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f", Registry.PARTICLE_TYPE.getKey(this.getType()),
-                    this.red, this.green, this.blue, this.alpha);
-        }
-    }
 }

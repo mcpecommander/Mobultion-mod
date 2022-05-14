@@ -18,7 +18,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import java.util.Locale;
 
 /* McpeCommander created on 09/07/2021 inside the package - dev.mcpecommander.mobultion.particles */
@@ -43,9 +42,9 @@ public class HealParticle extends TextureSheetParticle {
         this.yd = speed.y / 2f;
         this.zd = speed.z / 2f;
         this.quadSize = 0.1f + 0.1f * (this.random.nextFloat() * 2f);
-        this.rCol = data.getRed();
-        this.gCol = data.getGreen();
-        this.bCol = data.getBlue();
+        this.rCol = data.red();
+        this.gCol = data.green();
+        this.bCol = data.blue();
         //this.alpha = data.getAlpha();
         this.lifetime = 50;
         this.sprite = sprite;
@@ -84,102 +83,94 @@ public class HealParticle extends TextureSheetParticle {
         return ParticleRenderType.PARTICLE_SHEET_LIT;
     }
 
-    public static class Factory implements ParticleProvider<HealParticleData>{
+    public record Factory(SpriteSet sprite) implements ParticleProvider<HealParticleData> {
 
-        private final SpriteSet sprite;
-
-        public Factory(SpriteSet sprite){
-            this.sprite = sprite;
-        }
-
-        @Nullable
-        @Override
-        public Particle createParticle(@NotNull HealParticleData data, @NotNull ClientLevel world,
-                                       double posX, double posY, double posZ,
-                                       double speedX, double speedY, double speedZ) {
-            return new HealParticle(world, posX, posY, posZ, speedX, speedY, speedZ, data, sprite);
-        }
-    }
-
-    public static class HealParticleData implements ParticleOptions{
-
-        public static final ParticleOptions.Deserializer<HealParticleData> DESERIALIZER = new Deserializer<>() {
             @Override
-            public @NotNull HealParticleData fromCommand(@NotNull ParticleType<HealParticleData> particleType, StringReader reader) throws CommandSyntaxException {
-                reader.expect(' ');
-                float red = (float) reader.readDouble();
-                reader.expect(' ');
-                float green = (float) reader.readDouble();
-                reader.expect(' ');
-                float blue = (float) reader.readDouble();
-                reader.expect(' ');
-                float alpha = (float) reader.readDouble();
-                return new HealParticleData(red, green, blue, alpha);
+            public Particle createParticle(@NotNull HealParticleData data, @NotNull ClientLevel world,
+                                           double posX, double posY, double posZ,
+                                           double speedX, double speedY, double speedZ) {
+                return new HealParticle(world, posX, posY, posZ, speedX, speedY, speedZ, data, sprite);
+            }
+        }
+
+    public record HealParticleData(float red, float green, float blue, float alpha) implements ParticleOptions {
+
+            public static final ParticleOptions.Deserializer<HealParticleData> DESERIALIZER = new Deserializer<>() {
+                @Override
+                public @NotNull HealParticleData fromCommand(@NotNull ParticleType<HealParticleData> particleType, StringReader reader) throws CommandSyntaxException {
+                    reader.expect(' ');
+                    float red = (float) reader.readDouble();
+                    reader.expect(' ');
+                    float green = (float) reader.readDouble();
+                    reader.expect(' ');
+                    float blue = (float) reader.readDouble();
+                    reader.expect(' ');
+                    float alpha = (float) reader.readDouble();
+                    return new HealParticleData(red, green, blue, alpha);
+                }
+
+                @Override
+                public @NotNull HealParticleData fromNetwork(@NotNull ParticleType<HealParticleData> particleType, FriendlyByteBuf buffer) {
+                    return new HealParticleData(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(),
+                            buffer.readFloat());
+                }
+            };
+
+            public static final Codec<HealParticleData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                    Codec.FLOAT.fieldOf("red").forGetter(data -> data.red),
+                    Codec.FLOAT.fieldOf("green").forGetter(data -> data.green),
+                    Codec.FLOAT.fieldOf("blue").forGetter(data -> data.blue),
+                    Codec.FLOAT.fieldOf("alpha").forGetter(data -> data.alpha)
+            ).apply(instance, HealParticleData::new));
+
+            public HealParticleData(float red, float green, float blue, float alpha) {
+                this.red = red;
+                this.green = green;
+                this.blue = blue;
+                this.alpha = Mth.clamp(alpha, 0.01f, 4.0f);
             }
 
             @Override
-            public @NotNull HealParticleData fromNetwork(@NotNull ParticleType<HealParticleData> particleType, FriendlyByteBuf buffer) {
-                return new HealParticleData(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(),
-                        buffer.readFloat());
+            @OnlyIn(Dist.CLIENT)
+            public float red() {
+                return this.red;
             }
-        };
 
-        public static final Codec<HealParticleData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                Codec.FLOAT.fieldOf("red").forGetter(data -> data.red),
-                Codec.FLOAT.fieldOf("green").forGetter(data -> data.green),
-                Codec.FLOAT.fieldOf("blue").forGetter(data -> data.blue),
-                Codec.FLOAT.fieldOf("alpha").forGetter(data -> data.alpha)
-        ).apply(instance, HealParticleData::new));
+            @Override
+            @OnlyIn(Dist.CLIENT)
+            public float green() {
+                return this.green;
+            }
 
-        private final float red;
-        private final float green;
-        private final float blue;
-        private final float alpha;
+            @Override
+            @OnlyIn(Dist.CLIENT)
+            public float blue() {
+                return this.blue;
+            }
 
-        public HealParticleData(float red, float green, float blue, float alpha) {
-            this.red = red;
-            this.green = green;
-            this.blue = blue;
-            this.alpha = Mth.clamp(alpha, 0.01f, 4.0f);
+            @Override
+            @OnlyIn(Dist.CLIENT)
+            public float alpha() {
+                return this.alpha;
+            }
+
+            @Override
+            public @NotNull ParticleType<?> getType() {
+                return ClientSetup.HEAL_PARTICLE_TYPE.get();
+            }
+
+            @Override
+            public void writeToNetwork(FriendlyByteBuf buffer) {
+                buffer.writeFloat(this.red);
+                buffer.writeFloat(this.green);
+                buffer.writeFloat(this.blue);
+                buffer.writeFloat(this.alpha);
+            }
+
+            @Override
+            public @NotNull String writeToString() {
+                return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f", Registry.PARTICLE_TYPE.getKey(this.getType()),
+                        this.red, this.green, this.blue, this.alpha);
+            }
         }
-
-        @OnlyIn(Dist.CLIENT)
-        public float getRed() {
-            return this.red;
-        }
-
-        @OnlyIn(Dist.CLIENT)
-        public float getGreen() {
-            return this.green;
-        }
-
-        @OnlyIn(Dist.CLIENT)
-        public float getBlue() {
-            return this.blue;
-        }
-
-        @OnlyIn(Dist.CLIENT)
-        public float getAlpha() {
-            return this.alpha;
-        }
-
-        @Override
-        public @NotNull ParticleType<?> getType() {
-            return ClientSetup.HEAL_PARTICLE_TYPE.get();
-        }
-
-        @Override
-        public void writeToNetwork(FriendlyByteBuf buffer) {
-            buffer.writeFloat(this.red);
-            buffer.writeFloat(this.green);
-            buffer.writeFloat(this.blue);
-            buffer.writeFloat(this.alpha);
-        }
-
-        @Override
-        public @NotNull String writeToString() {
-            return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f", Registry.PARTICLE_TYPE.getKey(this.getType()),
-                    this.red, this.green, this.blue, this.alpha);
-        }
-    }
 }

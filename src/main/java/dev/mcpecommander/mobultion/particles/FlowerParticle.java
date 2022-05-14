@@ -32,11 +32,11 @@ public class FlowerParticle extends TextureSheetParticle {
         this.xd = speedX;
         this.yd = speedY;
         this.zd = speedZ;
-        this.quadSize = 0.075f * (this.random.nextFloat() * 2f) * data.getSize();
-        this.rCol = data.getRed();
-        this.gCol = data.getGreen();
-        this.bCol = data.getBlue();
-        this.alpha = data.getAlpha();
+        this.quadSize = 0.075f * (this.random.nextFloat() * 2f) * data.size();
+        this.rCol = data.red();
+        this.gCol = data.green();
+        this.bCol = data.blue();
+        this.alpha = data.alpha();
         this.lifetime = this.random.nextInt(20) + 10;
     }
 
@@ -80,96 +80,96 @@ public class FlowerParticle extends TextureSheetParticle {
         }
     }
 
-    public static class FlowerParticleData implements ParticleOptions {
+    public record FlowerParticleData(float red, float green, float blue, float alpha,
+                                     float size) implements ParticleOptions {
 
-        public static final Deserializer<FlowerParticle.FlowerParticleData> DESERIALIZER = new Deserializer<>() {
-            @Override
-            public FlowerParticle.@NotNull FlowerParticleData fromCommand(@NotNull ParticleType<FlowerParticle.FlowerParticleData> particleType, StringReader reader) throws CommandSyntaxException {
-                reader.expect(' ');
-                float red = (float) reader.readDouble();
-                reader.expect(' ');
-                float green = (float) reader.readDouble();
-                reader.expect(' ');
-                float blue = (float) reader.readDouble();
-                reader.expect(' ');
-                float alpha = (float) reader.readDouble();
-                reader.expect(' ');
-                float size = (float) reader.readDouble();
-                return new FlowerParticle.FlowerParticleData(red, green, blue, alpha, size);
+            public static final Deserializer<FlowerParticle.FlowerParticleData> DESERIALIZER = new Deserializer<>() {
+                @Override
+                public FlowerParticle.@NotNull FlowerParticleData fromCommand(@NotNull ParticleType<FlowerParticle.FlowerParticleData> particleType, StringReader reader) throws CommandSyntaxException {
+                    reader.expect(' ');
+                    float red = (float) reader.readDouble();
+                    reader.expect(' ');
+                    float green = (float) reader.readDouble();
+                    reader.expect(' ');
+                    float blue = (float) reader.readDouble();
+                    reader.expect(' ');
+                    float alpha = (float) reader.readDouble();
+                    reader.expect(' ');
+                    float size = (float) reader.readDouble();
+                    return new FlowerParticle.FlowerParticleData(red, green, blue, alpha, size);
+                }
+
+                @Override
+                public FlowerParticle.@NotNull FlowerParticleData fromNetwork(@NotNull ParticleType<FlowerParticle.FlowerParticleData> particleType, FriendlyByteBuf buffer) {
+                    return new FlowerParticle.FlowerParticleData(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(),
+                            buffer.readFloat(), buffer.readFloat());
+                }
+            };
+
+            public static final Codec<FlowerParticleData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                    Codec.FLOAT.fieldOf("red").forGetter(data -> data.red),
+                    Codec.FLOAT.fieldOf("green").forGetter(data -> data.green),
+                    Codec.FLOAT.fieldOf("blue").forGetter(data -> data.blue),
+                    Codec.FLOAT.fieldOf("alpha").forGetter(data -> data.alpha),
+                    Codec.FLOAT.fieldOf("size").forGetter(data -> data.size)
+            ).apply(instance, FlowerParticle.FlowerParticleData::new));
+
+            public FlowerParticleData(float red, float green, float blue, float alpha, float size) {
+                this.red = red;
+                this.green = green;
+                this.blue = blue;
+                this.alpha = Mth.clamp(alpha, 0.01f, 4.0f);
+                this.size = size;
             }
 
             @Override
-            public FlowerParticle.@NotNull FlowerParticleData fromNetwork(@NotNull ParticleType<FlowerParticle.FlowerParticleData> particleType, FriendlyByteBuf buffer) {
-                return new FlowerParticle.FlowerParticleData(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(),
-                        buffer.readFloat(), buffer.readFloat());
+            @OnlyIn(Dist.CLIENT)
+            public float red() {
+                return this.red;
             }
-        };
 
-        public static final Codec<FlowerParticleData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                Codec.FLOAT.fieldOf("red").forGetter(data -> data.red),
-                Codec.FLOAT.fieldOf("green").forGetter(data -> data.green),
-                Codec.FLOAT.fieldOf("blue").forGetter(data -> data.blue),
-                Codec.FLOAT.fieldOf("alpha").forGetter(data -> data.alpha),
-                Codec.FLOAT.fieldOf("size").forGetter(data -> data.size)
-        ).apply(instance, FlowerParticle.FlowerParticleData::new));
+            @Override
+            @OnlyIn(Dist.CLIENT)
+            public float green() {
+                return this.green;
+            }
 
-        private final float red;
-        private final float green;
-        private final float blue;
-        private final float alpha;
-        private final float size;
+            @Override
+            @OnlyIn(Dist.CLIENT)
+            public float blue() {
+                return this.blue;
+            }
 
-        public FlowerParticleData(float red, float green, float blue, float alpha, float size) {
-            this.red = red;
-            this.green = green;
-            this.blue = blue;
-            this.alpha = Mth.clamp(alpha, 0.01f, 4.0f);
-            this.size = size;
+            @Override
+            @OnlyIn(Dist.CLIENT)
+            public float alpha() {
+                return this.alpha;
+            }
+
+            @Override
+            @OnlyIn(Dist.CLIENT)
+            public float size() {
+                return this.size;
+            }
+
+            @Override
+            public @NotNull ParticleType<?> getType() {
+                return ClientSetup.FLOWER_PARTICLE_TYPE.get();
+            }
+
+            @Override
+            public void writeToNetwork(FriendlyByteBuf buffer) {
+                buffer.writeFloat(this.red);
+                buffer.writeFloat(this.green);
+                buffer.writeFloat(this.blue);
+                buffer.writeFloat(this.alpha);
+                buffer.writeFloat(this.size);
+            }
+
+            @Override
+            public @NotNull String writeToString() {
+                return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f %.2f", Registry.PARTICLE_TYPE.getKey(this.getType()),
+                        this.red, this.green, this.blue, this.alpha, this.size);
+            }
         }
-
-        @OnlyIn(Dist.CLIENT)
-        public float getRed() {
-            return this.red;
-        }
-
-        @OnlyIn(Dist.CLIENT)
-        public float getGreen() {
-            return this.green;
-        }
-
-        @OnlyIn(Dist.CLIENT)
-        public float getBlue() {
-            return this.blue;
-        }
-
-        @OnlyIn(Dist.CLIENT)
-        public float getAlpha() {
-            return this.alpha;
-        }
-
-        @OnlyIn(Dist.CLIENT)
-        public float getSize() {
-            return this.size;
-        }
-
-        @Override
-        public @NotNull ParticleType<?> getType() {
-            return ClientSetup.FLOWER_PARTICLE_TYPE.get();
-        }
-
-        @Override
-        public void writeToNetwork(FriendlyByteBuf buffer) {
-            buffer.writeFloat(this.red);
-            buffer.writeFloat(this.green);
-            buffer.writeFloat(this.blue);
-            buffer.writeFloat(this.alpha);
-            buffer.writeFloat(this.size);
-        }
-
-        @Override
-        public @NotNull String writeToString() {
-            return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f %.2f", Registry.PARTICLE_TYPE.getKey(this.getType()),
-                    this.red, this.green, this.blue, this.alpha, this.size);
-        }
-    }
 }

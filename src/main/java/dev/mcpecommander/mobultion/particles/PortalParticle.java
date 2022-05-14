@@ -38,13 +38,13 @@ public class PortalParticle extends TextureSheetParticle {
         this.xd = speedX;
         this.yd = speedY;
         this.zd = speedZ;
-        this.finalPos = new Vec3(data.getFinalX(), data.getFinalY(), data.getFinalZ());
+        this.finalPos = new Vec3(data.finalX(), data.finalY(), data.finalZ());
         this.quadSize = 0.3f * (this.random.nextFloat() * 2f);
         this.oSize = quadSize;
-        this.rCol = data.getRed();
-        this.gCol = data.getGreen();
-        this.bCol = data.getBlue();
-        this.alpha = data.getAlpha();
+        this.rCol = data.red();
+        this.gCol = data.green();
+        this.bCol = data.blue();
+        this.alpha = data.alpha();
         this.lifetime = this.random.nextInt(30) + 20;
         this.sprite = sprite;
         this.hasPhysics = false;
@@ -100,118 +100,118 @@ public class PortalParticle extends TextureSheetParticle {
         }
     }
 
-    public static class PortalParticleData implements ParticleOptions {
+    public record PortalParticleData(float red, float green, float blue, float alpha, float finalX, float finalY,
+                                     float finalZ) implements ParticleOptions {
 
-        public static final ParticleOptions.Deserializer<PortalParticle.PortalParticleData> DESERIALIZER = new Deserializer<>() {
-            @Override
-            public PortalParticle.@NotNull PortalParticleData fromCommand(@NotNull ParticleType<PortalParticle.PortalParticleData> particleType, StringReader reader) throws CommandSyntaxException {
-                reader.expect(' ');
-                float red = (float) reader.readDouble();
-                reader.expect(' ');
-                float green = (float) reader.readDouble();
-                reader.expect(' ');
-                float blue = (float) reader.readDouble();
-                reader.expect(' ');
-                float alpha = (float) reader.readDouble();
-                reader.expect(' ');
-                float finalX = (float) reader.readDouble();
-                reader.expect(' ');
-                float finalY = (float) reader.readDouble();
-                reader.expect(' ');
-                float finalZ = (float) reader.readDouble();
-                return new PortalParticle.PortalParticleData(red, green, blue, alpha, finalX, finalY, finalZ);
+            public static final ParticleOptions.Deserializer<PortalParticle.PortalParticleData> DESERIALIZER = new Deserializer<>() {
+                @Override
+                public PortalParticle.@NotNull PortalParticleData fromCommand(@NotNull ParticleType<PortalParticle.PortalParticleData> particleType, StringReader reader) throws CommandSyntaxException {
+                    reader.expect(' ');
+                    float red = (float) reader.readDouble();
+                    reader.expect(' ');
+                    float green = (float) reader.readDouble();
+                    reader.expect(' ');
+                    float blue = (float) reader.readDouble();
+                    reader.expect(' ');
+                    float alpha = (float) reader.readDouble();
+                    reader.expect(' ');
+                    float finalX = (float) reader.readDouble();
+                    reader.expect(' ');
+                    float finalY = (float) reader.readDouble();
+                    reader.expect(' ');
+                    float finalZ = (float) reader.readDouble();
+                    return new PortalParticle.PortalParticleData(red, green, blue, alpha, finalX, finalY, finalZ);
+                }
+
+                @Override
+                public PortalParticle.@NotNull PortalParticleData fromNetwork(@NotNull ParticleType<PortalParticle.PortalParticleData> particleType, FriendlyByteBuf buffer) {
+                    return new PortalParticle.PortalParticleData(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(),
+                            buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
+                }
+            };
+
+            public static final Codec<PortalParticle.PortalParticleData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                    Codec.FLOAT.fieldOf("red").forGetter(data -> data.red),
+                    Codec.FLOAT.fieldOf("green").forGetter(data -> data.green),
+                    Codec.FLOAT.fieldOf("blue").forGetter(data -> data.blue),
+                    Codec.FLOAT.fieldOf("alpha").forGetter(data -> data.alpha),
+                    Codec.FLOAT.fieldOf("finalX").forGetter(data -> data.finalX),
+                    Codec.FLOAT.fieldOf("finalY").forGetter(data -> data.finalY),
+                    Codec.FLOAT.fieldOf("finalZ").forGetter(data -> data.finalZ)
+            ).apply(instance, PortalParticle.PortalParticleData::new));
+
+            public PortalParticleData(float red, float green, float blue, float alpha, float finalX, float finalY, float finalZ) {
+                this.red = red;
+                this.green = green;
+                this.blue = blue;
+                this.alpha = Mth.clamp(alpha, 0.01f, 4.0f);
+                this.finalX = finalX;
+                this.finalY = finalY;
+                this.finalZ = finalZ;
             }
 
             @Override
-            public PortalParticle.@NotNull PortalParticleData fromNetwork(@NotNull ParticleType<PortalParticle.PortalParticleData> particleType, FriendlyByteBuf buffer) {
-                return new PortalParticle.PortalParticleData(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(),
-                        buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
+            @OnlyIn(Dist.CLIENT)
+            public float red() {
+                return this.red;
             }
-        };
 
-        public static final Codec<PortalParticle.PortalParticleData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                Codec.FLOAT.fieldOf("red").forGetter(data -> data.red),
-                Codec.FLOAT.fieldOf("green").forGetter(data -> data.green),
-                Codec.FLOAT.fieldOf("blue").forGetter(data -> data.blue),
-                Codec.FLOAT.fieldOf("alpha").forGetter(data -> data.alpha),
-                Codec.FLOAT.fieldOf("finalX").forGetter(data -> data.finalX),
-                Codec.FLOAT.fieldOf("finalY").forGetter(data -> data.finalY),
-                Codec.FLOAT.fieldOf("finalZ").forGetter(data -> data.finalZ)
-        ).apply(instance, PortalParticle.PortalParticleData::new));
+            @Override
+            @OnlyIn(Dist.CLIENT)
+            public float green() {
+                return this.green;
+            }
 
-        private final float red;
-        private final float green;
-        private final float blue;
-        private final float alpha;
-        private final float finalX;
-        private final float finalY;
-        private final float finalZ;
+            @Override
+            @OnlyIn(Dist.CLIENT)
+            public float blue() {
+                return this.blue;
+            }
 
-        public PortalParticleData(float red, float green, float blue, float alpha, float finalX, float finalY, float finalZ) {
-            this.red = red;
-            this.green = green;
-            this.blue = blue;
-            this.alpha = Mth.clamp(alpha, 0.01f, 4.0f);
-            this.finalX = finalX;
-            this.finalY = finalY;
-            this.finalZ = finalZ;
+            @Override
+            @OnlyIn(Dist.CLIENT)
+            public float alpha() {
+                return this.alpha;
+            }
+
+            @Override
+            @OnlyIn(Dist.CLIENT)
+            public float finalX() {
+                return this.finalX;
+            }
+
+            @Override
+            @OnlyIn(Dist.CLIENT)
+            public float finalY() {
+                return this.finalY;
+            }
+
+            @Override
+            @OnlyIn(Dist.CLIENT)
+            public float finalZ() {
+                return this.finalZ;
+            }
+
+            @Override
+            public @NotNull ParticleType<?> getType() {
+                return ClientSetup.PORTAL_PARTICLE_TYPE.get();
+            }
+
+            @Override
+            public void writeToNetwork(FriendlyByteBuf buffer) {
+                buffer.writeFloat(this.red);
+                buffer.writeFloat(this.green);
+                buffer.writeFloat(this.blue);
+                buffer.writeFloat(this.alpha);
+                buffer.writeFloat(this.finalX);
+                buffer.writeFloat(this.finalY);
+                buffer.writeFloat(this.finalZ);
+            }
+
+            @Override
+            public @NotNull String writeToString() {
+                return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f %.2f %.2f %.2f", Registry.PARTICLE_TYPE.getKey(this.getType()),
+                        this.red, this.green, this.blue, this.alpha, this.finalX, this.finalY, this.finalZ);
+            }
         }
-
-        @OnlyIn(Dist.CLIENT)
-        public float getRed() {
-            return this.red;
-        }
-
-        @OnlyIn(Dist.CLIENT)
-        public float getGreen() {
-            return this.green;
-        }
-
-        @OnlyIn(Dist.CLIENT)
-        public float getBlue() {
-            return this.blue;
-        }
-
-        @OnlyIn(Dist.CLIENT)
-        public float getAlpha() {
-            return this.alpha;
-        }
-
-        @OnlyIn(Dist.CLIENT)
-        public float getFinalX() {
-            return this.finalX;
-        }
-
-        @OnlyIn(Dist.CLIENT)
-        public float getFinalY() {
-            return this.finalY;
-        }
-
-        @OnlyIn(Dist.CLIENT)
-        public float getFinalZ() {
-            return this.finalZ;
-        }
-
-        @Override
-        public @NotNull ParticleType<?> getType() {
-            return ClientSetup.PORTAL_PARTICLE_TYPE.get();
-        }
-
-        @Override
-        public void writeToNetwork(FriendlyByteBuf buffer) {
-            buffer.writeFloat(this.red);
-            buffer.writeFloat(this.green);
-            buffer.writeFloat(this.blue);
-            buffer.writeFloat(this.alpha);
-            buffer.writeFloat(this.finalX);
-            buffer.writeFloat(this.finalY);
-            buffer.writeFloat(this.finalZ);
-        }
-
-        @Override
-        public @NotNull String writeToString() {
-            return String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f %.2f %.2f %.2f", Registry.PARTICLE_TYPE.getKey(this.getType()),
-                    this.red, this.green, this.blue, this.alpha, this.finalX, this.finalY, this.finalZ);
-        }
-    }
 }
