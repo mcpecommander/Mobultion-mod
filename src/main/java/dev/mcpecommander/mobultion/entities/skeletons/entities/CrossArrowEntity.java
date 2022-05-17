@@ -60,8 +60,7 @@ public class CrossArrowEntity extends AbstractArrow {
     }
 
     /**
-     * The main tick method that has most of the logic for entities. A bit more advanced than baseTick method where this
-     * method is called. Called on both the client and server side of course.
+     * The main tick method that has most of the logic for entities. Called on both the client and server side of course.
      */
     @Override
     public void tick() {
