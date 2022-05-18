@@ -17,7 +17,6 @@ public class MobultionSpiderMeleeGoal extends Goal{
     private Path path;
     private int ticksUntilNextAttack;
     private long lastCanUseCheck;
-    private final boolean forgiveInDay;
     private static final long COOLDOWN_BETWEEN_CAN_USE_CHECKS = 20;
 
     /**
@@ -28,9 +27,8 @@ public class MobultionSpiderMeleeGoal extends Goal{
      * @param jumpHeight The height of the spider leap, vanilla uses 0.3f
      * @param jumpSpeed A float to multiply the jump vector by, vanilla uses 0.4f
      */
-    public MobultionSpiderMeleeGoal(PathfinderMob attacker, boolean forgiveInDay, double speedMultiplier, float jumpHeight, float jumpSpeed) {
+    public MobultionSpiderMeleeGoal(PathfinderMob attacker, double speedMultiplier, float jumpHeight, float jumpSpeed) {
         this.attacker = attacker;
-        this.forgiveInDay = forgiveInDay;
         this.speedMultiplier = speedMultiplier;
         this.jumpHeight = jumpHeight;
         this.jumpSpeed = jumpSpeed;
@@ -74,7 +72,7 @@ public class MobultionSpiderMeleeGoal extends Goal{
     public boolean canContinueToUse() {
         //If it is bright enough, there is a 1% for the spider to stop being angry at the target.
         float brightness = this.attacker.getBrightness();
-        if (!forgiveInDay && brightness >= 0.5F && this.attacker.getRandom().nextInt(100) == 0) {
+        if (brightness >= 0.5F && this.attacker.getRandom().nextInt(100) == 0) {
             this.attacker.setTarget(null);
             return false;
         } else {
