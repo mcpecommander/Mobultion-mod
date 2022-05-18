@@ -1,20 +1,29 @@
 package dev.mcpecommander.mobultion.entities.spiders.entities;
 
+import dev.mcpecommander.mobultion.entities.spiders.entityGoals.ThreeAttackableTargetsGoal;
+import dev.mcpecommander.mobultion.entities.spiders.entityGoals.WitherSpiderAttackGoal;
 import dev.mcpecommander.mobultion.setup.Registration;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.AreaEffectCloud;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.util.RandomPos;
+import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -26,6 +35,19 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 /* McpeCommander created on 18/06/2021 inside the package - dev.mcpecommander.mobultion.entities.spiders.entities */
 public class WitherSpiderEntity extends MobultionSpiderEntity{
 
+    //Temp
+    BlockPos pos1, pos2;
+    /**
+     * The extra heads rotation.
+     */
+    public float[] headYRot = new float[2];
+    public float[] headXRot = new float[2];
+    /**
+     * The target's sync accessor
+     */
+    private static final EntityDataAccessor<Integer> LEFT_TARGET = SynchedEntityData.defineId(WitherSpiderEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> RIGHT_TARGET = SynchedEntityData.defineId(WitherSpiderEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> TARGET = SynchedEntityData.defineId(WitherSpiderEntity.class, EntityDataSerializers.INT);
     /**
      * The animation factory, for more information check GeckoLib.
      */
@@ -39,13 +61,25 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
         prevHealth = this.getMaxHealth();
     }
 
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(LEFT_TARGET, -1);
+        this.entityData.define(RIGHT_TARGET, -1);
+        this.entityData.define(TARGET, -1);
+    }
+
     /**
      * Register the AI/goals here. Server side only.
      */
     @Override
     protected void registerGoals() {
         super.registerGoals();
-
+        this.goalSelector.addGoal(3, new WitherSpiderAttackGoal(this, 1.0, 0.5f, 0.7f));
+        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new ThreeAttackableTargetsGoal<>(this, Player.class, true));
+        this.targetSelector.addGoal(2, new ThreeAttackableTargetsGoal<>(this, Sheep.class, true));
     }
 
     /**
@@ -54,7 +88,71 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 60.0D).add(Attributes.MOVEMENT_SPEED, 0.3D);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 60.0D)
+                .add(Attributes.MOVEMENT_SPEED, 0.3D)
+                .add(Attributes.ATTACK_DAMAGE, 2D);
+    }
+
+    @Nullable
+    public LivingEntity getTarget(Head head){
+        return (LivingEntity) this.level.getEntity(head == Head.LEFT ? this.entityData.get(LEFT_TARGET)
+                                                            : this.entityData.get(RIGHT_TARGET));
+    }
+
+    @Nullable
+    @Override
+    public LivingEntity getTarget() {
+        if(this.level.isClientSide){
+            return (LivingEntity) this.level.getEntity(this.entityData.get(TARGET));
+        }
+        return super.getTarget();
+    }
+
+    public void setTarget(Head head, @Nullable LivingEntity target){
+        this.entityData.set(head == Head.LEFT ? LEFT_TARGET : RIGHT_TARGET, target == null ? -1 : target.getId());
+    }
+
+    @Override
+    public void setTarget(@Nullable LivingEntity livingEntity) {
+        super.setTarget(livingEntity);
+        this.entityData.set(TARGET, livingEntity == null ? -1 : livingEntity.getId());
+    }
+
+
+    public void lookAt(Vec3 position, float maxYawIncrease, float maxPitchIncrease, Head head) {
+        Vec3 headPos = getHead(head);
+        double xDist = position.x - headPos.x;
+        double zDist = position.z - headPos.z;
+        double yDist = position.y - headPos.y;
+
+        double horzDist = Math.sqrt(xDist * xDist + zDist * zDist);
+        //180/PI is to convert from radians to degrees.
+        float yRot = (float)(Mth.atan2(zDist, xDist) * 180F / Math.PI) - 90.0F;
+        float xRot = (float)-(Mth.atan2(yDist, horzDist) * 180F /Math.PI);
+        this.headYRot[head.number] = this.rotlerp(this.headYRot[head.number], yRot, maxYawIncrease);
+        this.headXRot[head.number] = this.rotlerp(this.headXRot[head.number], xRot, maxPitchIncrease);
+        //System.out.println(this.headYRot[head] + ", " + this.headXRot[head]);
+    }
+
+    public void lookAt(Entity entity, float maxYawIncrease, float maxPitchIncrease, Head head) {
+        double y;
+        if (entity instanceof LivingEntity livingentity) {
+            y = livingentity.getEyeY();
+        } else {
+            y = (entity.getBoundingBox().minY + entity.getBoundingBox().maxY) / 2.0D;
+        }
+        lookAt(new Vec3(entity.getX(), y, entity.getZ()), maxYawIncrease, maxPitchIncrease, head);
+    }
+
+    private float rotlerp(float angle, float targetAngle, float maxIncrease){
+        float f = Mth.wrapDegrees(targetAngle - angle);
+        f = Mth.clamp(f, -maxIncrease, maxIncrease);
+        return angle + f;
+    }
+
+    public Vec3 getHead(Head head){
+        Vec3 pos = new Vec3(head.offset, getEyeHeight() + 0.15d, 1d);
+        return pos.yRot((float) Math.toRadians(-this.yBodyRot)).add(this.position());
     }
 
     /**
@@ -169,26 +267,48 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
             }
             timer --;
         }
+        if(this.level.isClientSide) {
+            if(this.getTarget(Head.LEFT) == null && this.getTarget() == null) {
+                if (this.tickCount % 40 == 0 && this.random.nextFloat() < 0.2f) {
+                    pos1 = this.blockPosition().offset(RandomPos.generateRandomDirection(this.random, 30, 30));
+                } else if (pos1 != null) {
+                    this.lookAt(Vec3.atCenterOf(pos1), 15, 15, Head.LEFT);
+                }
+            }else if(this.getTarget(Head.LEFT) != null){
+                this.lookAt(this.getTarget(Head.LEFT), 15, 15, Head.LEFT);
+            }else{
+                this.lookAt(this.getTarget(), 15, 15, Head.LEFT);
+            }
+            if(this.getTarget(Head.RIGHT) == null && this.getTarget() == null){
+                if (this.tickCount % 40 == 0 && this.random.nextFloat() < 0.2f) {
+                    pos2 = this.blockPosition().offset(RandomPos.generateRandomDirection(this.random, 30, 30));
+                } else if (pos2 != null){
+                    this.lookAt(Vec3.atCenterOf(pos2), 15, 15, Head.RIGHT);
+                }
+            }else if(this.getTarget(Head.RIGHT) != null){
+                this.lookAt(this.getTarget(Head.RIGHT), 15, 15, Head.RIGHT);
+            }else{
+                this.lookAt(this.getTarget(), 15, 15, Head.RIGHT);
+            }
+        }
     }
 
     /**
      * Removes the entity from the level. Gets called when the death timer has reached 20 or if the entity is despawned.
      */
-    //TODO: check if this actually works
     @Override
-    public void kill() {
-        super.kill();
-        if(!this.level.isClientSide) {
-            AreaEffectCloud areaeffectcloudentity = new AreaEffectCloud(this.level, this.getX(), this.getY(), this.getZ());
-            areaeffectcloudentity.setOwner(this);
-            areaeffectcloudentity.setRadius(3.0F);
-            areaeffectcloudentity.setRadiusOnUse(-0.5F);
-            areaeffectcloudentity.setWaitTime(10);
-            areaeffectcloudentity.setRadiusPerTick(-areaeffectcloudentity.getRadius() / (float) areaeffectcloudentity.getDuration());
-            areaeffectcloudentity.addEffect(new MobEffectInstance(MobEffects.WITHER, 160));
-            areaeffectcloudentity.setPotion(Potions.EMPTY);
+    public void remove(@NotNull RemovalReason removalReason) {
+        super.remove(removalReason);
+        if(!this.level.isClientSide && removalReason == RemovalReason.KILLED) {
+            AreaEffectCloud cloudEntity = new AreaEffectCloud(this.level, this.getX(), this.getY(), this.getZ());
+            cloudEntity.setOwner(this);
+            cloudEntity.setRadius(3.0F);
+            cloudEntity.setRadiusOnUse(-0.5F);
+            cloudEntity.setWaitTime(10);
+            cloudEntity.setRadiusPerTick(-cloudEntity.getRadius() / (float) cloudEntity.getDuration());
+            cloudEntity.addEffect(new MobEffectInstance(MobEffects.WITHER, 160));
 
-            this.level.addFreshEntity(areaeffectcloudentity);
+            this.level.addFreshEntity(cloudEntity);
         }
     }
 
@@ -201,5 +321,17 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
     public boolean canBeAffected(MobEffectInstance effectInstance) {
         MobEffect effect = effectInstance.getEffect();
         return effect != MobEffects.REGENERATION && effect != MobEffects.POISON && effect != MobEffects.WITHER;
+    }
+
+    public enum Head{
+        RIGHT(1, 0.625D), LEFT(0, -0.625);
+
+        public final int number;
+        public final double offset;
+
+        Head(int number, double offset){
+            this.number = number;
+            this.offset = offset;
+        }
     }
 }
