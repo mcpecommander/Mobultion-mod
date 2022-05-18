@@ -231,6 +231,9 @@ public class Registration {
     public static final RegistryObject<EntityType<WitherHeadBugEntity>> WITHERHEADBUG = ENTITIES.register("witherheadbug",
             () -> EntityType.Builder.of(WitherHeadBugEntity::new, MobCategory.MONSTER)
                     .sized(0.7f, 0.7f).build("witherheadbug"));
+    public static final RegistryObject<EntityType<MiniHeadEntity>> MINIHEAD = ENTITIES.register("minihead",
+            () -> EntityType.Builder.of((EntityType.EntityFactory<MiniHeadEntity>) MiniHeadEntity::new, MobCategory.MISC)
+                    .sized(0.5f, 0.5f).build("minihead"));
 
     public static final RegistryObject<EntityType<JokerSkeletonEntity>> JOKERSKELETON = ENTITIES.register("jokerskeleton",
             () -> EntityType.Builder.of(JokerSkeletonEntity::new,

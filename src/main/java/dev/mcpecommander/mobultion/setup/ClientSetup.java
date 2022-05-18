@@ -112,6 +112,8 @@ public class ClientSetup {
                 WitherSpiderRenderer::new);
         event.registerEntityRenderer(Registration.WITHERHEADBUG.get(),
                 WitherHeadBugRenderer::new);
+        event.registerEntityRenderer(Registration.MINIHEAD.get(),
+                MiniHeadRenderer::new);
 
         event.registerEntityRenderer(Registration.JOKERSKELETON.get(),
                 JokerSkeletonRenderer::new);
