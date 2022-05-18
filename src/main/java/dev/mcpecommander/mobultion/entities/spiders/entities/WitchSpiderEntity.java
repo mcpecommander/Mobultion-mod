@@ -180,9 +180,6 @@ public class WitchSpiderEntity extends MobultionSpiderEntity{
                     this.heal(0.4f * this.getMaxHealth());
                 }
             }
-            if(this.getAttackMode() == 4 && this.getUseItemRemainingTicks() == ATTACK_4-1 && !this.level.isClientSide){
-                this.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, (int)ATTACK_4, 1));
-            }
         }
     }
 

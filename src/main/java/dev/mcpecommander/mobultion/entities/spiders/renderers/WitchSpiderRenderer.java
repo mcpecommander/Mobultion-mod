@@ -33,7 +33,8 @@ public class WitchSpiderRenderer extends GeoEntityRenderer<WitchSpiderEntity> {
     @Override
     public boolean shouldRender(@NotNull WitchSpiderEntity witchSpider, @NotNull Frustum viewFrustum,
                                 double posX, double posY, double posZ) {
-        //This fucks with the invisibility effect, so we need to add a line in the render method to fix this.
+        //Don't stop rendering when attacking to make sure the confusion attack doesn't magically disappear if the player
+        //turned around.
         return witchSpider.getTarget() != null || super.shouldRender(witchSpider, viewFrustum, posX, posY, posZ);
     }
 
@@ -53,7 +54,7 @@ public class WitchSpiderRenderer extends GeoEntityRenderer<WitchSpiderEntity> {
         if (renderTypeBuffer != null) {
             vertexBuilder = renderTypeBuffer.getBuffer(type);
 
-            if(!animatable.isInvisible()){
+            if(animatable.getAttackMode() != 4) {
                 renderRecursively(model.topLevelBones.get(0), stack, vertexBuilder, packedLightIn, OverlayTexture.pack(0,
                         OverlayTexture.v(animatable.hurtTime > 0)), red, green, blue, alpha);
             }
@@ -89,12 +90,11 @@ public class WitchSpiderRenderer extends GeoEntityRenderer<WitchSpiderEntity> {
                     stack.popPose();
                 }
             }
-
         }
-
     }
 
-    //Return translucent to make the entity translucent. Default is cutout.
+    //Return translucent to make the entity translucent which makes it so that the alpha value is taken into
+    //consideration when rendering. Default is cutout.
     @Override
     public RenderType getRenderType(WitchSpiderEntity animatable, float partialTicks, PoseStack stack,
                                     @Nullable MultiBufferSource renderTypeBuffer, @Nullable VertexConsumer vertexBuilder,
