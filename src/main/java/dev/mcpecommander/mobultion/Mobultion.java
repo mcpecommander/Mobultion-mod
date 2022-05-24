@@ -27,7 +27,7 @@ public class Mobultion
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SERVER_CONFIG);
 
-        GeckoLibMod.DISABLE_IN_DEV = true;
+        GeckoLibMod.DISABLE_IN_DEV = false;
         GeckoLib.initialize();
         Registration.init();
 

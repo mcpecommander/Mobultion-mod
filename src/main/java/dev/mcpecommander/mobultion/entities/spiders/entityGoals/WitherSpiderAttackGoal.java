@@ -1,6 +1,6 @@
 package dev.mcpecommander.mobultion.entities.spiders.entityGoals;
 
-import dev.mcpecommander.mobultion.entities.spiders.entities.MiniHeadEntity;
+import dev.mcpecommander.mobultion.entities.spiders.entities.RedEyeEntity;
 import dev.mcpecommander.mobultion.entities.spiders.entities.WitherSpiderEntity;
 import dev.mcpecommander.mobultion.setup.Registration;
 import net.minecraft.util.Mth;
@@ -275,15 +275,28 @@ public class WitherSpiderAttackGoal extends Goal {
      * Perform the ranged attack of the left and right heads.
      * @param target The target being targeted by that specific head.
      * @param spawnPos The position to spawn the projectile at.
-     * @param head The head which is shooting the projectile.
      */
     private void performRangedAttack(LivingEntity target, Vec3 spawnPos, WitherSpiderEntity.Head head){
-        MiniHeadEntity miniHead = new MiniHeadEntity(Registration.MINIHEAD.get(), this.attacker.level, this.attacker);
-        miniHead.setData(spawnPos.add(this.attacker.getRandom().nextGaussian() * 0.2d - 0.1d,
-                this.attacker.getRandom().nextGaussian() * 0.2 - 0.1d,
-                this.attacker.getRandom().nextGaussian() * 0.2 - 0.1d),
-                target.getEyePosition(), head.number);
-        this.attacker.level.addFreshEntity(miniHead);
+//        if(head == LEFT) {
+        if(head == LEFT) return;
+        if(!this.attacker.getDeployed(head)){
+            RedEyeEntity redEye = new RedEyeEntity(Registration.REDEYE.get(), this.attacker.level);
+            redEye.setPos(spawnPos);
+            redEye.setOwner(this.attacker);
+            redEye.setLaunching(true);
+            redEye.setHead(head);
+            redEye.setTarget(target);
+            this.attacker.level.addFreshEntity(redEye);
+            this.attacker.setDeployed(head, true);
+        }
+
+//        }else{
+//            WitheringWebEntity web = new WitheringWebEntity(Registration.WITHERINGWEB.get(), spawnPos.x, spawnPos.y, spawnPos.z,
+//                    (target.getX() - spawnPos.x)/2f, (target.getEyeY() - spawnPos.y)/2f, (target.getZ() - spawnPos.z)/2f,
+//                    target.level, this.attacker, target);
+//            this.attacker.level.addFreshEntity(web);
+//        }
+
     }
 
     /**

@@ -1,25 +1,26 @@
 package dev.mcpecommander.mobultion.entities.spiders.models;
 
-import dev.mcpecommander.mobultion.entities.spiders.entities.MiniHeadEntity;
+import dev.mcpecommander.mobultion.entities.spiders.entities.RedEyeEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib3.model.provider.data.EntityModelData;
 
 import javax.annotation.Nullable;
 
 import static dev.mcpecommander.mobultion.Mobultion.MODID;
 
 /* McpeCommander created on 08/08/2021 inside the package - dev.mcpecommander.mobultion.entities.spiders.models */
-public class MiniHeadModel extends AnimatedGeoModel<MiniHeadEntity> {
+public class RedEyeModel extends AnimatedGeoModel<RedEyeEntity> {
     /**
      * Gets the model json file.
      * @param entity: The entity for which the model file is getting called.
      * @return A resource location for the model file.
      */
     @Override
-    public ResourceLocation getModelLocation(MiniHeadEntity entity) {
+    public ResourceLocation getModelLocation(RedEyeEntity entity) {
         return new ResourceLocation(MODID, "geo/spiders/redeye.json");
     }
 
@@ -29,7 +30,7 @@ public class MiniHeadModel extends AnimatedGeoModel<MiniHeadEntity> {
      * @return A resource location for the texture file.
      */
     @Override
-    public ResourceLocation getTextureLocation(MiniHeadEntity entity) {
+    public ResourceLocation getTextureLocation(RedEyeEntity entity) {
         return new ResourceLocation(MODID, "textures/entity/spiders/redeye.png");
     }
 
@@ -39,8 +40,8 @@ public class MiniHeadModel extends AnimatedGeoModel<MiniHeadEntity> {
      * @return A resource location for the animation file.
      */
     @Override
-    public ResourceLocation getAnimationFileLocation(MiniHeadEntity animatable) {
-        return null;
+    public ResourceLocation getAnimationFileLocation(RedEyeEntity animatable) {
+        return new ResourceLocation(MODID, "animations/spiders/redeye.animation.json");
     }
 
     /**
@@ -50,14 +51,18 @@ public class MiniHeadModel extends AnimatedGeoModel<MiniHeadEntity> {
      * @param customPredicate: The animation event which has information about the animation.
      */
     @Override
-    public void setLivingAnimations(MiniHeadEntity entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
+    public void setLivingAnimations(RedEyeEntity entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
         super.setLivingAnimations(entity, uniqueID, customPredicate);
-        IBone main = this.getAnimationProcessor().getBone("main");
+        IBone head = this.getAnimationProcessor().getBone("main");
 
-        double xDist = entity.target.x - entity.position().x;
-        double zDist = entity.target.z - entity.position().z;
-        main.setRotationX((float) -(Mth.atan2(entity.target.y - entity.position().y, Math.sqrt(xDist * xDist + zDist * zDist))));
-        main.setRotationY((float) (Mth.atan2(zDist, xDist) - Math.PI));
+        assert customPredicate != null;
+        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+        head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
+        head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
+        if(entity.isDeadOrDying()) {
+            head.setRotationX(0f);
+            head.setRotationY(0f);
+        }
 
     }
 }

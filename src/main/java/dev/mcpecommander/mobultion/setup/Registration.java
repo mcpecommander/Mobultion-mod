@@ -82,6 +82,7 @@ public class Registration {
         event.put(MINISPIDER.get(), MiniSpiderEntity.createAttributes().build());
         event.put(WITHERSPIDER.get(), WitherSpiderEntity.createAttributes().build());
         event.put(WITHERHEADBUG.get(), WitherHeadBugEntity.createAttributes().build());
+        event.put(REDEYE.get(), RedEyeEntity.createAttributes().build());
 
         event.put(JOKERSKELETON.get(), JokerSkeletonEntity.createAttributes().build());
         event.put(CORRUPTEDSKELETON.get(), CorruptedSkeletonEntity.createAttributes().build());
@@ -231,9 +232,12 @@ public class Registration {
     public static final RegistryObject<EntityType<WitherHeadBugEntity>> WITHERHEADBUG = ENTITIES.register("witherheadbug",
             () -> EntityType.Builder.of(WitherHeadBugEntity::new, MobCategory.MONSTER)
                     .sized(0.7f, 0.7f).build("witherheadbug"));
-    public static final RegistryObject<EntityType<MiniHeadEntity>> MINIHEAD = ENTITIES.register("minihead",
-            () -> EntityType.Builder.of((EntityType.EntityFactory<MiniHeadEntity>) MiniHeadEntity::new, MobCategory.MISC)
-                    .sized(0.5f, 0.5f).build("minihead"));
+    public static final RegistryObject<EntityType<RedEyeEntity>> REDEYE = ENTITIES.register("redeye",
+            () -> EntityType.Builder.of(RedEyeEntity::new, MobCategory.MONSTER)
+                    .sized(0.7f, 0.7f).build("redeye"));
+    public static final RegistryObject<EntityType<WitheringWebEntity>> WITHERINGWEB = ENTITIES.register("witheringweb",
+            () -> EntityType.Builder.of((EntityType.EntityFactory<WitheringWebEntity>) WitheringWebEntity::new, MobCategory.MISC)
+                    .sized(0.1f, 0.1f).build("witheringweb"));
 
     public static final RegistryObject<EntityType<JokerSkeletonEntity>> JOKERSKELETON = ENTITIES.register("jokerskeleton",
             () -> EntityType.Builder.of(JokerSkeletonEntity::new,

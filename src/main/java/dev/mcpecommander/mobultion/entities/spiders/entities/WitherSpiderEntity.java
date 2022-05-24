@@ -48,6 +48,8 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
     private static final EntityDataAccessor<Integer> LEFT_TARGET = SynchedEntityData.defineId(WitherSpiderEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> RIGHT_TARGET = SynchedEntityData.defineId(WitherSpiderEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> TARGET = SynchedEntityData.defineId(WitherSpiderEntity.class, EntityDataSerializers.INT);
+
+    private final boolean[] deployedEyes = new boolean[2];
     /**
      * The animation factory, for more information check GeckoLib.
      */
@@ -74,7 +76,7 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
      */
     @Override
     protected void registerGoals() {
-        super.registerGoals();
+        //super.registerGoals();
         this.goalSelector.addGoal(3, new WitherSpiderAttackGoal(this, 1.0, 0.5f, 0.7f));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
@@ -153,6 +155,14 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
     public Vec3 getHead(Head head){
         Vec3 pos = new Vec3(head.offset, getEyeHeight() + 0.15d, 1d);
         return pos.yRot((float) Math.toRadians(-this.yBodyRot)).add(this.position());
+    }
+
+    public boolean getDeployed(Head head){
+        return this.deployedEyes[head.number];
+    }
+
+    public void setDeployed(Head head, boolean deployed){
+        this.deployedEyes[head.number] = deployed;
     }
 
     /**
@@ -324,7 +334,7 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
     }
 
     public enum Head{
-        RIGHT(1, 0.625D), LEFT(0, -0.625);
+        RIGHT(1, -0.625D), LEFT(0, 0.625);
 
         public final int number;
         public final double offset;
