@@ -23,8 +23,8 @@ public class WitchSpiderAttackGoal extends Goal {
     private boolean strafingBackwards;
     private int strafingTime = -1;
 
-    public WitchSpiderAttackGoal(WitchSpiderEntity hypnoSpiderEntity, double speedModifier, int attackInterval, float attackRadius) {
-        this.attacker = hypnoSpiderEntity;
+    public WitchSpiderAttackGoal(WitchSpiderEntity witchSpiderEntity, double speedModifier, int attackInterval, float attackRadius) {
+        this.attacker = witchSpiderEntity;
         this.speedModifier = speedModifier;
         this.attackIntervalMin = attackInterval;
         this.attackRadiusSqr = attackRadius * attackRadius;
