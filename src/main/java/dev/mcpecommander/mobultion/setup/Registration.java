@@ -397,6 +397,8 @@ public class Registration {
             new SoundEvent(new ResourceLocation(MODID, "split")));
     public static final RegistryObject<SoundEvent> SLASH_SOUND = SOUNDS.register("slash", () ->
             new SoundEvent(new ResourceLocation(MODID, "slash")));
+    public static final RegistryObject<SoundEvent> ZAP_SOUND = SOUNDS.register("zap", () ->
+            new SoundEvent(new ResourceLocation(MODID, "zap")));
 
     public static final RegistryObject<Attribute> RANGED_DAMAGE = ATTRIBUTES.register("ranged_damage", () ->
             new RangedAttribute("mobultion.rangedDamage", 5d, 1d, 1024d));

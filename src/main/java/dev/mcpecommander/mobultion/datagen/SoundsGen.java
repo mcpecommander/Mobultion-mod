@@ -44,5 +44,7 @@ public class SoundsGen extends SoundDefinitionsProvider {
                 .with(SoundDefinitionsProvider.sound(new ResourceLocation(MODID, "split")).volume(1d)));
         this.add(Registration.SLASH_SOUND.get(), SoundDefinition.definition().subtitle("cross.shooting")
                 .with(SoundDefinitionsProvider.sound(new ResourceLocation(MODID, "slash")).volume(1d)));
+        this.add(Registration.ZAP_SOUND.get(), SoundDefinition.definition().subtitle("lightning.zap")
+                .with(SoundDefinitionsProvider.sound(new ResourceLocation(MODID, "zap")).volume(1d)));
     }
 }

@@ -63,5 +63,11 @@
     "sounds": [
       "mobultion:slash"
     ]
+  },
+  "zap": {
+    "subtitle": "lightning.zap",
+    "sounds": [
+      "mobultion:zap"
+    ]
   }
 }
