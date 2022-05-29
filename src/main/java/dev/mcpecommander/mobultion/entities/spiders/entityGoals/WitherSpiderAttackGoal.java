@@ -279,7 +279,7 @@ public class WitherSpiderAttackGoal extends Goal {
     private void performRangedAttack(LivingEntity target, Vec3 spawnPos, WitherSpiderEntity.Head head){
 //        if(head == LEFT) {
         if(head == LEFT) return;
-        if(!this.attacker.getDeployed(head)){
+        if(this.attacker.getDeployed(head) == null){
             RedEyeEntity redEye = new RedEyeEntity(Registration.REDEYE.get(), this.attacker.level);
             redEye.setPos(spawnPos);
             redEye.setOwner(this.attacker);
@@ -287,7 +287,7 @@ public class WitherSpiderAttackGoal extends Goal {
             redEye.setHead(head);
             redEye.setTarget(target);
             this.attacker.level.addFreshEntity(redEye);
-            this.attacker.setDeployed(head, true);
+            this.attacker.setDeployed(head, redEye.getUUID());
         }
 
 //        }else{

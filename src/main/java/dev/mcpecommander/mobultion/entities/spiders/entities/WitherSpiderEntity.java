@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
@@ -32,6 +33,9 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import java.util.Objects;
+import java.util.UUID;
+
 /* McpeCommander created on 18/06/2021 inside the package - dev.mcpecommander.mobultion.entities.spiders.entities */
 public class WitherSpiderEntity extends MobultionSpiderEntity{
 
@@ -49,20 +53,23 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
     private static final EntityDataAccessor<Integer> RIGHT_TARGET = SynchedEntityData.defineId(WitherSpiderEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> TARGET = SynchedEntityData.defineId(WitherSpiderEntity.class, EntityDataSerializers.INT);
 
-    private final boolean[] deployedEyes = new boolean[2];
+    private final UUID[] deployedEyes = new UUID[2];
     /**
      * The animation factory, for more information check GeckoLib.
      */
     private final AnimationFactory factory = new AnimationFactory(this);
     float prevHealth;
     int timer = -1;
-    boolean isDroppingHead1, isDroppingHead2 = false;
+    boolean isDroppingLeftHead, isDroppingRightHead = false;
 
     public WitherSpiderEntity(EntityType<WitherSpiderEntity> mob, Level world) {
         super(mob, world);
         prevHealth = this.getMaxHealth();
     }
 
+    /**
+     * Register/define the default value of the data parameter here.
+     */
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
@@ -112,6 +119,12 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
 
     public void setTarget(Head head, @Nullable LivingEntity target){
         this.entityData.set(head == Head.LEFT ? LEFT_TARGET : RIGHT_TARGET, target == null ? -1 : target.getId());
+        if(target != null && getDeployed(head) != null){
+            Entity entity = ((ServerLevel) this.level).getEntity(getDeployed(head));
+            if(entity instanceof RedEyeEntity eye){
+                eye.setTarget(target);
+            }
+        }
     }
 
     @Override
@@ -157,11 +170,15 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
         return pos.yRot((float) Math.toRadians(-this.yBodyRot)).add(this.position());
     }
 
-    public boolean getDeployed(Head head){
+    public boolean hasHead(Head head){
+        return head == Head.LEFT ? this.getHealth() > 2/3f * getMaxHealth() : this.getHealth() > 1/3f * getMaxHealth();
+    }
+
+    public UUID getDeployed(Head head){
         return this.deployedEyes[head.number];
     }
 
-    public void setDeployed(Head head, boolean deployed){
+    public void setDeployed(Head head, UUID deployed){
         this.deployedEyes[head.number] = deployed;
     }
 
@@ -236,20 +253,20 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
      */
     @Override
     protected void actuallyHurt(@NotNull DamageSource damageSource, float amount) {
-        if(isDroppingHead1 ||isDroppingHead2) return;
+        if(isDroppingLeftHead || isDroppingRightHead) return;
         float prev = this.getHealth();
         super.actuallyHurt(damageSource, Mth.clamp(amount, 0, 1f/3f * this.getMaxHealth()));
         if(prev < 1f/3f * this.getMaxHealth() || this.isDeadOrDying()) return;
         if(prev > 2f/3f * this.getMaxHealth()
-                && this.getHealth() < 2f/3f * this.getMaxHealth()
+                && this.getHealth() <= 2f/3f * this.getMaxHealth()
                 && this.getHealth() > 1f/3f * this.getMaxHealth()){
             timer = 15;
-            isDroppingHead1 = true;
+            isDroppingLeftHead = true;
         }
         if(prev > 1f/3f * this.getMaxHealth()
                 && this.getHealth() <= 1f/3f * this.getMaxHealth()){
             timer = 15;
-            isDroppingHead2 = true;
+            isDroppingRightHead = true;
         }
     }
 
@@ -265,15 +282,15 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
     @Override
     public void tick() {
         super.tick();
-        if(!this.level.isClientSide && (isDroppingHead1 || isDroppingHead2)){
+        if(!this.level.isClientSide && (isDroppingLeftHead || isDroppingRightHead)){
             if(timer == 0){
-                Vec3 pos = new Vec3(isDroppingHead1 ? 1d : -1d, 0.0d, 1d);
+                Vec3 pos = new Vec3(isDroppingLeftHead ? 1d : -1d, 0.0d, 1d);
                 pos = pos.yRot((float) Math.toRadians(-this.yBodyRot)).add(this.position());
                 WitherHeadBugEntity bug = new WitherHeadBugEntity(Registration.WITHERHEADBUG.get(), this.level);
                 bug.setPos(pos.x, pos.y, pos.z);
                 this.level.addFreshEntity(bug);
-                isDroppingHead1 = false;
-                isDroppingHead2 = false;
+                isDroppingLeftHead = false;
+                isDroppingRightHead = false;
             }
             timer --;
         }
@@ -320,6 +337,12 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
 
             this.level.addFreshEntity(cloudEntity);
         }
+
+    }
+
+    @Override
+    public boolean canCollideWith(@NotNull Entity entity) {
+        return !(entity instanceof RedEyeEntity) && super.canCollideWith(entity);
     }
 
     /**

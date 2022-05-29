@@ -1,6 +1,7 @@
 package dev.mcpecommander.mobultion.entities.spiders.entities;
 
-import net.minecraft.core.particles.ParticleTypes;
+import dev.mcpecommander.mobultion.entities.spiders.entityGoals.RedEyeHoverAroundOwnerGoal;
+import dev.mcpecommander.mobultion.entities.spiders.entityGoals.RedEyeZapAttackGoal;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
@@ -8,18 +9,12 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -47,28 +42,53 @@ public class RedEyeEntity extends Monster implements IAnimatable {
      */
     private final AnimationFactory factory = new AnimationFactory(this);
 
+    /**
+     * A simple data parameter to sync the launch animation with the goals.
+     */
     private static final EntityDataAccessor<Boolean> DATA_LAUNCHING = SynchedEntityData.defineId(RedEyeEntity.class, EntityDataSerializers.BOOLEAN);
+    /**
+     * A data parameter to sync the owner id to the client for positioning and looking vector.
+     */
     private static final EntityDataAccessor<Integer> DATA_OWNER = SynchedEntityData.defineId(RedEyeEntity.class, EntityDataSerializers.INT);
+    /**
+     * A data parameter to sync the target entity's id to the client.
+     */
     private static final EntityDataAccessor<Integer> DATA_TARGET = SynchedEntityData.defineId(RedEyeEntity.class, EntityDataSerializers.INT);
+    /**
+     * Cache the owner instance since it shouldn't change in principle.
+     */
     private WitherSpiderEntity ownerCache;
+    /**
+     * The owner UUID which is used to save owner entity permanently.
+     */
     private UUID ownerUUID;
-    private WitherSpiderEntity.Head head = LEFT;
+    /**
+     * Which head does this entity belong to.
+     */
+    public WitherSpiderEntity.Head head = LEFT;
 
     public RedEyeEntity(EntityType<RedEyeEntity> entityType, Level world){
         super(entityType, world);
     }
 
+    /**
+     * Register the AI/goals here. Server side only.
+     */
     @Override
     protected void registerGoals() {
-        super.registerGoals();
-        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this){
+        this.goalSelector.addGoal(1, new RedEyeZapAttackGoal(this));
+        this.goalSelector.addGoal(2, new RedEyeHoverAroundOwnerGoal(this));
+        this.goalSelector.addGoal(3, new RandomLookAroundGoal(this){
             @Override
             public boolean canUse() {
-                return !isLaunching() && getOwner() == null && super.canUse();
+                    return !isLaunching() && (getOwner() == null || distanceToSqr(getOwner().getHead(head).add(0, 2, 0)) < 1);
             }
         });
     }
 
+    /**
+     * Register/define the default value of the data parameter here.
+     */
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
@@ -77,14 +97,26 @@ public class RedEyeEntity extends Monster implements IAnimatable {
         this.entityData.define(DATA_TARGET, -1);
     }
 
+    /**
+     * A setter for the launching data parameter which is only used in the first 15 ticks.
+     * @param launching true if the red eye should be launching.
+     */
     public void setLaunching(boolean launching){
         this.entityData.set(DATA_LAUNCHING, launching);
     }
 
+    /**
+     * A getter for the launching data parameter which is only used in the first 15 ticks.
+     * @return true is the red eye is launching right now.
+     */
     public boolean isLaunching(){
         return this.entityData.get(DATA_LAUNCHING);
     }
 
+    /**
+     * A more advanced setter for the wither spider entity that owns this red eye. Sets both the data parameter and the UUID.
+     * @param owner the wither spider entity that owns this entity or null to reset it.
+     */
     public void setOwner(WitherSpiderEntity owner){
         if(owner != null){
             this.entityData.set(DATA_OWNER, owner.getId());
@@ -95,6 +127,11 @@ public class RedEyeEntity extends Monster implements IAnimatable {
         }
     }
 
+    /**
+     * A really advanced getter for the owner. It tries to fetch the owner from the cached version, if it is null, it tries to
+     * fetch the target by the id data parameter or by UUID depending on the logical side.
+     * @return the wither spider entity instance that owns this spider.
+     */
     public WitherSpiderEntity getOwner(){
         if(this.ownerCache != null) return ownerCache;
         Entity entity;
@@ -102,7 +139,7 @@ public class RedEyeEntity extends Monster implements IAnimatable {
             entity = ((ServerLevel) this.level).getEntity(ownerUUID);
             if(entity instanceof WitherSpiderEntity spider){
                 this.entityData.set(DATA_OWNER, spider.getId());
-                spider.setDeployed(head, true);
+                spider.setDeployed(head, getUUID());
                 this.ownerCache = spider;
                 return spider;
             }
@@ -116,12 +153,20 @@ public class RedEyeEntity extends Monster implements IAnimatable {
         return null;
     }
 
+    /**
+     * The vanilla target setter but with a data parameter setter attached to it.
+     * @param target the living entity that this entity is targeting or null to reset it.
+     */
     @Override
     public void setTarget(@Nullable LivingEntity target) {
         super.setTarget(target);
         this.entityData.set(DATA_TARGET, target == null ? -1 : target.getId());
     }
 
+    /**
+     * The vanilla target getter but with an actual return on the client side using a data parameter to sync the entity's ID.
+     * @return the living entity that this entity is targeting.
+     */
     @Nullable
     @Override
     public LivingEntity getTarget() {
@@ -132,17 +177,30 @@ public class RedEyeEntity extends Monster implements IAnimatable {
         return super.getTarget();
     }
 
+    /**
+     * Setter for the head of the wither spider entity that owns this entity, because left and right heads own one red each.
+     * @param head enum of the head that this red eye belongs to and tries to flock around once idle.
+     */
     public void setHead(WitherSpiderEntity.Head head){
         this.head = head;
     }
 
+    /**
+     * Writing extra pieces of data to the NBT tag which is persisted
+     * @param compound The tag where the additional data will be written to.
+     */
     @Override
     public void addAdditionalSaveData(@NotNull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         if(this.getOwner() != null) compound.putUUID("mobultion:owner", this.getOwner().getUUID());
+        if(this.getTarget() != null) compound.putUUID("mobultion:target", this.getTarget().getUUID());
         compound.putInt("mobultion:head", this.head.number);
     }
 
+    /**
+     * Reads the NBT tag and gets any pieces of saved data and applies it to the entity.
+     * @param compound The NBT tag that holds the saved data.
+     */
     @Override
     public void readAdditionalSaveData(@NotNull CompoundTag compound) {
         super.readAdditionalSaveData(compound);
@@ -151,11 +209,12 @@ public class RedEyeEntity extends Monster implements IAnimatable {
         }
         if(compound.hasUUID("mobultion:owner") && !this.level.isClientSide){
             this.ownerUUID = compound.getUUID("mobultion:owner");
-            //this.setOwner((WitherSpiderEntity) ((ServerLevel) this.level).getEntity(compound.getUUID("mobultion:owner")));
-            //this.getOwner().setDeployed(head, true);
         }
-
+        if(compound.hasUUID("mobultion:target") && !this.level.isClientSide){
+            this.setTarget((LivingEntity) ((ServerLevel)this.level).getEntity(compound.getUUID("mobultion:owner")));
+        }
     }
+
 
     /**
      * Gets called in the main class to init the attributes.
@@ -178,25 +237,28 @@ public class RedEyeEntity extends Monster implements IAnimatable {
             this.lookControl.setLookAt(this.position().add(0, 5, 0));
             if(tickCount == 15) this.setLaunching(false);
         }else {
-            if (this.getTarget() != null) {
-                double distance = Mth.abs(Mth.sin(tickCount%160f/160f * Mth.PI)) * 4;
-                if(distance < 2) distance = 2;
-                double xTarget = Mth.cos(tickCount/40f * Mth.PI) * distance + this.getTarget().getX();
-                double zTarget = Mth.sin(tickCount/40f * Mth.PI) * distance + this.getTarget().getZ();
-                Vec3 deltaMovement = new Vec3(xTarget - this.getX(), this.getTarget().getY() + 2 - this.getY(), zTarget - this.getZ());
-
-                this.setDeltaMovement(deltaMovement.scale(0.2D/deltaMovement.length())
-                        .add(0, Mth.sin(tickCount%30f/30f * Mth.TWO_PI) * 0.05d, 0));
-
-                this.getLookControl().setLookAt(this.getTarget());
+            if (!this.level.isClientSide) {
+                if (this.getOwner() == null || !this.getOwner().isAlive() || !this.getOwner().hasHead(this.head)) {
+                    this.kill();
+                }
             }
-
         }
 
         this.noPhysics = false;
         this.setNoGravity(true);
 
     }
+
+    /**
+     * Whether this entity can collide with the entity being passed in the parameter.
+     * @param entity a non-null entity which this check is run for.
+     * @return true if the two entity can collide as normal or whether the collision calculation is skipped.
+     */
+    @Override
+    public boolean canCollideWith(@NotNull Entity entity) {
+        return !(entity instanceof WitherSpiderEntity) && super.canCollideWith(entity);
+    }
+
     /*
     double x = Mth.cos((float) ((speedMultiplier-tickCount)/(float)speedMultiplier * Math.PI)) * distance;
             double z;
@@ -212,20 +274,42 @@ public class RedEyeEntity extends Monster implements IAnimatable {
             vec3 = vec3.add(this.center.x, 0, this.center.z);
      */
 
+    /**
+     * The last method that is called by every other method that kills or removes this entity.
+     * @param reason An enum for the removal reason like killed or discarded.
+     */
     @Override
     public void remove(@NotNull RemovalReason reason) {
         super.remove(reason);
-        if(this.getOwner() != null) this.getOwner().setDeployed(this.head, false);
+        if(this.getOwner() != null) this.getOwner().setDeployed(this.head, null);
     }
 
+    /**
+     * The maximum rotation on the x-axis for this entity's head.
+     * @return an integer of the maximum degrees, positive or negative, that this head can rotate towards.
+     */
     @Override
     public int getMaxHeadXRot() {
         return 100;
     }
 
+    /**
+     * The maximum rotation on the y-axis for this entity's head.
+     * @return an integer of the maximum degrees, positive or negative, that this head can rotate towards.
+     */
     @Override
     public int getMaxHeadYRot() {
         return 180;
+    }
+
+    /**
+     * Gets the eye height in relation to the collision box. Check {@linkplain Entity#getEyeY()} EyeY} too.
+     * @param pose The current pose, since some entities have different eye height depending on the pose.
+     * @return a float of the current eye height.
+     */
+    @Override
+    public float getEyeHeight(@NotNull Pose pose) {
+        return 0.35f;
     }
 
     /**
