@@ -101,8 +101,7 @@ public class WitheringWebEntity extends AbstractHurtingProjectile implements IAn
             double scaleAmount = MathCalculations.map(distance, originalDistance, 0, 0.2, 1);
             float xScale = Mth.sin((float) Math.toRadians(this.getYRot() - 90));
             float zScale = Mth.cos((float) Math.toRadians(this.getYRot() - 90));
-            this.setBoundingBox(this.getBoundingBox().expandTowards(-xScale * scaleAmount, scaleAmount, -zScale * scaleAmount));
-            this.setBoundingBox(this.getBoundingBox().expandTowards( xScale * scaleAmount, scaleAmount,  zScale * scaleAmount));
+            this.setBoundingBox(this.getBoundingBox().inflate(xScale * scaleAmount, 0, zScale * scaleAmount).expandTowards(0, scaleAmount * 2, 0));
             if(distance > oldDistance &&
                     this.distanceToSqr(this.getTarget().xOld, this.getTarget().yOld, this.getTarget().zOld) >= distance){
                 ticksFurther++;
@@ -126,7 +125,7 @@ public class WitheringWebEntity extends AbstractHurtingProjectile implements IAn
     @Nonnull
     @Override
     protected ParticleOptions getTrailParticle() {
-        return new DustParticleOptions(new Vector3f(0.188f, 0.106f, 0.247f), 2f);
+        return new DustParticleOptions(new Vector3f(0.188f, 0.106f, 0.247f), 1.5f);
     }
 
     /**
