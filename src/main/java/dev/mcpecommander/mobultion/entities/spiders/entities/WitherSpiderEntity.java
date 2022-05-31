@@ -1,5 +1,6 @@
 package dev.mcpecommander.mobultion.entities.spiders.entities;
 
+import dev.mcpecommander.mobultion.entities.spiders.entityGoals.MobultionSpiderMoveControl;
 import dev.mcpecommander.mobultion.entities.spiders.entityGoals.ThreeAttackableTargetsGoal;
 import dev.mcpecommander.mobultion.entities.spiders.entityGoals.WitherSpiderAttackGoal;
 import dev.mcpecommander.mobultion.setup.Registration;
@@ -16,10 +17,11 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.util.RandomPos;
-import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -33,7 +35,6 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-import java.util.Objects;
 import java.util.UUID;
 
 /* McpeCommander created on 18/06/2021 inside the package - dev.mcpecommander.mobultion.entities.spiders.entities */
@@ -84,11 +85,11 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
     @Override
     protected void registerGoals() {
         //super.registerGoals();
-        this.goalSelector.addGoal(3, new WitherSpiderAttackGoal(this, 1.0, 0.5f, 0.7f));
+        this.goalSelector.addGoal(3, new WitherSpiderAttackGoal(this, 1.0, 0.3f, 0.4f));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new ThreeAttackableTargetsGoal<>(this, Player.class, true));
-        this.targetSelector.addGoal(2, new ThreeAttackableTargetsGoal<>(this, Sheep.class, true));
+        this.targetSelector.addGoal(2, new ThreeAttackableTargetsGoal<>(this, IronGolem.class, true));
     }
 
     /**
@@ -135,15 +136,10 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
 
 
     public void lookAt(Vec3 position, float maxYawIncrease, float maxPitchIncrease, Head head) {
-        Vec3 headPos = getHead(head);
-        double xDist = position.x - headPos.x;
-        double zDist = position.z - headPos.z;
-        double yDist = position.y - headPos.y;
-
-        double horzDist = Math.sqrt(xDist * xDist + zDist * zDist);
+        Vec3 distanceVector = position.subtract(getHead(head));
         //180/PI is to convert from radians to degrees.
-        float yRot = (float)(Mth.atan2(zDist, xDist) * 180F / Math.PI) - 90.0F;
-        float xRot = (float)-(Mth.atan2(yDist, horzDist) * 180F /Math.PI);
+        float yRot = (float)(Mth.atan2(distanceVector.z, distanceVector.x) * 180F / Math.PI) - 90.0F;
+        float xRot = (float)-(Mth.atan2(distanceVector.y, distanceVector.horizontalDistance()) * 180F /Math.PI);
         this.headYRot[head.number] = this.rotlerp(this.headYRot[head.number], yRot, maxYawIncrease);
         this.headXRot[head.number] = this.rotlerp(this.headXRot[head.number], xRot, maxPitchIncrease);
         //System.out.println(this.headYRot[head] + ", " + this.headXRot[head]);
@@ -282,6 +278,7 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
     @Override
     public void tick() {
         super.tick();
+        //System.out.println("spider: " + this.getYHeadRot() + ", " + this.yBodyRot);
         if(!this.level.isClientSide && (isDroppingLeftHead || isDroppingRightHead)){
             if(timer == 0){
                 Vec3 pos = new Vec3(isDroppingLeftHead ? 1d : -1d, 0.0d, 1d);

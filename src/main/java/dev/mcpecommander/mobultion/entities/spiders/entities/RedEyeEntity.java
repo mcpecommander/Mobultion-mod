@@ -260,18 +260,18 @@ public class RedEyeEntity extends Monster implements IAnimatable {
     }
 
     /*
-    double x = Mth.cos((float) ((speedMultiplier-tickCount)/(float)speedMultiplier * Math.PI)) * distance;
-            double z;
-            if(arcType == 0){
-                z = Mth.sin((float) ((speedMultiplier-tickCount)/(float)speedMultiplier * Math.PI)) * distance * 0.2d;
-            }else{
-                z = Mth.sin((float) (-(speedMultiplier-tickCount)/(float)speedMultiplier * Math.PI)) * distance * 0.2d;
-            }
+        double x = Mth.cos((float) ((speedMultiplier-tickCount)/(float)speedMultiplier * Math.PI)) * distance;
+        double z;
+        if(arcType == 0){
+            z = Mth.sin((float) ((speedMultiplier-tickCount)/(float)speedMultiplier * Math.PI)) * distance * 0.2d;
+        }else{
+            z = Mth.sin((float) (-(speedMultiplier-tickCount)/(float)speedMultiplier * Math.PI)) * distance * 0.2d;
+        }
 
-            Vec3 vec3 = new Vec3(x, this.origin.y + yPower*tickCount, z);
-            vec3 = vec3.yRot((float) -this.angle);
-            this.setDeltaMovement(vec3.subtract(0, this.origin.y, 0));
-            vec3 = vec3.add(this.center.x, 0, this.center.z);
+        Vec3 vec3 = new Vec3(x, this.origin.y + yPower*tickCount, z);
+        vec3 = vec3.yRot((float) -this.angle);
+        this.setDeltaMovement(vec3.subtract(0, this.origin.y, 0));
+        vec3 = vec3.add(this.center.x, 0, this.center.z);
      */
 
     /**

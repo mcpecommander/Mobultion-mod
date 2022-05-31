@@ -2,6 +2,7 @@ package dev.mcpecommander.mobultion.entities.spiders.entityGoals;
 
 import dev.mcpecommander.mobultion.entities.spiders.entities.RedEyeEntity;
 import dev.mcpecommander.mobultion.entities.spiders.entities.WitherSpiderEntity;
+import dev.mcpecommander.mobultion.entities.spiders.entities.WitheringWebEntity;
 import dev.mcpecommander.mobultion.setup.Registration;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,8 +23,9 @@ public class WitherSpiderAttackGoal extends Goal {
     private Path path;
     private int ticksUntilNextAttack;
     private long lastCanUseCheck;
+    private final int attackDelay;
     private int leftSeeTime, rightSeeTime;
-    private int leftAttackTime = -1, rightAttackTime = -1, leftAttackCount, rightAttackCount;
+    private int leftAttackTime = -1, rightAttackTime = -1;
     private static final long COOLDOWN_BETWEEN_CAN_USE_CHECKS = 20;
 
     /**
@@ -39,6 +41,8 @@ public class WitherSpiderAttackGoal extends Goal {
         this.speedMultiplier = speedMultiplier;
         this.jumpHeight = jumpHeight;
         this.jumpSpeed = jumpSpeed;
+        this.attackDelay = 30 - Mth.ceil(this.attacker.level.getCurrentDifficultyAt(
+                this.attacker.blockPosition()).getEffectiveDifficulty()) * 3;
         this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
@@ -128,13 +132,10 @@ public class WitherSpiderAttackGoal extends Goal {
      * Used to set some variables or timers for the goal/AI.
      */
     public void start() {
-        //this.attacker.getNavigation().moveTo(this.path, this.speedMultiplier);
+        this.attacker.getNavigation().moveTo(this.path, this.speedMultiplier);
         this.attacker.setAggressive(true);
         this.ticksUntilNextAttack = 0;
-        int count = Math.min(Mth.ceil(this.attacker.level.getCurrentDifficultyAt(
-                this.attacker.blockPosition()).getEffectiveDifficulty()) * (attacker.getRandom().nextInt(2) + 2), 10);
-        this.rightAttackCount = count;
-        this.leftAttackCount = count;
+        this.leftAttackTime = attackDelay/2;
     }
 
     /**
@@ -183,7 +184,7 @@ public class WitherSpiderAttackGoal extends Goal {
             }
             //Because of the jump, the spider loses its path sometimes, so we refresh if it happens.
             if(this.attacker.isOnGround() && this.attacker.getNavigation().isDone()){
-                //this.attacker.getNavigation().moveTo(mainTarget, this.speedMultiplier);
+                this.attacker.getNavigation().moveTo(mainTarget, this.speedMultiplier);
             }
             //Keep looking at the target.
             this.attacker.getLookControl().setLookAt(mainTarget, 30.0F, 30.0F);
@@ -192,7 +193,6 @@ public class WitherSpiderAttackGoal extends Goal {
         }
         LivingEntity leftTarget = this.attacker.getTarget(LEFT);
         if(leftTarget != null && (!(leftTarget instanceof Player player) || (!player.isCreative() && !player.isCreative()))){
-            //this.attacker.lookAt(leftTarget, 15, 15, 0);
             //The current distance to the target.
             double leftTargetDistance = this.attacker.distanceToSqr(leftTarget.getX(), leftTarget.getY(), leftTarget.getZ());
             //If the attacker can see the target.
@@ -210,23 +210,14 @@ public class WitherSpiderAttackGoal extends Goal {
                 --this.leftSeeTime;
             }
             if (leftTargetDistance < 400 && --this.leftAttackTime <= 0) {
-                //If the attacker cannot see the target for over 60 ticks, then stop using the item.
+                //If the attacker cannot see the target for over 60 ticks, then reset the attack timer and try to spawn the red eyes.
                 if (!canSeeLeft && this.leftSeeTime < -60) {
-                    this.leftAttackTime = 20;
+                    this.leftAttackTime = attackDelay;
+                    this.spawnRedEye(leftTarget, this.attacker.getHead(LEFT), LEFT);
                 } else if (canSeeLeft) {
-                    //If the attacker attack count (AKA: eyes count) is positive then tick through them.
-                    if(this.leftAttackCount > 0) {
-                        //Only fire each other time to give a spray effect.
-                        if(this.leftAttackCount % 2 == 0) {
-                            this.performRangedAttack(leftTarget, this.attacker.getHead(LEFT), LEFT);
-                        }
-                        this.leftAttackCount --;
-                    }else{
-                        //If the attack count is 0 then reset the attack timer and reset the attack count.
-                        this.leftAttackTime = 20;
-                        this.leftAttackCount = Math.min(Mth.ceil(this.attacker.level.getCurrentDifficultyAt(
-                                this.attacker.blockPosition()).getEffectiveDifficulty()) * (attacker.getRandom().nextInt(2) + 2), 10);
-                    }
+                    this.performRangedAttack(leftTarget, this.attacker.getHead(LEFT));
+                    //Reset the attack delay after attacking.
+                    this.leftAttackTime = attackDelay;
                 }
             }
         }
@@ -249,36 +240,27 @@ public class WitherSpiderAttackGoal extends Goal {
                 --this.rightSeeTime;
             }
             if (rightTargetDistance < 400 && --this.rightAttackTime <= 0) {
-                //If the attacker cannot see the target for over 60 ticks, then reset the attack time.
+                //If the attacker cannot see the target for over 60 ticks, then reset the attack time and try to spawn the red eyes.
                 if (!canSeeRight && this.rightSeeTime < -60) {
-                    this.rightAttackTime = 20;
+                    this.rightAttackTime = attackDelay;
+                    this.spawnRedEye(rightTarget, this.attacker.getHead(RIGHT), RIGHT);
                 } else if (canSeeRight) {
-                    //If the attacker attack count (AKA: eyes count) is positive then tick through them.
-                    if(this.rightAttackCount > 0) {
-                        //Only fire each other time to give a spray effect.
-                        if(this.rightAttackCount % 2 == 0) {
-                            this.performRangedAttack(rightTarget, this.attacker.getHead(RIGHT), RIGHT);
-                        }
-                        this.rightAttackCount--;
-                    }else{
-                        //If the attack count is 0 then reset the attack timer and reset the attack count.
-                        this.rightAttackTime = 20;
-                        this.rightAttackCount = Math.min(Mth.ceil(this.attacker.level.getCurrentDifficultyAt(
-                                this.attacker.blockPosition()).getEffectiveDifficulty()) * (attacker.getRandom().nextInt(2) + 2), 10);
-                    }
+                    this.performRangedAttack(rightTarget, this.attacker.getHead(RIGHT));
+                    //Reset the attack delay after attacking.
+                    this.rightAttackTime = attackDelay;
                 }
             }
         }
     }
 
     /**
-     * Perform the ranged attack of the left and right heads.
-     * @param target The target being targeted by that specific head.
-     * @param spawnPos The position to spawn the projectile at.
+     * Try to spawn the red eyes
+     * @param target the living entity this red eye is going to target (I can use target goal to do that, but this guarantees
+     *               the red eye is targeting the same target as soon as possible).
+     * @param spawnPos the spawning location passed as vector since it spawns in relation to the head that it belongs to.
+     * @param head The head that owns this red eye (used to check if this head has already head too).
      */
-    private void performRangedAttack(LivingEntity target, Vec3 spawnPos, WitherSpiderEntity.Head head){
-//        if(head == LEFT) {
-        if(head == LEFT) return;
+    private void spawnRedEye(LivingEntity target, Vec3 spawnPos, WitherSpiderEntity.Head head){
         if(this.attacker.getDeployed(head) == null){
             RedEyeEntity redEye = new RedEyeEntity(Registration.REDEYE.get(), this.attacker.level);
             redEye.setPos(spawnPos);
@@ -289,13 +271,18 @@ public class WitherSpiderAttackGoal extends Goal {
             this.attacker.level.addFreshEntity(redEye);
             this.attacker.setDeployed(head, redEye.getUUID());
         }
+    }
 
-//        }else{
-//            WitheringWebEntity web = new WitheringWebEntity(Registration.WITHERINGWEB.get(), spawnPos.x, spawnPos.y, spawnPos.z,
-//                    (target.getX() - spawnPos.x)/2f, (target.getEyeY() - spawnPos.y)/2f, (target.getZ() - spawnPos.z)/2f,
-//                    target.level, this.attacker, target);
-//            this.attacker.level.addFreshEntity(web);
-//        }
+    /**
+     * Perform the ranged attack of the left and right heads.
+     * @param target The target being targeted by that specific head.
+     * @param spawnPos The position to spawn the projectile at.
+     */
+    private void performRangedAttack(LivingEntity target, Vec3 spawnPos){
+        WitheringWebEntity web = new WitheringWebEntity(Registration.WITHERINGWEB.get(), spawnPos.x, spawnPos.y, spawnPos.z,
+                (target.getX() - spawnPos.x)/20f, (target.getY(0.5f) - spawnPos.y)/20f, (target.getZ() - spawnPos.z)/20f,
+                target.level, this.attacker, target);
+        this.attacker.level.addFreshEntity(web);
 
     }
 
