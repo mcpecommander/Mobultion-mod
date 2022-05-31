@@ -1,11 +1,11 @@
 package dev.mcpecommander.mobultion.entities.spiders.entities;
 
+import com.mojang.math.Vector3f;
+import dev.mcpecommander.mobultion.entities.spiders.SpidersConfig;
 import dev.mcpecommander.mobultion.setup.Registration;
-import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -13,7 +13,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -44,31 +43,13 @@ public class HypnoWaveEntity extends AbstractHurtingProjectile implements IAnima
     }
 
     /**
-     * The main update method which ticks on both sides all the time until the entity is removed.
-     * Ticks on the server side only when the entity is not rendered anymore.
-     */
-    @Override
-    public void tick() {
-        super.tick();
-        this.setYRot((float)(Mth.atan2(this.getDeltaMovement().x, this.getDeltaMovement().z) * (double)(180F / (float)Math.PI)));
-        this.setXRot((float) (Mth.atan2(this.getDeltaMovement().y, this.getDeltaMovement().horizontalDistance())
-                        * (double)(180F / (float)Math.PI)));
-
-        this.setXRot(lerpRotation(this.xRotO, this.getXRot()));
-        //The y rotation is being calculated somewhere else and when interpolating between them, I get crazy results so
-        //because the projectile doesn't change direction, the y rotation can be considered to the same every frame.
-        this.yRotO = getYRot();
-
-    }
-
-    /**
      * The particles that will be spawned as the projectile is flying.
      * @return A particle type (implements IParticleData).
      */
     @Nonnull
     @Override
     protected ParticleOptions getTrailParticle() {
-        return new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(Registration.HYPNOEMITTER.get()));
+        return new DustParticleOptions(new Vector3f(0.612f, 0.149f, 0.784f), 1f);
     }
 
     /**
@@ -99,8 +80,8 @@ public class HypnoWaveEntity extends AbstractHurtingProjectile implements IAnima
     protected void onHitEntity(@Nonnull EntityHitResult rayTraceResult) {
         Entity entity = rayTraceResult.getEntity();
         if(this.getOwner() == null || !this.getOwner().isAlive() || !(entity instanceof LivingEntity)) return;
-        entity.hurt(DamageSource.thrown(this, this.getOwner()), 1);
-        ((LivingEntity) entity).addEffect(new MobEffectInstance(Registration.HYPNO_EFFECT.get(), 20 * 10,
+        entity.hurt(DamageSource.thrown(this, this.getOwner()), SpidersConfig.HYPNO_DAMAGE.get().floatValue());
+        ((LivingEntity) entity).addEffect(new MobEffectInstance(Registration.HYPNO_EFFECT.get(), 20 * SpidersConfig.HYPNO_DURATION.get(),
                 this.level.getDifficulty() == Difficulty.HARD ? 1 : 0));
     }
 
