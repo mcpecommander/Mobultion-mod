@@ -1,10 +1,16 @@
 package dev.mcpecommander.mobultion.entities.spiders.entityGoals;
 
 import dev.mcpecommander.mobultion.entities.spiders.entities.HypnoSpiderEntity;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.RangedAttackGoal;
+import net.minecraft.world.entity.ai.goal.RangedBowAttackGoal;
+import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 
@@ -32,7 +38,7 @@ public class HypnoSpiderRangedGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return this.attacker.getTarget() != null;
+        return this.attacker.getTarget() != null && this.attacker.getTarget().isAlive();
     }
 
     public boolean canContinueToUse() {
@@ -40,8 +46,9 @@ public class HypnoSpiderRangedGoal extends Goal {
             if (this.attacker.getTarget() instanceof Player player){
                 return !player.isCreative();
             }
+            return true;
         }
-        return !this.attacker.getNavigation().isDone();
+        return false; //!this.attacker.getNavigation().isDone();
     }
 
     @Override
@@ -60,6 +67,7 @@ public class HypnoSpiderRangedGoal extends Goal {
         this.seeTime = 0;
         this.attackTime = -1;
         this.attacker.stopUsingItem();
+        this.attacker.getNavigation().stop();
     }
 
     @Override
@@ -84,11 +92,12 @@ public class HypnoSpiderRangedGoal extends Goal {
             }
 
             //If within attack distance or can not reach but has and is seeing the target for more than 20 ticks.
-            if (distance < this.attackRadiusSqr && this.seeTime >= 20) {
+            if (distance <= this.attackRadiusSqr && this.seeTime >= 20) {
                 this.attacker.getNavigation().stop();
                 ++this.strafingTime;
             } else {
-                this.attacker.getNavigation().moveTo(target, this.speedModifier);
+                Vec3 position = this.attacker.position().subtract(target.position()).normalize().scale(4).add(target.position());
+                this.attacker.getNavigation().moveTo(position.x, position.y, position.z, this.speedModifier);
                 this.strafingTime = -1;
             }
 
@@ -114,13 +123,11 @@ public class HypnoSpiderRangedGoal extends Goal {
                 } else if (distance < this.attackRadiusSqr * 0.5F) {
                     this.strafingBackwards = true;
                 }
-
-                this.attacker.getMoveControl().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
+                ((MobultionSpiderMoveControl)this.attacker.getMoveControl()).strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F, 0.7f);
                 this.attacker.lookAt(target, 30.0F, 30.0F);
             } else {
                 this.attacker.getLookControl().setLookAt(target, 30.0F, 30.0F);
             }
-
             if (this.attacker.isUsingItem()) {
                 //If the attacker cannot see the target for over 60 ticks, then stop using the item.
                 if (!canSee && this.seeTime < -60) {

@@ -1,7 +1,11 @@
 package dev.mcpecommander.mobultion.entities.spiders.entities;
 
+import dev.mcpecommander.mobultion.entities.spiders.SpidersConfig;
 import dev.mcpecommander.mobultion.entities.spiders.entityGoals.HypnoSpiderRangedGoal;
+import dev.mcpecommander.mobultion.entities.spiders.entityGoals.MobultionSpiderMoveControl;
+import dev.mcpecommander.mobultion.setup.Registration;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
@@ -11,10 +15,12 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -26,7 +32,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import javax.annotation.Nonnull;
 
 /* Created by McpeCommander on 2021/06/18 */
-public class HypnoSpiderEntity extends MobultionSpiderEntity{
+public class HypnoSpiderEntity extends MobultionSpiderEntity {
 
     /**
      * The animation factory, for more information check GeckoLib.
@@ -35,6 +41,7 @@ public class HypnoSpiderEntity extends MobultionSpiderEntity{
 
     public HypnoSpiderEntity(EntityType<HypnoSpiderEntity> mob, Level world) {
         super(mob, world);
+        this.moveControl = new MobultionSpiderMoveControl(this);
     }
 
     /**
@@ -46,6 +53,7 @@ public class HypnoSpiderEntity extends MobultionSpiderEntity{
         this.goalSelector.addGoal(2, new HypnoSpiderRangedGoal(this, 1.1, 20, 12));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
     }
 
     /**
@@ -54,7 +62,8 @@ public class HypnoSpiderEntity extends MobultionSpiderEntity{
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 16.0D).add(Attributes.MOVEMENT_SPEED, 0.3D);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, SpidersConfig.HYPNO_HEALTH.get())
+                                        .add(Attributes.MOVEMENT_SPEED, SpidersConfig.HYPNO_SPEED.get());
     }
 
     /**
@@ -69,6 +78,7 @@ public class HypnoSpiderEntity extends MobultionSpiderEntity{
             return PlayState.CONTINUE;
         }
         if(this.isUsingItem()){
+            if(event.getController().getAnimationState() == AnimationState.Stopped) event.getController().clearAnimationCache();
             event.getController().setAnimation(new AnimationBuilder().addAnimation("attack", false));
             return PlayState.CONTINUE;
         } else if(event.isMoving()){
@@ -130,8 +140,7 @@ public class HypnoSpiderEntity extends MobultionSpiderEntity{
                 double d1 = this.random.nextGaussian() * 0.02D;
                 double d2 = this.random.nextGaussian() * 0.02D;
                 this.level.addParticle(ParticleTypes.POOF,
-                        this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D)
-                        , d0, d1, d2);
+                        this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
             }
         }
     }
@@ -160,6 +169,19 @@ public class HypnoSpiderEntity extends MobultionSpiderEntity{
                 this.setLivingEntityFlag(1, true);
                 this.setLivingEntityFlag(2, hand == InteractionHand.OFF_HAND);
             }
+        }
+    }
+
+    @Override
+    public int getTicksUsingItem() {
+        return isUsingItem() ? 22 - this.getUseItemRemainingTicks() : 0;
+    }
+
+    @Override
+    public void onSyncedDataUpdated(@NotNull EntityDataAccessor<?> key) {
+        super.onSyncedDataUpdated(key);
+        if(key.equals(DATA_LIVING_ENTITY_FLAGS) && this.isUsingItem() && this.level.isClientSide){
+            this.useItemRemaining = 22;
         }
     }
 
@@ -195,6 +217,7 @@ public class HypnoSpiderEntity extends MobultionSpiderEntity{
      */
     @Override
     public boolean canBeAffected(@Nonnull MobEffectInstance effect) {
-        return true;
+        return !effect.getEffect().equals(Registration.HYPNO_EFFECT.get());
     }
+
 }
