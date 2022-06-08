@@ -28,7 +28,7 @@ public class SpiderEyesLayer<T extends MobultionSpiderEntity> extends GeoLayerRe
         super(entityRendererIn);
         SPIDER_EYES = spiderName.equals("witchspider") ? new ResourceLocation(MODID,"textures/entity/spiders/witchspidereyes.png")
                 : new ResourceLocation(MODID,"textures/entity/spiders/spidereyes.png");
-        SPIDER_MODEL = new ResourceLocation(MODID, "geo/spiders/" + spiderName + ".json");;
+        SPIDER_MODEL = new ResourceLocation(MODID, "geo/spiders/" + spiderName + ".json");
     }
 
     @Override

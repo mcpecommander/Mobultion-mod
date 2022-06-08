@@ -18,6 +18,8 @@ import javax.annotation.Nullable;
 /* McpeCommander created on 10/08/2021 inside the package - dev.mcpecommander.mobultion.entities.spiders.renderers */
 public class MotherSpiderRenderer extends GeoEntityRenderer<MotherSpiderEntity> {
 
+    private float rotationAngle;
+
     public MotherSpiderRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new MotherSpiderModel());
         this.shadowRadius = 0.7F;
@@ -37,6 +39,14 @@ public class MotherSpiderRenderer extends GeoEntityRenderer<MotherSpiderEntity> 
             renderRecursively(group, matrixStackIn, vertexBuilder, packedLightIn, OverlayTexture.pack(0,
                     OverlayTexture.v(animatable.hurtTime > 0)), red, green, blue, alpha);
         }
+    }
+
+    @Override
+    protected void applyRotations(MotherSpiderEntity entityLiving, PoseStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks) {
+        if (!entityLiving.isDeadOrDying()){
+            this.rotationAngle = rotationYaw;
+        }
+        super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationAngle, partialTicks);
     }
 
     @Override
