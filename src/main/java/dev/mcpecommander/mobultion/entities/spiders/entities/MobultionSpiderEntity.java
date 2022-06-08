@@ -39,7 +39,7 @@ public abstract class MobultionSpiderEntity extends Monster implements IAnimatab
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.8D));
-        //this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
     }
 
     /**

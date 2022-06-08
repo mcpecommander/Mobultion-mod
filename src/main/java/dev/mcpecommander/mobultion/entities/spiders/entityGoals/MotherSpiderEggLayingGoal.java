@@ -2,6 +2,7 @@ package dev.mcpecommander.mobultion.entities.spiders.entityGoals;
 
 import dev.mcpecommander.mobultion.blocks.SpiderEggBlock;
 import dev.mcpecommander.mobultion.blocks.tile.SpiderEggTile;
+import dev.mcpecommander.mobultion.entities.spiders.SpidersConfig;
 import dev.mcpecommander.mobultion.entities.spiders.entities.MotherSpiderEntity;
 import dev.mcpecommander.mobultion.setup.Registration;
 import net.minecraft.core.BlockPos;
@@ -32,7 +33,8 @@ public class MotherSpiderEggLayingGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return this.mother.level.getGameTime() - this.lastCanUseCheck > COOLDOWN && this.mother.getMiniSpidersCount() < 4;
+        return this.mother.level.getGameTime() - this.lastCanUseCheck > COOLDOWN &&
+                this.mother.getMiniSpidersCount() < SpidersConfig.MOTHER_MAX_MINI_FOLLOWERS.get() - 4;
     }
 
     @Override
@@ -56,7 +58,7 @@ public class MotherSpiderEggLayingGoal extends Goal {
         byte pregnancyStatus = this.mother.getPregnancyStatus();
         BlockPos pos = new BlockPos(this.mother.getBlockX(), this.mother.getBlockY(), this.mother.getBlockZ());
         if(pregnancyStatus == 3 && this.mother.level.getGameTime() - this.layEggTime > 15
-                && isPositionRightForEgg(this.mother.level, pos)){
+                && isPositionSuitableForEgg(this.mother.level, pos)){
             this.mother.setPregnant((byte)0);
             this.lastCanUseCheck = this.mother.level.getGameTime();
             this.mother.level.setBlock(this.mother.level.getBlockState(pos.below()).isAir() ? pos.below() : pos,
@@ -68,7 +70,7 @@ public class MotherSpiderEggLayingGoal extends Goal {
         }
         if(pregnancyStatus == 1){
             pregnancyTime ++;
-            if(pregnancyTime > 120){
+            if(pregnancyTime > SpidersConfig.MOTHER_GESTATION.get() * 20){
                 this.mother.setPregnant((byte)2);
             }
         }
@@ -79,7 +81,7 @@ public class MotherSpiderEggLayingGoal extends Goal {
         }
     }
 
-    private static boolean isPositionRightForEgg(Level level, BlockPos pos){
+    private static boolean isPositionSuitableForEgg(Level level, BlockPos pos){
         return level.getBlockState(pos).canBeReplaced(new DirectionalPlaceContext(level, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP))
                 && !level.getBlockState(pos.below()).isAir();
     }

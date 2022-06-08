@@ -1,5 +1,6 @@
 package dev.mcpecommander.mobultion.entities.spiders.entities;
 
+import dev.mcpecommander.mobultion.entities.spiders.SpidersConfig;
 import dev.mcpecommander.mobultion.entities.spiders.entityGoals.MobultionSpiderMeleeGoal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -77,9 +78,9 @@ public class MagmaSpiderEntity extends MobultionSpiderEntity{
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 26.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.3D)
-                .add(Attributes.ATTACK_DAMAGE, 2);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, SpidersConfig.MAGMA_HEALTH.get())
+                .add(Attributes.MOVEMENT_SPEED, SpidersConfig.MAGMA_SPEED.get())
+                .add(Attributes.ATTACK_DAMAGE, SpidersConfig.MAGMA_DAMAGE.get());
     }
 
     /**
@@ -118,7 +119,7 @@ public class MagmaSpiderEntity extends MobultionSpiderEntity{
     public boolean doHurtTarget(@Nonnull Entity target) {
         if (super.doHurtTarget(target)) {
             if (target instanceof LivingEntity) {
-                target.setSecondsOnFire(4);
+                target.setSecondsOnFire(SpidersConfig.MAGMA_FIRE.get());
             }
             return true;
         }

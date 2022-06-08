@@ -1,6 +1,7 @@
 package dev.mcpecommander.mobultion.entities.spiders.entities;
 
 import com.mojang.math.Vector3f;
+import dev.mcpecommander.mobultion.entities.spiders.SpidersConfig;
 import dev.mcpecommander.mobultion.utils.MathCalculations;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
@@ -158,8 +159,10 @@ public class WitheringWebEntity extends AbstractHurtingProjectile implements IAn
             Entity entity = rayTraceResult.getEntity();
             if(this.getOwner() == null || !this.getOwner().isAlive()) return;
             if(entity instanceof LivingEntity livingEntity){
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.WITHER, 5 * 20, 0), this.getOwner());
-                livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 5 * 20, 0), this.getOwner());
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.WITHER, SpidersConfig.WITHER_RANGED_EFFECT_DURATION.get() * 20,
+                        SpidersConfig.WITHER_RANGED_EFFECT_STRENGTH.get()), this.getOwner());
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, SpidersConfig.WITHER_RANGED_EFFECT_DURATION.get() * 20,
+                        SpidersConfig.WITHER_RANGED_EFFECT_STRENGTH.get()), this.getOwner());
             }
         }
     }

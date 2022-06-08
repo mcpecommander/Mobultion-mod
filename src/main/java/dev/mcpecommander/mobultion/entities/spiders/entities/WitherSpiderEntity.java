@@ -1,6 +1,6 @@
 package dev.mcpecommander.mobultion.entities.spiders.entities;
 
-import dev.mcpecommander.mobultion.entities.spiders.entityGoals.MobultionSpiderMoveControl;
+import dev.mcpecommander.mobultion.entities.spiders.SpidersConfig;
 import dev.mcpecommander.mobultion.entities.spiders.entityGoals.ThreeAttackableTargetsGoal;
 import dev.mcpecommander.mobultion.entities.spiders.entityGoals.WitherSpiderAttackGoal;
 import dev.mcpecommander.mobultion.setup.Registration;
@@ -17,7 +17,6 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.util.RandomPos;
@@ -98,9 +97,9 @@ public class WitherSpiderEntity extends MobultionSpiderEntity{
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 60.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.3D)
-                .add(Attributes.ATTACK_DAMAGE, 2D);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, SpidersConfig.WITHER_HEALTH.get())
+                .add(Attributes.MOVEMENT_SPEED, SpidersConfig.WITHER_SPEED.get())
+                .add(Attributes.ATTACK_DAMAGE,  SpidersConfig.WITHER_MELEE_DAMAGE.get());
     }
 
     @Nullable

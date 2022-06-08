@@ -20,6 +20,7 @@ public class ThreeAttackableTargetsGoal<T extends LivingEntity> extends NearestA
 
     public ThreeAttackableTargetsGoal(WitherSpiderEntity spider, Class<T> targetClass, boolean mustSee) {
         super(spider, targetClass, mustSee);
+        this.unseenMemoryTicks = 140;
     }
 
     /**
@@ -33,8 +34,12 @@ public class ThreeAttackableTargetsGoal<T extends LivingEntity> extends NearestA
         } else {
             //Try to find and set the three different targets.
             this.findTarget();
-            this.findTarget(LEFT);
-            this.findTarget(RIGHT);
+            if(((WitherSpiderEntity)this.mob).hasHead(LEFT)) {
+                this.findTarget(LEFT);
+            }
+            if(((WitherSpiderEntity)this.mob).hasHead(RIGHT)) {
+                this.findTarget(RIGHT);
+            }
             //Continue with the task if at least one of the targets is not null.
             return this.target != null || this.extraTargets[LEFT.number] != null || this.extraTargets[RIGHT.number] != null;
         }
@@ -62,6 +67,8 @@ public class ThreeAttackableTargetsGoal<T extends LivingEntity> extends NearestA
      */
     @Override
     public boolean canContinueToUse() {
+        boolean hasLeftHead = ((WitherSpiderEntity)this.mob).hasHead(LEFT);
+        boolean hasRightHead = ((WitherSpiderEntity)this.mob).hasHead(RIGHT);
         LivingEntity mainHeadTarget = this.mob.getTarget();
         LivingEntity leftHeadTarget = ((WitherSpiderEntity)this.mob).getTarget(LEFT);
         LivingEntity rightHeadTarget = ((WitherSpiderEntity)this.mob).getTarget(RIGHT);
@@ -69,16 +76,16 @@ public class ThreeAttackableTargetsGoal<T extends LivingEntity> extends NearestA
         if (mainHeadTarget == null) {
             mainHeadTarget = this.target;
         }
-        if (leftHeadTarget == null) {
+        if (leftHeadTarget == null && hasLeftHead) {
             leftHeadTarget = this.extraTargets[LEFT.number];
         }
-        if (rightHeadTarget == null) {
+        if (rightHeadTarget == null && hasRightHead) {
             rightHeadTarget = this.extraTargets[RIGHT.number];
         }
         //If all three heads have null targets then reset the task.
         if (mainHeadTarget == null && leftHeadTarget == null && rightHeadTarget == null) {
             return false;
-        //Reset the task if all the targets are
+        //Reset the task if all the targets are on the same team as the spider or all the targets are not attackable.
         } else if (!canAttackAndNotSameTeam(mainHeadTarget, leftHeadTarget, rightHeadTarget)) {
             return false;
         } else {
@@ -99,6 +106,10 @@ public class ThreeAttackableTargetsGoal<T extends LivingEntity> extends NearestA
                             this.extraTargets[LEFT.number] = null;
                         }
                     }
+                    if(!hasLeftHead){
+                        ((WitherSpiderEntity)this.mob).setTarget(LEFT, null);
+                        this.extraTargets[LEFT.number] = null;
+                    }
                 }
             }
 
@@ -114,6 +125,10 @@ public class ThreeAttackableTargetsGoal<T extends LivingEntity> extends NearestA
                             ((WitherSpiderEntity)this.mob).setTarget(RIGHT, null);
                             this.extraTargets[RIGHT.number] = null;
                         }
+                    }
+                    if(!hasRightHead){
+                        ((WitherSpiderEntity)this.mob).setTarget(RIGHT, null);
+                        this.extraTargets[RIGHT.number] = null;
                     }
                 }
             }
@@ -137,7 +152,7 @@ public class ThreeAttackableTargetsGoal<T extends LivingEntity> extends NearestA
             if(this.target == null && this.extraTargets[LEFT.number] == null && this.extraTargets[RIGHT.number] == null){
                 return false;
             }else{
-                setAlternativeTargetMobs();
+                setAlternativeTargetMobs(hasLeftHead, hasRightHead);
                 return true;
             }
         }
@@ -147,16 +162,16 @@ public class ThreeAttackableTargetsGoal<T extends LivingEntity> extends NearestA
      * If the logic arrived to this method, we know that at least one of the heads has a non-null target.
      * In this case, apply that one target to the rest of the heads.
      */
-    private void setAlternativeTargetMobs(){
-        if(this.target == null){
+    private void setAlternativeTargetMobs(boolean hasLeftHead, boolean hasRightHead){
+        if(this.target == null && (hasLeftHead || hasRightHead)){
             this.target = this.extraTargets[LEFT.number] != null ? this.extraTargets[LEFT.number] : this.extraTargets[RIGHT.number];
             this.mob.setTarget(target);
         }else{
-            if(this.extraTargets[LEFT.number] == null){
+            if(this.extraTargets[LEFT.number] == null && hasLeftHead){
                 this.extraTargets[LEFT.number] = this.target;
                 ((WitherSpiderEntity)this.mob).setTarget(LEFT, target);
             }
-            if(this.extraTargets[RIGHT.number] == null){
+            if(this.extraTargets[RIGHT.number] == null && hasRightHead){
                 this.extraTargets[RIGHT.number] = this.target;
                 ((WitherSpiderEntity)this.mob).setTarget(RIGHT, target);
             }

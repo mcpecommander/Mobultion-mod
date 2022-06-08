@@ -1,8 +1,10 @@
 package dev.mcpecommander.mobultion.entities.spiders.entityGoals;
 
+import dev.mcpecommander.mobultion.entities.spiders.SpidersConfig;
 import dev.mcpecommander.mobultion.entities.spiders.entities.AngelSpiderEntity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.level.Level;
 
 import java.util.EnumSet;
@@ -83,8 +85,7 @@ public class AngelSpiderHealGoal extends Goal {
             LivingEntity entity = this.mob.getTarget();
             this.mob.getLookControl().setLookAt(entity, 30f, 30f);
             if (this.healCoolDown < 10) {
-                entity.heal(4f);
-                //TODO: entity.heal(SpidersConfig.spiders.angel.healAmount);
+                entity.heal(SpidersConfig.ANGEL_HEAL.get().floatValue());
                 this.healCoolDown = 0;
             }
         }

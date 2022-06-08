@@ -1,5 +1,6 @@
 package dev.mcpecommander.mobultion.entities.spiders.entityGoals;
 
+import dev.mcpecommander.mobultion.entities.spiders.SpidersConfig;
 import dev.mcpecommander.mobultion.entities.spiders.entities.RedEyeEntity;
 import dev.mcpecommander.mobultion.setup.Registration;
 import net.minecraft.sounds.SoundSource;
@@ -127,7 +128,7 @@ public class RedEyeZapAttackGoal  extends Goal{
             //End of the visual part and start of the logical part of the attack.
             if(this.ticksUntilNextAttack == 20){
                 this.attacker.setAggressive(false);
-                target.hurt(DamageSource.mobAttack(this.attacker), 2.0F);
+                target.hurt(DamageSource.mobAttack(this.attacker), SpidersConfig.RED_EYE_DAMAGE.get());
             }
 
         }

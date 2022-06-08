@@ -1,5 +1,6 @@
 package dev.mcpecommander.mobultion.entities.spiders.entities;
 
+import dev.mcpecommander.mobultion.entities.spiders.SpidersConfig;
 import dev.mcpecommander.mobultion.entities.spiders.entityGoals.RedEyeHoverAroundOwnerGoal;
 import dev.mcpecommander.mobultion.entities.spiders.entityGoals.RedEyeZapAttackGoal;
 import net.minecraft.nbt.CompoundTag;
@@ -222,7 +223,8 @@ public class RedEyeEntity extends Monster implements IAnimatable {
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 6.0D).add(Attributes.MOVEMENT_SPEED, 0.3D);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, SpidersConfig.RED_EYE_HEALTH.get())
+                                        .add(Attributes.MOVEMENT_SPEED, SpidersConfig.RED_EYE_SPEED.get());
     }
 
     /**

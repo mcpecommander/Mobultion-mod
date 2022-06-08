@@ -1,5 +1,6 @@
 package dev.mcpecommander.mobultion.entities.spiders.entities;
 
+import dev.mcpecommander.mobultion.entities.spiders.SpidersConfig;
 import dev.mcpecommander.mobultion.entities.spiders.entityGoals.AngelSpiderHealGoal;
 import dev.mcpecommander.mobultion.entities.spiders.entityGoals.AngelSpiderTargetGoal;
 import dev.mcpecommander.mobultion.particles.HealParticle;
@@ -62,7 +63,8 @@ public class AngelSpiderEntity extends MobultionSpiderEntity {
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.MOVEMENT_SPEED, 0.4D);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, SpidersConfig.ANGEL_HEALTH.get())
+                                        .add(Attributes.MOVEMENT_SPEED, SpidersConfig.ANGEL_SPEED.get());
     }
 
     /**

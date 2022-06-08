@@ -132,7 +132,7 @@ public class WitchSpiderAttackGoal extends Goal {
                     int i = this.attacker.getTicksUsingItem();
                     switch(this.attacker.getAttackMode()){
                         case 1 ->{
-                            if(i >= WitchSpiderEntity.ATTACK_1 - 2){
+                            if(i >= WitchSpiderEntity.FREEZING_ATTACK - 2){
                                 this.attacker.stopUsingItem();
                                 this.attacker.setAttackMode((byte)0);
                                 this.attackTime = this.attackIntervalMin;

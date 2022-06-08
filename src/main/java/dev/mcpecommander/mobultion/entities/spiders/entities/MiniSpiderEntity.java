@@ -1,5 +1,6 @@
 package dev.mcpecommander.mobultion.entities.spiders.entities;
 
+import dev.mcpecommander.mobultion.entities.spiders.SpidersConfig;
 import dev.mcpecommander.mobultion.entities.spiders.entityGoals.FollowMotherGoal;
 import dev.mcpecommander.mobultion.entities.spiders.entityGoals.MiniSpiderMeleeGoal;
 import net.minecraft.nbt.CompoundTag;
@@ -64,9 +65,9 @@ public class MiniSpiderEntity extends MobultionSpiderEntity{
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 26.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.3D)
-                .add(Attributes.ATTACK_DAMAGE, 2D);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, SpidersConfig.MINI_HEALTH.get())
+                .add(Attributes.MOVEMENT_SPEED, SpidersConfig.MINI_SPEED.get())
+                .add(Attributes.ATTACK_DAMAGE, SpidersConfig.MINI_DAMAGE.get());
     }
 
     /**

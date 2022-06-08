@@ -1,5 +1,6 @@
 package dev.mcpecommander.mobultion.entities.spiders.entities;
 
+import dev.mcpecommander.mobultion.entities.spiders.SpidersConfig;
 import dev.mcpecommander.mobultion.entities.spiders.entityGoals.WitchSpiderAttackGoal;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -8,7 +9,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -36,7 +36,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 public class WitchSpiderEntity extends MobultionSpiderEntity{
 
     private Vec3 attackPosition;
-    public static final float ATTACK_1 = 80;
+    public static final float FREEZING_ATTACK = SpidersConfig.WITCH_FREEZE.get() * 20;
     public static final float ATTACK_2 = 15;
     public static final float ATTACK_3 = 10;
     public static final float ATTACK_4 = 40;
@@ -76,9 +76,8 @@ public class WitchSpiderEntity extends MobultionSpiderEntity{
      * @return AttributeModifierMap.MutableAttribute
      */
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 30.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.3D)
-                .add(Attributes.ATTACK_DAMAGE, 2D);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, SpidersConfig.WITCH_HEALTH.get())
+                                        .add(Attributes.MOVEMENT_SPEED, SpidersConfig.WITCH_SPEED.get());
     }
 
     @Override
@@ -122,7 +121,7 @@ public class WitchSpiderEntity extends MobultionSpiderEntity{
                     for (int i = 0; i < 10; i++) {
                         this.level.addParticle(ParticleTypes.SNOWFLAKE,
                                 player.getX() + Mth.cos((float) (i / 10f * Math.PI * 2)),
-                                player.getY() + 0.3f + (getUseItemRemainingTicks()/ATTACK_1) * 1.2f,
+                                player.getY() + 0.3f + (getUseItemRemainingTicks()/ FREEZING_ATTACK) * 1.2f,
                                 player.getZ() + Mth.sin((float) (i / 10f * Math.PI * 2)),
                                 Mth.randomBetween(random, -1.0F, 1.0F) * 0.083333336F,
                                 0.05F,
@@ -187,7 +186,7 @@ public class WitchSpiderEntity extends MobultionSpiderEntity{
     public int getTicksUsingItem() {
         switch (this.getAttackMode()){
             case 1 -> {
-                return this.isUsingItem() ? (int) (ATTACK_1 - this.getUseItemRemainingTicks()) : 0;
+                return this.isUsingItem() ? (int) (FREEZING_ATTACK - this.getUseItemRemainingTicks()) : 0;
             }
             case 2 -> {
                 return this.isUsingItem() ? (int) (ATTACK_2 - this.getUseItemRemainingTicks()) : 0;
@@ -212,7 +211,7 @@ public class WitchSpiderEntity extends MobultionSpiderEntity{
                 case 0 ->
                     this.useItemRemaining = 0;
                 case 1 ->
-                    this.useItemRemaining = (int) ATTACK_1;
+                    this.useItemRemaining = (int) FREEZING_ATTACK;
                 case 2 ->
                     this.useItemRemaining = (int) ATTACK_2;
                 case 3 ->
@@ -235,7 +234,7 @@ public class WitchSpiderEntity extends MobultionSpiderEntity{
         if (!this.isUsingItem()) {
             switch (this.getAttackMode()){
                 case 1 ->
-                        this.useItemRemaining = (int) ATTACK_1;
+                        this.useItemRemaining = (int) FREEZING_ATTACK;
                 case 2 ->
                         this.useItemRemaining = (int) ATTACK_2;
                 case 3 ->
