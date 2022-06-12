@@ -1,5 +1,6 @@
 package dev.mcpecommander.mobultion.entities.zombies.entities;
 
+import dev.mcpecommander.mobultion.entities.zombies.entityGoals.KnightZombieMeleeAttackGoal;
 import dev.mcpecommander.mobultion.setup.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -16,6 +17,12 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
@@ -25,10 +32,14 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.ServerLevelAccessor;
+import org.jetbrains.annotations.NotNull;
+import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.easing.EasingManager;
+import software.bernie.geckolib3.core.easing.EasingType;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
@@ -39,25 +50,46 @@ import javax.annotation.Nullable;
 /* McpeCommander created on 26/07/2021 inside the package - dev.mcpecommander.mobultion.entities.zombies.entities */
 public class KnightZombieEntity extends MobultionZombieEntity {
 
-    private static final EntityDataAccessor<Boolean> LEADER_DATA = SynchedEntityData.defineId(KnightZombieEntity.class, EntityDataSerializers.BOOLEAN);
     private final AnimationFactory factory = new AnimationFactory(this);
+    private static final EntityDataAccessor<Boolean> DATA_LEADER = SynchedEntityData.defineId(KnightZombieEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> DATA_CHARGING = SynchedEntityData.defineId(KnightZombieEntity.class, EntityDataSerializers.BOOLEAN);
+
 
     public KnightZombieEntity(EntityType<KnightZombieEntity> type, Level world) {
         super(type, world);
     }
 
     @Override
+    protected void registerGoals() {
+        this.goalSelector.addGoal(1, new FloatGoal(this));
+        this.goalSelector.addGoal(2, new KnightZombieMeleeAttackGoal(this, 1.0f));
+        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.8D));
+        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Sheep.class, true));
+    }
+
+    @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(LEADER_DATA, false);
+        this.entityData.define(DATA_LEADER, false);
+        this.entityData.define(DATA_CHARGING, false);
     }
 
     public boolean isLeader(){
-        return this.entityData.get(LEADER_DATA);
+        return this.entityData.get(DATA_LEADER);
     }
 
     public void setLeader(boolean isLeader){
-        this.entityData.set(LEADER_DATA, isLeader);
+        this.entityData.set(DATA_LEADER, isLeader);
+    }
+
+    public boolean isCharging(){
+        return this.entityData.get(DATA_CHARGING);
+    }
+
+    public void setCharging(boolean charging){
+        this.entityData.set(DATA_CHARGING, charging);
     }
 
     @Override
@@ -146,6 +178,11 @@ public class KnightZombieEntity extends MobultionZombieEntity {
         return flag;
     }
 
+    @Override
+    protected void customServerAiStep() {
+        super.customServerAiStep();
+
+    }
 
     @Override
     protected void populateDefaultEquipmentSlots(@Nonnull DifficultyInstance difficulty) {
@@ -153,12 +190,13 @@ public class KnightZombieEntity extends MobultionZombieEntity {
         this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
         this.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
         this.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.SHIELD));
         int i = this.random.nextInt(10);
-        if (i == 0) {
-            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
-        } else {
-            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
-        }
+//        if (i == 0) {
+//            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
+//        } else {
+//            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
+//        }
 
     }
 
@@ -243,8 +281,13 @@ public class KnightZombieEntity extends MobultionZombieEntity {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("death", true));
             return PlayState.CONTINUE;
         }
+        if(this.isCharging()) {
+            if(event.getController().getAnimationState() == AnimationState.Stopped) event.getController().clearAnimationCache();
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("shield", false));
+            return PlayState.CONTINUE;
+        }
 
-        return PlayState.STOP;
+        return PlayState.CONTINUE;
     }
 
     /**
@@ -254,7 +297,10 @@ public class KnightZombieEntity extends MobultionZombieEntity {
     private <E extends IAnimatable> PlayState movementPredicate(AnimationEvent<E> event)
     {
         if(isDeadOrDying()) return PlayState.STOP;
-        if(event.isMoving()){
+        AnimationController controller = factory.getOrCreateAnimationData(this.getUUID().hashCode()).getAnimationControllers()
+                .get("controller");
+        if(event.isMoving() && !this.isCharging() && (controller.getCurrentAnimation() == null ||
+                (controller.getCurrentAnimation() != null && controller.getAnimationState() == AnimationState.Stopped)) ){
             //TODO: rework the speed stuff.
             if(this.animationSpeed > 0.6){
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("running", true));
